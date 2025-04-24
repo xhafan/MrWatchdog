@@ -1,10 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <RootNamespace>MrWatchDog.Web</RootNamespace>
-    <AssemblyName>MrWatchDog.Web</AssemblyName>
+    <RootNamespace>MrWatchdog.Web</RootNamespace>
+    <AssemblyName>MrWatchdog.Web</AssemblyName>
   </PropertyGroup>
 
   <Import Project="..\SharedAssemblyInfo.props" />
+
+  <ItemGroup>
+    <Compile Include="..\Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.4" />
+  </ItemGroup>
 
 </Project>

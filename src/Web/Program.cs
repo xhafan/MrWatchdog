@@ -8,10 +8,13 @@ if (builder.Environment.IsDevelopment())
     mvcBuilder.AddRazorRuntimeCompilation();
 }
 
-builder.Services.AddHsts(options =>
+if (!builder.Environment.IsDevelopment())
 {
-    options.MaxAge = TimeSpan.FromDays(365);
-});
+    builder.Services.AddHsts(options =>
+    {
+        options.MaxAge = TimeSpan.FromDays(365);
+    });
+}
 
 var app = builder.Build();
 
@@ -19,9 +22,9 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
-app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseRouting();

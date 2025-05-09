@@ -3,3 +3,8 @@ bin
 obj
 *.user
 *.bak
+/src/Web/node_modules
+/src/Web/wwwroot/bundle.js
+/src/Web/wwwroot/bundle.js.map
+/src/Web/wwwroot/bundle.css
+/src/Web/wwwroot/bundle.css.map

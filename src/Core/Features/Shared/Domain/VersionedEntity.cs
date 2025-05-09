@@ -8,6 +8,7 @@ namespace MrWatchdog.Core.Features.Shared.Domain;
 /// of the commands to be lost as the last update to win. With versioned concurrency model in place, the second update
 /// would fail on update as the version value would be different, and Rebus would re-try to handle the second command again.
 /// More info: https://ayende.com/blog/3946/nhibernate-mapping-concurrency .
+///
 /// Has Id of type long.
 /// </summary>
 public abstract class VersionedEntity : Entity<long>

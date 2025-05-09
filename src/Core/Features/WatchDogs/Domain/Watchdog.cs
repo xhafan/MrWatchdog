@@ -5,9 +5,10 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class Watchdog : VersionedEntity, IAggregateRoot
 {
-    private readonly ISet<WatchdogWeb> _watchdogWebs = new HashSet<WatchdogWeb>();
+    private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
 
     protected Watchdog() {}
 
-    public virtual IEnumerable<WatchdogWeb> WatchdogWebs => _watchdogWebs;
+    public virtual string Name { get; protected set; } = null!;
+    public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
 }

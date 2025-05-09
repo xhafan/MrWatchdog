@@ -1,0 +1,35 @@
+﻿@page "{id}"
+@model MrWatchdog.Web.Pages.Watchdogs.WebPageToMonitorModel
+@{
+   Layout = null;
+}
+<turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.Id)">
+    <div class="card mb-1">
+        <div class="card-header">
+            @Model.WatchdogWebPageArgs.Name
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
+                    <input asp-for="WatchdogWebPageArgs.Name" class="form-control" />
+                    <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
+                    <input asp-for="WatchdogWebPageArgs.Url" class="form-control" />
+                    <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
+                    <input asp-for="WatchdogWebPageArgs.Selector" class="form-control" />
+                    <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
+                </div>
+                @* <button type="submit" class="btn btn-primary"> *@
+                @*     Save *@
+                @* </button> *@
+            </form>
+        </div>
+    </div>
+</turbo-frame>
+

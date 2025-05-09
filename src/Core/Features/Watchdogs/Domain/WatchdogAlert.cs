@@ -14,7 +14,7 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
     
     public virtual Watchdog Watchdog { get; protected set; } = null!;
     public virtual User User { get; protected set; } = null!;
-    public virtual string? SearchTerm { get; protected set; } = null!;
+    public virtual string? SearchTerm { get; protected set; }
     public virtual int SearchIntervalInSeconds { get; protected set; }
     public virtual AlertFrequency Frequency { get; protected set; }
 }

@@ -1,3 +1,6 @@
+using Rebus.Config;
+using Rebus.Transport.InMem;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +18,18 @@ if (!builder.Environment.IsDevelopment())
         options.MaxAge = TimeSpan.FromDays(365);
     });
 }
+
+builder.Services.AddRebus(configure => configure
+    .Transport(x =>
+    {
+        x.UseInMemoryTransport(new InMemNetwork(), $"{builder.Environment.EnvironmentName}Web", registerSubscriptionStorage: false);
+    })    
+    .Options(x =>
+    {
+        x.SetNumberOfWorkers(0); // no worker for unused Web queue
+        x.SetMaxParallelism(1); // must be 1 to make Rebus happy
+    })
+);
 
 var app = builder.Build();
 

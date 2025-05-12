@@ -13,7 +13,8 @@
      <PackageReference Include="CoreUtils" Version="3.2.4" />
      <PackageReference Include="DatabaseBuilder" Version="1.2.4" />
      <PackageReference Include="NHibernate" Version="5.5.2" />
-     <PackageReference Include="NHibernateProfiler.Appender" Version="6.0.6047" />
+     <PackageReference Include="NHibernateProfiler.Appender" Version="6.0.6048" />
+     <PackageReference Include="Rebus" Version="8.8.0" />
   </ItemGroup>
 
 </Project>

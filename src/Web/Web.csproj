@@ -12,12 +12,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
+    <PackageReference Include="CoreDdd.Nhibernate.Register.Castle" Version="3.2.5" />
+    <PackageReference Include="CoreDdd.Rebus.UnitOfWork" Version="3.2.2" />
+    <PackageReference Include="CoreDdd.Register.Castle" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Rebus" Version="8.8.0" />
+    <PackageReference Include="Rebus.Castle.Windsor" Version="6.1.0" />
+    <PackageReference Include="Rebus.Microsoft.Extensions.Logging" Version="5.1.0" />
     <PackageReference Include="Rebus.ServiceProvider" Version="10.3.0" />
+    <PackageReference Include="Rebus.UnitOfWork" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="package-lock.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="package.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="hibernate.cfg.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,10 @@
-﻿using Castle.Windsor;
+﻿using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
 using CoreDdd.Nhibernate.Configurations;
+using CoreDdd.Nhibernate.Register.Castle;
 using CoreDdd.Rebus.UnitOfWork;
+using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Messages;
@@ -26,13 +30,21 @@ public class RebusHostedService(
     public async Task StartAsync(CancellationToken cancellationToken)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
-        _hostedServiceWindsorContainer = new WindsorContainer();
+        _hostedServiceWindsorContainer = new WindsorContainer(); // Rebus hosted service instance needs its own Windsor container instance
 
-        WindsorContainerRegistrator.RegisterServices(
-            _hostedServiceWindsorContainer,
-            setUnitOfWorkLifeStyleFunc: x => x.PerRebusMessage(),
-            nhibernateConfigurator
+        _hostedServiceWindsorContainer.Register(
+            Component.For<INhibernateConfigurator>()
+                .Instance(nhibernateConfigurator)
         );
+        
+        CoreDddNhibernateInstaller.SetUnitOfWorkLifeStyle(x => x.PerRebusMessage());
+
+        _hostedServiceWindsorContainer.Install(
+            FromAssembly.Containing<CoreDddInstaller>(),
+            FromAssembly.Containing<CoreDddNhibernateInstaller>()
+        );        
+        
+        WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer);
         
         _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateWatchdogCommandMessageHandler>();
         

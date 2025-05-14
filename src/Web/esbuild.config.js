@@ -5,7 +5,7 @@ const options = {
   bundle: true,
   minify: true,
   sourcemap: true,
-  outfile: "wwwroot/bundle.js",
+  outfile: "wwwroot/assets/bundle.js",
   target: ["es2022"]
 };
 

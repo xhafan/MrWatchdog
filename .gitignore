@@ -4,7 +4,7 @@ obj
 *.user
 *.bak
 /src/Web/node_modules
-/src/Web/wwwroot/bundle.js
-/src/Web/wwwroot/bundle.js.map
-/src/Web/wwwroot/bundle.css
-/src/Web/wwwroot/bundle.css.map
+/src/Web/wwwroot/assets/bundle.js
+/src/Web/wwwroot/assets/bundle.js.map
+/src/Web/wwwroot/assets/bundle.css
+/src/Web/wwwroot/assets/bundle.css.map

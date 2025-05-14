@@ -1,7 +1,11 @@
-using Castle.MicroKernel.Registration;
+using System.Data;
+using System.Text.RegularExpressions;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
+using CoreDdd.AspNetCore.Middlewares;
 using CoreDdd.Nhibernate.Configurations;
+using CoreDdd.Nhibernate.Register.DependencyInjection;
+using CoreDdd.Register.DependencyInjection;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Web;
@@ -13,6 +17,12 @@ using Rebus.Transport.InMem;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Castle Windsor is the root container, not the default .NET DI. Rebus hosted services use Castle Windsor as the container
+// to be able to use advanced features like interceptors, etc., and there are common services registrations for Castle Windsor like query handlers, etc.
+builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
+builder.Host.ConfigureContainer<IWindsorContainer>(WindsorContainerRegistrator.RegisterCommonServices);
+
 var mvcBuilder = builder.Services.AddRazorPages();
 
 if (builder.Environment.IsDevelopment())
@@ -20,16 +30,11 @@ if (builder.Environment.IsDevelopment())
     mvcBuilder.AddRazorRuntimeCompilation();
 }
 
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHsts(options =>
-    {
-        options.MaxAge = TimeSpan.FromDays(365);
-    });
-}
-
 var rebusInMemoryNetwork = new InMemNetwork();
 builder.Services.AddSingleton(rebusInMemoryNetwork);
+
+builder.Services.AddCoreDdd();
+builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>();
 
 var webEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Web";
 var mainRebusHostedServiceEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Main";
@@ -44,22 +49,6 @@ builder.Services.AddRebus((configure, serviceProvider) => configure
         x.SetMaxParallelism(1); // must be 1 to make Rebus happy
     })
 );
-
-builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
-
-builder.Host.ConfigureContainer<IWindsorContainer>(mainWindsorContainer =>
-{
-    mainWindsorContainer.Register(
-        Component.For<INhibernateConfigurator>()
-            .ImplementedBy<NhibernateConfigurator>()
-            .DependsOn(new {connectionString = 
-                "Host=localhost;Database=mr_watchdog;Username=mr_watchdog;Password=Password01;Include Error Detail=true;"
-            })
-            .LifeStyle.Singleton
-    );
-
-    WindsorContainerRegistrator.RegisterServices(mainWindsorContainer, setUnitOfWorkLifeStyleFunc: x => x.Scoped());
-});
 
 builder.Services.AddSingleton<IHostedService>(serviceProvider =>
     new RebusHostedService(
@@ -76,10 +65,19 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+var getOrHeadRequestPathsWithoutDefaultDatabaseTransaction = new List<Regex>
+{
+    new("^/assets/.*", RegexOptions.IgnoreCase),
+    new("^/lib/.*", RegexOptions.IgnoreCase),
+    new(@"^/favicon\.ico$", RegexOptions.IgnoreCase)
+};
+
+app.UseMiddleware<UnitOfWorkDependencyInjectionMiddleware>(
+    IsolationLevel.ReadCommitted,
+    getOrHeadRequestPathsWithoutDefaultDatabaseTransaction
+);
 
 app.UseRouting();
 
@@ -89,7 +87,8 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-app.Run();
+await app.RunAsync();
 
+// Castle Windsor is the root container, so we need to dispose of it manually.
 var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 mainWindsorContainer.Dispose();

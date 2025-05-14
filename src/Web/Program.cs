@@ -89,6 +89,6 @@ app.MapRazorPages()
 
 await app.RunAsync();
 
-// Castle Windsor is the root container, so we need to dispose of it manually.
+// Castle Windsor is the root container and it needs to be disposed manually.
 var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 mainWindsorContainer.Dispose();

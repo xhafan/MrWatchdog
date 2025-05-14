@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Conventions;
 
 namespace MrWatchdog.Core.Infrastructure;
 
@@ -25,6 +26,17 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
             typeof(Watchdog).Assembly
         ];
     }
+    
+    protected override string GetIdentityHiLoMaxLo()
+    {
+        // Generated Id = (maxlo + 1) * hi; the lower the maxLo value, the fewer the gaps in Ids when a new app version is deployed.
+        return "99"; // this gives Id range of 100 (99 + 1) Ids per hi value.
+    }    
+    
+    protected override IEnumerable<Type> GetAdditionalConventions()
+    {
+        yield return typeof(EnumConvention);
+    } 
 
     protected override void Dispose(bool disposing)
     {

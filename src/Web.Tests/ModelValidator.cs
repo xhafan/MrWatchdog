@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TestsShared;
+namespace MrWatchdog.Web.Tests;
 
 public static class ModelValidator
 {

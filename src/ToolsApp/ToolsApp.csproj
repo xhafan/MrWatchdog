@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+	<RootNamespace>MrWatchdog.ToolsApp</RootNamespace>
+    <AssemblyName>MrWatchdog.ToolsApp</AssemblyName>
+  </PropertyGroup>
+
+  <Import Project="..\SharedAssemblyInfo.props" />
+
+  <ItemGroup>
+    <Compile Include="..\Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Web\hibernate.cfg.xml" Link="hibernate.cfg.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

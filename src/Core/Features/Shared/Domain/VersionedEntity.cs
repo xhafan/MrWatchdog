@@ -13,5 +13,5 @@ namespace MrWatchdog.Core.Features.Shared.Domain;
 /// </summary>
 public abstract class VersionedEntity : Entity<long>
 {
-    public virtual int Version { get; protected set; }
+    public virtual long Version { get; protected set; }
 }

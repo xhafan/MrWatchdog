@@ -9,6 +9,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     protected Watchdog() {}
 
+    public Watchdog(string name)
+    {
+        Name = name;
+    }
+    
     public virtual string Name { get; protected set; } = null!;
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
 }

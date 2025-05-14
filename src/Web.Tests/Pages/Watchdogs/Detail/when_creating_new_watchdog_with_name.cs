@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Web.Pages.Watchdogs;
-using NUnit.Framework;
 using Rebus.Bus;
-using Shouldly;
 
-namespace Web.Tests.Pages.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Pages.Watchdogs.Detail;
 
 [TestFixture]
 public class when_creating_new_watchdog_with_name

@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Web.Pages.Watchdogs;
-using NUnit.Framework;
-using Shouldly;
 
-namespace Web.Tests.Pages.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Pages.Watchdogs.Detail;
 
 [TestFixture]
 public class when_creating_new_watchdog_without_name

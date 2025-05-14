@@ -1,13 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <RootNamespace>MrWatchdog.TestsShared</RootNamespace>
+    <AssemblyName>MrWatchdog.TestsShared</AssemblyName>
+  </PropertyGroup>
+
   <Import Project="..\SharedAssemblyInfo.props" />
 
   <ItemGroup>
+    <PackageReference Include="CoreDdd.Nhibernate.TestHelpers" Version="3.2.0" />
+    <PackageReference Include="CoreDdd.TestHelpers" Version="3.2.0" />
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
     <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="Shouldly" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web\Web.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

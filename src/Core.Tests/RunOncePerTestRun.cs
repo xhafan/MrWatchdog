@@ -1,7 +1,10 @@
-﻿using CoreUtils;
+﻿using CoreDdd.Domain.Events;
+using CoreDdd.TestHelpers.DomainEvents;
+using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Configurations;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Loggers;
 
 namespace MrWatchdog.Core.Tests;
@@ -9,8 +12,6 @@ namespace MrWatchdog.Core.Tests;
 [SetUpFixture]
 public class RunOncePerTestRun
 {
-    public static NhibernateConfigurator? NhibernateConfigurator;
-
     [OneTimeSetUp]
     public void SetUp()
     {
@@ -20,7 +21,15 @@ public class RunOncePerTestRun
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
         _BuildDatabase(connectionString);
 
-        NhibernateConfigurator = new NhibernateConfigurator(ConsoleAppSettings.Configuration);
+        TestFixtureContext.NhibernateConfigurator = new NhibernateConfigurator(ConsoleAppSettings.Configuration);
+        
+        var domainEventHandlerFactory = new FakeDomainEventHandlerFactory(
+            domainEvent =>
+            {
+                Guard.Hope(TestFixtureContext.RaisedDomainEvents.Value != null, "TestFixtureContext.RaisedDomainEvents.Value" + " is null");
+                TestFixtureContext.RaisedDomainEvents.Value.Add((IDomainEvent) domainEvent);
+            });
+        DomainEvents.Initialize(domainEventHandlerFactory);        
     }
 
     private void _BuildDatabase(string connectionString)
@@ -37,6 +46,6 @@ public class RunOncePerTestRun
     [OneTimeTearDown]
     public void TearDown()
     {
-        NhibernateConfigurator?.Dispose();
+        TestFixtureContext.NhibernateConfigurator?.Dispose();
     }
 }

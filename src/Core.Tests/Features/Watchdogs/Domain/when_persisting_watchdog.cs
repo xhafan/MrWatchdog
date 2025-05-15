@@ -1,4 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;

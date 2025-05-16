@@ -2,7 +2,7 @@
 
 namespace MrWatchdog.TestsShared.Loggers;
 
-public class TestLogger : ILogger, IDisposable
+public class ConsoleTestLogger : ILogger, IDisposable
 {
     public IDisposable BeginScope<TState>(TState state) where TState : notnull => this;
 
@@ -16,8 +16,6 @@ public class TestLogger : ILogger, IDisposable
         Func<TState, Exception?, string> formatter
     )
     {
-        if (!IsEnabled(logLevel)) return;
-
         var message = formatter(state, exception);
         Console.WriteLine($"[{logLevel}] {message}");
 

@@ -5,7 +5,7 @@ using MrWatchdog.TestsShared.Extensions;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
 
 [TestFixture]
-public class when_persisting_watchdog : BaseIntegrationTest
+public class when_persisting_watchdog : BaseDatabaseTest
 {
     private Watchdog _newWatchdog = null!;
     private Watchdog _persistedWatchdog = null!;

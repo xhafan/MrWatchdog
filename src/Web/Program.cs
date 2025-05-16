@@ -6,6 +6,7 @@ using CoreDdd.AspNetCore.Middlewares;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
+using DatabaseBuilder;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Web;
@@ -61,6 +62,8 @@ builder.Services.AddSingleton<IHostedService>(serviceProvider =>
 
 var app = builder.Build();
 
+_buildDatabase(app.Services);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -92,3 +95,13 @@ await app.RunAsync();
 // Castle Windsor is the root container and it needs to be disposed manually.
 var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 mainWindsorContainer.Dispose();
+
+
+void _buildDatabase(IServiceProvider services)
+{
+    var logger = services.GetRequiredService<ILogger<BuilderOfDatabase>>();
+    var configuration = services.GetRequiredService<IConfiguration>();
+    var connectionString = $"{configuration.GetConnectionString("Database")}CommandTimeout=120;";
+    var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
+    DatabaseBuilderHelper.BuildDatabase(connectionString, databaseScriptsDirectoryPath, logger);
+}

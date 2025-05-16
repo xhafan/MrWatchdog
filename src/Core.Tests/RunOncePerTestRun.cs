@@ -39,7 +39,7 @@ public class RunOncePerTestRun
         DatabaseBuilderHelper.BuildDatabase(
             connectionString,
             databaseScriptsDirectoryPath,
-            new TestLogger()
+            new ConsoleTestLogger()
         );
     }
     

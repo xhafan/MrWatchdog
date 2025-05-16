@@ -1,12 +1,14 @@
-﻿using Rebus.Handlers;
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Repositories;
+using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public class CreateWatchdogCommandMessageHandler : IHandleMessages<CreateWatchdogCommand> // todo: test me
+public class CreateWatchdogCommandMessageHandler(IRepository<Watchdog> watchdogRepository) : IHandleMessages<CreateWatchdogCommand>
 {
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async Task Handle(CreateWatchdogCommand command)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
+        var newWatchdog = new Watchdog(command.Name);
+        await watchdogRepository.SaveAsync(newWatchdog);
     }
 }

@@ -4,7 +4,7 @@ using CoreUtils;
 
 namespace MrWatchdog.TestsShared;
 
-public abstract class BaseIntegrationTest
+public abstract class BaseDatabaseTest
 {
     protected NhibernateUnitOfWork UnitOfWork = null!;
     protected static ICollection<IDomainEvent> RaisedDomainEvents

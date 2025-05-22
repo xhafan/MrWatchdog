@@ -13,5 +13,6 @@ namespace MrWatchdog.Core.Features.Shared.Domain;
 /// </summary>
 public abstract class VersionedEntity : Entity<long>
 {
+    // ReSharper disable once VirtualMemberNeverOverridden.Global
     public virtual long Version { get; protected set; }
 }

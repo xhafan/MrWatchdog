@@ -1,5 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
+using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
@@ -8,13 +9,12 @@ namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
 public class when_persisting_watchdog : BaseDatabaseTest
 {
     private Watchdog _newWatchdog = null!;
-    private Watchdog _persistedWatchdog = null!;
+    private Watchdog? _persistedWatchdog;
 
     [SetUp]
     public void Context()
     {
-        _newWatchdog = new Watchdog("watchdog name");
-        UnitOfWork.Save(_newWatchdog);
+        _newWatchdog = new WatchdogBuilder(UnitOfWork).Build();
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();

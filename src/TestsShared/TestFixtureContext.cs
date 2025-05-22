@@ -6,6 +6,6 @@ namespace MrWatchdog.TestsShared;
 
 public static class TestFixtureContext
 {
-    public static NhibernateConfigurator? NhibernateConfigurator;
+    public static NhibernateConfigurator NhibernateConfigurator = null!;
     public static readonly AmbientStorage<ICollection<IDomainEvent>?> RaisedDomainEvents = new();
 }

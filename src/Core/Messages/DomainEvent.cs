@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Messages;
 
-public abstract record DomainEvent : IDomainEvent;
+public abstract record DomainEvent : BaseMessage, IDomainEvent;

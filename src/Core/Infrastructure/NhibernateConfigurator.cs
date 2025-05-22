@@ -6,6 +6,8 @@ using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Conventions;
+using MrWatchdog.Core.Infrastructure.Interceptors;
+using NHibernate.Cfg;
 
 namespace MrWatchdog.Core.Infrastructure;
 
@@ -36,7 +38,15 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
     protected override IEnumerable<Type> GetAdditionalConventions()
     {
         yield return typeof(EnumConvention);
+        yield return typeof(DateTimeConvention);
     } 
+
+    protected override void AdditionalConfiguration(Configuration configuration)
+    {
+        configuration.SetInterceptor(new CompositeInterceptor([
+            new AggregateRootEntityJobTrackingInterceptor()
+        ]));
+    }
 
     protected override void Dispose(bool disposing)
     {

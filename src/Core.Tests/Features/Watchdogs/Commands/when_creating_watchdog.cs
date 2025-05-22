@@ -21,7 +21,7 @@ public class when_creating_watchdog : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _newWatchdog = UnitOfWork.Session.Query<Watchdog>()
+        _newWatchdog = UnitOfWork.Session!.Query<Watchdog>()
             .SingleOrDefault(x => x.Name == _watchdogName);
     }
 

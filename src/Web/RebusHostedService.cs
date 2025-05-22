@@ -8,9 +8,12 @@ using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Messages;
+using MrWatchdog.Core.Rebus;
 using MrWatchdog.Web.Infrastructure;
 using Rebus.CastleWindsor;
 using Rebus.Config;
+using Rebus.Pipeline;
+using Rebus.Pipeline.Receive;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
@@ -21,7 +24,7 @@ public class RebusHostedService(
     string environmentInputQueueName,
     InMemNetwork rebusInMemoryNetwork,
     INhibernateConfigurator nhibernateConfigurator,
-    ILoggerFactory loggerFactory
+    IWindsorContainer mainWindsorContainer
 ) : IHostedService
 {
     private WindsorContainer? _hostedServiceWindsorContainer;
@@ -45,16 +48,17 @@ public class RebusHostedService(
         );        
         
         WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer);
+        WindsorContainerRegistrator.RegisterServicesFromMainWindsorContainer(_hostedServiceWindsorContainer, mainWindsorContainer);
         
         _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateWatchdogCommandMessageHandler>();
         
         var rebusUnitOfWork = new RebusUnitOfWork(
             unitOfWorkFactory: _hostedServiceWindsorContainer.Resolve<IUnitOfWorkFactory>(),
             isolationLevel: System.Data.IsolationLevel.ReadCommitted
-        );        
-        
+        );
+
         Configure.With(new CastleWindsorContainerAdapter(_hostedServiceWindsorContainer))
-            .Logging(x => x.MicrosoftExtensionsLogging(loggerFactory))
+            .Logging(x => x.MicrosoftExtensionsLogging(_hostedServiceWindsorContainer.Resolve<ILoggerFactory>()))
             .Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, environmentInputQueueName, registerSubscriptionStorage: false))
             .Routing(x => x.TypeBased().MapAssemblyDerivedFrom<Command>(environmentInputQueueName))
             .Options(x =>
@@ -71,6 +75,18 @@ public class RebusHostedService(
                     );
                     x.SetNumberOfWorkers(5);
                     x.SetMaxParallelism(5);
+                    x.Decorate<IPipeline>(resolutionContext =>
+                    {
+                        var jobTrackingIncomingStep = new JobTrackingIncomingStep(
+                            _hostedServiceWindsorContainer.Resolve<INhibernateConfigurator>(),
+                            _hostedServiceWindsorContainer.Resolve<ILogger<JobTrackingIncomingStep>>()
+                        );
+
+                        var pipeline = resolutionContext.Get<IPipeline>();
+                        return new PipelineStepInjector(pipeline)
+                                .OnReceive(jobTrackingIncomingStep, PipelineRelativePosition.After, typeof(DeserializeIncomingMessageStep))
+                            ;
+                    });
                 }
             )
             .Start();

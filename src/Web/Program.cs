@@ -56,13 +56,14 @@ builder.Services.AddSingleton<IHostedService>(serviceProvider =>
         mainRebusHostedServiceEnvironmentInputQueueName,
         serviceProvider.GetRequiredService<InMemNetwork>(),
         serviceProvider.GetRequiredService<INhibernateConfigurator>(),
-        serviceProvider.GetRequiredService<ILoggerFactory>()
+        serviceProvider.GetRequiredService<IWindsorContainer>()
     )
 );
 
 var app = builder.Build();
+var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
-_buildDatabase(app.Services);
+_buildDatabase();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -93,14 +94,13 @@ app.MapRazorPages()
 await app.RunAsync();
 
 // Castle Windsor is the root container and it needs to be disposed manually.
-var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 mainWindsorContainer.Dispose();
+return;
 
-
-void _buildDatabase(IServiceProvider services)
+void _buildDatabase()
 {
-    var logger = services.GetRequiredService<ILogger<BuilderOfDatabase>>();
-    var configuration = services.GetRequiredService<IConfiguration>();
+    var logger = mainWindsorContainer.Resolve<ILogger<BuilderOfDatabase>>();
+    var configuration = mainWindsorContainer.Resolve<IConfiguration>();
     var connectionString = $"{configuration.GetConnectionString("Database")}CommandTimeout=120;";
     var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
     DatabaseBuilderHelper.BuildDatabase(connectionString, databaseScriptsDirectoryPath, logger);

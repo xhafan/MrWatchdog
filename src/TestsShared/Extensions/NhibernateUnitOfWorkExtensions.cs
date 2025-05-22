@@ -15,10 +15,17 @@ public static class NhibernateUnitOfWorkExtensions
         unitOfWork.Flush();
     }
     
-    public static TAggregateRoot Get<TAggregateRoot>(this NhibernateUnitOfWork unitOfWork, long id) 
+    public static TAggregateRoot? Get<TAggregateRoot>(this NhibernateUnitOfWork unitOfWork, long id) 
         where TAggregateRoot : Entity<long>, IAggregateRoot
     {
         var repository = new NhibernateRepository<TAggregateRoot, long>(unitOfWork);
         return repository.Get(id);
     }    
+
+    public static TAggregateRoot LoadById<TAggregateRoot>(this NhibernateUnitOfWork unitOfWork, long id) 
+        where TAggregateRoot : Entity<long>, IAggregateRoot
+    {
+        var repository = new NhibernateRepository<TAggregateRoot, long>(unitOfWork);
+        return repository.LoadById(id);
+    }  
 }

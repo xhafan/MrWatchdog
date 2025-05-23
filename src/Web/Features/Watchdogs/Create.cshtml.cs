@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Web.Pages.Shared;
+using MrWatchdog.Web.Features.Shared;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Pages.Watchdogs;
+namespace MrWatchdog.Web.Features.Watchdogs;
 
 public class CreateModel(IBus bus) : BasePageModel
 {

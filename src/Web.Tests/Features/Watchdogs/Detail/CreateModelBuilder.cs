@@ -1,8 +1,8 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Web.Pages.Watchdogs;
+using MrWatchdog.Web.Features.Watchdogs;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Tests.Pages.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 public class CreateModelBuilder
 {

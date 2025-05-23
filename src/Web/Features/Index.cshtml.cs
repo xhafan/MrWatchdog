@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MrWatchdog.Web.Pages;
+namespace MrWatchdog.Web.Features;
 
 public class IndexModel : PageModel
 {

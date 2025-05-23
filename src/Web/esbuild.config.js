@@ -1,7 +1,7 @@
 const esbuild = require("esbuild");
 
 const options = {
-  entryPoints: ["Pages/Shared/site.ts"],
+  entryPoints: ["Features/Shared/site.ts"],
   bundle: true,
   minify: true,
   sourcemap: true,

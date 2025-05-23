@@ -24,7 +24,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
 builder.Host.ConfigureContainer<IWindsorContainer>(WindsorContainerRegistrator.RegisterCommonServices);
 
-var mvcBuilder = builder.Services.AddRazorPages();
+var mvcBuilder = builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.RootDirectory = "/Features";
+});
 
 if (builder.Environment.IsDevelopment())
 {

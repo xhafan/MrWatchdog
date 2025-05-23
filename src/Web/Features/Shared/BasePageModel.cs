@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MrWatchdog.Web.Pages.Shared;
+namespace MrWatchdog.Web.Features.Shared;
 
 public abstract class BasePageModel : PageModel
 {

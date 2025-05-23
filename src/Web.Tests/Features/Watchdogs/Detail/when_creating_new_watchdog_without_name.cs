@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Web.Pages.Watchdogs;
+using MrWatchdog.Web.Features.Watchdogs;
 
-namespace MrWatchdog.Web.Tests.Pages.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
 public class when_creating_new_watchdog_without_name

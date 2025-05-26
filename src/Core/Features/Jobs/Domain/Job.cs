@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using CoreDdd.Domain;
+using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Jobs.Domain;
@@ -75,5 +76,20 @@ public class Job : VersionedEntity, IAggregateRoot
 
         var lastHandlingAttempt = _GetLastJobHandlingUnfinishedAttempt();
         lastHandlingAttempt.Fail(ex);
+    }
+
+    public virtual JobDto GetDto()
+    {
+        return new JobDto(
+            Guid,
+            CreatedOn,
+            CompletedOn,
+            Type,
+            InputData,
+            Kind,
+            NumberOfHandlingAttempts,
+            _affectedAggregateRootEntities.Select(x => x.GetDto()),
+            _handlingAttempts.Select(x => x.GetDto())
+        );
     }
 }

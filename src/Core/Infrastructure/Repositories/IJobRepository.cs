@@ -2,4 +2,8 @@
 
 namespace MrWatchdog.Core.Infrastructure.Repositories;
 
-public interface IJobRepository : IRepository<Job>;
+public interface IJobRepository : IRepository<Job>
+{
+    Task<Job?> GetByGuidAsync(Guid jobGuid);
+    Task<Job> LoadByGuidAsync(Guid jobGuid);
+}

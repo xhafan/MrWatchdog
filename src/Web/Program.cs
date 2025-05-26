@@ -7,10 +7,10 @@ using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
 using DatabaseBuilder;
+using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Web;
-using MrWatchdog.Web.Infrastructure;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
@@ -24,10 +24,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
 builder.Host.ConfigureContainer<IWindsorContainer>(WindsorContainerRegistrator.RegisterCommonServices);
 
-var mvcBuilder = builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
-{
-    options.RootDirectory = "/Features";
-});
+var mvcBuilder = builder.Services
+    .AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.RootDirectory = "/Features";
+    });
+builder.Services.AddControllers();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -63,6 +66,11 @@ builder.Services.AddSingleton<IHostedService>(serviceProvider =>
     )
 );
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo {Title = "Mr Watchdog API", Version = "v1"});
+});
+
 var app = builder.Build();
 var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
@@ -93,6 +101,13 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("v1/swagger.json", "Mr Watchdog API V1");
+});
 
 await app.RunAsync();
 

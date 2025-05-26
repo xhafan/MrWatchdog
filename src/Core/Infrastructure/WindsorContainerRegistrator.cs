@@ -1,16 +1,27 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using CoreDdd.Queries;
+using Microsoft.Extensions.Logging;
+using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Web.Infrastructure;
+namespace MrWatchdog.Core.Infrastructure;
 
 public static class WindsorContainerRegistrator
 {
     public static void RegisterCommonServices(IWindsorContainer windsorContainer)
     {
         windsorContainer.Register(
-            Component.For<IRepository<Watchdog>>().ImplementedBy<NhibernateRepository<Watchdog>>().LifeStyle.Transient
+            Classes
+                .FromAssemblyContaining<JobRepository>()
+                .BasedOn(typeof(IRepository<>))
+                .WithService.AllInterfaces()
+                .Configure(x => x.LifestyleTransient()),
+            Classes
+                .FromAssemblyContaining<GetJobQueryHandler>()
+                .BasedOn(typeof(IQueryHandler<>))
+                .WithService.AllInterfaces()
+                .Configure(x => x.LifestyleTransient())
         );
     }
 

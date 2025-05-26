@@ -1,4 +1,5 @@
 ﻿using CoreUtils;
+using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Jobs.Domain;
@@ -29,5 +30,10 @@ public class JobHandlingAttempt : VersionedEntity
         Guard.Hope(EndedOn == null, "Job handling attempt has already ended.");
         EndedOn = DateTime.UtcNow;
         Exception = ex.ToString();
+    }
+
+    public virtual JobHandlingAttemptDto GetDto()
+    {
+        return new JobHandlingAttemptDto(StartedOn, EndedOn, Exception);
     }
 }

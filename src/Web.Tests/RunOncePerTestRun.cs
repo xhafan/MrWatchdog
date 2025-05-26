@@ -1,6 +1,6 @@
 ﻿using MrWatchdog.TestsShared;
 
-namespace MrWatchdog.Core.Tests;
+namespace MrWatchdog.Web.Tests;
 
 [SetUpFixture]
 public class RunOncePerTestRun : BaseRunOncePerTestRun;

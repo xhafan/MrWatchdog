@@ -1,20 +1,16 @@
 import { Controller } from "@hotwired/stimulus";
+import BaseStimulusModelController from "../BaseStimulusModelController";
+import { DetailStimulusModel } from "../Shared/Generated/DetailStimulusModel";
 
-export default class DetailController extends Controller {
+export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [
         "webPagesToMonitor"
     ];
-
-    static values = {
-        webPageToMonitorUrl: String
-    };
-    
+   
     declare webPagesToMonitorTarget: HTMLDivElement;
 
-    declare webPageToMonitorUrlValue: string;
-
     async addWebPageToMonitor() {
-        const response = await fetch(this.webPageToMonitorUrlValue);
+        const response = await fetch(this.modelValue.webPageToMonitorUrl);
         if (response.ok) {
             const html = await response.text();
             this.webPagesToMonitorTarget.insertAdjacentHTML("beforeend", html);

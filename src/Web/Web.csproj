@@ -7,6 +7,8 @@
 
   <Import Project="..\SharedAssemblyInfo.props" />
 
+  <Target Name="CompileTypeScript" /> <!-- This is added here just to make Reinforced.Typings happy -->
+
   <ItemGroup>
     <Compile Include="..\Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
   </ItemGroup>
@@ -25,6 +27,7 @@
     <PackageReference Include="Rebus.Microsoft.Extensions.Logging" Version="5.1.0" />
     <PackageReference Include="Rebus.ServiceProvider" Version="10.3.0" />
     <PackageReference Include="Rebus.UnitOfWork" Version="7.0.1" />
+    <PackageReference Include="Reinforced.Typings" Version="1.6.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />
   </ItemGroup>
 

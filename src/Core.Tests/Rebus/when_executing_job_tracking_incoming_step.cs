@@ -56,7 +56,7 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.Type.ShouldBe(nameof(CreateWatchdogCommand));
         job.InputData.ShouldBe($$"""
-                               {"Guid": "{{job.Guid}}", "Name": "watchdog name"}
+                               {"guid": "{{job.Guid}}", "name": "watchdog name"}
                                """);
         job.Kind.ShouldBe(JobKind.Command);
         job.NumberOfHandlingAttempts.ShouldBe(1);

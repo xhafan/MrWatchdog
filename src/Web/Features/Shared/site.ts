@@ -1,11 +1,16 @@
 import type { TurboFrameLoadEvent } from "@hotwired/turbo";
 import { Application } from "@hotwired/stimulus";
-import WatchdogsDetailController from "../Watchdogs/Detail";
+import { StimulusControllers } from "./Generated/StimulusControllers";
 
 import "./site.css";
 
+import WatchdogsCreateController from "../Watchdogs/create";
+import WatchdogsDetailController from "../Watchdogs/detail";
+
+
 const application = Application.start();
-application.register("watchdogs--detail", WatchdogsDetailController);
+application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateController);
+application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailController);
 
 attachValidationAfterTurboLoad();
 

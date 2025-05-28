@@ -1,4 +1,6 @@
 ﻿@page
+@using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model CreateModel
 @{
     ViewData["Title"] = "Create watchdog";
@@ -7,9 +9,18 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row">
+<div class="row"
+     @Stimulus.Controller(
+         StimulusControllers.WatchdogsCreate, 
+            new CreateStimulusModel(
+                Url.Action("GetJob", "Jobs", new { jobGuid = "$jobGuid"}),
+                Url.Page("/Watchdogs/Detail", new { id = "$id"})
+     ))
+     >
     <div class="col-md-6">
-        <form method="post">
+        <form method="post" 
+              data-watchdogs--create-target="form"
+              >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="mb-3">
@@ -19,7 +30,9 @@
             </div>
             
             <div class="mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <button class="btn btn-primary" type="submit">
+                    Create
+                </button>
             </div>
         </form>
     </div>

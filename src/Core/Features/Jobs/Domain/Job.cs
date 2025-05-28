@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using CoreDdd.Domain;
+﻿using CoreDdd.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Infrastructure;
 
 namespace MrWatchdog.Core.Features.Jobs.Domain;
 
@@ -22,7 +22,7 @@ public class Job : VersionedEntity, IAggregateRoot
         Guid = guid;
         CreatedOn = DateTime.UtcNow;
         Type = type;
-        InputData = JsonSerializer.Serialize(inputData);
+        InputData = JsonHelper.Serialize(inputData);
         Kind = kind;
     }
 

@@ -21,7 +21,6 @@ public class CreateModel(IBus bus) : BasePageModel
 
         var command = new CreateWatchdogCommand(Name);
         await bus.Send(command);
-
         return Ok(command.Guid.ToString());
     }    
 }

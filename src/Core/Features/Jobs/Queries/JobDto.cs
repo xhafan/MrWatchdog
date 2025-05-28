@@ -1,7 +1,9 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
+using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Core.Features.Jobs.Queries;
 
+[TsInterface]
 public record JobDto(
     Guid Guid,
     DateTime CreatedOn,

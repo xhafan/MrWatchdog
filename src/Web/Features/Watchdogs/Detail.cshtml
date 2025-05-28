@@ -1,4 +1,6 @@
 ﻿@page "{id}"
+@using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model DetailModel
 @{
     ViewData["Title"] = "Edit watchdog";
@@ -7,9 +9,14 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row" 
-     data-controller="watchdogs--detail"
-     data-watchdogs--detail-web-page-to-monitor-url-value="@Url.Page("WebPageToMonitor", new {id = 0})">
+<div class="row"
+     @Stimulus.Controller(
+         StimulusControllers.WatchdogsDetail,
+         new DetailStimulusModel(
+             Url.Action("GetJob", "Jobs", new { jobGuid = "$jobGuid"}),
+             Url.Page("WebPageToMonitor", new { id = 0 })
+     ))
+     >
     <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -29,7 +36,7 @@
                     <turbo-frame id="watchdog_web_page_@(watchdogWebPageId)" src="@Url.Page("WebPageToMonitor", new{id = watchdogWebPageId})" />
                 }
             </div>
-            <button type="submit" class="btn btn-primary" data-action="watchdogs--detail#addWebPageToMonitor">
+            <button type="submit" class="btn btn-primary" data-action="@StimulusControllers.WatchdogsDetail#addWebPageToMonitor">
                 Add web page to monitor
             </button>
         </div>

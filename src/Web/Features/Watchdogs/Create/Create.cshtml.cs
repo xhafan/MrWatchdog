@@ -4,7 +4,7 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Web.Features.Shared;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Features.Watchdogs;
+namespace MrWatchdog.Web.Features.Watchdogs.Create;
 
 public class CreateModel(IBus bus) : BasePageModel
 {

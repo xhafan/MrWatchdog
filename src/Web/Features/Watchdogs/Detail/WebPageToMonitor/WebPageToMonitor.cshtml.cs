@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs;
+namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
 
 public class WebPageToMonitorModel : BasePageModel
 {

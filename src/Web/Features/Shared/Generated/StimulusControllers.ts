@@ -4,6 +4,9 @@
 
 export abstract class StimulusControllers
 {
+	public static body: string = `body`;
+	public static turboFrame: string = `turbo-frame`;
+	public static viewOrEditForm: string = `view-or-edit-form`;
 	public static watchdogsCreate: string = `watchdogs--create`;
 	public static watchdogsDetail: string = `watchdogs--detail`;
 }

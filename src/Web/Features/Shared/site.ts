@@ -4,13 +4,23 @@ import { StimulusControllers } from "./Generated/StimulusControllers";
 
 import "./site.css";
 
-import WatchdogsCreateController from "../Watchdogs/create";
-import WatchdogsDetailController from "../Watchdogs/detail";
+
+import BodyController from "./BodyController";
+import TurboFrameController from "./TagHelpers/TurboFrame/TurboFrameController";
+import ViewOrEditFormController from "./TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+
+import WatchdogsCreateController from "../Watchdogs/Create/CreateController";
+import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 
 
 const application = Application.start();
+application.register(StimulusControllers.body, BodyController);
+application.register(StimulusControllers.turboFrame, TurboFrameController);
+application.register(StimulusControllers.viewOrEditForm, ViewOrEditFormController);
+
 application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateController);
 application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailController);
+
 
 attachValidationAfterTurboLoad();
 

@@ -12,6 +12,6 @@ public abstract class BasePageModel : PageModel
         pageResult.StatusCode = StatusCodes.Status422UnprocessableEntity;
         return pageResult;
     }
-    
-    protected IActionResult Ok(object? value) => new OkObjectResult(value);    
+
+    protected IActionResult Ok(object? value) => new OkObjectResult(value);
 }

@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Watchdogs;
+namespace MrWatchdog.Web.Features.Watchdogs.Create;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
 public record CreateStimulusModel(string? GetJobUrl, string? WatchdogDetailUrl)

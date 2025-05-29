@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Web;
+using MrWatchdog.Web.Infrastructure;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
@@ -29,6 +30,7 @@ var mvcBuilder = builder.Services
     .AddRazorPagesOptions(options =>
     {
         options.RootDirectory = "/Features";
+        options.Conventions.Add(new PageRouteModelConvention());
     });
 builder.Services.AddControllers();
 

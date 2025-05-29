@@ -1,19 +1,13 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Web.Features.Watchdogs;
+using MrWatchdog.Web.Features.Watchdogs.Create;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
 
 public class CreateModelBuilder
 {
     private IBus? _bus;
     private string? _name;
-
-    public CreateModelBuilder WithName(string name)
-    {
-        _name = name;
-        return this;
-    }
 
     public CreateModelBuilder WithBus(IBus bus)
     {
@@ -21,15 +15,21 @@ public class CreateModelBuilder
         return this;
     }
     
+    public CreateModelBuilder WithName(string name)
+    {
+        _name = name;
+        return this;
+    }
+
     public CreateModel Build()
     {
         _bus ??= A.Fake<IBus>();
 
-        var createModel = new CreateModel(_bus)
+        var model = new CreateModel(_bus)
         {
             Name = _name!
         };
-        ModelValidator.ValidateModel(createModel);
-        return createModel;
+        ModelValidator.ValidateModel(model);
+        return model;
     }
 }

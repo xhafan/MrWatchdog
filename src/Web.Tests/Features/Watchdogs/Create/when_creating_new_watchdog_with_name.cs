@@ -1,16 +1,16 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Web.Features.Watchdogs;
+using MrWatchdog.Web.Features.Watchdogs.Create;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
 
 [TestFixture]
 public class when_creating_new_watchdog_with_name
 {
     private IActionResult _actionResult = null!;
-    private CreateModel _createModel = null!;
+    private CreateModel _model = null!;
     private IBus _bus = null!;
 
     [SetUp]
@@ -18,12 +18,12 @@ public class when_creating_new_watchdog_with_name
     {
         _bus = A.Fake<IBus>();
         
-        _createModel = new CreateModelBuilder()
+        _model = new CreateModelBuilder()
             .WithName("watchdog name")
             .WithBus(_bus)
             .Build();
         
-        _actionResult = await _createModel.OnPost();
+        _actionResult = await _model.OnPost();
     }
 
     [Test]
@@ -51,6 +51,6 @@ public class when_creating_new_watchdog_with_name
     [Test]
     public void model_is_valid()
     {
-        _createModel.ModelState.IsValid.ShouldBe(true);
+        _model.ModelState.IsValid.ShouldBe(true);
     }
 }

@@ -1,0 +1,28 @@
+﻿@page "{id}"
+@model OverviewModel
+@{
+   Layout = null;
+}
+<!turbo-frame id="watchdog_overview_@(Model.WatchdogArgs.Id)">
+    <view-or-edit-form action="@Url.Page("Overview", new{id = Model.WatchdogArgs.Id})">
+        
+        <view-mode-item>
+            <div class="mb-3">
+                <label asp-for="WatchdogArgs.Name" class="form-label fw-bold"></label>
+                <div>@Model.WatchdogArgs.Name</div>
+            </div>
+        </view-mode-item>
+        
+        <edit-mode-item>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="WatchdogArgs.Name" class="form-label fw-bold"></label>
+                <input asp-for="WatchdogArgs.Name" class="form-control" />
+                <span asp-validation-for="WatchdogArgs.Name" class="text-danger"></span>
+            </div>
+        </edit-mode-item>
+
+    </view-or-edit-form>
+</!turbo-frame>
+

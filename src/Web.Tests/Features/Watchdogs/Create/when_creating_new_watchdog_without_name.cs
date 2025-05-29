@@ -1,24 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Web.Features.Watchdogs;
+using MrWatchdog.Web.Features.Watchdogs.Create;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
 
 [TestFixture]
 public class when_creating_new_watchdog_without_name
 {
     private IActionResult _actionResult = null!;
-    private CreateModel _createModel = null!;
+    private CreateModel _model = null!;
 
     [SetUp]
     public async Task Context()
     {
-        _createModel = new CreateModelBuilder()
+        _model = new CreateModelBuilder()
             .WithName("")
             .Build();
 
-        _actionResult = await _createModel.OnPost();
+        _actionResult = await _model.OnPost();
     }
 
     [Test]
@@ -32,8 +32,8 @@ public class when_creating_new_watchdog_without_name
     [Test]
     public void model_is_invalid()
     {
-        _createModel.ModelState.IsValid.ShouldBe(false);
-        var nameErrors = _createModel.ModelState[nameof(CreateModel.Name)]?.Errors;
+        _model.ModelState.IsValid.ShouldBe(false);
+        var nameErrors = _model.ModelState[nameof(CreateModel.Name)]?.Errors;
         nameErrors.ShouldNotBeNull();
         nameErrors.ShouldContain(x => x.ErrorMessage.Contains("required"));
     }

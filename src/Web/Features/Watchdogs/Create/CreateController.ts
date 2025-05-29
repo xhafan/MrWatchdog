@@ -1,9 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-import { JobDto } from "../Shared/Generated/JobDto";
-import { DomainConstants } from "../Shared/Generated/DomainConstants";
-import BaseStimulusModelController from "../BaseStimulusModelController";
-import { CreateStimulusModel } from "../Shared/Generated/CreateStimulusModel";
-import { formSubmitWithWaitForJobCompletion } from "../Jobs/jobCompletion";
+import { JobDto } from "../../Shared/Generated/JobDto";
+import { DomainConstants } from "../../Shared/Generated/DomainConstants";
+import BaseStimulusModelController from "../../BaseStimulusModelController";
+import { CreateStimulusModel } from "../../Shared/Generated/CreateStimulusModel";
+import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 
 export default class CreateController extends BaseStimulusModelController<CreateStimulusModel> {
     static targets  = [
@@ -15,7 +15,8 @@ export default class CreateController extends BaseStimulusModelController<Create
     connect() {
         const form = this.formTarget;
 
-        formSubmitWithWaitForJobCompletion(form, 
+        formSubmitWithWaitForJobCompletion(
+            form, 
             this.modelValue.getJobUrl, 
             jobDto => {
                 const watchdogEntity = jobDto.affectedAggregateRootEntities.find(e => e.aggregateRootEntityName === DomainConstants.watchdog);

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
-import BaseStimulusModelController from "../BaseStimulusModelController";
-import { DetailStimulusModel } from "../Shared/Generated/DetailStimulusModel";
+import BaseStimulusModelController from "../../BaseStimulusModelController";
+import { DetailStimulusModel } from "../../Shared/Generated/DetailStimulusModel";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [

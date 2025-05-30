@@ -1,6 +1,6 @@
 import { JobDto } from "../../Generated/JobDto";
 import { DomainConstants } from "../../Generated/DomainConstants";
-import BaseStimulusModelController from "../../../BaseStimulusModelController";
+import BaseStimulusModelController from "../../BaseStimulusModelController";
 import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion";
 import { ViewOrEditFormStimulusModel } from "../../Generated/ViewOrEditFormStimulusModel";
 

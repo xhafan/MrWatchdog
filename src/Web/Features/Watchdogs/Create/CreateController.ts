@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { JobDto } from "../../Shared/Generated/JobDto";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
-import BaseStimulusModelController from "../../BaseStimulusModelController";
+import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
 import { CreateStimulusModel } from "../../Shared/Generated/CreateStimulusModel";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import BaseStimulusModelController from "../../BaseStimulusModelController";
+import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
 import { DetailStimulusModel } from "../../Shared/Generated/DetailStimulusModel";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {

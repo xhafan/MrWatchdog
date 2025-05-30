@@ -44,8 +44,8 @@ public class when_creating_new_watchdog_with_name
         var okObjectResult = (OkObjectResult) _actionResult;
         var value = okObjectResult.Value;
         value.ShouldBeOfType<string>();
-        var valueAsString = (string) value;
-        valueAsString.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
+        var jobGuid = (string) value;
+        jobGuid.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
     }
 
     [Test]

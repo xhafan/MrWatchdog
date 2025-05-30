@@ -1,4 +1,5 @@
 ﻿using CoreDdd.Domain;
+using CoreUtils;
 using MrWatchdog.Core.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -22,8 +23,23 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return new WatchdogArgs
         {
             Id = Id, 
-            Name = Name, 
             WebPageIds = WebPages.Select(x => x.Id).ToList()
         };
+    }
+    
+    public virtual WatchdogOverviewArgs GetWatchdogOverviewArgs()
+    {
+        return new WatchdogOverviewArgs
+        {
+            Id = Id, 
+            Name = Name
+        };
+    }
+
+    public virtual void UpdateOverview(WatchdogOverviewArgs watchdogOverviewArgs)
+    {
+        Guard.Hope(Id == watchdogOverviewArgs.Id, "Invalid watchdog Id.");
+        
+        Name = watchdogOverviewArgs.Name;
     }
 }

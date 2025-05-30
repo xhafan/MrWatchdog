@@ -12,8 +12,9 @@
     <PackageReference Include="CoreDdd.Nhibernate" Version="3.3.4" />
     <PackageReference Include="CoreDdd.Register.Castle" Version="3.3.0" />
     <PackageReference Include="CoreUtils" Version="3.3.1" />
+    <PackageReference Include="DataAnnotationsValidator.fork.xhafan" Version="2.3.0" />
     <PackageReference Include="DatabaseBuilder" Version="1.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.5" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.5" />
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="Npgsql" Version="9.0.3" />

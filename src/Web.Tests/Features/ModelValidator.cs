@@ -7,10 +7,10 @@ public static class ModelValidator
 {
     public static void ValidateModel(PageModel model)
     {
-        var context = new ValidationContext(model, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
-
-        Validator.TryValidateObject(model, context, results, validateAllProperties: true);
+        
+        var validator = new DataAnnotationsValidator.DataAnnotationsValidator();
+        validator.TryValidateObjectRecursive(model, results);
 
         foreach (var validationResult in results)
         {

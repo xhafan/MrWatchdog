@@ -13,5 +13,5 @@ public abstract class BasePageModel : PageModel
         return pageResult;
     }
 
-    protected IActionResult Ok(object? value) => new OkObjectResult(value);
+    protected IActionResult Ok(object? value = null) => new OkObjectResult(value);
 }

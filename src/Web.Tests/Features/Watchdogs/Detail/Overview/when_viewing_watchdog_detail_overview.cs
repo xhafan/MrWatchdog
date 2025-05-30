@@ -1,14 +1,14 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 [TestFixture]
-public class when_viewing_watchdog_detail : BaseDatabaseTest
+public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
 {
-    private DetailModel _model = null!;
+    private OverviewModel _model = null!;
     private Watchdog _watchdog = null!;
 
     [SetUp]
@@ -16,7 +16,7 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new DetailModelBuilder(UnitOfWork)
+        _model = new OverviewModelBuilder(UnitOfWork)
             .Build();
         
         await _model.OnGet(_watchdog.Id);
@@ -25,8 +25,8 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _model.WatchdogArgs.Id.ShouldBe(_watchdog.Id);
-        _model.WatchdogArgs.WebPageIds.ShouldBeEmpty();
+        _model.WatchdogOverviewArgs.Id.ShouldBe(_watchdog.Id);
+        _model.WatchdogOverviewArgs.Name.ShouldBe(WatchdogBuilder.Name);
     }
 
     private void _BuildEntities()

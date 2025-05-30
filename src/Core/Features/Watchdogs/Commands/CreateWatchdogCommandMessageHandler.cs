@@ -4,7 +4,8 @@ using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public class CreateWatchdogCommandMessageHandler(IRepository<Watchdog> watchdogRepository) : IHandleMessages<CreateWatchdogCommand>
+public class CreateWatchdogCommandMessageHandler(IRepository<Watchdog> watchdogRepository) 
+    : IHandleMessages<CreateWatchdogCommand>
 {
     public async Task Handle(CreateWatchdogCommand command)
     {

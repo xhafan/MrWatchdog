@@ -60,7 +60,7 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
         job.CompletedOn.ShouldBe(null);
         job.NumberOfHandlingAttempts.ShouldBe(1);
         
-        job.AffectedAggregateRootEntities.ShouldBeEmpty();
+        job.AffectedEntities.ShouldBeEmpty();
         
         var jobHandlingAttempt = job.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));

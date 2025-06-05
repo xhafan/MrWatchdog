@@ -7,4 +7,8 @@ public static class DomainConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string Watchdog = nameof(Watchdog);
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogWebPage = nameof(WatchdogWebPage);
+    
 }

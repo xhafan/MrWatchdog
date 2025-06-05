@@ -3,7 +3,7 @@
 //     the code is regenerated.
 
 import { JobKind } from './JobKind';
-import { JobAggregateRootEntityDto } from './JobAggregateRootEntityDto';
+import { JobAffectedEntityDto } from './JobAffectedEntityDto';
 import { JobHandlingAttemptDto } from './JobHandlingAttemptDto';
 
 export interface JobDto
@@ -15,6 +15,6 @@ export interface JobDto
 	inputData: string;
 	kind: JobKind;
 	numberOfHandlingAttempts: number;
-	affectedAggregateRootEntities: JobAggregateRootEntityDto[];
+	affectedEntities: JobAffectedEntityDto[];
 	handlingAttempts: JobHandlingAttemptDto[];
 }

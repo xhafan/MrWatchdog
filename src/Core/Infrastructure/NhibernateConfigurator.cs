@@ -44,7 +44,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
     protected override void AdditionalConfiguration(Configuration configuration)
     {
         configuration.SetInterceptor(new CompositeInterceptor([
-            new AggregateRootEntityJobTrackingInterceptor()
+            new EntityJobTrackingInterceptor()
         ]));
     }
 

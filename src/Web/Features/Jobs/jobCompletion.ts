@@ -34,11 +34,11 @@ export function formSubmitWithWaitForJobCompletion(
             throw new Error("Error getting job Guid.");
         }
 
-        getJobUrl = getJobUrl.replace("$jobGuid", jobGuid);
+        let getJobUrlWithReplacedJobGuid = getJobUrl.replace("$jobGuid", jobGuid);
 
         const pollJob = async (delay = 300): Promise<JobDto> => {
             await new Promise(resolve => setTimeout(resolve, delay));
-            const response = await fetch(getJobUrl);
+            const response = await fetch(getJobUrlWithReplacedJobGuid);
             if (response.ok) {
                 const jobDto = await response.json() as JobDto;
                 if (jobDto.completedOn) {
@@ -51,6 +51,7 @@ export function formSubmitWithWaitForJobCompletion(
         const jobDto = await pollJob();
         
         onCompletion(jobDto);
+        enableElementAndRemoveSpinner(event.submitter);
     };
 }
 
@@ -64,4 +65,11 @@ function disableElementAndAddSpinner(element: HTMLElement | null) {
         spinner.className = "spinner-border spinner-border-sm me-2";
         element.prepend(spinner);
     }
+}
+
+function enableElementAndRemoveSpinner(element: HTMLElement | null) {
+    if (!element) return;
+    
+    element.removeAttribute("disabled");
+    element.querySelectorAll("span[class^='spinner-border']").forEach(spinnerSpan => spinnerSpan.remove());    
 }

@@ -7,12 +7,12 @@ using MrWatchdog.TestsShared.Extensions;
 namespace MrWatchdog.Core.Tests.Features.Jobs.Domain;
 
 [TestFixture]
-public class when_persisting_job_aggregate_root_entity : BaseDatabaseTest
+public class when_persisting_job_affected_entity : BaseDatabaseTest
 {
     private readonly Guid _jobGuid = Guid.NewGuid();
 
     private Job _newJob = null!;
-    private JobAggregateRootEntity _persistedJobAggregateRootEntity = null!;
+    private JobAffectedEntity _persistedJobAffectedEntity = null!;
 
     [SetUp]
     public void Context()
@@ -21,20 +21,21 @@ public class when_persisting_job_aggregate_root_entity : BaseDatabaseTest
             .WithGuid(_jobGuid)
             .Build();
         _newJob.HandlingStarted();
-        _newJob.AddAffectedAggregateRootEntity(nameof(Watchdog), 23);
+        _newJob.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
         UnitOfWork.Save(_newJob);
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
 
-        _persistedJobAggregateRootEntity = UnitOfWork.LoadById<Job>(_newJob.Id).AffectedAggregateRootEntities.Single();
+        _persistedJobAffectedEntity = UnitOfWork.LoadById<Job>(_newJob.Id).AffectedEntities.Single();
     }
 
     [Test]
     public void persisted_job_handling_attempt_can_be_retrieved_and_has_correct_data()
     {
-        _persistedJobAggregateRootEntity.Job.ShouldBe(_newJob);
-        _persistedJobAggregateRootEntity.AggregateRootEntityName.ShouldBe(nameof(Watchdog));
-        _persistedJobAggregateRootEntity.AggregateRootEntityId.ShouldBe(23);
+        _persistedJobAffectedEntity.Job.ShouldBe(_newJob);
+        _persistedJobAffectedEntity.EntityName.ShouldBe(nameof(Watchdog));
+        _persistedJobAffectedEntity.EntityId.ShouldBe(23);
+        _persistedJobAffectedEntity.IsCreated.ShouldBe(true);
     }
 }

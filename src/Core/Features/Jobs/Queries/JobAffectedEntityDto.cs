@@ -3,4 +3,4 @@
 namespace MrWatchdog.Core.Features.Jobs.Queries;
 
 [TsInterface]
-public record JobAggregateRootEntityDto(string AggregateRootEntityName, long AggregateRootEntityId);
+public record JobAffectedEntityDto(string EntityName, long EntityId, bool IsCreated);

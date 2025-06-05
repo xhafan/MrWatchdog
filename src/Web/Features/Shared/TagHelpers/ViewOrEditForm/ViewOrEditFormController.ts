@@ -34,6 +34,10 @@ export default class ViewOrEditFormController extends BaseStimulusModelControlle
                 this.raiseEventFormSubmitted(jobDto);
             }
         );
+
+        if (this.modelValue.startInEditMode) {
+            this.edit();
+        }
     }
 
     private raiseEventFormSubmitted(job: JobDto) {

@@ -6,5 +6,4 @@ import { BaseStimulusModel } from './BaseStimulusModel';
 
 export interface TurboFrameStimulusModel extends BaseStimulusModel
 {
-	reloadOnEvent: string;
 }

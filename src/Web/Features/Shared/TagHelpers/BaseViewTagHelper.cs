@@ -7,6 +7,8 @@ namespace MrWatchdog.Web.Features.Shared.TagHelpers;
 
 public abstract class BaseViewTagHelper(IHtmlHelper htmlHelper) : TagHelper 
 {
+    protected virtual string? TagName => "div";
+    
     [HtmlAttributeNotBound]
     [ViewContext]
     public ViewContext ViewContext { get; set; } = null!;
@@ -33,6 +35,7 @@ public abstract class BaseViewTagHelper(IHtmlHelper htmlHelper) : TagHelper
 
         var partial = await htmlHelper.PartialAsync(viewLocation, this, null);
 
+        output.TagName = TagName;
         output.Content.SetHtmlContent(partial);
         
         var stimulusControllerName = GetStimulusControllerName();

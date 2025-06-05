@@ -19,7 +19,7 @@ public class when_getting_job : BaseDatabaseTest
         _job = new JobBuilder(UnitOfWork).Build();
         _job.HandlingStarted();
         _job.Complete();
-        _job.AddAffectedAggregateRootEntity(nameof(Watchdog), 23);
+        _job.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
         
         var controller = new JobsControllerBuilder(UnitOfWork)
             .Build();
@@ -44,9 +44,10 @@ public class when_getting_job : BaseDatabaseTest
         jobDto.Kind.ShouldBe(_job.Kind);
         jobDto.NumberOfHandlingAttempts.ShouldBe(_job.NumberOfHandlingAttempts);
         
-        var jobAggregateRootEntityDto = jobDto.AffectedAggregateRootEntities.ShouldHaveSingleItem();
-        jobAggregateRootEntityDto.AggregateRootEntityName.ShouldBe(nameof(Watchdog));
-        jobAggregateRootEntityDto.AggregateRootEntityId.ShouldBe(23);
+        var jobAffectedEntityDto = jobDto.AffectedEntities.ShouldHaveSingleItem();
+        jobAffectedEntityDto.EntityName.ShouldBe(nameof(Watchdog));
+        jobAffectedEntityDto.EntityId.ShouldBe(23);
+        jobAffectedEntityDto.IsCreated.ShouldBe(true);
         
         var jobHandlingAttemptDto = jobDto.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttemptDto.StartedOn.ShouldBe(_job.HandlingAttempts.Single().StartedOn);

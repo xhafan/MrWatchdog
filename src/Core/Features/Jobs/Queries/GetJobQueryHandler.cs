@@ -12,10 +12,8 @@ public class GetJobQueryHandler(
     public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetJobQuery query)
     {
         var job = await jobRepository.GetByGuidAsync(query.JobGuid);
-        if (job == null)
-        {
-            return [];
-        }
-        return (IEnumerable<TResult>) new List<JobDto> {job.GetDto()};
+        return job == null
+            ? []
+            : [(TResult) (object) job.GetDto()];
     }
 }

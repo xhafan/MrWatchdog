@@ -10,9 +10,9 @@ public class GetWatchdogOverviewArgsQueryHandler(
     IRepository<Watchdog> watchdogRepository
 ) : BaseNhibernateQueryHandler<GetWatchdogOverviewArgsQuery>(unitOfWork)
 {
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogOverviewArgsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogOverviewArgsQuery query)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (IEnumerable<TResult>) new List<WatchdogOverviewArgs> {watchdog.GetWatchdogOverviewArgs()};
+        return (TResult)(object)watchdog.GetWatchdogOverviewArgs();
     }
 }

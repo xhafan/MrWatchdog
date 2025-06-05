@@ -10,7 +10,6 @@ public class TurboFrame(IHtmlHelper htmlHelper, LinkGenerator linkGenerator)
     public string Id { get; set; } = null!;
     public string? Src { get; set; }
     public string? Loading { get; set; }
-    public string? ReloadOnEvent { get; set; }
 
     protected override string GetStimulusControllerName()
     {
@@ -19,6 +18,6 @@ public class TurboFrame(IHtmlHelper htmlHelper, LinkGenerator linkGenerator)
     
     protected override TurboFrameStimulusModel GetStimulusModel()
     {
-        return new TurboFrameStimulusModel {ReloadOnEvent = ReloadOnEvent};
+        return new TurboFrameStimulusModel();
     }
 }

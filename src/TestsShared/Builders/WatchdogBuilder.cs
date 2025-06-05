@@ -9,16 +9,32 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork)
     public const string Name = "watchdog name";
 
     private string _name = Name;
+    private WatchdogWebPageArgs[]? _watchdogWebPageArgses;
 
     public WatchdogBuilder WithName(string name)
     {
         _name = name;
         return this;
     }
+    
+    public WatchdogBuilder WithWebPage(params WatchdogWebPageArgs[] watchdogWebPageArgses)
+    {
+        _watchdogWebPageArgses = watchdogWebPageArgses;
+        return this;
+    } 
+    
 
     public Watchdog Build()
     {
         var watchdog = new Watchdog(_name);
+
+        if (_watchdogWebPageArgses != null)
+        {
+            foreach (var watchdogWebPageArgs in _watchdogWebPageArgses)
+            {
+                watchdog.AddWebPage(watchdogWebPageArgs);
+            }
+        }
 
         unitOfWork?.Save(watchdog);
         

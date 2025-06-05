@@ -2,8 +2,9 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export interface JobAggregateRootEntityDto
+export interface JobAffectedEntityDto
 {
-	aggregateRootEntityName: string;
-	aggregateRootEntityId: number;
+	entityName: string;
+	entityId: number;
+	isCreated: boolean;
 }

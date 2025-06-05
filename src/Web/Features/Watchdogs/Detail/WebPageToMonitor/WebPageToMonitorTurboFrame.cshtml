@@ -1,0 +1,12 @@
+﻿@page "{watchdogId}/{watchdogWebPageId}"
+@model WebPageToMonitorTurboFrameModel
+@{
+   Layout = null;
+}
+<turbo-frame id="watchdog_web_page_@Model.WatchdogWebPageId"
+             src="@Url.Page("WebPageToMonitor", new {
+                      watchdogId = Model.WatchdogId,
+                      watchdogWebPageId = Model.WatchdogWebPageId
+                  })"
+             >
+</turbo-frame>

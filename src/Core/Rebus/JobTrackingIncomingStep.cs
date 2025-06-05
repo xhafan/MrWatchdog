@@ -19,7 +19,7 @@ public class JobTrackingIncomingStep(
 {
     private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
 
-    public static readonly AmbientStorage<List<(string AggregateRootName, long AggregateRootId)>?> AffectedAggregateRootEntities = new();
+    public static readonly AmbientStorage<List<(string EntityName, long EntityId, bool IsCreated)>?> AffectedEntities = new();
 
     public async Task Process(IncomingStepContext context, Func<Task> next)
     {
@@ -31,7 +31,7 @@ public class JobTrackingIncomingStep(
             return;
         }
         
-        AffectedAggregateRootEntities.Value = [];
+        AffectedEntities.Value = [];
         Job? job = null;
 
         try
@@ -55,7 +55,7 @@ public class JobTrackingIncomingStep(
         }   
     }
 
-    private async Task<Job> _CreateOrFetchJobInSeparateTransaction(BaseMessage baseMessage) // todo: try to fetch existing job
+    private async Task<Job> _CreateOrFetchJobInSeparateTransaction(BaseMessage baseMessage)
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
         newUnitOfWork.BeginTransaction(DefaultIsolationLevel);
@@ -94,15 +94,19 @@ public class JobTrackingIncomingStep(
 
         job.Complete();
 
-        _addAffectedAggregateRootEntitiesToJob();
+        _addAffectedEntitiesToJob();
         return;
 
-        void _addAffectedAggregateRootEntitiesToJob()
+        void _addAffectedEntitiesToJob()
         {
-            Guard.Hope(AffectedAggregateRootEntities.Value != null, "AffectedAggregateRootEntities.Value" + " is null");
-            foreach (var affectedAggregateRootEntity in AffectedAggregateRootEntities.Value)
+            Guard.Hope(AffectedEntities.Value != null, "AffectedEntities.Value" + " is null");
+            foreach (var affectedEntity in AffectedEntities.Value)
             {
-                job.AddAffectedAggregateRootEntity(affectedAggregateRootEntity.AggregateRootName, affectedAggregateRootEntity.AggregateRootId);
+                job.AddAffectedEntity(
+                    affectedEntity.EntityName,
+                    affectedEntity.EntityId,
+                    affectedEntity.IsCreated
+                );
             }
         }
     }   

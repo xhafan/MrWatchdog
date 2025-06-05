@@ -1,34 +1,50 @@
-﻿@page "{id}"
+﻿@page "{watchdogId}/{watchdogWebPageId}"
 @model WebPageToMonitorModel
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.Id)">
+<!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.WatchdogWebPageId)">
     <div class="card mb-1">
         <div class="card-header">
             @Model.WatchdogWebPageArgs.Name
         </div>
         <div class="card-body">
-            <form method="post">
+            <view-or-edit-form action="@Url.Page("WebPageToMonitor")"
+                               start-in-edit-mode="Model.WatchdogWebPageArgs.Url == null">
+                <view-mode-item>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogWebPageArgs.Url</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogWebPageArgs.Selector</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogWebPageArgs.Name</div>
+                    </div>
+                </view-mode-item>
+                <edit-mode-item>
+                    <input asp-for="WatchdogWebPageArgs.WatchdogId" type="hidden" />
+                    <input asp-for="WatchdogWebPageArgs.WatchdogWebPageId" type="hidden" />
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogWebPageArgs.Url" class="form-control" />
+                        <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogWebPageArgs.Selector" class="form-control" />
+                        <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
+                    </div>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
                     <input asp-for="WatchdogWebPageArgs.Name" class="form-control" />
                     <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Url" class="form-control" />
-                    <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Selector" class="form-control" />
-                    <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
-                </div>
-                @* <button type="submit" class="btn btn-primary"> *@
-                @*     Save *@
-                @* </button> *@
-            </form>
+                </edit-mode-item>
+            </view-or-edit-form>
         </div>
     </div>
 </!turbo-frame>

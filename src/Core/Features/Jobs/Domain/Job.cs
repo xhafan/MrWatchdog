@@ -7,7 +7,7 @@ namespace MrWatchdog.Core.Features.Jobs.Domain;
 
 public class Job : VersionedEntity, IAggregateRoot
 {
-    private readonly ISet<JobAggregateRootEntity> _affectedAggregateRootEntities = new HashSet<JobAggregateRootEntity>();
+    private readonly ISet<JobAffectedEntity> _affectedEntities = new HashSet<JobAffectedEntity>();
     private readonly ISet<JobHandlingAttempt> _handlingAttempts = new HashSet<JobHandlingAttempt>();
     
     protected Job() {}
@@ -33,7 +33,7 @@ public class Job : VersionedEntity, IAggregateRoot
     public virtual string InputData { get; } = null!;
     public virtual JobKind Kind { get; }
     public virtual int NumberOfHandlingAttempts { get; protected set; }
-    public virtual IEnumerable<JobAggregateRootEntity> AffectedAggregateRootEntities => _affectedAggregateRootEntities;
+    public virtual IEnumerable<JobAffectedEntity> AffectedEntities => _affectedEntities;
     public virtual IEnumerable<JobHandlingAttempt> HandlingAttempts => _handlingAttempts;
 
     public virtual void Complete()
@@ -45,18 +45,19 @@ public class Job : VersionedEntity, IAggregateRoot
         lastHandlingAttempt.Complete();
     }
 
-    public virtual void AddAffectedAggregateRootEntity(
-        string aggregateRootEntityName, 
-        long aggregateRootEntityId
+    public virtual void AddAffectedEntity(
+        string entityName, 
+        long entityId,
+        bool isCreated
     )
     {
-        if (_affectedAggregateRootEntities.Any(x => x.AggregateRootEntityName == aggregateRootEntityName
-                                                    && x.AggregateRootEntityId == aggregateRootEntityId))
+        if (_affectedEntities.Any(x => x.EntityName == entityName
+                                       && x.EntityId == entityId))
         {
             return;
         }
 
-        _affectedAggregateRootEntities.Add(new JobAggregateRootEntity(this, aggregateRootEntityName, aggregateRootEntityId));
+        _affectedEntities.Add(new JobAffectedEntity(this, entityName, entityId, isCreated));
     }
 
     public virtual void HandlingStarted()
@@ -88,7 +89,7 @@ public class Job : VersionedEntity, IAggregateRoot
             InputData,
             Kind,
             NumberOfHandlingAttempts,
-            _affectedAggregateRootEntities.Select(x => x.GetDto()),
+            _affectedEntities.Select(x => x.GetDto()),
             _handlingAttempts.Select(x => x.GetDto())
         );
     }

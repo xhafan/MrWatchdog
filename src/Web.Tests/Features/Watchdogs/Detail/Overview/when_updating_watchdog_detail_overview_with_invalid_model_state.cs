@@ -24,12 +24,12 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
             .Build();
         _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
         {
-            Id = _watchdog.Id,
+            WatchdogId = _watchdog.Id,
             Name = null!
         };
         ModelValidator.ValidateModel(_model);
 
-        _actionResult = await _model.OnPost(_watchdog.Id);
+        _actionResult = await _model.OnPost();
     }
 
     [Test]
@@ -44,9 +44,9 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
     public void model_is_invalid()
     {
         _model.ModelState.IsValid.ShouldBe(false);
-        const string nameKey = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.Name)}";
-        _model.ModelState.Keys.ShouldBe([nameKey]);
-        var nameErrors = _model.ModelState[nameKey]?.Errors;
+        const string key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.Name)}";
+        _model.ModelState.Keys.ShouldBe([key]);
+        var nameErrors = _model.ModelState[key]?.Errors;
         nameErrors.ShouldNotBeNull();
         nameErrors.ShouldContain(x => x.ErrorMessage.Contains("required"));
     }   

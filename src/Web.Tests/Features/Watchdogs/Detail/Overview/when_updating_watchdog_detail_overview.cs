@@ -28,11 +28,11 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
             .Build();
         _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
         {
-            Id = _watchdog.Id,
+            WatchdogId = _watchdog.Id,
             Name = "watchdog updated name" 
         };
 
-        _actionResult = await _model.OnPost(_watchdog.Id);
+        _actionResult = await _model.OnPost();
     }
 
     [Test]

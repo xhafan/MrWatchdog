@@ -23,7 +23,7 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
 
         await handler.Handle(new UpdateWatchdogOverviewCommand(new WatchdogOverviewArgs
         {
-            Id = _watchdog.Id,
+            WatchdogId = _watchdog.Id,
             Name = "updated watchdog Name"
         }));
         

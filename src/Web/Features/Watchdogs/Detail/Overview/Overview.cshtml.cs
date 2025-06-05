@@ -15,12 +15,12 @@ public class OverviewModel(IQueryExecutor queryExecutor, IBus bus) : BasePageMod
 
     public async Task OnGet(long id)
     {
-        WatchdogOverviewArgs = (
-            await queryExecutor.ExecuteAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(new GetWatchdogOverviewArgsQuery(id))
-        ).Single();
+        WatchdogOverviewArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(
+                new GetWatchdogOverviewArgsQuery(id));
     }
     
-    public async Task<IActionResult> OnPost(long id)
+    public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)
         {

@@ -46,7 +46,7 @@ public class when_persisting_job : BaseDatabaseTest
         JsonHelper.Deserialize<CreateWatchdogCommand>(_persistedJob.InputData).ShouldBe(JobBuilder.InputData);
         _persistedJob.Kind.ShouldBe(JobBuilder.Kind);
         _persistedJob.NumberOfHandlingAttempts.ShouldBe(1);
-        _persistedJob.AffectedAggregateRootEntities.ShouldBeEmpty();
+        _persistedJob.AffectedEntities.ShouldBeEmpty();
         _persistedJob.HandlingAttempts.Count().ShouldBe(1);
     }
 }

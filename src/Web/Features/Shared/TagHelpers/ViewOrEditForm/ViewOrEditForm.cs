@@ -8,6 +8,7 @@ public class ViewOrEditForm(IHtmlHelper htmlHelper, LinkGenerator linkGenerator)
     : BaseStimulusModelViewTagHelper<ViewOrEditFormStimulusModel>(htmlHelper, linkGenerator)
 {
     public string? Action { get; set; }
+    public bool StartInEditMode { get; set; }
     
     protected override string GetStimulusControllerName()
     {
@@ -16,6 +17,6 @@ public class ViewOrEditForm(IHtmlHelper htmlHelper, LinkGenerator linkGenerator)
 
     protected override ViewOrEditFormStimulusModel GetStimulusModel()
     {
-        return new ViewOrEditFormStimulusModel();
+        return new ViewOrEditFormStimulusModel(StartInEditMode);
     }
 }

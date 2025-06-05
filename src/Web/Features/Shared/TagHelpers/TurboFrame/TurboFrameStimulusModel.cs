@@ -3,7 +3,4 @@
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.TurboFrame;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
-public record TurboFrameStimulusModel : BaseStimulusModel
-{
-    public string? ReloadOnEvent { get; set; }
-}
+public record TurboFrameStimulusModel : BaseStimulusModel;

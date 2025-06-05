@@ -7,6 +7,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.TestsShared.Extensions;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
@@ -17,11 +18,26 @@ namespace MrWatchdog.Core.Tests.Rebus;
 public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
 {
     private CreateWatchdogCommand _command = null!;
-    private Watchdog _newWatchdog = null!;
+    private Watchdog _watchdog = null!;
+    private long _watchdogWebPageIdOne;
+    private long _watchdogWebPageIdTwo;
 
     [SetUp]
     public async Task Context()
     {
+        _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithWebPage(new WatchdogWebPageArgs
+            {
+                Url = "http://url.com/page",
+                Selector = ".selector",
+                Name = "url.com/page"
+            })
+            .Build();
+        _watchdogWebPageIdOne = _watchdog.WebPages.Single().Id;
+        
+        await UnitOfWork.FlushAsync();
+        UnitOfWork.Clear();
+        
         var step = new JobTrackingIncomingStep(
             TestFixtureContext.NhibernateConfigurator,
             A.Fake<ILogger<JobTrackingIncomingStep>>()
@@ -38,10 +54,18 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         return;
 
-        Task _next()
+        async Task _next()
         {
-            _newWatchdog = new WatchdogBuilder(UnitOfWork).Build();
-            return Task.CompletedTask;
+            _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+            _watchdog.AddWebPage(new WatchdogWebPageArgs
+            {
+                Url = "http://url.com/page2",
+                Selector = ".selector2",
+                Name = "url.com/page2"
+            });
+            await UnitOfWork.FlushAsync();
+            
+            _watchdogWebPageIdTwo = _watchdog.WebPages.Single(x => x.Id != _watchdogWebPageIdOne).Id;
         }
     }
 
@@ -61,10 +85,17 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         job.Kind.ShouldBe(JobKind.Command);
         job.NumberOfHandlingAttempts.ShouldBe(1);
         
-        var jobAffectedAggregateRootEntity = job.AffectedAggregateRootEntities.ShouldHaveSingleItem();
-        jobAffectedAggregateRootEntity.AggregateRootEntityName.ShouldBe(nameof(Watchdog));
-        jobAffectedAggregateRootEntity.AggregateRootEntityId.ShouldBe(_newWatchdog.Id);
+        var jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(Watchdog));
+        jobAffectedEntity.ShouldNotBeNull();
+        jobAffectedEntity.EntityId.ShouldBe(_watchdog.Id);
         
+        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(WatchdogWebPage) && !x.IsCreated);
+        jobAffectedEntity.ShouldBeNull();
+
+        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(WatchdogWebPage) && x.IsCreated);
+        jobAffectedEntity.ShouldNotBeNull();
+        jobAffectedEntity.EntityId.ShouldBe(_watchdogWebPageIdTwo);
+
         var jobHandlingAttempt = job.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         jobHandlingAttempt.EndedOn.ShouldNotBeNull();

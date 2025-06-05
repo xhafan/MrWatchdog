@@ -9,7 +9,7 @@ public class UpdateWatchdogOverviewCommandMessageHandler(IRepository<Watchdog> w
 {
     public async Task Handle(UpdateWatchdogOverviewCommand command)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogOverviewArgs.Id);
+        var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogOverviewArgs.WatchdogId);
         watchdog.UpdateOverview(command.WatchdogOverviewArgs);
     }
 }

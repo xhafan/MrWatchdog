@@ -57,9 +57,9 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
         _job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _job.NumberOfHandlingAttempts.ShouldBe(1);
         
-        var jobAffectedAggregateRootEntity = _job.AffectedAggregateRootEntities.ShouldHaveSingleItem();
-        jobAffectedAggregateRootEntity.AggregateRootEntityName.ShouldBe(nameof(Watchdog));
-        jobAffectedAggregateRootEntity.AggregateRootEntityId.ShouldBe(_newWatchdog.Id);
+        var jobAffectedEntity = _job.AffectedEntities.ShouldHaveSingleItem();
+        jobAffectedEntity.EntityName.ShouldBe(nameof(Watchdog));
+        jobAffectedEntity.EntityId.ShouldBe(_newWatchdog.Id);
         
         var jobHandlingAttempt = _job.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));

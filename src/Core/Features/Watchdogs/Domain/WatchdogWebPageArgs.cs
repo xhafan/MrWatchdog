@@ -1,15 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MrWatchdog.Core.Infrastructure.Validations;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogWebPageArgs
+public record WatchdogWebPageArgs
 {
-    public long Id { get; set; }
-    
-    public string? Name { get; set; }
+    [NotDefault]
+    public long WatchdogId { get; set; }
+    [NotDefault]
+    public long WatchdogWebPageId { get; set; }
 
     [Url(ErrorMessage = "The {0} field is not a valid fully-qualified http, or https URL.")]
-    public string Url { get; set; } = null!;
+    [Required]
+    public string? Url { get; set; }
 
-    public string? Selector { get; set; } = null!;
+    public string? Selector { get; set; }
+    
+    public string? Name { get; set; }
 }

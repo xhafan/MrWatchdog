@@ -1,0 +1,58 @@
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.TestsShared;
+using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
+
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPageToMonitor;
+
+[TestFixture]
+public class when_viewing_watchdog_web_page_to_monitor : BaseDatabaseTest
+{
+    private WebPageToMonitorModel _model = null!;
+    private Watchdog _watchdog = null!;
+    private long _watchdogWebPageId;
+
+    [SetUp]
+    public async Task Context()
+    {
+        _BuildEntities();
+        await UnitOfWork.FlushAsync();
+        UnitOfWork.Clear();
+        
+        _model = new WebPageToMonitorModelBuilder(UnitOfWork)
+            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            {
+                WatchdogId = _watchdog.Id,
+                WatchdogWebPageId = _watchdogWebPageId,
+                Url = "http://url.com/page",
+                Selector = ".selector",
+                Name = "url.com/page"
+            })
+            .Build();
+
+        await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
+    }
+
+    [Test]
+    public void model_is_correct()
+    {
+        _model.WatchdogWebPageArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogWebPageArgs.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
+        _model.WatchdogWebPageArgs.Url.ShouldBe("http://url.com/page");
+        _model.WatchdogWebPageArgs.Selector.ShouldBe(".selector");
+        _model.WatchdogWebPageArgs.Name.ShouldBe("url.com/page");
+    }  
+
+    private void _BuildEntities()
+    {
+        _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithWebPage(new WatchdogWebPageArgs
+            {
+                Url = "http://url.com/page",
+                Selector = ".selector",
+                Name = "url.com/page"
+            })
+            .Build();
+        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+    }    
+}

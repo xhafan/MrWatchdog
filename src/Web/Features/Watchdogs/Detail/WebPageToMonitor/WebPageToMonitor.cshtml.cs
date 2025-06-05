@@ -1,36 +1,40 @@
+using CoreDdd.Queries;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Web.Features.Shared;
+using Rebus.Bus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
 
-public class WebPageToMonitorModel : BasePageModel
+public class WebPageToMonitorModel(
+    IQueryExecutor queryExecutor, 
+    IBus bus
+) : BasePageModel
 {
     [BindProperty]
     public WatchdogWebPageArgs WatchdogWebPageArgs { get; set; } = null!;
 
-    public void OnGet(long id) // todo: test me
+    public async Task OnGet(
+        long watchdogId, 
+        long watchdogWebPageId
+    )
     {
-        string? name = null;
-        string url = null!;
-        
-        if (id == 23)
+        WatchdogWebPageArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageArgsQuery, WatchdogWebPageArgs>(
+                new GetWatchdogWebPageArgsQuery(watchdogId, watchdogWebPageId));
+    }
+    
+    public async Task<IActionResult> OnPost()
+    {
+        if (!ModelState.IsValid)
         {
-            name = "Travelzoo US";
-            url = "https://www.travelzoo.com/top20/";
+            return PageWithUnprocessableEntityStatus422();
         }
         
-        if (id == 24)
-        {
-            name = "Travelzoo DE";
-            url = "https://www.travelzoo.com/de/top20/";
-        }        
-        
-        WatchdogWebPageArgs = new WatchdogWebPageArgs
-        {
-            Id = id,
-            Name = name,
-            Url = url
-        };
+        var command = new UpdateWatchdogWebPageCommand(WatchdogWebPageArgs);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
     }
 }

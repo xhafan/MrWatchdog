@@ -5,5 +5,5 @@
 export interface DetailStimulusModel
 {
 	getJobUrl: string;
-	webPageToMonitorUrl: string;
+	webPageToMonitorTurboFrameUrl: string;
 }

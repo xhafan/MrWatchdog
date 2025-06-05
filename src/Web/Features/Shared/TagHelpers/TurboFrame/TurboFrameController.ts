@@ -11,15 +11,6 @@ export default class TurboFrameController extends BaseStimulusModelController<Tu
 
     connect() {
         this.attachFormEventListeners();
-
-        if (!this.modelValue.reloadOnEvent) {
-            this.dispatch(registerGlobalEventHandlerEventName, {
-                prefix: "",
-                detail: new EventHandlerRegistration(this.modelValue.reloadOnEvent, () => {
-                    this.reload();
-                })
-            });
-        }
     }
 
     private attachFormEventListeners() {

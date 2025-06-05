@@ -3,8 +3,8 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_overview_@(Model.WatchdogOverviewArgs.Id)">
-    <view-or-edit-form action="@Url.Page("Overview", new{id = Model.WatchdogOverviewArgs.Id})">
+<!turbo-frame id="watchdog_overview_@(Model.WatchdogOverviewArgs.WatchdogId)">
+    <view-or-edit-form action="@Url.Page("Overview")">
         
         <view-mode-item>
             <div class="mb-3">
@@ -15,7 +15,7 @@
         
         <edit-mode-item>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="WatchdogOverviewArgs.Id" type="hidden" />
+            <input asp-for="WatchdogOverviewArgs.WatchdogId" type="hidden" />
 
             <div class="mb-3">
                 <label asp-for="WatchdogOverviewArgs.Name" class="form-label fw-bold"></label>

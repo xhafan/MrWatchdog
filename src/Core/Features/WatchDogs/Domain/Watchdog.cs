@@ -22,7 +22,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         return new WatchdogArgs
         {
-            Id = Id, 
+            WatchdogId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList()
         };
     }
@@ -31,15 +31,42 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         return new WatchdogOverviewArgs
         {
-            Id = Id, 
+            WatchdogId = Id, 
             Name = Name
         };
     }
 
     public virtual void UpdateOverview(WatchdogOverviewArgs watchdogOverviewArgs)
     {
-        Guard.Hope(Id == watchdogOverviewArgs.Id, "Invalid watchdog Id.");
+        Guard.Hope(Id == watchdogOverviewArgs.WatchdogId, "Invalid watchdog Id.");
         
         Name = watchdogOverviewArgs.Name;
+    }
+
+    public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
+    {
+        _webPages.Add(new WatchdogWebPage(
+            this,
+            watchdogWebPageArgs.Url,
+            watchdogWebPageArgs.Selector,
+            watchdogWebPageArgs.Name
+        ));
+    }
+    
+    public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs(long watchdogWebPageId)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        return webPage.GetWatchdogWebPageArgs();
+    }
+
+    private WatchdogWebPage _GetWebPage(long watchdogWebPageId)
+    {
+        return _webPages.Single(x => x.Id == watchdogWebPageId);
+    }
+
+    public virtual void UpdateWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
+    {
+        var webPage = _GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
+        webPage.Update(watchdogWebPageArgs);
     }
 }

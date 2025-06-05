@@ -6,4 +6,5 @@ import { BaseStimulusModel } from './BaseStimulusModel';
 
 export interface ViewOrEditFormStimulusModel extends BaseStimulusModel
 {
+	startInEditMode: boolean;
 }

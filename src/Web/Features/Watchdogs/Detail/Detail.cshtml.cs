@@ -1,13 +1,16 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Web.Features.Shared;
+using Rebus.Bus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 
 public class DetailModel(
-    IQueryExecutor queryExecutor
+    IQueryExecutor queryExecutor,
+    IBus bus
 ) : BasePageModel
 {
     [BindProperty]
@@ -15,8 +18,13 @@ public class DetailModel(
     
     public async Task OnGet(long id)
     {
-        WatchdogArgs = (
-            await queryExecutor.ExecuteAsync<GetWatchdogArgsQuery, WatchdogArgs>(new GetWatchdogArgsQuery(id))
-        ).Single();
+        WatchdogArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogArgsQuery, WatchdogArgs>(new GetWatchdogArgsQuery(id));
     }
+    
+    public async Task<IActionResult> OnPostCreateWatchdogWebPage(long id)
+    {
+        var command = new CreateWatchdogWebPageCommand(WatchdogId: id);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
+    }    
 }

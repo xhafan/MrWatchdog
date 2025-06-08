@@ -29,7 +29,6 @@ export default class ViewOrEditFormController extends BaseStimulusModelControlle
 
         formSubmitWithWaitForJobCompletion(
             form, 
-            this.modelValue.getJobUrl, 
             jobDto => {
                 this.raiseEventFormSubmitted(jobDto);
             }
@@ -53,8 +52,10 @@ export default class ViewOrEditFormController extends BaseStimulusModelControlle
         });
 
         this.editTarget.style.display = "none"; 
-        this.saveTarget.style.display = ""; 
-        this.cancelTarget.style.display = "";
+        this.saveTarget.style.display = "";
+        if (!this.modelValue.hideCancelInEditMode) {
+            this.cancelTarget.style.display = "";
+        }
     }
 
     cancel() {

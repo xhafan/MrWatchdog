@@ -1,16 +1,30 @@
 ﻿@page "{watchdogId}/{watchdogWebPageId}"
-@model WebPageToMonitorModel
+@using MrWatchdog.Web.Features.Shared
+@model WebPageModel
 @{
    Layout = null;
 }
 <!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.WatchdogWebPageId)">
-    <div class="card mb-1">
-        <div class="card-header">
+    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
+        <div class="card-header d-flex justify-content-between align-items-center">
             @Model.WatchdogWebPageArgs.Name
+            <form asp-page-handler="RemoveWatchdogWebPage"
+                  asp-route-id="@Model.WatchdogWebPageArgs.WatchdogId"
+                  asp-route-watchdogWebPageId="@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                  method="post"
+                  data-watchdogs--detail-web-page-target="removeWebPageForm"
+                  >
+                <button type="submit" class="btn-close"></button>
+            </form>
         </div>
         <div class="card-body">
-            <view-or-edit-form action="@Url.Page("WebPageToMonitor")"
-                               start-in-edit-mode="Model.WatchdogWebPageArgs.Url == null">
+            @{
+                var isEmptyWebPage = Model.WatchdogWebPageArgs.Url == null;
+            }
+            <view-or-edit-form action="@Url.Page("WebPage")"
+                               start-in-edit-mode="isEmptyWebPage"
+                               hide-cancel-in-edit-mode="isEmptyWebPage"
+                               >
                 <view-mode-item>
                     <div class="mb-3">
                         <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
@@ -30,8 +44,12 @@
                     <input asp-for="WatchdogWebPageArgs.WatchdogWebPageId" type="hidden" />
                     <div class="mb-3">
                         <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                        <input asp-for="WatchdogWebPageArgs.Url" class="form-control" />
+                        <input asp-for="WatchdogWebPageArgs.Url" 
+                               class="form-control" 
+                               data-watchdogs--detail-web-page-target="url" 
+                               data-action="input->@StimulusControllers.WatchdogsDetailWebPage#onUrlModified" />
                         <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
+                        <input type="hidden" data-watchdogs--detail-web-page-target="previousUrl" value="@Model.WatchdogWebPageArgs.Url" />
                     </div>
                     <div class="mb-3">
                         <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
@@ -40,7 +58,7 @@
                     </div>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Name" class="form-control" />
+                    <input asp-for="WatchdogWebPageArgs.Name" class="form-control" data-watchdogs--detail-web-page-target="name" />
                     <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
                 </div>
                 </edit-mode-item>

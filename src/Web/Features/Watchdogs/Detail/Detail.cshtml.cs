@@ -26,5 +26,5 @@ public class DetailModel(
         var command = new CreateWatchdogWebPageCommand(WatchdogId: id);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
-    }    
+    }
 }

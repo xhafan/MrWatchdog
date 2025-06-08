@@ -1,0 +1,1 @@
+ALTER TABLE "WatchdogWebPage" alter column "WatchdogId" drop not null;

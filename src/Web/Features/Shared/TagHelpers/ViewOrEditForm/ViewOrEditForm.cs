@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.ViewOrEditForm;
 
 [HtmlTargetElement("view-or-edit-form")]
-public class ViewOrEditForm(IHtmlHelper htmlHelper, LinkGenerator linkGenerator) 
-    : BaseStimulusModelViewTagHelper<ViewOrEditFormStimulusModel>(htmlHelper, linkGenerator)
+public class ViewOrEditForm(IHtmlHelper htmlHelper) 
+    : BaseStimulusModelViewTagHelper<ViewOrEditFormStimulusModel>(htmlHelper)
 {
     public string? Action { get; set; }
     public bool StartInEditMode { get; set; }
+    public bool HideCancelInEditMode { get; set; }
     
     protected override string GetStimulusControllerName()
     {
@@ -17,6 +18,6 @@ public class ViewOrEditForm(IHtmlHelper htmlHelper, LinkGenerator linkGenerator)
 
     protected override ViewOrEditFormStimulusModel GetStimulusModel()
     {
-        return new ViewOrEditFormStimulusModel(StartInEditMode);
+        return new ViewOrEditFormStimulusModel(StartInEditMode, HideCancelInEditMode);
     }
 }

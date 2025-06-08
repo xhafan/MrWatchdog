@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.TurboFrame;
 
 [HtmlTargetElement("turbo-frame")]
-public class TurboFrame(IHtmlHelper htmlHelper, LinkGenerator linkGenerator) 
-    : BaseStimulusModelViewTagHelper<TurboFrameStimulusModel>(htmlHelper, linkGenerator)
+public class TurboFrame(IHtmlHelper htmlHelper) 
+    : BaseStimulusModelViewTagHelper<TurboFrameStimulusModel>(htmlHelper)
 {
     public string Id { get; set; } = null!;
     public string? Src { get; set; }

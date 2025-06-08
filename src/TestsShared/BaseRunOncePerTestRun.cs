@@ -12,7 +12,7 @@ namespace MrWatchdog.TestsShared;
 public class BaseRunOncePerTestRun
 {
     [OneTimeSetUp]
-    public void SetUp()
+    public void BaseSetUp()
     {
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
         
@@ -43,7 +43,7 @@ public class BaseRunOncePerTestRun
     }
     
     [OneTimeTearDown]
-    public void TearDown()
+    public void BaseTearDown()
     {
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         TestFixtureContext.NhibernateConfigurator?.Dispose();

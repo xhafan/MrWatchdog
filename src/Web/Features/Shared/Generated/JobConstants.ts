@@ -2,7 +2,8 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export interface CreateStimulusModel
+export abstract class JobConstants
 {
-	watchdogDetailUrl: string;
+	public static jobGuidVariable: string = `$jobGuid`;
+	public static getJobUrl: string = `/api/Jobs/$jobGuid`;
 }

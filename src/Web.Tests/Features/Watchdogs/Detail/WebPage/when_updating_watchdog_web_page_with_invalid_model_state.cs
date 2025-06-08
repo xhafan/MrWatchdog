@@ -5,18 +5,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
+using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPageToMonitor;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_creating_watchdog_web_page_with_invalid_model_state : BaseDatabaseTest
+public class when_updating_watchdog_web_page_with_invalid_model_state : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
-    private WebPageToMonitorModel _model = null!;
+    private WebPageModel _model = null!;
     private IBus _bus = null!;    
     private Watchdog _watchdog = null!;
+    private long _watchdogWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -24,12 +25,12 @@ public class when_creating_watchdog_web_page_with_invalid_model_state : BaseData
         _BuildEntities();
         _bus = A.Fake<IBus>();
         
-        _model = new WebPageToMonitorModelBuilder(UnitOfWork)
+        _model = new WebPageModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = 0,
+                WatchdogWebPageId = _watchdogWebPageId,
                 Url = "http",
                 Selector = ".selector",
                 Name = "url.com/page"
@@ -60,6 +61,14 @@ public class when_creating_watchdog_web_page_with_invalid_model_state : BaseData
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithWebPage(new WatchdogWebPageArgs
+            {
+                Url = "http://url.com/page",
+                Selector = ".selector",
+                Name = "url.com/page"
+            })
+            .Build();
+        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
     }    
 }

@@ -11,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Web;
-using MrWatchdog.Web.Infrastructure;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
@@ -125,3 +124,5 @@ void _buildDatabase()
     var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
     DatabaseBuilderHelper.BuildDatabase(connectionString, databaseScriptsDirectoryPath, logger);
 }
+
+public partial class Program; // For testing purposes, this partial class is needed to allow the test project to access the Program class; see https://stackoverflow.com/a/70490057/379279

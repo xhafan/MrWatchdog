@@ -4,5 +4,4 @@
 
 export interface BaseStimulusModel
 {
-	getJobUrl: string;
 }

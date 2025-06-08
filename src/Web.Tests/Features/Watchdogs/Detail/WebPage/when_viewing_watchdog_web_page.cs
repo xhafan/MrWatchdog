@@ -1,14 +1,14 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
+using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPageToMonitor;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_to_monitor : BaseDatabaseTest
+public class when_viewing_watchdog_web_page : BaseDatabaseTest
 {
-    private WebPageToMonitorModel _model = null!;
+    private WebPageModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -19,7 +19,7 @@ public class when_viewing_watchdog_web_page_to_monitor : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageToMonitorModelBuilder(UnitOfWork)
+        _model = new WebPageModelBuilder(UnitOfWork)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,

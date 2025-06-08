@@ -1,12 +1,9 @@
-﻿@page "{watchdogId}/{watchdogWebPageId}"
-@model WebPageToMonitorTurboFrameModel
-@{
-   Layout = null;
-}
+﻿@model (long WatchdogId, long WatchdogWebPageId)
 <turbo-frame id="watchdog_web_page_@Model.WatchdogWebPageId"
-             src="@Url.Page("WebPageToMonitor", new {
+             src="@Url.Page("WebPage", new {
                       watchdogId = Model.WatchdogId,
                       watchdogWebPageId = Model.WatchdogWebPageId
                   })"
+             data-watchdogs--detail-target="webPageTurboFrame"
              >
 </turbo-frame>

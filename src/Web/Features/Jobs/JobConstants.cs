@@ -1,0 +1,13 @@
+﻿using Reinforced.Typings.Attributes;
+
+namespace MrWatchdog.Web.Features.Jobs;
+
+[TsClass(IncludeNamespace = false)]
+public static class JobConstants
+{
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string JobGuidVariable = "$jobGuid";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string GetJobUrl = $"/api/Jobs/{JobGuidVariable}";
+}

@@ -16,5 +16,6 @@ public record WatchdogWebPageArgs
 
     public string? Selector { get; set; }
     
+    [Required]
     public string? Name { get; set; }
 }

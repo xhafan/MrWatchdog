@@ -13,7 +13,6 @@
      @Stimulus.Controller(
          StimulusControllers.WatchdogsCreate, 
             new CreateStimulusModel(
-                Url.Action("GetJob", "Jobs", new { jobGuid = "$jobGuid"}),
                 Url.Page("/Watchdogs/Detail/Detail", new { id = "$id"})
      ))
      >

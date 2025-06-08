@@ -5,33 +5,33 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
+using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPageToMonitor;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageToMonitorModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private IBus? _bus;
     private WatchdogWebPageArgs? _watchdogWebPageArgs;
 
-    public WebPageToMonitorModelBuilder WithBus(IBus bus)
+    public WebPageModelBuilder WithBus(IBus bus)
     {
         _bus = bus;
         return this;
     }
     
-    public WebPageToMonitorModelBuilder WithWatchdogWebPageArgs(WatchdogWebPageArgs watchdogWebPageArgs)
+    public WebPageModelBuilder WithWatchdogWebPageArgs(WatchdogWebPageArgs watchdogWebPageArgs)
     {
         _watchdogWebPageArgs = watchdogWebPageArgs;
         return this;
     }       
     
-    public WebPageToMonitorModel Build()
+    public WebPageModel Build()
     {
         _bus ??= A.Fake<IBus>();
         
-        var model = new WebPageToMonitorModel(
+        var model = new WebPageModel(
             new QueryExecutor(
                 new FakeQueryHandlerFactory<GetWatchdogWebPageArgsQuery>(
                     new GetWatchdogWebPageArgsQueryHandler(

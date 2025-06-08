@@ -4,22 +4,22 @@ import { DetailStimulusModel } from "../../Shared/Generated/DetailStimulusModel"
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
+import { watchdogWebPageRemovedEvent } from "./WebPage/WebPageController";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [
-        "webPagesToMonitor",
-        "addWebPageToMonitorForm"
+        "webPages",
+        "addWebPageForm",
+        "webPageTurboFrame"
     ];
    
-    declare webPagesToMonitorTarget: HTMLDivElement;
-    declare addWebPageToMonitorFormTarget: HTMLFormElement;
+    declare webPagesTarget: HTMLDivElement;
+    declare addWebPageFormTarget: HTMLFormElement;
+    declare webPageTurboFrameTargets: HTMLFormElement[];
 
     connect() {
-        const addWebPageToMonitorForm = this.addWebPageToMonitorFormTarget;
-
         formSubmitWithWaitForJobCompletion(
-            addWebPageToMonitorForm, 
-            this.modelValue.getJobUrl, 
+            this.addWebPageFormTarget, 
             async jobDto => {
                 const watchdogWebPageEntity = Enumerable.from(jobDto.affectedEntities)
                     .singleOrDefault(x => x.entityName === DomainConstants.watchdogWebPage && x.isCreated);
@@ -27,14 +27,27 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     throw new Error("Error getting created WatchdogWebPage.");
                 }
 
-                const webPageToMonitorTurboFrameUrl = this.modelValue.webPageToMonitorTurboFrameUrl.replace("$watchdogWebPageId", String(watchdogWebPageEntity.entityId));
+                const webPageTurboFrameUrl = this.modelValue.webPageTurboFrameUrl.replace("$watchdogWebPageId", String(watchdogWebPageEntity.entityId));
 
-                const response = await fetch(webPageToMonitorTurboFrameUrl);
+                const response = await fetch(webPageTurboFrameUrl);
                 if (response.ok) {
                     const html = await response.text();
-                    this.webPagesToMonitorTarget.insertAdjacentHTML("beforeend", html);
+                    this.webPagesTarget.insertAdjacentHTML("beforeend", html);
                 }
             }
         );
+
+        this.element.addEventListener(watchdogWebPageRemovedEvent, this.onWatchdogWebPageRemoved.bind(this));
+    }
+
+    private onWatchdogWebPageRemoved(event: CustomEventInit) {
+        let watchdogWebPageElement = event.detail as HTMLElement;
+     
+        const parentTurboFrame = this.webPageTurboFrameTargets.find(
+            webPageTurboFrame => webPageTurboFrame.contains(watchdogWebPageElement)
+        );
+
+        if (!parentTurboFrame) throw new Error("Parent turbo-frame not found for the removed watchdog web page.");
+        parentTurboFrame.remove();
     }
 }

@@ -20,4 +20,8 @@ public static class StimulusControllers
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsDetail = "watchdogs--detail";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsDetailWebPage = "watchdogs--detail-web-page";
+    
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -72,7 +73,7 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
     [Test]
     public async Task job_is_created_and_completed()
     {
-        var job = await _GetJob(UnitOfWork);
+        var job = await new JobRepository(UnitOfWork).GetByGuidAsync(_command.Guid);
 
         job.ShouldNotBeNull();
         job.CreatedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
@@ -107,17 +108,11 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        var job = await _GetJob(newUnitOfWork);
+        var jobRepository = new JobRepository(newUnitOfWork);
+        var job = await jobRepository.GetByGuidAsync(_command.Guid);
         if (job != null)
         {
-            await newUnitOfWork.Session!.DeleteAsync(job);
+            await jobRepository.DeleteAsync(job);
         }
-    }
-
-    private async Task<Job?> _GetJob(NhibernateUnitOfWork unitOfWork)
-    {
-        return await unitOfWork.Session!.QueryOver<Job>()
-            .Where(x => x.Guid == _command.Guid)
-            .SingleOrDefaultAsync();
     }
 }

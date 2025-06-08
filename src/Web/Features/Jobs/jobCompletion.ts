@@ -1,10 +1,11 @@
 import { DomainConstants } from "../Shared/Generated/DomainConstants";
+import { JobConstants } from "../Shared/Generated/JobConstants";
 import { JobDto } from "../Shared/Generated/JobDto";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
-    getJobUrl: string,
-    onCompletion: (job: JobDto) => void
+    onJobCompletion: (job: JobDto) => void,
+    confirmationMessage: string | undefined = undefined
 ) {
     form.onsubmit = async (event: SubmitEvent) => {
         event.preventDefault();
@@ -12,47 +13,75 @@ export function formSubmitWithWaitForJobCompletion(
         if (!$(form).valid()) {
             return false;
         }
-        
-        disableElementAndAddSpinner(event.submitter);
 
-        const formData = new FormData(form);
-        const action = form.action;
-        const method = form.method;
+        if (confirmationMessage) {
+            bootbox.confirm(
+                confirmationMessage,
+                result => {
+                    if (!result) return;
 
-        const response = await fetch(action, {
-            method,
-            body: formData
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to submit form: HTTP ${response.status} - ${errorText}`);
-        }
-
-        let jobGuid = await response.text()
-        if (!jobGuid) {
-            throw new Error("Error getting job Guid.");
-        }
-
-        let getJobUrlWithReplacedJobGuid = getJobUrl.replace("$jobGuid", jobGuid);
-
-        const pollJob = async (delay = 300): Promise<JobDto> => {
-            await new Promise(resolve => setTimeout(resolve, delay));
-            const response = await fetch(getJobUrlWithReplacedJobGuid);
-            if (response.ok) {
-                const jobDto = await response.json() as JobDto;
-                if (jobDto.completedOn) {
-                    return jobDto;
+                    sendRequestAndWaitForJobCompletionCommon();
                 }
-            }
-            return pollJob(Math.min(delay * 2, 8000));
-        };
-
-        const jobDto = await pollJob();
-        
-        onCompletion(jobDto);
-        enableElementAndRemoveSpinner(event.submitter);
+            );
+        }
+        else {
+            sendRequestAndWaitForJobCompletionCommon();
+        }
+            
+        function sendRequestAndWaitForJobCompletionCommon() {
+            sendRequestAndWaitForJobCompletion(
+                form.action, 
+                new FormData(form), 
+                event.submitter, 
+                onJobCompletion, 
+                form.method
+            );
+        }
     };
+}
+
+export async function sendRequestAndWaitForJobCompletion(
+    actionUrl: string,
+    formData: FormData | undefined,
+    submitter: HTMLElement | null = null,
+    onJobCompletion: (job: JobDto) => void,
+    method: string = 'POST'
+) {       
+    disableElementAndAddSpinner(submitter);
+
+    const response = await fetch(actionUrl, {
+        method,
+        body: formData
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to submit form: HTTP ${response.status} - ${errorText}`);
+    }
+
+    let jobGuid = await response.text()
+    if (!jobGuid) {
+        throw new Error("Error getting job Guid.");
+    }
+
+    let getJobUrlWithReplacedJobGuid = JobConstants.getJobUrl.replace(JobConstants.jobGuidVariable, jobGuid);
+
+    const pollJob = async (delay = 300): Promise<JobDto> => {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        const response = await fetch(getJobUrlWithReplacedJobGuid);
+        if (response.ok) {
+            const jobDto = await response.json() as JobDto;
+            if (jobDto.completedOn) {
+                return jobDto;
+            }
+        }
+        return pollJob(Math.min(delay * 2, 8000));
+    };
+
+    const jobDto = await pollJob();
+        
+    onJobCompletion(jobDto);
+    enableElementAndRemoveSpinner(submitter);
 }
 
 function disableElementAndAddSpinner(element: HTMLElement | null) {

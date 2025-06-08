@@ -6,9 +6,9 @@ using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Web.Features.Shared;
 using Rebus.Bus;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPageToMonitor;
+namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageToMonitorModel(
+public class WebPageModel(
     IQueryExecutor queryExecutor, 
     IBus bus
 ) : BasePageModel
@@ -37,4 +37,11 @@ public class WebPageToMonitorModel(
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }
+    
+    public async Task<IActionResult> OnPostRemoveWatchdogWebPage(long id, long watchdogWebPageId)
+    {
+        var command = new RemoveWatchdogWebPageCommand(WatchdogId: id, watchdogWebPageId);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
+    }     
 }

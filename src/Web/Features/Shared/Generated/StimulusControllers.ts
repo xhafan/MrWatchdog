@@ -9,4 +9,5 @@ export abstract class StimulusControllers
 	public static viewOrEditForm: string = `view-or-edit-form`;
 	public static watchdogsCreate: string = `watchdogs--create`;
 	public static watchdogsDetail: string = `watchdogs--detail`;
+	public static watchdogsDetailWebPage: string = `watchdogs--detail-web-page`;
 }

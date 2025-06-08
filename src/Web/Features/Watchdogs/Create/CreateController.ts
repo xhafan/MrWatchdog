@@ -18,7 +18,6 @@ export default class CreateController extends BaseStimulusModelController<Create
 
         formSubmitWithWaitForJobCompletion(
             form, 
-            this.modelValue.getJobUrl, 
             jobDto => {
                 const watchdogEntity = Enumerable.from(jobDto.affectedEntities).singleOrDefault(x => x.entityName === DomainConstants.watchdog);
                 if (!watchdogEntity) {

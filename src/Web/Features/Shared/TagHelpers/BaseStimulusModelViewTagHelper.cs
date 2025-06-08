@@ -5,7 +5,7 @@ using MrWatchdog.Core.Infrastructure;
 
 namespace MrWatchdog.Web.Features.Shared.TagHelpers;
 
-public abstract class BaseStimulusModelViewTagHelper<TStimulusModel>(IHtmlHelper htmlHelper, LinkGenerator linkGenerator) 
+public abstract class BaseStimulusModelViewTagHelper<TStimulusModel>(IHtmlHelper htmlHelper) 
     : BaseViewTagHelper(htmlHelper) where TStimulusModel : BaseStimulusModel
 {
     protected abstract TStimulusModel GetStimulusModel();
@@ -15,9 +15,6 @@ public abstract class BaseStimulusModelViewTagHelper<TStimulusModel>(IHtmlHelper
         await base.ProcessAsync(context, output);
 
         var stimulusModel = GetStimulusModel();
-        var getJobUrl = linkGenerator.GetPathByAction("GetJob", "Jobs", new { jobGuid = "$jobGuid"});
-        Guard.Hope(getJobUrl != null, nameof(getJobUrl) + " is null");
-        stimulusModel.GetJobUrl = getJobUrl;
         
         var stimulusControllerName = GetStimulusControllerName();
         Guard.Hope(stimulusControllerName != null, $"{GetType().Name} Stimulus controller name not provided.");

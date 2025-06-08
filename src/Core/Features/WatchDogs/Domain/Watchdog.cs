@@ -69,4 +69,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         var webPage = _GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
         webPage.Update(watchdogWebPageArgs);
     }
+
+    public virtual void RemoveWebPage(long watchdogWebPageId)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        _webPages.Remove(webPage);
+    }
 }

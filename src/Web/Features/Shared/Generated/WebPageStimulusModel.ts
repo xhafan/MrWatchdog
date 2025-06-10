@@ -2,8 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-import { BaseStimulusModel } from './BaseStimulusModel';
-
-export interface TurboFrameStimulusModel extends BaseStimulusModel
+export interface WebPageStimulusModel
 {
+	isEmptyWebPage: boolean;
 }

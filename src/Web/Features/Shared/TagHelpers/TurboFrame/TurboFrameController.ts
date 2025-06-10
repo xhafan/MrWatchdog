@@ -1,10 +1,9 @@
+import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
-import BaseStimulusModelController from "../../BaseStimulusModelController";
-import { TurboFrameStimulusModel } from "../../Generated/TurboFrameStimulusModel";
 import { formEditingCancelledEventName, formSubmittedEventName } from "../ViewOrEditForm/ViewOrEditFormController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../BodyController";
 
-export default class TurboFrameController extends BaseStimulusModelController<TurboFrameStimulusModel> {
+export default class TurboFrameController extends Controller {
     static targets = ["turboFrame"];
 
     declare turboFrameTarget: FrameElement;

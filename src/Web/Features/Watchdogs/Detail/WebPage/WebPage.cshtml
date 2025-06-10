@@ -1,13 +1,13 @@
-﻿@page "{watchdogId}/{watchdogWebPageId}"
+﻿@page
 @using MrWatchdog.Web.Features.Shared
 @model WebPageModel
 @{
    Layout = null;
 }
 <!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.WatchdogWebPageId)">
-    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
+    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage, new WebPageStimulusModel(Model.IsEmptyWebPage))>
         <div class="card-header d-flex justify-content-between align-items-center">
-            @Model.WatchdogWebPageArgs.Name
+            <span>@Model.WatchdogWebPageArgs.Name</span>
             <form asp-page-handler="RemoveWatchdogWebPage"
                   asp-route-id="@Model.WatchdogWebPageArgs.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageArgs.WatchdogWebPageId"
@@ -18,12 +18,9 @@
             </form>
         </div>
         <div class="card-body">
-            @{
-                var isEmptyWebPage = Model.WatchdogWebPageArgs.Url == null;
-            }
             <view-or-edit-form action="@Url.Page("WebPage")"
-                               start-in-edit-mode="isEmptyWebPage"
-                               hide-cancel-in-edit-mode="isEmptyWebPage"
+                               start-in-edit-mode="Model.IsEmptyWebPage"
+                               hide-cancel-in-edit-mode="Model.IsEmptyWebPage"
                                >
                 <view-mode-item>
                     <div class="mb-3">

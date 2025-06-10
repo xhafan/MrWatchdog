@@ -15,6 +15,7 @@ public class WebPageModel(
 {
     [BindProperty]
     public WatchdogWebPageArgs WatchdogWebPageArgs { get; set; } = null!;
+    public bool IsEmptyWebPage { get; private set; }
 
     public async Task OnGet(
         long watchdogId, 
@@ -24,6 +25,8 @@ public class WebPageModel(
         WatchdogWebPageArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageArgsQuery, WatchdogWebPageArgs>(
                 new GetWatchdogWebPageArgsQuery(watchdogId, watchdogWebPageId));
+
+        IsEmptyWebPage = string.IsNullOrWhiteSpace(WatchdogWebPageArgs.Url);
     }
     
     public async Task<IActionResult> OnPost()

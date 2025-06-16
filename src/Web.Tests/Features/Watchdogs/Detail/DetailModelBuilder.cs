@@ -3,18 +3,18 @@ using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
-    private IBus? _bus;
+    private ICoreBus? _bus;
     
-    public DetailModelBuilder WithBus(IBus bus)
+    public DetailModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
@@ -22,7 +22,7 @@ public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
     
     public DetailModel Build()
     {
-        _bus ??= A.Fake<IBus>();
+        _bus ??= A.Fake<ICoreBus>();
         
         var model = new DetailModel(
             new QueryExecutor(

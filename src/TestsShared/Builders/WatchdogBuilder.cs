@@ -4,7 +4,7 @@ using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 
-public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork)
+public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string Name = "watchdog name";
 
@@ -36,6 +36,15 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork)
             }
         }
 
+        if (unitOfWork == null)
+        {
+            watchdog.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
+            foreach (var watchdogWebPage in watchdog.WebPages)
+            {
+                watchdogWebPage.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
+            }
+        }        
+        
         unitOfWork?.Save(watchdog);
         
         return watchdog;

@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using NHibernate;
 using NHibernate.Type;
 
@@ -53,9 +53,9 @@ public class EntityJobTrackingInterceptor : EmptyInterceptor
 
     private void _AddAffectedEntity(object entity, long id, bool isCreated)
     {
-        if (JobTrackingIncomingStep.AffectedEntities.Value != null)
+        if (JobContext.AffectedEntities.Value != null)
         {
-            JobTrackingIncomingStep.AffectedEntities.Value.Add((entity.GetType().Name, id, isCreated));
+            JobContext.AffectedEntities.Value.Add((entity.GetType().Name, id, isCreated));
         }
     }
 }

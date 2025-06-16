@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
-public class OverviewModel(IQueryExecutor queryExecutor, IBus bus) : BasePageModel
+public class OverviewModel(IQueryExecutor queryExecutor, ICoreBus bus) : BasePageModel
 {
     [BindProperty]
     public WatchdogOverviewArgs WatchdogOverviewArgs { get; set; } = null!;

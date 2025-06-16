@@ -3,7 +3,7 @@ using MrWatchdog.Core.Infrastructure.Validations;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogOverviewArgs
+public record WatchdogOverviewArgs
 {
     [NotDefault]
     public long WatchdogId { get; set; }

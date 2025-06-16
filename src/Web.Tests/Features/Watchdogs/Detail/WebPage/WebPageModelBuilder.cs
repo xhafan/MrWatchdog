@@ -3,19 +3,19 @@ using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
-    private IBus? _bus;
+    private ICoreBus? _bus;
     private WatchdogWebPageArgs? _watchdogWebPageArgs;
 
-    public WebPageModelBuilder WithBus(IBus bus)
+    public WebPageModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
@@ -29,7 +29,7 @@ public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
     
     public WebPageModel Build()
     {
-        _bus ??= A.Fake<IBus>();
+        _bus ??= A.Fake<ICoreBus>();
         
         var model = new WebPageModel(
             new QueryExecutor(

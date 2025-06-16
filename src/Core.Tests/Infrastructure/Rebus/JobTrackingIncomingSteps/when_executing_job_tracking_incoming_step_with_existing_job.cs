@@ -1,18 +1,19 @@
-﻿using MrWatchdog.TestsShared.Extensions;
+﻿using Castle.Windsor;
+using MrWatchdog.TestsShared.Extensions;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
+using MrWatchdog.Core.Infrastructure.Rebus;
 
-namespace MrWatchdog.Core.Tests.Rebus;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
 
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_with_existing_job : BaseDatabaseTest
@@ -26,15 +27,16 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
     {
         var step = new JobTrackingIncomingStep(
             TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>()
+            A.Fake<ILogger<JobTrackingIncomingStep>>(),
+            A.Fake<IWindsorContainer>()
         );
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name");
+        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
         _CreateJobInSeparateTransaction();
-        incomingStepContext.Save(new Message(new Dictionary<string, string>(), _command));
+        incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await step.Process(incomingStepContext, _next);
 

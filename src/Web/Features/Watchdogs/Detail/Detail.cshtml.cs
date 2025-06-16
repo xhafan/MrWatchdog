@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 
 public class DetailModel(
     IQueryExecutor queryExecutor,
-    IBus bus
+    ICoreBus bus
 ) : BasePageModel
 {
     [BindProperty]

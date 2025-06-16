@@ -1,4 +1,6 @@
-﻿using MrWatchdog.Core.Features.Shared.Domain;
+﻿using CoreDdd.Domain.Events;
+using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -24,11 +26,6 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? Selector { get; protected set; }
     public virtual string? Name { get; protected set; }
 
-    public virtual string GetHtmlSnippet()
-    {
-        return "";
-    }
-
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
     {
         return new WatchdogWebPageArgs
@@ -43,8 +40,18 @@ public class WatchdogWebPage : VersionedEntity
 
     public virtual void Update(WatchdogWebPageArgs watchdogWebPageArgs)
     {
+        var hasChanged =
+            Url != watchdogWebPageArgs.Url
+            || Selector != watchdogWebPageArgs.Selector
+            || Name != watchdogWebPageArgs.Name;
+
         Url = watchdogWebPageArgs.Url;
         Selector = watchdogWebPageArgs.Selector;
         Name = watchdogWebPageArgs.Name;
+
+        if (hasChanged)
+        {
+            DomainEvents.RaiseEvent(new WatchdogWebPageUpdatedDomainEvent(Watchdog.Id, Id));
+        }
     }
 }

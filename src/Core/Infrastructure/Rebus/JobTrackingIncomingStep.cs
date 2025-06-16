@@ -1,8 +1,8 @@
 ﻿using System.Data;
+using Castle.Windsor;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
-using CoreUtils.AmbientStorages;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
@@ -10,19 +10,21 @@ using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Pipeline;
 
-namespace MrWatchdog.Core.Rebus;
+namespace MrWatchdog.Core.Infrastructure.Rebus;
 
 public class JobTrackingIncomingStep(
     INhibernateConfigurator nhibernateConfigurator,
-    ILogger<JobTrackingIncomingStep> logger
+    ILogger<JobTrackingIncomingStep> logger,
+    IWindsorContainer windsorContainer
 ) : IIncomingStep
 {
     private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
 
-    public static readonly AmbientStorage<List<(string EntityName, long EntityId, bool IsCreated)>?> AffectedEntities = new();
-
     public async Task Process(IncomingStepContext context, Func<Task> next)
     {
+        JobContext.WindsorContainer.Value = windsorContainer;
+        JobContext.RaisedDomainEvents.Value = [];
+
         var rebusMessage = context.Load<Message>();
 
         if (rebusMessage.Body is not BaseMessage baseMessage)
@@ -30,13 +32,27 @@ public class JobTrackingIncomingStep(
             await next();
             return;
         }
+
+        var jobGuid = Guid.Parse(rebusMessage.Headers[Headers.MessageId]);
+
+        switch (baseMessage)
+        {
+            case Command commandMessage:
+                JobContext.CommandGuid.Value = commandMessage.Guid;
+                break;
+            case DomainEvent domainEventMessage:
+                JobContext.CommandGuid.Value = domainEventMessage.RelatedCommandGuid;
+                break;
+            default:
+                throw new NotSupportedException($"Unsupported BaseMessage type {baseMessage.GetType().FullName}");
+        }
         
-        AffectedEntities.Value = [];
+        JobContext.AffectedEntities.Value = [];
         Job? job = null;
 
         try
         {
-            job = await _CreateOrFetchJobInSeparateTransaction(baseMessage);
+            job = await _CreateOrFetchJobInSeparateTransaction(jobGuid, baseMessage);
 
             await next();
             
@@ -55,13 +71,13 @@ public class JobTrackingIncomingStep(
         }   
     }
 
-    private async Task<Job> _CreateOrFetchJobInSeparateTransaction(BaseMessage baseMessage)
+    private async Task<Job> _CreateOrFetchJobInSeparateTransaction(Guid jobGuid, BaseMessage baseMessage)
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
         newUnitOfWork.BeginTransaction(DefaultIsolationLevel);
 
         var jobRepository = new JobRepository(newUnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(baseMessage.Guid);
+        var job = await jobRepository.GetByGuidAsync(jobGuid);
 
         if (job == null)
         {
@@ -72,7 +88,7 @@ public class JobTrackingIncomingStep(
                 _ => throw new NotSupportedException($"Unsupported BaseMessage type {baseMessage.GetType().FullName}")
             };
             job = new Job(
-                baseMessage.Guid,
+                jobGuid,
                 baseMessage.GetType().Name,
                 baseMessage, 
                 jobKind
@@ -99,8 +115,8 @@ public class JobTrackingIncomingStep(
 
         void _addAffectedEntitiesToJob()
         {
-            Guard.Hope(AffectedEntities.Value != null, "AffectedEntities.Value" + " is null");
-            foreach (var affectedEntity in AffectedEntities.Value)
+            Guard.Hope(JobContext.AffectedEntities.Value != null, $"{nameof(JobContext)} {nameof(JobContext.AffectedEntities)} is null");
+            foreach (var affectedEntity in JobContext.AffectedEntities.Value)
             {
                 job.AddAffectedEntity(
                     affectedEntity.EntityName,

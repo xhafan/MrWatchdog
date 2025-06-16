@@ -9,8 +9,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row"
-     @Stimulus.Controller(
+<div @Stimulus.Controller(
          StimulusControllers.WatchdogsDetail,
          new DetailStimulusModel(
              WebPageTurboFrameUrl: Url.Page("WebPage/WebPageTurboFrame", new
@@ -20,31 +19,30 @@
              })
      ))
      >
-    <div class="col-md-6">
-        <turbo-frame id="watchdog_overview_@(Model.WatchdogArgs.WatchdogId)"
-                     src="@Url.Page("Overview/Overview", new{id = Model.WatchdogArgs.WatchdogId})"
-                     >
-        </turbo-frame>
-
-        <div>
-            <label class="form-label fw-bold">Web pages to monitor</label>
-            <div id="web_pages_to_monitor" data-watchdogs--detail-target="webPages">
-                @foreach (var watchdogWebPageId in Model.WatchdogArgs.WebPageIds)
-                {
-                    <partial name="WebPage/WebPageTurboFramePartial"
-                             model="(Model.WatchdogArgs.WatchdogId, watchdogWebPageId)"
-                             />
-                }
-            </div>
-            <form asp-page-handler="CreateWatchdogWebPage"
-                  asp-route-id="@Model.WatchdogArgs.WatchdogId"
-                  data-watchdogs--detail-target="addWebPageForm">
-                <button type="submit" class="btn btn-primary">
-                    Add web page to monitor
-                </button>
-            </form>
+    <div class="row">
+        <div class="col-md-6">
+            <turbo-frame id="watchdog_overview_@(Model.WatchdogArgs.WatchdogId)"
+                         src="@Url.Page("Overview/Overview", new{id = Model.WatchdogArgs.WatchdogId})"
+            >
+            </turbo-frame>
         </div>
     </div>
+    <label class="form-label fw-bold">Web pages to monitor</label>
+    <div id="web_pages_to_monitor" data-watchdogs--detail-target="webPages">
+        @foreach (var watchdogWebPageId in Model.WatchdogArgs.WebPageIds)
+        {
+            <partial name="WebPage/WebPageTurboFramePartial"
+                     model="(Model.WatchdogArgs.WatchdogId, watchdogWebPageId)"
+            />
+        }
+    </div>
+    <form asp-page-handler="CreateWatchdogWebPage"
+          asp-route-id="@Model.WatchdogArgs.WatchdogId"
+          data-watchdogs--detail-target="addWebPageForm">
+        <button type="submit" class="btn btn-primary">
+            Add web page to monitor
+        </button>
+    </form>
 </div>
 
 <div>

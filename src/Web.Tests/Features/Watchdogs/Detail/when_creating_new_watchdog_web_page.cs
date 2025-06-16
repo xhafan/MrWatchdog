@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
@@ -14,7 +14,7 @@ public class when_creating_new_watchdog_web_page : BaseDatabaseTest
 {
     private DetailModel _model = null!;
     private Watchdog _watchdog = null!;
-    private IBus _bus = null!;
+    private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -22,7 +22,7 @@ public class when_creating_new_watchdog_web_page : BaseDatabaseTest
     {
         _BuildEntities();
 
-        _bus = A.Fake<IBus>();
+        _bus = A.Fake<ICoreBus>();
         
         _model = new DetailModelBuilder(UnitOfWork)
             .WithBus(_bus)
@@ -34,12 +34,7 @@ public class when_creating_new_watchdog_web_page : BaseDatabaseTest
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(
-                A<CreateWatchdogWebPageCommand>.That.Matches(p => p.WatchdogId == _watchdog.Id
-                                                                  && !p.Guid.Equals(Guid.Empty)),
-                A<IDictionary<string, string>>._
-            )
-        ).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new CreateWatchdogWebPageCommand(_watchdog.Id))).MustHaveHappenedOnceExactly();
     }
     
     [Test]

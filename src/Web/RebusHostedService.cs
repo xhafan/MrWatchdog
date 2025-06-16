@@ -8,8 +8,8 @@ using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
-using MrWatchdog.Core.Rebus;
 using Rebus.CastleWindsor;
 using Rebus.Config;
 using Rebus.Pipeline;
@@ -60,7 +60,12 @@ public class RebusHostedService(
         Configure.With(new CastleWindsorContainerAdapter(_hostedServiceWindsorContainer))
             .Logging(x => x.MicrosoftExtensionsLogging(_hostedServiceWindsorContainer.Resolve<ILoggerFactory>()))
             .Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, environmentInputQueueName, registerSubscriptionStorage: false))
-            .Routing(x => x.TypeBased().MapAssemblyDerivedFrom<Command>(environmentInputQueueName))
+            .Routing(x =>
+            {
+                x.TypeBased()
+                    .MapAssemblyDerivedFrom<Command>(environmentInputQueueName)
+                    .MapAssemblyDerivedFrom<DomainEvent>(environmentInputQueueName);
+            })
             .Options(x =>
                 {
                     x.EnableUnitOfWork(
@@ -79,7 +84,8 @@ public class RebusHostedService(
                     {
                         var jobTrackingIncomingStep = new JobTrackingIncomingStep(
                             _hostedServiceWindsorContainer.Resolve<INhibernateConfigurator>(),
-                            _hostedServiceWindsorContainer.Resolve<ILogger<JobTrackingIncomingStep>>()
+                            _hostedServiceWindsorContainer.Resolve<ILogger<JobTrackingIncomingStep>>(),
+                            _hostedServiceWindsorContainer
                         );
 
                         var pipeline = resolutionContext.Get<IPipeline>();

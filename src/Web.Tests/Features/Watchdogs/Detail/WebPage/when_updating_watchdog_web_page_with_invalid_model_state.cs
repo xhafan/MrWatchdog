@@ -1,12 +1,10 @@
-﻿using FakeItEasy;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
@@ -15,7 +13,6 @@ public class when_updating_watchdog_web_page_with_invalid_model_state : BaseData
 {
     private IActionResult _actionResult = null!;
     private WebPageModel _model = null!;
-    private IBus _bus = null!;    
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -23,10 +20,8 @@ public class when_updating_watchdog_web_page_with_invalid_model_state : BaseData
     public async Task Context()
     {
         _BuildEntities();
-        _bus = A.Fake<IBus>();
         
         _model = new WebPageModelBuilder(UnitOfWork)
-            .WithBus(_bus)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,

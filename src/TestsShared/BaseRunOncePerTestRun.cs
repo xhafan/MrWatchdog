@@ -2,8 +2,8 @@
 using CoreDdd.TestHelpers.DomainEvents;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
-using MrWatchdog.Core.Configurations;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.TestsShared.Loggers;
 
 namespace MrWatchdog.TestsShared;

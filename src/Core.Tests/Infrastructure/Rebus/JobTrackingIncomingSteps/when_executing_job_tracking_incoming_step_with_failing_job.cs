@@ -1,16 +1,17 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using Castle.Windsor;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Rebus;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
 
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDatabaseTest
@@ -22,14 +23,15 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
     {
         var step = new JobTrackingIncomingStep(
             TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>()
+            A.Fake<ILogger<JobTrackingIncomingStep>>(),
+            A.Fake<IWindsorContainer>()
         );
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name");
-        incomingStepContext.Save(new Message(new Dictionary<string, string>(), _command));
+        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
+        incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         try
         {

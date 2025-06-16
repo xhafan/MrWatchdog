@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
-using Rebus.Bus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Create;
 
-public class CreateModel(IBus bus) : BasePageModel
+public class CreateModel(ICoreBus bus) : BasePageModel
 {
     [BindProperty]
     [Required]

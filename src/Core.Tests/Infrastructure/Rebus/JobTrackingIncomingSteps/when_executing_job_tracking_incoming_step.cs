@@ -1,11 +1,14 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using Castle.Windsor;
+using CoreDdd.Domain.Events;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Rebus;
+using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -13,7 +16,7 @@ using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Rebus;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
 
 [TestFixture]
 public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
@@ -22,10 +25,17 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageIdOne;
     private long _watchdogWebPageIdTwo;
+    private IWindsorContainer _windsorContainer = null!;
+    private IWindsorContainer? _jobContextWindsorContainerInTheNextIncomingStep;
+    private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
+    private Guid _jobContextCommandGuidInTheNextIncomingStep;
 
     [SetUp]
     public async Task Context()
     {
+        _windsorContainer = A.Fake<IWindsorContainer>();
+        JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
+
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithWebPage(new WatchdogWebPageArgs
             {
@@ -38,17 +48,18 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
-        
+
         var step = new JobTrackingIncomingStep(
             TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>()
+            A.Fake<ILogger<JobTrackingIncomingStep>>(),
+            _windsorContainer
         );
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name");
-        incomingStepContext.Save(new Message(new Dictionary<string, string>(), _command));
+        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
+        incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await step.Process(incomingStepContext, _next);
 
@@ -67,6 +78,10 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
             await UnitOfWork.FlushAsync();
             
             _watchdogWebPageIdTwo = _watchdog.WebPages.Single(x => x.Id != _watchdogWebPageIdOne).Id;
+
+            _jobContextWindsorContainerInTheNextIncomingStep = JobContext.WindsorContainer.Value;
+            _jobContextRaisedDomainEventsInTheNextIncomingStep = JobContext.RaisedDomainEvents.Value;
+            _jobContextCommandGuidInTheNextIncomingStep = JobContext.CommandGuid.Value;
         }
     }
 
@@ -103,6 +118,24 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         jobHandlingAttempt.EndedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
     }
 
+    [Test]
+    public void job_context_windsor_container_is_set_in_the_next_incoming_step()
+    {
+        _jobContextWindsorContainerInTheNextIncomingStep.ShouldBe(_windsorContainer);
+    }
+
+    [Test]
+    public void job_context_raised_domain_events_are_reset_in_the_next_incoming_step()
+    {
+        _jobContextRaisedDomainEventsInTheNextIncomingStep.ShouldBeEmpty();
+    }
+    
+    [Test]
+    public void job_context_command_guid_is_set_in_the_next_incoming_step()
+    {
+        _jobContextCommandGuidInTheNextIncomingStep.ShouldBe(_command.Guid);
+    }
+    
     [TearDown]
     public async Task TearDown()
     {
@@ -115,4 +148,6 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
             await jobRepository.DeleteAsync(job);
         }
     }
+
+    private record TestDomainEvent : DomainEvent;
 }

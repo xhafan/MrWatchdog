@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace MrWatchdog.Core.Configurations;
+namespace MrWatchdog.Core.Infrastructure.Configurations;
 
 public static class ConsoleAppSettings
 {

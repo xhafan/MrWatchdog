@@ -3,12 +3,14 @@ using System.Text.RegularExpressions;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using CoreDdd.AspNetCore.Middlewares;
+using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
 using DatabaseBuilder;
 using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
 using Rebus.Config;
 using Rebus.Routing.TypeBased;
@@ -114,6 +116,8 @@ public class Program
         {
             options.SwaggerEndpoint("v1/swagger.json", "Mr Watchdog API V1");
         });
+        
+        DomainEvents.Initialize(new DomainEventHandlerFactory());
 
         await app.RunAsync();
 

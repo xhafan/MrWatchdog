@@ -1,0 +1,14 @@
+﻿@page
+@model WebPageSelectedHtmlModel
+@{
+   Layout = null;
+}
+<!turbo-frame id="watchdog_web_page_selected_html_@(Model.WatchdogWebPageId)">
+    <div class="mb-3">
+        <label class="form-label fw-bold">Selected HTML</label>
+        <div>
+            <textarea readonly></textarea>
+        </div>
+    </div>
+</!turbo-frame>
+

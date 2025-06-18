@@ -24,15 +24,15 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         _bus ??= A.Fake<ICoreBus>();
         
+        var queryHandlerFactory = new FakeQueryHandlerFactory();
+        
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogOverviewArgsQueryHandler(
+            unitOfWork,
+            new NhibernateRepository<Watchdog>(unitOfWork)
+        ));
+        
         var model = new OverviewModel(
-            new QueryExecutor(
-                new FakeQueryHandlerFactory<GetWatchdogOverviewArgsQuery>(
-                    new GetWatchdogOverviewArgsQueryHandler(
-                        unitOfWork,
-                        new NhibernateRepository<Watchdog>(unitOfWork)
-                    )
-                )
-            ),
+            new QueryExecutor(queryHandlerFactory),
             _bus
         );
         ModelValidator.ValidateModel(model);

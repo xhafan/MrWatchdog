@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
@@ -9,6 +8,7 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Pipeline;
+using System.Data;
 
 namespace MrWatchdog.Core.Infrastructure.Rebus;
 
@@ -93,6 +93,13 @@ public class JobTrackingIncomingStep(
                 baseMessage, 
                 jobKind
             );
+
+            if (baseMessage is DomainEvent evnt)
+            {
+                var relatedCommandJob = await jobRepository.LoadByGuidAsync(evnt.RelatedCommandGuid);
+                job.SetRelatedCommandJob(relatedCommandJob);
+            }
+            
             await jobRepository.SaveAsync(job);
         }
         

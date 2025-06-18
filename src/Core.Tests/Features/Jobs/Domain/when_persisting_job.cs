@@ -14,15 +14,19 @@ public class when_persisting_job : BaseDatabaseTest
 
     private Job _newJob = null!;
     private Job? _persistedJob;
+    private Job _relatedCommandJob = null!;
 
     [SetUp]
     public void Context()
     {
+        _relatedCommandJob = new JobBuilder(UnitOfWork).Build();
+        
         _newJob = new JobBuilder(UnitOfWork)
             .WithGuid(_jobGuid)
             .Build();
         _newJob.HandlingStarted();
         _newJob.Complete();
+        _newJob.SetRelatedCommandJob(_relatedCommandJob);
         UnitOfWork.Save(_newJob);
         
         UnitOfWork.Flush();
@@ -48,5 +52,6 @@ public class when_persisting_job : BaseDatabaseTest
         _persistedJob.NumberOfHandlingAttempts.ShouldBe(1);
         _persistedJob.AffectedEntities.ShouldBeEmpty();
         _persistedJob.HandlingAttempts.Count().ShouldBe(1);
+        _persistedJob.RelatedCommandJob.ShouldBe(_relatedCommandJob);
     }
 }

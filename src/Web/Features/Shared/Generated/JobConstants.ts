@@ -6,4 +6,7 @@ export abstract class JobConstants
 {
 	public static jobGuidVariable: string = `$jobGuid`;
 	public static getJobUrl: string = `/api/Jobs/$jobGuid`;
+	public static commandJobGuidVariable: string = `$commandJobGuid`;
+	public static domainEventTypeVariable: string = `$domainEventType`;
+	public static getRelatedDomainEventJobUrl: string = `/api/Jobs/GetRelatedDomainEventJob?commandJobGuid=$commandJobGuid&type=$domainEventType`;
 }

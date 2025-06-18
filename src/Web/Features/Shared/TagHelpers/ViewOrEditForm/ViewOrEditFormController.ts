@@ -4,7 +4,7 @@ import BaseStimulusModelController from "../../BaseStimulusModelController";
 import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion";
 import { ViewOrEditFormStimulusModel } from "../../Generated/ViewOrEditFormStimulusModel";
 
-export const formSubmittedEventName = "formSubmitted";
+export const formSubmitJobCompletedEventName = "formSubmitJobCompleted";
 export const formEditingCancelledEventName = "formEditingCancelled";
 
 export default class ViewOrEditFormController extends BaseStimulusModelController<ViewOrEditFormStimulusModel> {
@@ -30,7 +30,7 @@ export default class ViewOrEditFormController extends BaseStimulusModelControlle
         formSubmitWithWaitForJobCompletion(
             form, 
             jobDto => {
-                this.raiseEventFormSubmitted(jobDto);
+                this.raiseEventFormSubmitJobCompleted(jobDto);
             }
         );
 
@@ -39,8 +39,8 @@ export default class ViewOrEditFormController extends BaseStimulusModelControlle
         }
     }
 
-    private raiseEventFormSubmitted(job: JobDto) {
-        this.formTarget.dispatchEvent(new CustomEvent(formSubmittedEventName, { bubbles: true, detail: job }));
+    private raiseEventFormSubmitJobCompleted(job: JobDto) {
+        this.formTarget.dispatchEvent(new CustomEvent(formSubmitJobCompletedEventName, { bubbles: true, detail: job }));
     }
 
     edit() {

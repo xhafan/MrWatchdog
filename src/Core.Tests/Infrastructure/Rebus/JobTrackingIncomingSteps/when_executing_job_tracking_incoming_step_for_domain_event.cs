@@ -31,10 +31,13 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
     private readonly Guid _relatedCommandGuid = Guid.NewGuid();
     private readonly Guid _domainEventJobGuid = Guid.NewGuid();
+    private Job _commandJob = null!;
 
     [SetUp]
     public async Task Context()
     {
+        _BuildCommandJob();
+        
         _windsorContainer = A.Fake<IWindsorContainer>();
         JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
 
@@ -105,6 +108,7 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
                                  """);
         job.Kind.ShouldBe(JobKind.DomainEvent);
         job.NumberOfHandlingAttempts.ShouldBe(1);
+        job.RelatedCommandJob.ShouldBe(_commandJob);
         
         var jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(Watchdog));
         jobAffectedEntity.ShouldNotBeNull();
@@ -140,6 +144,16 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
     {
         _jobContextCommandGuidInTheNextIncomingStep.ShouldBe(_domainEvent.RelatedCommandGuid);
     }
+ 
+    private void _BuildCommandJob()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+        
+        _commandJob = new JobBuilder(newUnitOfWork)
+            .WithGuid(_relatedCommandGuid)
+            .Build();        
+    }
     
     [TearDown]
     public async Task TearDown()
@@ -147,11 +161,18 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
         var jobRepository = new JobRepository(newUnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(_domainEventJobGuid);
-        if (job != null)
+        
+        var domainEventJob = await jobRepository.GetByGuidAsync(_domainEventJobGuid);
+        if (domainEventJob != null)
         {
-            await jobRepository.DeleteAsync(job);
+            await jobRepository.DeleteAsync(domainEventJob);
         }
+        
+        var commandJob = await jobRepository.GetByGuidAsync(_relatedCommandGuid);
+        if (commandJob != null)
+        {
+            await jobRepository.DeleteAsync(commandJob);
+        }        
     }
 
     private record TestDomainEvent : DomainEvent;

@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.TurboFrame;
 
 [HtmlTargetElement("turbo-frame")]
-public class TurboFrame(IHtmlHelper htmlHelper) 
-    : BaseViewTagHelper(htmlHelper)
+public class TurboFrame : TagHelper
 {
-    public string Id { get; set; } = null!;
-    public string Src { get; set; } = null!;
-    public string? Loading { get; set; }
-
-    protected override string GetStimulusControllerName()
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        return StimulusControllers.TurboFrame;
-    }    
+        await base.ProcessAsync(context, output);
+
+        output.Attributes.SetAttribute("data-controller", StimulusControllers.TurboFrame);
+    }
 }

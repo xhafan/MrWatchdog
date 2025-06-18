@@ -12,5 +12,7 @@ public class JobMappingOverrides : IAutoMappingOverride<Job>
         mapping.HasMany(x => x.HandlingAttempts).Not.OptimisticLock();
 
         mapping.Map(x => x.InputData).CustomSqlType("jsonb").CustomType<StringAsJsonb>();
+        
+        mapping.References(x => x.RelatedCommandJob, "RelatedCommandJobId");
     }
 }

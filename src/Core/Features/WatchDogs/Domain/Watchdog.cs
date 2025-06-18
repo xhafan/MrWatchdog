@@ -75,4 +75,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         var webPage = _GetWebPage(watchdogWebPageId);
         _webPages.Remove(webPage);
     }
+
+    public virtual void SetSelectedHtml(long watchdogWebPageId, string selectedHtml)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        webPage.SetSelectedHtml(selectedHtml);
+    }
 }

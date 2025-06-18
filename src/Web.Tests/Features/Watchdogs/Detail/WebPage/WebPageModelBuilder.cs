@@ -31,15 +31,15 @@ public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         _bus ??= A.Fake<ICoreBus>();
         
+        var queryHandlerFactory = new FakeQueryHandlerFactory();
+        
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageArgsQueryHandler(
+            unitOfWork,
+            new NhibernateRepository<Watchdog>(unitOfWork)
+        ));
+        
         var model = new WebPageModel(
-            new QueryExecutor(
-                new FakeQueryHandlerFactory<GetWatchdogWebPageArgsQuery>(
-                    new GetWatchdogWebPageArgsQueryHandler(
-                        unitOfWork,
-                        new NhibernateRepository<Watchdog>(unitOfWork)
-                    )
-                )
-            ),
+            new QueryExecutor(queryHandlerFactory),
             _bus
         )
         {

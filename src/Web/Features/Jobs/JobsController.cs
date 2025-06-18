@@ -20,4 +20,16 @@ public class JobsController(IQueryExecutor queryExecutor) : ControllerBase
             ? NotFound()
             : Ok(jobDtos.Single());
     }
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetRelatedDomainEventJob(Guid commandJobGuid, string type)
+    {
+        var jobDtos = (
+            await queryExecutor.ExecuteAsync<GetRelatedDomainEventJobQuery, JobDto>(new GetRelatedDomainEventJobQuery(commandJobGuid, type))
+        ).ToList();
+
+        return jobDtos.IsEmpty()
+            ? NotFound()
+            : Ok(jobDtos.Single());
+    }    
 }

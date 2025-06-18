@@ -39,7 +39,9 @@ public static class WindsorContainerRegistrator
             Component.For<ILoggerFactory>()
                 .Instance(mainWindsorContainer.Resolve<ILoggerFactory>()),
             Component.For(typeof(ILogger<>))
-                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(ILogger<>).MakeGenericType(creationContext.GenericArguments[0])))
+                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(ILogger<>).MakeGenericType(creationContext.GenericArguments[0]))),
+            Component.For<IHttpClientFactory>()
+                .Instance(mainWindsorContainer.Resolve<IHttpClientFactory>())
         );
     }
 }

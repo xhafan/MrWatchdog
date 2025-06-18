@@ -10,4 +10,14 @@ public static class JobConstants
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string GetJobUrl = $"/api/Jobs/{JobGuidVariable}";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string CommandJobGuidVariable = "$commandJobGuid";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string DomainEventTypeVariable = "$domainEventType";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string GetRelatedDomainEventJobUrl = $"/api/Jobs/GetRelatedDomainEventJob?commandJobGuid={CommandJobGuidVariable}&type={DomainEventTypeVariable}";
+    
 }

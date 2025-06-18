@@ -24,6 +24,7 @@
                     <view-or-edit-form action="@Url.Page("WebPage")"
                                        start-in-edit-mode="Model.IsEmptyWebPage"
                                        hide-cancel-in-edit-mode="Model.IsEmptyWebPage"
+                                       data-watchdogs--detail-web-page-target="viewOrEditWebPageForm"
                                        >
                         <view-mode-item>
                             <div class="mb-3">
@@ -65,12 +66,15 @@
                     </view-or-edit-form>
                 </div>
                 <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Selected HTML</label>
-                        <div>
-                            <textarea readonly></textarea>
-                        </div>
-                    </div>
+                    <turbo-frame id="watchdog_web_page_selected_html_@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                                 src="@Url.Page("WebPageSelectedHtml", new
+                                            {
+                                                watchdogId = Model.WatchdogWebPageArgs.WatchdogId,
+                                                watchdogWebPageId = Model.WatchdogWebPageArgs.WatchdogWebPageId
+                                            })"
+                                 data-watchdogs--detail-web-page-target="webPageSelectedHtml"
+                                 >
+                    </turbo-frame>
                 </div>
             </div>
         </div>

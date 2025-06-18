@@ -40,6 +40,14 @@ public class when_updating_existing_watchdog_web_page : BaseTest
         RaisedDomainEvents.ShouldContain(new WatchdogWebPageUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
     }
 
+    [Test]
+    public void web_page_selected_html_and_scraped_on_are_reset()
+    {
+        var watchdogWebPage = _watchdog.WebPages.Single();
+        watchdogWebPage.SelectedHtml.ShouldBe(null);
+        watchdogWebPage.ScrapedOn.ShouldBe(null);
+    }
+
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder()
@@ -51,5 +59,6 @@ public class when_updating_existing_watchdog_web_page : BaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _watchdog.SetSelectedHtml(_watchdogWebPageId, "<div></div>");
     }
 }

@@ -33,6 +33,7 @@ public class Job : VersionedEntity, IAggregateRoot
     public virtual string InputData { get; } = null!;
     public virtual JobKind Kind { get; }
     public virtual int NumberOfHandlingAttempts { get; protected set; }
+    public virtual Job? RelatedCommandJob { get; protected set; }
     public virtual IEnumerable<JobAffectedEntity> AffectedEntities => _affectedEntities;
     public virtual IEnumerable<JobHandlingAttempt> HandlingAttempts => _handlingAttempts;
 
@@ -93,4 +94,9 @@ public class Job : VersionedEntity, IAggregateRoot
             _handlingAttempts.Select(x => x.GetDto())
         );
     }
+    
+    public virtual void SetRelatedCommandJob(Job relatedCommandJob)
+    {
+        RelatedCommandJob = relatedCommandJob;
+    }    
 }

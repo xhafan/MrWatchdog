@@ -1,6 +1,8 @@
+import Enumerable from "linq";
 import { DomainConstants } from "../Shared/Generated/DomainConstants";
 import { JobConstants } from "../Shared/Generated/JobConstants";
 import { JobDto } from "../Shared/Generated/JobDto";
+import { RebusConstants } from "../Shared/Generated/RebusConstants";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
@@ -64,24 +66,55 @@ export async function sendRequestAndWaitForJobCompletion(
         throw new Error("Error getting job Guid.");
     }
 
-    let getJobUrlWithReplacedJobGuid = JobConstants.getJobUrl.replace(JobConstants.jobGuidVariable, jobGuid);
+    const jobDto = await waitForJobCompletion(jobGuid);
+       
+    onJobCompletion(jobDto);
+    enableElementAndRemoveSpinner(submitter);
+}
+
+export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
+    let getJobUrl = JobConstants.getJobUrl.replace(JobConstants.jobGuidVariable, jobGuid);
 
     const pollJob = async (delay = 300): Promise<JobDto> => {
         await new Promise(resolve => setTimeout(resolve, delay));
-        const response = await fetch(getJobUrlWithReplacedJobGuid);
+        const response = await fetch(getJobUrl);
         if (response.ok) {
             const jobDto = await response.json() as JobDto;
             if (jobDto.completedOn) {
                 return jobDto;
+            }
+            else if (jobDto.numberOfHandlingAttempts >= RebusConstants.maxDeliveryAttempts) {
+                let jobLastException = getJobLastException(jobDto);
+                if (jobLastException) {
+                    return jobDto;
+                }
             }
         }
         return pollJob(Math.min(delay * 2, 8000));
     };
 
     const jobDto = await pollJob();
-        
-    onJobCompletion(jobDto);
-    enableElementAndRemoveSpinner(submitter);
+    
+    return jobDto;
+}
+
+function getJobLastException(jobDto: JobDto) : string | null {
+    let lastJobHandlingAttempt = Enumerable.from(jobDto.handlingAttempts).orderByDescending(x => x.endedOn).first();
+    return lastJobHandlingAttempt.exception;
+}
+
+export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domainEventType: string): Promise<string | null> {
+    let getRelatedDomainEventJobUrl = JobConstants.getRelatedDomainEventJobUrl
+        .replace(JobConstants.commandJobGuidVariable, commandJobGuid)
+        .replace(JobConstants.domainEventTypeVariable, domainEventType);
+
+    const response = await fetch(getRelatedDomainEventJobUrl);
+    if (response.ok) {
+        const jobDto = await response.json() as JobDto;
+        return jobDto.guid;
+    }
+
+    return null;
 }
 
 function disableElementAndAddSpinner(element: HTMLElement | null) {

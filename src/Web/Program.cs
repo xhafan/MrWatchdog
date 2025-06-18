@@ -78,6 +78,8 @@ public class Program
         {
             options.SwaggerDoc("v1", new OpenApiInfo {Title = "Mr Watchdog API", Version = "v1"});
         });
+        
+        builder.Services.AddHttpClient();
 
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();

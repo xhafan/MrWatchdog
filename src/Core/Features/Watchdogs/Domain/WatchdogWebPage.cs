@@ -25,6 +25,8 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? Url { get; protected set; }
     public virtual string? Selector { get; protected set; }
     public virtual string? Name { get; protected set; }
+    public virtual string? SelectedHtml { get; protected set; }
+    public virtual DateTime? ScrapedOn { get; protected set; }
 
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
     {
@@ -49,9 +51,17 @@ public class WatchdogWebPage : VersionedEntity
         Selector = watchdogWebPageArgs.Selector;
         Name = watchdogWebPageArgs.Name;
 
-        if (hasChanged)
-        {
-            DomainEvents.RaiseEvent(new WatchdogWebPageUpdatedDomainEvent(Watchdog.Id, Id));
-        }
+        if (!hasChanged) return;
+        
+        SelectedHtml = null;
+        ScrapedOn = null;
+            
+        DomainEvents.RaiseEvent(new WatchdogWebPageUpdatedDomainEvent(Watchdog.Id, Id));
+    }
+
+    public virtual void SetSelectedHtml(string selectedHtml)
+    {
+        SelectedHtml = selectedHtml;
+        ScrapedOn = DateTime.UtcNow;
     }
 }

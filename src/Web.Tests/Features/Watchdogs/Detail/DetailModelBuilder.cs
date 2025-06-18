@@ -24,15 +24,15 @@ public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         _bus ??= A.Fake<ICoreBus>();
         
+        var queryHandlerFactory = new FakeQueryHandlerFactory();
+        
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogArgsQueryHandler(
+            unitOfWork,
+            new NhibernateRepository<Watchdog>(unitOfWork)
+        ));
+        
         var model = new DetailModel(
-            new QueryExecutor(
-                new FakeQueryHandlerFactory<GetWatchdogArgsQuery>(
-                    new GetWatchdogArgsQueryHandler(
-                        unitOfWork,
-                        new NhibernateRepository<Watchdog>(unitOfWork)
-                    )
-                )
-            ),
+            new QueryExecutor(queryHandlerFactory),
             _bus
         );
         ModelValidator.ValidateModel(model);

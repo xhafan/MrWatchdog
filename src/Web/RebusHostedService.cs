@@ -76,7 +76,7 @@ public class RebusHostedService(
                     );
                     x.RetryStrategy(
                         errorQueueName: $"{environmentInputQueueName}Error",
-                        maxDeliveryAttempts: 5
+                        maxDeliveryAttempts: RebusConstants.MaxDeliveryAttempts
                     );
                     x.SetNumberOfWorkers(5);
                     x.SetMaxParallelism(5);

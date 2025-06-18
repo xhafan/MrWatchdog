@@ -1,7 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
-import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion";
+import { FrameElement } from "@hotwired/turbo";
+import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitForJobCompletion } from "../../../Jobs/jobCompletion";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
 import { WebPageStimulusModel } from "../../../Shared/Generated/WebPageStimulusModel";
+import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import { JobDto } from "../../../Shared/Generated/JobDto";
+import { JobConstants } from "../../../Shared/Generated/JobConstants";
+import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
+
 
 export const watchdogWebPageRemovedEvent = "watchdogWebPageRemoved";
 
@@ -10,13 +16,17 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
         "url",
         "previousUrl",
         "name",
-        "removeWebPageForm"
+        "removeWebPageForm",
+        "viewOrEditWebPageForm",
+        "webPageSelectedHtml"
     ];
    
     declare urlTarget: HTMLInputElement;
     declare previousUrlTarget: HTMLInputElement;
     declare nameTarget: HTMLInputElement;
     declare removeWebPageFormTarget: HTMLFormElement;
+    declare viewOrEditWebPageFormTarget: HTMLFormElement;
+    declare webPageSelectedHtmlTarget: FrameElement;
 
     connect() {
         formSubmitWithWaitForJobCompletion(
@@ -33,6 +43,8 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
                 this.urlTarget.focus();                
             });
         }
+
+        this.viewOrEditWebPageFormTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateWatchdogWebPageJobCompleted.bind(this), {});
     }
 
     onUrlModified(event: InputEvent) {
@@ -48,5 +60,18 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
 
     private getUrlWithoutHttpPrefix(url: string): string {
         return url.replace(/^https?:\/\//i, "");
-    }    
+    }
+    
+    private async onUpdateWatchdogWebPageJobCompleted(event: CustomEventInit) {
+        let updateWatchdogWebPageJobDto = event.detail as JobDto;
+        let updateWatchdogWebPageJobGuid = updateWatchdogWebPageJobDto.guid;
+
+        var watchdogWebPageUpdatedDomainEventJobGuid = await getRelatedDomainEventJobGuid(updateWatchdogWebPageJobGuid, DomainConstants.watchdogWebPageUpdatedDomainEvent);
+        
+        if (!watchdogWebPageUpdatedDomainEventJobGuid) return;
+
+        var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageUpdatedDomainEventJobGuid);
+
+        this.webPageSelectedHtmlTarget.reload();
+    }
 }

@@ -5,13 +5,15 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageArgs.WatchdogWebPageId)">
-    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage, new WebPageStimulusModel(Model.IsEmptyWebPage))>
+<!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageId)">
+    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span>@Model.WatchdogWebPageArgs.Name</span>
+            <span data-watchdogs--detail-web-page-target="webPageName">
+                @Model.WatchdogWebPageName
+            </span>
             <form asp-page-handler="RemoveWatchdogWebPage"
-                  asp-route-id="@Model.WatchdogWebPageArgs.WatchdogId"
-                  asp-route-watchdogWebPageId="@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                  asp-route-id="@Model.WatchdogId"
+                  asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
                   method="post"
                   data-watchdogs--detail-web-page-target="removeWebPageForm"
                   >
@@ -21,60 +23,24 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <view-or-edit-form action="@Url.Page("WebPage")"
-                                       start-in-edit-mode="Model.IsEmptyWebPage"
-                                       hide-cancel-in-edit-mode="Model.IsEmptyWebPage"
-                                       data-watchdogs--detail-web-page-target="viewOrEditWebPageForm"
-                                       >
-                        <view-mode-item>
-                            <div class="mb-3">
-                                <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                                <div>@Model.WatchdogWebPageArgs.Url</div>
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                                <div>@Model.WatchdogWebPageArgs.Selector</div>
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
-                                <div>@Model.WatchdogWebPageArgs.Name</div>
-                            </div>
-                        </view-mode-item>
-                        <edit-mode-item>
-                            <input asp-for="WatchdogWebPageArgs.WatchdogId" type="hidden" />
-                            <input asp-for="WatchdogWebPageArgs.WatchdogWebPageId" type="hidden" />
-                            <div class="mb-3">
-                                <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                                <input asp-for="WatchdogWebPageArgs.Url" 
-                                       class="form-control" 
-                                       data-watchdogs--detail-web-page-target="url" 
-                                       data-action="input->@StimulusControllers.WatchdogsDetailWebPage#onUrlModified" />
-                                <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
-                                <input type="hidden" data-watchdogs--detail-web-page-target="previousUrl" value="@Model.WatchdogWebPageArgs.Url" />
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                                <input asp-for="WatchdogWebPageArgs.Selector" class="form-control" />
-                                <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
-                            </div>
-                        <div class="mb-3">
-                            <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
-                            <input asp-for="WatchdogWebPageArgs.Name" class="form-control" data-watchdogs--detail-web-page-target="name" />
-                            <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
-                        </div>
-                        </edit-mode-item>
-                    </view-or-edit-form>
+                    <turbo-frame id="watchdog_web_page_overview_@(Model.WatchdogWebPageId)" 
+                                 src="@Url.Page("WebPageOverview", new
+                                      {
+                                          watchdogId = Model.WatchdogId,
+                                          watchdogWebPageId = Model.WatchdogWebPageId
+                                      })"
+                                 data-watchdogs--detail-web-page-target="webPageOverview"
+                                 />
                 </div>
                 <div class="col-md-6">
-                    <turbo-frame id="watchdog_web_page_selected_html_@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                    <turbo-frame id="watchdog_web_page_selected_html_@Model.WatchdogWebPageId"
                                  src="@Url.Page("WebPageSelectedHtml", new
-                                            {
-                                                watchdogId = Model.WatchdogWebPageArgs.WatchdogId,
-                                                watchdogWebPageId = Model.WatchdogWebPageArgs.WatchdogWebPageId
-                                            })"
+                                      {
+                                          watchdogId = Model.WatchdogId,
+                                          watchdogWebPageId = Model.WatchdogWebPageId
+                                      })"
                                  data-watchdogs--detail-web-page-target="webPageSelectedHtml"
-                                 >
-                    </turbo-frame>
+                                 />
                 </div>
             </div>
         </div>

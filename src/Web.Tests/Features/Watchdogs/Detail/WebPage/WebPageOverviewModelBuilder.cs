@@ -10,17 +10,24 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class WebPageOverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
+    private WatchdogWebPageArgs? _watchdogWebPageArgs;
 
-    public WebPageModelBuilder WithBus(ICoreBus bus)
+    public WebPageOverviewModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }
     
-    public WebPageModel Build()
+    public WebPageOverviewModelBuilder WithWatchdogWebPageArgs(WatchdogWebPageArgs watchdogWebPageArgs)
+    {
+        _watchdogWebPageArgs = watchdogWebPageArgs;
+        return this;
+    }       
+    
+    public WebPageOverviewModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
         
@@ -31,10 +38,13 @@ public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
         
-        var model = new WebPageModel(
+        var model = new WebPageOverviewModel(
             new QueryExecutor(queryHandlerFactory),
             _bus
-        );
+        )
+        {
+            WatchdogWebPageArgs = _watchdogWebPageArgs!
+        };
         ModelValidator.ValidateModel(model);
         return model;
     }

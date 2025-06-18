@@ -14,8 +14,9 @@ export default class TurboFrameController extends Controller {
         this.element.addEventListener(formEditingCancelledEventName, this.onFormEditingCancelled.bind(this), {});
     }
 
-    private onFormSubmitJobCompleted() {
+    private onFormSubmitJobCompleted(event: Event) {
         this.reload();
+        event.stopPropagation();
     }
 
     private onFormEditingCancelled() {

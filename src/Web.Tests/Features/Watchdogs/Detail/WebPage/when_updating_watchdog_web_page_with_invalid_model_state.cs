@@ -12,7 +12,7 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 public class when_updating_watchdog_web_page_with_invalid_model_state : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
-    private WebPageModel _model = null!;
+    private WebPageOverviewModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -21,7 +21,7 @@ public class when_updating_watchdog_web_page_with_invalid_model_state : BaseData
     {
         _BuildEntities();
         
-        _model = new WebPageModelBuilder(UnitOfWork)
+        _model = new WebPageOverviewModelBuilder(UnitOfWork)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,

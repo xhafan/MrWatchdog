@@ -12,6 +12,7 @@ import ViewOrEditFormController from "./TagHelpers/ViewOrEditForm/ViewOrEditForm
 import WatchdogsCreateController from "../Watchdogs/Create/CreateController";
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailWebPageController from "../Watchdogs/Detail/WebPage/WebPageController";
+import WatchdogsDetailWebPageOverviewController from "../Watchdogs/Detail/WebPage/WebPageOverviewController";
 
 
 const application = Application.start();
@@ -22,6 +23,7 @@ application.register(StimulusControllers.viewOrEditForm, ViewOrEditFormControlle
 application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateController);
 application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailController);
 application.register(StimulusControllers.watchdogsDetailWebPage, WatchdogsDetailWebPageController);
+application.register(StimulusControllers.watchdogsDetailWebPageOverview, WatchdogsDetailWebPageOverviewController);
 
 
 attachValidationAfterTurboLoad();

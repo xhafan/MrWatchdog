@@ -6,9 +6,9 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page : BaseDatabaseTest
+public class when_viewing_watchdog_empty_web_page_overview : BaseDatabaseTest
 {
-    private WebPageModel _model = null!;
+    private WebPageOverviewModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -19,7 +19,16 @@ public class when_viewing_watchdog_web_page : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageModelBuilder(UnitOfWork).Build();
+        _model = new WebPageOverviewModelBuilder(UnitOfWork)
+            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            {
+                WatchdogId = _watchdog.Id,
+                WatchdogWebPageId = _watchdogWebPageId,
+                Url = null,
+                Selector = null,
+                Name = null
+            })
+            .Build();
 
         await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
     }
@@ -27,9 +36,7 @@ public class when_viewing_watchdog_web_page : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageName.ShouldBe("url.com/page");
+        _model.IsEmptyWebPage.ShouldBe(true);
     }  
 
     private void _BuildEntities()
@@ -37,9 +44,9 @@ public class when_viewing_watchdog_web_page : BaseDatabaseTest
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithWebPage(new WatchdogWebPageArgs
             {
-                Url = "http://url.com/page",
-                Selector = ".selector",
-                Name = "url.com/page"
+                Url = null,
+                Selector = null,
+                Name = null
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;

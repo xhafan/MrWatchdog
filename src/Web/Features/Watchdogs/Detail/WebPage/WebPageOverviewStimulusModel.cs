@@ -3,4 +3,4 @@
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
-public record WebPageStimulusModel(bool IsEmptyWebPage);
+public record WebPageOverviewStimulusModel(bool IsEmptyWebPage);

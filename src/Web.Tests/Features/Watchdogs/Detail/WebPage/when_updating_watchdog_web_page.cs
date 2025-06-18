@@ -13,7 +13,7 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 public class when_updating_watchdog_web_page : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
-    private WebPageModel _model = null!;
+    private WebPageOverviewModel _model = null!;
     private ICoreBus _bus = null!;    
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -24,7 +24,7 @@ public class when_updating_watchdog_web_page : BaseDatabaseTest
         _BuildEntities();
         _bus = A.Fake<ICoreBus>();
 
-        _model = new WebPageModelBuilder(UnitOfWork)
+        _model = new WebPageOverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {

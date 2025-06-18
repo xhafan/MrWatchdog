@@ -8,34 +8,36 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageModel(
+public class WebPageOverviewModel(
     IQueryExecutor queryExecutor, 
     ICoreBus bus
 ) : BasePageModel
 {
-    public long WatchdogId { get; private set; }
-    public long WatchdogWebPageId { get; private set; }
-    public string? WatchdogWebPageName { get; private set; }
+    [BindProperty]
+    public WatchdogWebPageArgs WatchdogWebPageArgs { get; set; } = null!;
+    public bool IsEmptyWebPage { get; private set; }
 
     public async Task OnGet(
         long watchdogId, 
         long watchdogWebPageId
     )
     {
-        WatchdogId = watchdogId;
-        WatchdogWebPageId = watchdogWebPageId;
-
-        var watchdogWebPageArgs =
+        WatchdogWebPageArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageArgsQuery, WatchdogWebPageArgs>(
                 new GetWatchdogWebPageArgsQuery(watchdogId, watchdogWebPageId));
-        
-        WatchdogWebPageName = watchdogWebPageArgs.Name;
+
+        IsEmptyWebPage = string.IsNullOrWhiteSpace(WatchdogWebPageArgs.Url);
     }
     
-    public async Task<IActionResult> OnPostRemoveWatchdogWebPage(long id, long watchdogWebPageId)
+    public async Task<IActionResult> OnPost()
     {
-        var command = new RemoveWatchdogWebPageCommand(WatchdogId: id, watchdogWebPageId);
+        if (!ModelState.IsValid)
+        {
+            return PageWithUnprocessableEntityStatus422();
+        }
+        
+        var command = new UpdateWatchdogWebPageCommand(WatchdogWebPageArgs);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
-    }     
+    }
 }

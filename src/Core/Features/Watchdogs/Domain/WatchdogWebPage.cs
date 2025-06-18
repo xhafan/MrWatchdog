@@ -64,4 +64,9 @@ public class WatchdogWebPage : VersionedEntity
         SelectedHtml = selectedHtml;
         ScrapedOn = DateTime.UtcNow;
     }
+    
+    public virtual WatchdogWebPageSelectedHtmlDto GetWatchdogWebPageSelectedHtmlDto()
+    {
+        return new WatchdogWebPageSelectedHtmlDto(Watchdog.Id, Id, SelectedHtml, ScrapedOn);
+    }      
 }

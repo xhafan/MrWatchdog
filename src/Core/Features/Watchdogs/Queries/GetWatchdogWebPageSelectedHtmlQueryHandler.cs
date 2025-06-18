@@ -13,6 +13,6 @@ public class GetWatchdogWebPageSelectedHtmlQueryHandler(
     public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogWebPageSelectedHtmlQuery query)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (TResult)(object)watchdog.GetWatchdogWebPageArgs(query.WatchdogWebPageId);
+        return (TResult)(object)watchdog.GetWatchdogWebPageSelectedHtmlDto(query.WatchdogWebPageId);
     }
 }

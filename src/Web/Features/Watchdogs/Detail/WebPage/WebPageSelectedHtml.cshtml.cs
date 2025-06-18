@@ -1,23 +1,21 @@
 using CoreDdd.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageSelectedHtmlModel(
-#pragma warning disable CS9113 // Parameter is unread.
-    IQueryExecutor queryExecutor
-#pragma warning restore CS9113 // Parameter is unread.
-) : BasePageModel
+public class WebPageSelectedHtmlModel(IQueryExecutor queryExecutor) : BasePageModel
 {
-    public long WatchdogWebPageId { get; private set; }
+    public WatchdogWebPageSelectedHtmlDto WatchdogWebPageSelectedHtmlDto { get; private set; } = null!;
     
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-    public async Task OnGet( // todo: test me
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+    public async Task OnGet(
         long watchdogId, 
         long watchdogWebPageId
     )
     {
-        WatchdogWebPageId = watchdogWebPageId;
+        WatchdogWebPageSelectedHtmlDto =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageSelectedHtmlQuery, WatchdogWebPageSelectedHtmlDto>(
+                new GetWatchdogWebPageSelectedHtmlQuery(watchdogId, watchdogWebPageId));
     }
 }

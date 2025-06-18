@@ -3,12 +3,23 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_selected_html_@(Model.WatchdogWebPageId)">
+<!turbo-frame id="watchdog_web_page_selected_html_@(Model.WatchdogWebPageSelectedHtmlDto.WatchdogWebPageId)">
     <div class="mb-3">
         <label class="form-label fw-bold">Selected HTML</label>
         <div>
-            <textarea readonly></textarea>
+            @if (Model.WatchdogWebPageSelectedHtmlDto.SelectedHtml != null)
+            {
+                <textarea readonly style="width:100%;resize:vertical;" rows="5">@Model.WatchdogWebPageSelectedHtmlDto.SelectedHtml</textarea>
+            }
+            else
+            {
+                @:Web page not scraped yet
+            }
         </div>
+        @if (Model.WatchdogWebPageSelectedHtmlDto.ScrapedOn != null)
+        {
+            <span>Scraped on: @($"{Model.WatchdogWebPageSelectedHtmlDto.ScrapedOn:yyyy-MM-dd HH:mm:ss UTC}")</span>
+        }
     </div>
 </!turbo-frame>
 

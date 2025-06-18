@@ -81,4 +81,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         var webPage = _GetWebPage(watchdogWebPageId);
         webPage.SetSelectedHtml(selectedHtml);
     }
+    
+    public virtual WatchdogWebPageSelectedHtmlDto GetWatchdogWebPageSelectedHtmlDto(long watchdogWebPageId)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        return webPage.GetWatchdogWebPageSelectedHtmlDto();
+    }    
 }

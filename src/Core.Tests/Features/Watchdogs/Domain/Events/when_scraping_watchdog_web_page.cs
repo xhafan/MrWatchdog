@@ -9,7 +9,7 @@ using MrWatchdog.TestsShared.HttpClients;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
 
 [TestFixture]
-public class when_handling_watchdog_web_page_updated_domain_event : BaseDatabaseTest
+public class when_scraping_watchdog_web_page : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -20,7 +20,8 @@ public class when_handling_watchdog_web_page_updated_domain_event : BaseDatabase
         _BuildEntities();
 
         var httpClientFactory = new HttpClientFactoryBuilder()
-            .WithRequestResponse(new HttpMessageRequestResponse("https://www.pcgamer.com/epic-games-store-free-games-list/",
+            .WithRequestResponse(new HttpMessageRequestResponse(
+                "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 () => new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -39,12 +40,12 @@ public class when_handling_watchdog_web_page_updated_domain_event : BaseDatabase
                 }))
             .Build();
         
-        var handler = new WatchdogWebPageUpdatedDomainEventMessageHandler(
+        var handler = new ScrapeWatchdogWebPageDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             httpClientFactory
         );
 
-        await handler.Handle(new WatchdogWebPageUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
+        await handler.Handle(new WatchdogWebPageScrapingDataUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
     }
 
     [Test]
@@ -58,6 +59,7 @@ public class when_handling_watchdog_web_page_updated_domain_event : BaseDatabase
         );
         webPage.ScrapedOn.ShouldNotBeNull();
         webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
+        webPage.ScrapingErrorMessage.ShouldBe(null);
     }
     
     private void _BuildEntities()
@@ -73,5 +75,6 @@ public class when_handling_watchdog_web_page_updated_domain_event : BaseDatabase
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

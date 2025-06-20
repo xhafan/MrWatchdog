@@ -28,7 +28,7 @@ public class when_getting_related_domain_event_job
             .Build();
         
         _domainEventJob = new JobBuilder(unitOfWork)
-            .WithType(nameof(WatchdogWebPageUpdatedDomainEvent))
+            .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
             .Build();
         _domainEventJob.SetRelatedCommandJob(_commandJob);
     }
@@ -38,7 +38,7 @@ public class when_getting_related_domain_event_job
     {
         var getRelatedDomainEventJobUrl = JobConstants.GetRelatedDomainEventJobUrl
             .Replace(JobConstants.CommandJobGuidVariable, _commandJobGuid.ToString())
-            .Replace(JobConstants.DomainEventTypeVariable, nameof(WatchdogWebPageUpdatedDomainEvent));
+            .Replace(JobConstants.DomainEventTypeVariable, nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
         var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(getRelatedDomainEventJobUrl);
         response.EnsureSuccessStatusCode();
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();

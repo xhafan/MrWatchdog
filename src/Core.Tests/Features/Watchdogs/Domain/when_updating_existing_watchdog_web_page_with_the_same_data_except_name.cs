@@ -6,7 +6,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
 
 [TestFixture]
-public class when_updating_existing_watchdog_web_page_with_the_same_data : BaseTest
+public class when_updating_existing_watchdog_web_page_with_the_same_data_except_name : BaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -21,14 +21,14 @@ public class when_updating_existing_watchdog_web_page_with_the_same_data : BaseT
             WatchdogWebPageId = _watchdogWebPageId,
             Url = "http://url.com/page",
             Selector = ".selector",
-            Name = "url.com/page"
+            Name = "url.com/page2"
         });
     }
 
     [Test]
     public void watchdog_web_page_updated_domain_event_is_not_raised()
     {
-        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
+        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingDataUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
     }
 
     private void _BuildEntities()

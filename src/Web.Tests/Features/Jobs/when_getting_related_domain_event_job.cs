@@ -27,7 +27,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
         
         _domainEventJob = new JobBuilder(UnitOfWork)
             .WithKind(JobKind.DomainEvent)
-            .WithType(nameof(WatchdogWebPageUpdatedDomainEvent))
+            .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
             .Build();
         _domainEventJob.HandlingStarted();
         _domainEventJob.Complete();
@@ -35,7 +35,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
         
         var controller = new JobsControllerBuilder(UnitOfWork).Build();
 
-        _actionResult = await controller.GetRelatedDomainEventJob(_commandJob.Guid, nameof(WatchdogWebPageUpdatedDomainEvent));
+        _actionResult = await controller.GetRelatedDomainEventJob(_commandJob.Guid, nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
     }
 
     [Test]

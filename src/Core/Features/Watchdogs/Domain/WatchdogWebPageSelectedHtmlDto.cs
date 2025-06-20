@@ -4,5 +4,6 @@ public record WatchdogWebPageSelectedHtmlDto(
     long WatchdogId,
     long WatchdogWebPageId,
     string? SelectedHtml,
-    DateTime? ScrapedOn
+    DateTime? ScrapedOn,
+    string? ScrapingErrorMessage
 );

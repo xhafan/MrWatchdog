@@ -31,6 +31,7 @@ public class when_viewing_watchdog_web_page_selected_html_with_web_page_not_scra
         _model.WatchdogWebPageSelectedHtmlDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
         _model.WatchdogWebPageSelectedHtmlDto.SelectedHtml.ShouldBe(null);
         _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.ShouldBe(null);
+        _model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage.ShouldBe(null);
     }  
 
     private void _BuildEntities()

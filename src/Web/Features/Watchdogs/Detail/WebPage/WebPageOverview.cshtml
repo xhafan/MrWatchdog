@@ -14,7 +14,7 @@
             <view-mode-item>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                    <div>@Model.WatchdogWebPageArgs.Url</div>
+                    <div><a href="@Model.WatchdogWebPageArgs.Url" target="_blank">@Model.WatchdogWebPageArgs.Url</a></div>
                 </div>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
@@ -40,7 +40,12 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Selector" class="form-control" />
+                    <textarea asp-for="WatchdogWebPageArgs.Selector" 
+                              class="form-control"
+                              style="width:100%" 
+                              rows="2"
+                              >
+                    </textarea>
                     <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
                 </div>
                 <div class="mb-3">

@@ -6,7 +6,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_selected_html_with_error_during_scraping : BaseDatabaseTest
 {
     private WebPageSelectedHtmlModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -29,10 +29,9 @@ public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
     {
         _model.WatchdogWebPageSelectedHtmlDto.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogWebPageSelectedHtmlDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageSelectedHtmlDto.SelectedHtml.ShouldBe("<div></div>");
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.ShouldNotBeNull();
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage.ShouldBe(null);
+        _model.WatchdogWebPageSelectedHtmlDto.SelectedHtml.ShouldBe(null);
+        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.ShouldBe(null);
+        _model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage.ShouldBe("Network error");
     }  
 
     private void _BuildEntities()
@@ -46,6 +45,6 @@ public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetSelectedHtml(_watchdogWebPageId, "<div></div>");
+        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }    
 }

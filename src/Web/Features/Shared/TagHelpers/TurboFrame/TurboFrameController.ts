@@ -19,8 +19,9 @@ export default class TurboFrameController extends Controller {
         event.stopPropagation();
     }
 
-    private onFormEditingCancelled() {
+    private onFormEditingCancelled(event: Event) {
         this.reload();
+        event.stopPropagation();
     }
 
     private reload() {

@@ -9,11 +9,20 @@
         <div>
             @if (Model.WatchdogWebPageSelectedHtmlDto.SelectedHtml != null)
             {
-                <textarea readonly style="width:100%;resize:vertical;" rows="5">@Model.WatchdogWebPageSelectedHtmlDto.SelectedHtml</textarea>
+                <textarea readonly style="width:100%" rows="7">@Model.WatchdogWebPageSelectedHtmlDto.SelectedHtml</textarea>
             }
             else
             {
-                @:Web page not scraped yet
+                <span class="text-danger">
+                    @if (Model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage != null)
+                    {
+                        @:Error: @Model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage
+                    }
+                    else
+                    {
+                        @:Web page not scraped yet
+                    }
+                </span>
             }
         </div>
         @if (Model.WatchdogWebPageSelectedHtmlDto.ScrapedOn != null)

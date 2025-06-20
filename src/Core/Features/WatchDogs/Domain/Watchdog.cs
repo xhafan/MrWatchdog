@@ -82,6 +82,12 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         webPage.SetSelectedHtml(selectedHtml);
     }
     
+    public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        webPage.SetScrapingErrorMessage(scrapingErrorMessage);
+    }    
+    
     public virtual WatchdogWebPageSelectedHtmlDto GetWatchdogWebPageSelectedHtmlDto(long watchdogWebPageId)
     {
         var webPage = _GetWebPage(watchdogWebPageId);

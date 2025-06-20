@@ -21,7 +21,7 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDatabaseTest
 {
-    private WatchdogWebPageUpdatedDomainEvent _domainEvent = null!;
+    private WatchdogWebPageScrapingDataUpdatedDomainEvent _domainEvent = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageIdOne;
     private long _watchdogWebPageIdTwo;
@@ -63,7 +63,7 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _domainEvent = new WatchdogWebPageUpdatedDomainEvent(WatchdogId: _watchdog.Id, WatchdogWebPageId: _watchdogWebPageIdOne)
+        _domainEvent = new WatchdogWebPageScrapingDataUpdatedDomainEvent(WatchdogId: _watchdog.Id, WatchdogWebPageId: _watchdogWebPageIdOne)
         {
             RelatedCommandGuid = _relatedCommandGuid
         };
@@ -102,7 +102,7 @@ public class when_executing_job_tracking_incoming_step_for_domain_event : BaseDa
         job.CreatedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.CompletedOn.ShouldNotBeNull();
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
-        job.Type.ShouldBe(nameof(WatchdogWebPageUpdatedDomainEvent));
+        job.Type.ShouldBe(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
         job.InputData.ShouldBe($$"""
                                  {"watchdogId": {{_watchdog.Id}}, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
                                  """);

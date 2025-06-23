@@ -1,7 +1,4 @@
-﻿using Castle.Windsor;
-using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using FakeItEasy;
 using MrWatchdog.TestsShared;
 using Rebus.Messages;
 using Rebus.Pipeline;
@@ -17,11 +14,8 @@ public class when_executing_job_tracking_incoming_step_with_non_base_message : B
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStep(
-            TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>(),
-            A.Fake<IWindsorContainer>()
-        );
+        var step = new JobTrackingIncomingStepBuilder()
+            .Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()

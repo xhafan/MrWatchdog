@@ -1,13 +1,15 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.TestsShared;
 using Rebus.Bus;
 using Rebus.Messages;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.CoreBuses;
 
 [TestFixture]
-public class when_sending_command_message
+public class when_sending_command_message : BaseDatabaseTest
 {
     private IBus _bus = null!;
     private CoreBus _coreBus = null!;
@@ -17,7 +19,7 @@ public class when_sending_command_message
     public async Task Context()
     {
         _bus = A.Fake<IBus>();
-        _coreBus = new CoreBus(_bus);
+        _coreBus = new CoreBus(_bus, new ExistingTransactionJobCreator(UnitOfWork));
         _command = new CreateWatchdogCommand("watchdog name");
         
         await _coreBus.Send(_command);
@@ -32,5 +34,15 @@ public class when_sending_command_message
                 A<IDictionary<string, string>>.That.Matches(p => p.ContainsKey(Headers.MessageId) && p[Headers.MessageId] == _command.Guid.ToString())
             )
         ).MustHaveHappenedOnceExactly();
+    }
+
+    [Test]
+    public async Task command_job_is_created()
+    {
+        var job = await new JobRepository(UnitOfWork).GetByGuidAsync(_command.Guid);
+        job.ShouldNotBeNull();
+        job.Guid.ShouldBe(_command.Guid);
+        job.Type.ShouldBe(nameof(CreateWatchdogCommand));
+        job.HandlingAttempts.ShouldBeEmpty();
     }
 }

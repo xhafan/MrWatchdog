@@ -1,4 +1,5 @@
 ﻿using CoreDdd.Domain;
+using CoreUtils;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure;
@@ -63,6 +64,8 @@ public class Job : VersionedEntity, IAggregateRoot
 
     public virtual void HandlingStarted()
     {
+        Guard.Hope(_handlingAttempts.All(x => x.EndedOn != null), "Job handling already started.");
+        
         _handlingAttempts.Add(new JobHandlingAttempt(this));
     }
     

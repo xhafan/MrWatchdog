@@ -1,6 +1,7 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.Castle;
 using CoreDdd.Rebus.UnitOfWork;
@@ -45,10 +46,21 @@ public class RebusHostedService(
         _hostedServiceWindsorContainer.Install(
             FromAssembly.Containing<CoreDddInstaller>(),
             FromAssembly.Containing<CoreDddNhibernateInstaller>()
-        );        
-        
+        );
+
         WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer);
         WindsorContainerRegistrator.RegisterServicesFromMainWindsorContainer(_hostedServiceWindsorContainer, mainWindsorContainer);
+
+        _hostedServiceWindsorContainer.Register(
+            Component.For<IJobCreator>().ImplementedBy<ExistingTransactionJobCreator>().LifeStyle.PerRebusMessage(),
+            Component.For<IJobCreator>().ImplementedBy<NewTransactionJobCreator>().LifeStyle.Singleton.Named(nameof(NewTransactionJobCreator)),
+            Component.For<ICoreBus>().ImplementedBy<CoreBus>().LifeStyle.PerRebusMessage(),
+            Classes
+                .FromAssemblyContaining(typeof(SendDomainEventOverMessageBusDomainEventHandler<>))
+                .BasedOn(typeof(IDomainEventHandler<>))
+                .WithService.FirstInterface()
+                .Configure(x => x.LifestyleTransient())
+        );
         
         _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateWatchdogCommandMessageHandler>();
         
@@ -83,9 +95,10 @@ public class RebusHostedService(
                     x.Decorate<IPipeline>(resolutionContext =>
                     {
                         var jobTrackingIncomingStep = new JobTrackingIncomingStep(
-                            _hostedServiceWindsorContainer.Resolve<INhibernateConfigurator>(),
+                            nhibernateConfigurator,
                             _hostedServiceWindsorContainer.Resolve<ILogger<JobTrackingIncomingStep>>(),
-                            _hostedServiceWindsorContainer
+                            _hostedServiceWindsorContainer,
+                            _hostedServiceWindsorContainer.Resolve<IJobCreator>(nameof(NewTransactionJobCreator))
                         );
 
                         var pipeline = resolutionContext.Get<IPipeline>();

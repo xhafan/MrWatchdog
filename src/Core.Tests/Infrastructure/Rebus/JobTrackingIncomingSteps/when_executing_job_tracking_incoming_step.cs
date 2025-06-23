@@ -2,7 +2,6 @@
 using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
-using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -49,11 +48,9 @@ public class when_executing_job_tracking_incoming_step : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
 
-        var step = new JobTrackingIncomingStep(
-            TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>(),
-            _windsorContainer
-        );
+        var step = new JobTrackingIncomingStepBuilder()
+            .WithWindsorContainer(_windsorContainer)
+            .Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()

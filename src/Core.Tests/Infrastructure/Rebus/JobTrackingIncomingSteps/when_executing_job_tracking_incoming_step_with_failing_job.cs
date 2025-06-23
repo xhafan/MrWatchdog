@@ -1,10 +1,7 @@
-﻿using Castle.Windsor;
-using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
-using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
@@ -21,11 +18,8 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStep(
-            TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>(),
-            A.Fake<IWindsorContainer>()
-        );
+        var step = new JobTrackingIncomingStepBuilder()
+            .Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()

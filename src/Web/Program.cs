@@ -24,6 +24,11 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Logging.AddSimpleConsole(options =>
+        {
+            options.TimestampFormat = "yyyy-MM-dd HH:mm:ss.fff ";
+        });
+        
         // Add services to the container.
 
         // Castle Windsor is the root container, not the default .NET DI. Rebus hosted services use Castle Windsor as the container
@@ -50,7 +55,9 @@ public class Program
 
         builder.Services.AddCoreDdd();
         builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>();
-
+        builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
+        builder.Services.AddSingleton<ICoreBus, CoreBus>();
+        
         var webEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Web";
         var mainRebusHostedServiceEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Main";
 

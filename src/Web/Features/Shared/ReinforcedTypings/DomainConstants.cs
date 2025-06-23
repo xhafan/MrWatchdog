@@ -1,4 +1,6 @@
-﻿using Reinforced.Typings.Attributes;
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 
@@ -6,12 +8,12 @@ namespace MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 public static class DomainConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string Watchdog = nameof(Watchdog);
+    public const string WatchdogEntityName = nameof(Watchdog);
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogWebPage = nameof(WatchdogWebPage);
+    public const string WatchdogWebPageEntityName = nameof(WatchdogWebPage);
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogWebPageUpdatedDomainEvent = nameof(WatchdogWebPageUpdatedDomainEvent);
+    public const string WatchdogWebPageScrapingDataUpdatedDomainEventName = nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent);
     
 }

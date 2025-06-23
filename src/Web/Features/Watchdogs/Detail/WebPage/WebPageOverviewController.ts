@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
-import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitForJobCompletion } from "../../../Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion, waitForJobCompletion } from "../../../Jobs/jobCompletion";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
 import { WebPageOverviewStimulusModel } from "../../../Shared/Generated/WebPageOverviewStimulusModel";
 import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";

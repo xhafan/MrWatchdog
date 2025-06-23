@@ -22,7 +22,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
             this.addWebPageFormTarget, 
             async jobDto => {
                 const watchdogWebPageEntity = Enumerable.from(jobDto.affectedEntities)
-                    .singleOrDefault(x => x.entityName === DomainConstants.watchdogWebPage && x.isCreated);
+                    .singleOrDefault(x => x.entityName === DomainConstants.watchdogWebPageEntityName && x.isCreated);
                 if (!watchdogWebPageEntity) {
                     throw new Error("Error getting created WatchdogWebPage.");
                 }

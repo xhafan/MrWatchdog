@@ -5,7 +5,7 @@ using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 
-public class JobBuilder(NhibernateUnitOfWork? unitOfWork)
+public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string Type = nameof(CreateWatchdogCommand);
     public static readonly object InputData = new CreateWatchdogCommand("watchdog name");

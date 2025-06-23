@@ -4,7 +4,7 @@
 
 export abstract class DomainConstants
 {
-	public static watchdog: string = `Watchdog`;
-	public static watchdogWebPage: string = `WatchdogWebPage`;
-	public static watchdogWebPageUpdatedDomainEvent: string = `WatchdogWebPageUpdatedDomainEvent`;
+	public static watchdogEntityName: string = `Watchdog`;
+	public static watchdogWebPageEntityName: string = `WatchdogWebPage`;
+	public static watchdogWebPageScrapingDataUpdatedDomainEventName: string = `WatchdogWebPageScrapingDataUpdatedDomainEvent`;
 }

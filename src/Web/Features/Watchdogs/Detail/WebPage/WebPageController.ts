@@ -39,11 +39,12 @@ export default class WebPageController extends Controller {
         if (!updateWatchdogWebPageJobDto) throw new Error("JobDto is missing.");
         let updateWatchdogWebPageJobGuid = updateWatchdogWebPageJobDto.guid;
 
-        var watchdogWebPageUpdatedDomainEventJobGuid = await getRelatedDomainEventJobGuid(updateWatchdogWebPageJobGuid, DomainConstants.watchdogWebPageUpdatedDomainEvent);
+        var watchdogWebPageScrapingDataUpdatedDomainEventJobGuid = 
+            await getRelatedDomainEventJobGuid(updateWatchdogWebPageJobGuid, DomainConstants.watchdogWebPageScrapingDataUpdatedDomainEventName);
         
-        if (!watchdogWebPageUpdatedDomainEventJobGuid) return;
+        if (!watchdogWebPageScrapingDataUpdatedDomainEventJobGuid) return;
 
-        var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageUpdatedDomainEventJobGuid);
+        var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
 
         this.webPageSelectedHtmlTarget.reload();
     }

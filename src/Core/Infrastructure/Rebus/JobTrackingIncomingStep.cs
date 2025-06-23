@@ -8,18 +8,16 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Pipeline;
-using System.Data;
 
 namespace MrWatchdog.Core.Infrastructure.Rebus;
 
 public class JobTrackingIncomingStep(
     INhibernateConfigurator nhibernateConfigurator,
     ILogger<JobTrackingIncomingStep> logger,
-    IWindsorContainer windsorContainer
+    IWindsorContainer windsorContainer,
+    IJobCreator jobCreator
 ) : IIncomingStep
 {
-    private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
-
     public async Task Process(IncomingStepContext context, Func<Task> next)
     {
         JobContext.WindsorContainer.Value = windsorContainer;
@@ -73,45 +71,13 @@ public class JobTrackingIncomingStep(
 
     private async Task<Job> _CreateOrFetchJobInSeparateTransaction(Guid jobGuid, BaseMessage baseMessage)
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction(DefaultIsolationLevel);
-
-        var jobRepository = new JobRepository(newUnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(jobGuid);
-
-        if (job == null)
-        {
-            var jobKind = baseMessage switch
-            {
-                Command => JobKind.Command,
-                DomainEvent => JobKind.DomainEvent,
-                _ => throw new NotSupportedException($"Unsupported BaseMessage type {baseMessage.GetType().FullName}")
-            };
-            job = new Job(
-                jobGuid,
-                baseMessage.GetType().Name,
-                baseMessage, 
-                jobKind
-            );
-
-            if (baseMessage is DomainEvent evnt)
-            {
-                var relatedCommandJob = await jobRepository.LoadByGuidAsync(evnt.RelatedCommandGuid);
-                job.SetRelatedCommandJob(relatedCommandJob);
-            }
-            
-            await jobRepository.SaveAsync(job);
-        }
-        
-        job.HandlingStarted();
-
-        return job;
+        return await jobCreator.CreateJob(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted: true);
     }
     
     private async Task _MarkJobAsCompleteInSeparateTransaction(long jobId)
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction(DefaultIsolationLevel);
+        newUnitOfWork.BeginTransaction();
         
         var job = await new NhibernateRepository<Job>(newUnitOfWork).LoadByIdAsync(jobId);
 
@@ -137,7 +103,7 @@ public class JobTrackingIncomingStep(
     private async Task _MarkJobAsFailedInSeparateTransaction(long jobId, Exception ex)
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction(DefaultIsolationLevel);
+        newUnitOfWork.BeginTransaction();
         
         var job = await new NhibernateRepository<Job>(newUnitOfWork).LoadByIdAsync(jobId);
 

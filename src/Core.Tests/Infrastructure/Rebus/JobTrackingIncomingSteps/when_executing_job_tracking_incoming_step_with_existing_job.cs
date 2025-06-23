@@ -1,8 +1,6 @@
-﻿using Castle.Windsor;
-using MrWatchdog.TestsShared.Extensions;
+﻿using MrWatchdog.TestsShared.Extensions;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
-using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -11,7 +9,6 @@ using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
-using MrWatchdog.Core.Infrastructure.Rebus;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
 
@@ -25,11 +22,8 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStep(
-            TestFixtureContext.NhibernateConfigurator,
-            A.Fake<ILogger<JobTrackingIncomingStep>>(),
-            A.Fake<IWindsorContainer>()
-        );
+        var step = new JobTrackingIncomingStepBuilder()
+            .Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()

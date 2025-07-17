@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 
 public class JobTrackingIncomingStepBuilder
 {

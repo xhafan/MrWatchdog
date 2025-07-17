@@ -40,11 +40,18 @@ public class Job : VersionedEntity, IAggregateRoot
 
     public virtual void Complete()
     {
+        _CheckJobHasNotCompleted();
+
         CompletedOn = DateTime.UtcNow;
         NumberOfHandlingAttempts++;
 
         var lastHandlingAttempt = _GetLastJobHandlingUnfinishedAttempt();
         lastHandlingAttempt.Complete();
+    }
+
+    private void _CheckJobHasNotCompleted()
+    {
+        Guard.Hope(!HasCompleted(), "Job has already completed.");
     }
 
     public virtual void AddAffectedEntity(
@@ -64,19 +71,22 @@ public class Job : VersionedEntity, IAggregateRoot
 
     public virtual void HandlingStarted()
     {
-        Guard.Hope(_handlingAttempts.All(x => x.EndedOn != null), "Job handling already started.");
+        _CheckJobHasNotCompleted();
         
         _handlingAttempts.Add(new JobHandlingAttempt(this));
     }
     
     private JobHandlingAttempt _GetLastJobHandlingUnfinishedAttempt()
     {
-        var lastJobHandlingUnfinishedAttempt = _handlingAttempts.Single(x => x.EndedOn == null);
+        var lastJobHandlingUnfinishedAttempt = _handlingAttempts.OrderByDescending(x => x.StartedOn).FirstOrDefault(x => x.EndedOn == null);
+        Guard.Hope(lastJobHandlingUnfinishedAttempt != null, "Cannot find the last job unfinished handling attempt.");
         return lastJobHandlingUnfinishedAttempt;
     }
 
     public virtual void Fail(Exception ex)
     {
+        _CheckJobHasNotCompleted();
+        
         NumberOfHandlingAttempts++;
 
         var lastHandlingAttempt = _GetLastJobHandlingUnfinishedAttempt();
@@ -101,5 +111,10 @@ public class Job : VersionedEntity, IAggregateRoot
     public virtual void SetRelatedCommandJob(Job relatedCommandJob)
     {
         RelatedCommandJob = relatedCommandJob;
-    }    
+    }
+
+    public virtual bool HasCompleted()
+    {
+        return CompletedOn != null;
+    }
 }

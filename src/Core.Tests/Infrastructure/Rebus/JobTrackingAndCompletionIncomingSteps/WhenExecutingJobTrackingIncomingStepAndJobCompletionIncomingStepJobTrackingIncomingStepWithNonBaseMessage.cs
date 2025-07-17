@@ -4,25 +4,30 @@ using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 
 [TestFixture]
-public class when_executing_job_tracking_incoming_step_with_non_base_message : BaseDatabaseTest
+public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_non_base_message : BaseDatabaseTest
 {
     private bool _isNextStepExecuted;
 
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStepBuilder()
+        var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
             .Build();
 
+        var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
+        
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
         incomingStepContext.Save(new Message(new Dictionary<string, string>(), new object()));
 
-        await step.Process(incomingStepContext, _next);
+        await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
+        {
+            await jobCompletionIncomingStep.Process(incomingStepContext, _next);
+        });
 
 
         Task _next()

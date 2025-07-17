@@ -47,7 +47,7 @@ public abstract class BaseJobCreator : IJobCreator
             await jobRepository.SaveAsync(job);
         }
 
-        if (shouldMarkJobAsHandlingStarted)
+        if (!job.HasCompleted() && shouldMarkJobAsHandlingStarted)
         {
             job.HandlingStarted();
         }

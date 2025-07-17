@@ -1,19 +1,19 @@
-﻿using MrWatchdog.TestsShared.Extensions;
-using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.TestsShared.Extensions;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 
 [TestFixture]
-public class when_executing_job_tracking_incoming_step_with_existing_job : BaseDatabaseTest
+public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_existing_job : BaseDatabaseTest
 {
     private CreateWatchdogCommand _command = null!;
     private Watchdog _newWatchdog = null!;
@@ -22,8 +22,10 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStepBuilder()
+        var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
             .Build();
+        
+        var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
@@ -32,7 +34,10 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
         _CreateJobInSeparateTransaction();
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
-        await step.Process(incomingStepContext, _next);
+        await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
+        {
+            await jobCompletionIncomingStep.Process(incomingStepContext, _next);
+        });
 
         await UnitOfWork.FlushAsync();
         return;
@@ -66,6 +71,10 @@ public class when_executing_job_tracking_incoming_step_with_existing_job : BaseD
     [TearDown]
     public async Task TearDown()
     {
+        await UnitOfWork.FlushAsync();
+        await UnitOfWork.RollbackAsync();
+        UnitOfWork.BeginTransaction();
+        
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
         var job = _GetJob(newUnitOfWork);

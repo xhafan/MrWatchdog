@@ -22,6 +22,8 @@
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Rebus" Version="8.8.0" />
+    <PackageReference Include="Rebus.PostgreSql" Version="9.1.1" />
+    <PackageReference Include="Rebus.RabbitMq" Version="10.0.1" />
     <PackageReference Include="Reinforced.Typings" Version="1.6.5" />
   </ItemGroup>
 

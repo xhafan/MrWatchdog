@@ -61,10 +61,6 @@ public class ScrapeWatchdogWebPageDomainEventMessageHandler(
         {
             scrapingErrorMessage = "No HTML node selected. Please review the Selector.";
         } 
-        else if (nodes.Count > 1)
-        {
-            scrapingErrorMessage = "Multiple HTML nodes selected. Please review the Selector.";
-        }
 
         if (scrapingErrorMessage != null)
         {
@@ -72,6 +68,6 @@ public class ScrapeWatchdogWebPageDomainEventMessageHandler(
             return;
         }        
         
-        watchdog.SetSelectedHtml(domainEvent.WatchdogWebPageId, nodes.Single().OuterHtml);
+        watchdog.SetSelectedHtml(domainEvent.WatchdogWebPageId, string.Join(Environment.NewLine, nodes.Select(x => x.OuterHtml)));
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Castle.Windsor;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreUtils;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
@@ -51,10 +50,14 @@ public class JobTrackingIncomingStep(
         try
         {
             job = await _CreateOrFetchJobInSeparateTransaction(jobGuid, baseMessage);
-
-            await next();
+            if (job.HasCompleted())
+            {
+                return;
+            }
             
-            await _MarkJobAsCompleteInSeparateTransaction(job.Id);            
+            await next();
+
+            // Job has been completed by JobCompletionIncomingStep within the main unit of work transaction.
         }
         catch (Exception ex)
         {
@@ -74,38 +77,12 @@ public class JobTrackingIncomingStep(
         return await jobCreator.CreateJob(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted: true);
     }
     
-    private async Task _MarkJobAsCompleteInSeparateTransaction(long jobId)
-    {
-        using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        
-        var job = await new NhibernateRepository<Job>(newUnitOfWork).LoadByIdAsync(jobId);
-
-        job.Complete();
-
-        _addAffectedEntitiesToJob();
-        return;
-
-        void _addAffectedEntitiesToJob()
-        {
-            Guard.Hope(JobContext.AffectedEntities.Value != null, $"{nameof(JobContext)} {nameof(JobContext.AffectedEntities)} is null");
-            foreach (var affectedEntity in JobContext.AffectedEntities.Value)
-            {
-                job.AddAffectedEntity(
-                    affectedEntity.EntityName,
-                    affectedEntity.EntityId,
-                    affectedEntity.IsCreated
-                );
-            }
-        }
-    }   
-    
     private async Task _MarkJobAsFailedInSeparateTransaction(long jobId, Exception ex)
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
         
-        var job = await new NhibernateRepository<Job>(newUnitOfWork).LoadByIdAsync(jobId);
+        var job = await new JobRepository(newUnitOfWork).LoadByIdAsync(jobId);
 
         job.Fail(ex);
     } 

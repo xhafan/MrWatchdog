@@ -32,7 +32,7 @@ public class when_scraping_watchdog_web_page_with_multiple_html_nodes_selected :
                         <div id="article-body">
                         <p class="infoUpdate-log">
                         <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
-                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
                         </p>
                         </div>
                         </body>
@@ -50,12 +50,18 @@ public class when_scraping_watchdog_web_page_with_multiple_html_nodes_selected :
     }
 
     [Test]
-    public void web_page_scraping_error_message_is_set()
+    public void web_page_is_scraped_and_selected_html_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedHtml.ShouldBe(null);
-        webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("Multiple HTML nodes selected. Please review the Selector.");
+        webPage.SelectedHtml.ShouldBe(
+            """
+            <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+            <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
+            """
+        );
+        webPage.ScrapedOn.ShouldNotBeNull();
+        webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
+        webPage.ScrapingErrorMessage.ShouldBe(null);
     }
     
     private void _BuildEntities()

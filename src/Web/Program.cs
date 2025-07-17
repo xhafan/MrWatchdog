@@ -1,5 +1,4 @@
 using System.Data;
-using System.Text.RegularExpressions;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using CoreDdd.AspNetCore.Middlewares;
@@ -13,7 +12,9 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
 using Rebus.Config;
+using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
+using System.Text.RegularExpressions;
 using Rebus.Transport.InMem;
 
 namespace MrWatchdog.Web;
@@ -50,9 +51,6 @@ public class Program
             mvcBuilder.AddRazorRuntimeCompilation();
         }
 
-        var rebusInMemoryNetwork = new InMemNetwork();
-        builder.Services.AddSingleton(rebusInMemoryNetwork);
-
         builder.Services.AddCoreDdd();
         builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>();
         builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
@@ -61,23 +59,57 @@ public class Program
         var webEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Web";
         var mainRebusHostedServiceEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Main";
 
-        builder.Services.AddRebus((configure, serviceProvider) => configure
-            .Logging(x => x.MicrosoftExtensionsLogging(serviceProvider.GetRequiredService<ILoggerFactory>()))
-            .Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, webEnvironmentInputQueueName, registerSubscriptionStorage: false))
-            .Routing(x => x.TypeBased().MapAssemblyDerivedFrom<Command>(mainRebusHostedServiceEnvironmentInputQueueName))
-            .Options(x =>
+        InMemNetwork? rebusInMemoryNetwork = null;
+        if (builder.Configuration["Rebus:Transport"] == "InMemory")
+        {
+            rebusInMemoryNetwork = new InMemNetwork();
+            builder.Services.AddSingleton(rebusInMemoryNetwork);
+        }
+        
+        builder.Services.AddRebus((configure, serviceProvider) =>
+        {
+            var rebusConfigurer = configure
+                .Logging(x => x.MicrosoftExtensionsLogging(serviceProvider.GetRequiredService<ILoggerFactory>()));
+
+            switch (builder.Configuration["Rebus:Transport"])
             {
-                x.SetNumberOfWorkers(0); // no worker for unused Web queue
-                x.SetMaxParallelism(1); // must be 1 to make Rebus happy
-            })
-        );
+                case "RabbitMq":
+                    rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", webEnvironmentInputQueueName));
+                    break;
+                
+                case "PostgreSql":
+                    rebusConfigurer
+                        .Transport(x => x.UsePostgreSql(
+                            builder.Configuration.GetConnectionString("Database"),
+                            "RebusQueue",
+                            webEnvironmentInputQueueName
+                        ));
+                    break;
+                
+                case "InMemory":
+                    rebusConfigurer.Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, webEnvironmentInputQueueName, registerSubscriptionStorage: false));
+                    break;
+                
+                default:
+                    throw new InvalidOperationException("Rebus transport is not configured. Set Rebus:Transport to RabbitMq, PostgreSql, or InMemory in appsettings.json.");
+            }
+
+            return rebusConfigurer
+                .Routing(x => x.TypeBased().MapAssemblyDerivedFrom<Command>(mainRebusHostedServiceEnvironmentInputQueueName))
+                .Options(x =>
+                {
+                    x.RetryStrategy(errorQueueName: $"{webEnvironmentInputQueueName}Error");
+                    x.SetNumberOfWorkers(0); // no worker for unused Web queue
+                    x.SetMaxParallelism(1); // must be 1 to make Rebus happy
+                });
+        });
 
         builder.Services.AddSingleton<IHostedService>(serviceProvider =>
             new RebusHostedService(
                 mainRebusHostedServiceEnvironmentInputQueueName,
-                serviceProvider.GetRequiredService<InMemNetwork>(),
                 serviceProvider.GetRequiredService<INhibernateConfigurator>(),
-                serviceProvider.GetRequiredService<IWindsorContainer>()
+                serviceProvider.GetRequiredService<IWindsorContainer>(),
+                serviceProvider.GetRequiredService<IConfiguration>()
             )
         );
 
@@ -125,7 +157,7 @@ public class Program
         {
             options.SwaggerEndpoint("v1/swagger.json", "Mr Watchdog API V1");
         });
-        
+
         DomainEvents.Initialize(new DomainEventHandlerFactory());
 
         await app.RunAsync();

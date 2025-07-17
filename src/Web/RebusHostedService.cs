@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System.Data;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using CoreDdd.Domain.Events;
@@ -23,9 +24,9 @@ namespace MrWatchdog.Web;
 
 public class RebusHostedService(
     string environmentInputQueueName,
-    InMemNetwork rebusInMemoryNetwork,
     INhibernateConfigurator nhibernateConfigurator,
-    IWindsorContainer mainWindsorContainer
+    IWindsorContainer mainWindsorContainer,
+    IConfiguration configuration
 ) : IHostedService
 {
     private WindsorContainer? _hostedServiceWindsorContainer;
@@ -66,12 +67,38 @@ public class RebusHostedService(
         
         var rebusUnitOfWork = new RebusUnitOfWork(
             unitOfWorkFactory: _hostedServiceWindsorContainer.Resolve<IUnitOfWorkFactory>(),
-            isolationLevel: System.Data.IsolationLevel.ReadCommitted
+            isolationLevel: IsolationLevel.ReadCommitted
         );
 
-        Configure.With(new CastleWindsorContainerAdapter(_hostedServiceWindsorContainer))
-            .Logging(x => x.MicrosoftExtensionsLogging(_hostedServiceWindsorContainer.Resolve<ILoggerFactory>()))
-            .Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, environmentInputQueueName, registerSubscriptionStorage: false))
+        var rebusConfigurer = Configure.With(new CastleWindsorContainerAdapter(_hostedServiceWindsorContainer))
+            .Logging(x => x.MicrosoftExtensionsLogging(_hostedServiceWindsorContainer.Resolve<ILoggerFactory>()));
+        
+        switch (configuration["Rebus:Transport"])
+        {
+            case "RabbitMq":
+                rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", environmentInputQueueName));
+                break;
+                
+            case "PostgreSql":
+                // todo: command handler which sends a domain event over the message bus sends the domain event even when the command handler throws: https://github.com/rebus-org/Rebus.PostgreSql/issues/53
+                rebusConfigurer
+                    .Transport(x => x.UsePostgreSql(
+                        configuration.GetConnectionString("Database"),
+                        "RebusQueue",
+                        environmentInputQueueName
+                    ));
+                break;
+                
+            case "InMemory":
+                var rebusInMemoryNetwork = mainWindsorContainer.Resolve<InMemNetwork>();
+                rebusConfigurer.Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, environmentInputQueueName, registerSubscriptionStorage: false));
+                break;
+                
+            default:
+                throw new InvalidOperationException("Rebus transport is not configured. Set Rebus:Transport to RabbitMq, PostgreSql, or InMemory in appsettings.json.");
+        }        
+        
+        rebusConfigurer
             .Routing(x =>
             {
                 x.TypeBased()
@@ -80,11 +107,11 @@ public class RebusHostedService(
             })
             .Options(x =>
                 {
-                    x.EnableUnitOfWork(
-                        rebusUnitOfWork.Create,
-                        rebusUnitOfWork.Commit,
-                        rebusUnitOfWork.Rollback,
-                        rebusUnitOfWork.Cleanup
+                    x.EnableAsyncUnitOfWork(
+                        rebusUnitOfWork.CreateAsync,
+                        rebusUnitOfWork.CommitAsync,
+                        rebusUnitOfWork.RollbackAsync,
+                        rebusUnitOfWork.CleanupAsync
                     );
                     x.RetryStrategy(
                         errorQueueName: $"{environmentInputQueueName}Error",
@@ -101,9 +128,14 @@ public class RebusHostedService(
                             _hostedServiceWindsorContainer.Resolve<IJobCreator>(nameof(NewTransactionJobCreator))
                         );
 
+                        var jobCompletionIncomingStep = new JobCompletionIncomingStep(
+                            _hostedServiceWindsorContainer.Resolve<IJobRepositoryFactory>()
+                        );
+
                         var pipeline = resolutionContext.Get<IPipeline>();
                         return new PipelineStepInjector(pipeline)
                                 .OnReceive(jobTrackingIncomingStep, PipelineRelativePosition.After, typeof(DeserializeIncomingMessageStep))
+                                .OnReceive(jobCompletionIncomingStep, PipelineRelativePosition.Before, typeof(ActivateHandlersStep))
                             ;
                     });
                 }

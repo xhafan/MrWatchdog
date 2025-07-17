@@ -2,25 +2,28 @@
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingIncomingSteps;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 
 [TestFixture]
-public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDatabaseTest
+public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_failing_job : BaseDatabaseTest
 {
     private CreateWatchdogCommand _command = null!;
 
     [SetUp]
     public async Task Context()
     {
-        var step = new JobTrackingIncomingStepBuilder()
+        var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
             .Build();
-
+        
+        var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
+        
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
@@ -29,7 +32,10 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
 
         try
         {
-            await step.Process(incomingStepContext, _next);
+            await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
+            {
+                await jobCompletionIncomingStep.Process(incomingStepContext, _next);
+            });
         }
         catch (Exception ex)
         {
@@ -68,6 +74,10 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
     [TearDown]
     public async Task TearDown()
     {
+        await UnitOfWork.FlushAsync();
+        await UnitOfWork.RollbackAsync();
+        UnitOfWork.BeginTransaction();
+        
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
         var job = await _GetJob(newUnitOfWork);
@@ -79,8 +89,6 @@ public class when_executing_job_tracking_incoming_step_with_failing_job : BaseDa
 
     private async Task<Job?> _GetJob(NhibernateUnitOfWork unitOfWork)
     {
-        return await unitOfWork.Session!.QueryOver<Job>()
-            .Where(x => x.Guid == _command.Guid)
-            .SingleOrDefaultAsync();
+        return await new JobRepository(unitOfWork).GetByGuidAsync(_command.Guid);
     }
 }

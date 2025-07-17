@@ -1,8 +1,10 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreDdd.Queries;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Jobs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Infrastructure;
@@ -21,7 +23,8 @@ public static class WindsorContainerRegistrator
                 .FromAssemblyContaining<GetJobQueryHandler>()
                 .BasedOn(typeof(IQueryHandler<>))
                 .WithService.AllInterfaces()
-                .Configure(x => x.LifestyleTransient())
+                .Configure(x => x.LifestyleTransient()),
+            Component.For<IJobRepositoryFactory>().AsFactory()
         );
     }
 

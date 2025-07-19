@@ -50,15 +50,17 @@ public class when_scraping_watchdog_web_page_with_multiple_html_nodes_selected :
     }
 
     [Test]
-    public void web_page_is_scraped_and_selected_html_is_set()
+    public void web_page_is_scraped_and_selected_elements_are_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedHtml.ShouldBe(
+        webPage.SelectedElements.ShouldBe([
             """
             <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+            """,
+            """
             <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
             """
-        );
+        ]);
         webPage.ScrapedOn.ShouldNotBeNull();
         webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         webPage.ScrapingErrorMessage.ShouldBe(null);

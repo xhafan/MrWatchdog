@@ -20,11 +20,12 @@ public class when_persisting_watchdog_web_page : BaseDatabaseTest
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
+                SelectText = true,
                 Name = "url.com/page"
             })
             .Build();
         _newWatchdogWebPage = _newWatchdog.WebPages.Single();
-        _newWatchdog.SetSelectedHtml(_newWatchdogWebPage.Id, "<div></div>");
+        _newWatchdog.SetSelectedElements(_newWatchdogWebPage.Id, ["<div>text</div>"]);
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
@@ -39,8 +40,9 @@ public class when_persisting_watchdog_web_page : BaseDatabaseTest
         _persistedWatchdogWebPage.Watchdog.ShouldBe(_newWatchdog);
         _persistedWatchdogWebPage.Url.ShouldBe("http://url.com/page");
         _persistedWatchdogWebPage.Selector.ShouldBe(".selector");
+        _persistedWatchdogWebPage.SelectText.ShouldBe(true);
         _persistedWatchdogWebPage.Name.ShouldBe("url.com/page");
-        _persistedWatchdogWebPage.SelectedHtml.ShouldBe("<div></div>");
+        _persistedWatchdogWebPage.SelectedElements.ShouldBe(["text"]);
         _persistedWatchdogWebPage.ScrapedOn.ShouldNotBeNull();
         _persistedWatchdogWebPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
     }

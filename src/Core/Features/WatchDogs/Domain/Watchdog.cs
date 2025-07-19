@@ -47,9 +47,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         _webPages.Add(new WatchdogWebPage(
             this,
-            watchdogWebPageArgs.Url,
-            watchdogWebPageArgs.Selector,
-            watchdogWebPageArgs.Name
+            watchdogWebPageArgs
         ));
     }
     
@@ -76,10 +74,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         _webPages.Remove(webPage);
     }
 
-    public virtual void SetSelectedHtml(long watchdogWebPageId, string selectedHtml)
+    public virtual void SetSelectedElements(long watchdogWebPageId, IEnumerable<string> selectedElements)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
-        webPage.SetSelectedHtml(selectedHtml);
+        webPage.SetSelectedElements(selectedElements);
     }
     
     public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
@@ -88,9 +86,9 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         webPage.SetScrapingErrorMessage(scrapingErrorMessage);
     }    
     
-    public virtual WatchdogWebPageSelectedHtmlDto GetWatchdogWebPageSelectedHtmlDto(long watchdogWebPageId)
+    public virtual WatchdogWebPageSelectedElementsDto GetWatchdogWebPageSelectedElementsDto(long watchdogWebPageId)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
-        return webPage.GetWatchdogWebPageSelectedHtmlDto();
+        return webPage.GetWatchdogWebPageSelectedElementsDto();
     }    
 }

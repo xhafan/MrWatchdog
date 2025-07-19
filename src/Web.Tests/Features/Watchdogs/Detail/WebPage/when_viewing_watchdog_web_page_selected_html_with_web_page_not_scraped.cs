@@ -6,9 +6,9 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_selected_html_with_web_page_not_scraped : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_selected_elements_with_web_page_not_scraped : BaseDatabaseTest
 {
-    private WebPageSelectedHtmlModel _model = null!;
+    private WebPageSelectedElementsModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -19,7 +19,7 @@ public class when_viewing_watchdog_web_page_selected_html_with_web_page_not_scra
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageSelectedHtmlModelBuilder(UnitOfWork).Build();
+        _model = new WebPageSelectedElementsModelBuilder(UnitOfWork).Build();
 
         await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
     }
@@ -27,11 +27,11 @@ public class when_viewing_watchdog_web_page_selected_html_with_web_page_not_scra
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageSelectedHtmlDto.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageSelectedHtmlDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageSelectedHtmlDto.SelectedHtml.ShouldBe(null);
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.ShouldBe(null);
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage.ShouldBe(null);
+        _model.WatchdogWebPageSelectedElementsDto.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogWebPageSelectedElementsDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
+        _model.WatchdogWebPageSelectedElementsDto.SelectedElements.ShouldBeEmpty();
+        _model.WatchdogWebPageSelectedElementsDto.ScrapedOn.ShouldBe(null);
+        _model.WatchdogWebPageSelectedElementsDto.ScrapingErrorMessage.ShouldBe(null);
     }  
 
     private void _BuildEntities()

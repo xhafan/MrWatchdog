@@ -23,10 +23,7 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = _watchdogWebPageId,
-                Url = "http://url.com/page",
-                Selector = ".selector",
-                Name = "url.com/page"
+                WatchdogWebPageId = _watchdogWebPageId
             })
             .Build();
 
@@ -40,6 +37,7 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
         _model.WatchdogWebPageArgs.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
         _model.WatchdogWebPageArgs.Url.ShouldBe("http://url.com/page");
         _model.WatchdogWebPageArgs.Selector.ShouldBe(".selector");
+        _model.WatchdogWebPageArgs.SelectText.ShouldBe(true);
         _model.WatchdogWebPageArgs.Name.ShouldBe("url.com/page");
         
         _model.IsEmptyWebPage.ShouldBe(false);
@@ -52,6 +50,7 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
+                SelectText = true,
                 Name = "url.com/page"
             })
             .Build();

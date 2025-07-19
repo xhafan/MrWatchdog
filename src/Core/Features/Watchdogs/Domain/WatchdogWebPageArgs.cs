@@ -16,6 +16,9 @@ public record WatchdogWebPageArgs
 
     public string? Selector { get; set; }
     
+    [Display(Name = "Select text instead of HTML")]
+    public bool SelectText { get; set; }
+    
     [Required]
     public string? Name { get; set; }
 }

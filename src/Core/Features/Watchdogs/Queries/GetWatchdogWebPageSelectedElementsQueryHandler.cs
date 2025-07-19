@@ -5,14 +5,14 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public class GetWatchdogWebPageSelectedHtmlQueryHandler(
+public class GetWatchdogWebPageSelectedElementsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
     IRepository<Watchdog> watchdogRepository
-) : BaseNhibernateQueryHandler<GetWatchdogWebPageSelectedHtmlQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetWatchdogWebPageSelectedElementsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogWebPageSelectedHtmlQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogWebPageSelectedElementsQuery query)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (TResult)(object)watchdog.GetWatchdogWebPageSelectedHtmlDto(query.WatchdogWebPageId);
+        return (TResult)(object)watchdog.GetWatchdogWebPageSelectedElementsDto(query.WatchdogWebPageId);
     }
 }

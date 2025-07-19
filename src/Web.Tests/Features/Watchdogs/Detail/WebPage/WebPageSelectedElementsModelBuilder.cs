@@ -8,18 +8,18 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageSelectedHtmlModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class WebPageSelectedElementsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
-    public WebPageSelectedHtmlModel Build()
+    public WebPageSelectedElementsModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageSelectedHtmlQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageSelectedElementsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
 
-        var model = new WebPageSelectedHtmlModel(
+        var model = new WebPageSelectedElementsModel(
             new QueryExecutor(queryHandlerFactory)
         );
         ModelValidator.ValidateModel(model);

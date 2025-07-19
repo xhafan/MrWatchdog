@@ -68,6 +68,6 @@ public class ScrapeWatchdogWebPageDomainEventMessageHandler(
             return;
         }        
         
-        watchdog.SetSelectedHtml(domainEvent.WatchdogWebPageId, string.Join(Environment.NewLine, nodes.Select(x => x.OuterHtml)));
+        watchdog.SetSelectedElements(domainEvent.WatchdogWebPageId, nodes.Select(x => x.OuterHtml));
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public record WatchdogWebPageSelectedHtmlDto(
+public record WatchdogWebPageSelectedElementsDto(
     long WatchdogId,
     long WatchdogWebPageId,
-    string? SelectedHtml,
+    IEnumerable<string> SelectedElements,
     DateTime? ScrapedOn,
     string? ScrapingErrorMessage
 );

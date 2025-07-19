@@ -21,6 +21,10 @@
                     <div>@Model.WatchdogWebPageArgs.Selector</div>
                 </div>
                 <div class="mb-3">
+                    <input class="form-check-input" type="checkbox" checked="@Model.WatchdogWebPageArgs.SelectText" disabled/>
+                    <label asp-for="WatchdogWebPageArgs.SelectText" class="form-check-label fw-bold"></label>
+                </div>
+                <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
                     <div>@Model.WatchdogWebPageArgs.Name</div>
                 </div>
@@ -47,6 +51,18 @@
                               >
                     </textarea>
                     <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <input asp-for="WatchdogWebPageArgs.SelectText"
+                           id="WatchdogWebPageArgs_SelectText_@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                           class="form-check-input" 
+                           type="checkbox" 
+                           checked="@Model.WatchdogWebPageArgs.SelectText" 
+                           />
+                    <label asp-for="WatchdogWebPageArgs.SelectText" 
+                           for="WatchdogWebPageArgs_SelectText_@Model.WatchdogWebPageArgs.WatchdogWebPageId" 
+                           class="form-label fw-bold">
+                    </label>
                 </div>
                 <div class="mb-3">
                     <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>

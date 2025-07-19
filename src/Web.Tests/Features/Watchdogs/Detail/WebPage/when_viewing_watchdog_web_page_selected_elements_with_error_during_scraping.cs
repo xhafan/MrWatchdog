@@ -6,9 +6,9 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_selected_elements_with_error_during_scraping : BaseDatabaseTest
 {
-    private WebPageSelectedHtmlModel _model = null!;
+    private WebPageSelectedElementsModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -19,7 +19,7 @@ public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageSelectedHtmlModelBuilder(UnitOfWork).Build();
+        _model = new WebPageSelectedElementsModelBuilder(UnitOfWork).Build();
 
         await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
     }
@@ -27,12 +27,11 @@ public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageSelectedHtmlDto.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageSelectedHtmlDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageSelectedHtmlDto.SelectedHtml.ShouldBe("<div></div>");
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.ShouldNotBeNull();
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
-        _model.WatchdogWebPageSelectedHtmlDto.ScrapingErrorMessage.ShouldBe(null);
+        _model.WatchdogWebPageSelectedElementsDto.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogWebPageSelectedElementsDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
+        _model.WatchdogWebPageSelectedElementsDto.SelectedElements.ShouldBeEmpty();
+        _model.WatchdogWebPageSelectedElementsDto.ScrapedOn.ShouldBe(null);
+        _model.WatchdogWebPageSelectedElementsDto.ScrapingErrorMessage.ShouldBe("Network error");
     }  
 
     private void _BuildEntities()
@@ -46,6 +45,6 @@ public class when_viewing_watchdog_web_page_selected_html : BaseDatabaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetSelectedHtml(_watchdogWebPageId, "<div></div>");
+        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }    
 }

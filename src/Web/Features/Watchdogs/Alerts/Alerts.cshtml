@@ -1,0 +1,12 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
+@model AlertsModel
+@inject IStringLocalizer<Resource> SharedLocalizer
+
+@{
+    ViewData["Title"] = SharedLocalizer[Resource.MyAlerts];
+}
+
+<h1>@SharedLocalizer[Resource.MyAlerts]</h1>
+

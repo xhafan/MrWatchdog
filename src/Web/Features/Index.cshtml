@@ -1,12 +1,27 @@
 ﻿@page
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
 @model IndexModel
+@inject IStringLocalizer<Resource> SharedLocalizer
+
 @{
-    ViewData["Title"] = "List of watchdogs";
+    ViewData["Title"] = SharedLocalizer[Resource.MrWatchdog];
 }
 
-<div>
-    <h1 class="display-4">List of watchdogs</h1>
-    <p>
-        <a asp-page="/Watchdogs/Create/Create">Create watchdog</a>
-    </p>
+<h1 class="display-4">@SharedLocalizer[Resource.MrWatchdog]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            A watchdog platform for any publicly accessible web page on the internet.
+            Use it to monitor any publicly accessible web page for changes 
+            and get notified when it changes or your search term is found on it.
+        </p>
+        <p>
+            Navigate to the list of existing <a asp-page="/Watchdogs/Index">@SharedLocalizer[Resource.ListOfWatchdogs]</a>.
+        </p>
+        <p>
+            <a asp-page="/Watchdogs/Create/Create">Create</a> your own watchdog.
+        </p>
+    </div>
 </div>

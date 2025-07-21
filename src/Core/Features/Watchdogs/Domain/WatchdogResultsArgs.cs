@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MrWatchdog.Core.Infrastructure.Validations;
+﻿using MrWatchdog.Core.Infrastructure.Validations;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public record WatchdogOverviewArgs
+public class WatchdogResultsArgs
 {
     [NotDefault]
     public required long WatchdogId { get; set; }
-
-    [Required]
     public required string Name { get; set; } = null!;
 }

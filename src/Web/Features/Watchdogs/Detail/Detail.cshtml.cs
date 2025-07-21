@@ -13,12 +13,11 @@ public class DetailModel(
     ICoreBus bus
 ) : BasePageModel
 {
-    [BindProperty]
-    public WatchdogArgs WatchdogArgs { get; set; } = null!;
+    public WatchdogDetailArgs WatchdogDetailArgs { get; private set; } = null!;
     
     public async Task OnGet(long id)
     {
-        WatchdogArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogArgsQuery, WatchdogArgs>(new GetWatchdogArgsQuery(id));
+        WatchdogDetailArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(new GetWatchdogDetailArgsQuery(id));
     }
     
     public async Task<IActionResult> OnPostCreateWatchdogWebPage(long id)

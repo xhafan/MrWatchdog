@@ -15,6 +15,7 @@ using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using System.Text.RegularExpressions;
+using MrWatchdog.Core.Resources;
 using Rebus.Transport.InMem;
 
 namespace MrWatchdog.Web;
@@ -115,11 +116,12 @@ public class Program
 
         builder.Services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo {Title = "Mr Watchdog API", Version = "v1"});
+            options.SwaggerDoc("v1", new OpenApiInfo {Title = $"{Resource.MrWatchdog} API", Version = "v1"});
         });
         
         builder.Services.AddHttpClient();
-
+        builder.Services.AddLocalization();
+        
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
@@ -155,7 +157,7 @@ public class Program
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("v1/swagger.json", "Mr Watchdog API V1");
+            options.SwaggerEndpoint("v1/swagger.json", $"{Resource.MrWatchdog} API V1");
         });
 
         DomainEvents.Initialize(new DomainEventHandlerFactory());

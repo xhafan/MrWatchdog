@@ -18,12 +18,13 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual string Name { get; protected set; } = null!;
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
 
-    public virtual WatchdogArgs GetWatchdogArgs()
+    public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
     {
-        return new WatchdogArgs
+        return new WatchdogDetailArgs
         {
             WatchdogId = Id, 
-            WebPageIds = WebPages.Select(x => x.Id).ToList()
+            WebPageIds = WebPages.Select(x => x.Id).ToList(),
+            Name = Name
         };
     }
     
@@ -90,5 +91,14 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         var webPage = _GetWebPage(watchdogWebPageId);
         return webPage.GetWatchdogWebPageSelectedElementsDto();
+    }
+    
+    public virtual WatchdogResultsArgs GetWatchdogResultsArgs()
+    {
+        return new WatchdogResultsArgs
+        {
+            WatchdogId = Id,
+            Name = Name
+        };
     }    
 }

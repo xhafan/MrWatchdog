@@ -1,0 +1,23 @@
+﻿@page "{id}"
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
+@model ResultsModel
+@inject IStringLocalizer<Resource> SharedLocalizer
+
+@{
+    ViewData["Title"] = $"Watchdog results - {Model.WatchdogResultsArgs.Name}";
+}
+
+@section Navigation {
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Watchdogs/Index">@SharedLocalizer[Resource.ListOfWatchdogs]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<h1>@ViewData["Title"]</h1>
+

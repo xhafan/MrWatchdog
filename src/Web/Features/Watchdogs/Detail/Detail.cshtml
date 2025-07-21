@@ -1,50 +1,60 @@
 ﻿@page "{id}"
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model DetailModel
+@inject IStringLocalizer<Resource> SharedLocalizer
+
 @{
-    ViewData["Title"] = "Edit watchdog";
+    ViewData["Title"] = $"Watchdog detail - {Model.WatchdogDetailArgs.Name}";
+}
+
+@section Navigation {
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Watchdogs/Manage/Manage">@SharedLocalizer[Resource.ManageWatchdogs]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<hr />
 <div @Stimulus.Controller(
          StimulusControllers.WatchdogsDetail,
          new DetailStimulusModel(
              WebPageTurboFrameUrl: Url.Page("WebPage/WebPageTurboFrame", new
              {
-                 watchdogId = Model.WatchdogArgs.WatchdogId,
+                 watchdogId = Model.WatchdogDetailArgs.WatchdogId,
                  watchdogWebPageId = "$watchdogWebPageId"
              })
      ))
      >
     <div class="row">
         <div class="col-md-6">
-            <turbo-frame id="watchdog_overview_@(Model.WatchdogArgs.WatchdogId)"
-                         src="@Url.Page("Overview/Overview", new{id = Model.WatchdogArgs.WatchdogId})"
+            <turbo-frame id="watchdog_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
+                         src="@Url.Page("Overview/Overview", new{id = Model.WatchdogDetailArgs.WatchdogId})"
             >
             </turbo-frame>
         </div>
     </div>
     <label class="form-label fw-bold">Web pages to monitor</label>
     <div id="web_pages_to_monitor" data-watchdogs--detail-target="webPages">
-        @foreach (var watchdogWebPageId in Model.WatchdogArgs.WebPageIds)
+        @foreach (var watchdogWebPageId in Model.WatchdogDetailArgs.WebPageIds)
         {
             <partial name="WebPage/WebPageTurboFramePartial"
-                     model="(Model.WatchdogArgs.WatchdogId, watchdogWebPageId)"
+                     model="(Model.WatchdogDetailArgs.WatchdogId, watchdogWebPageId)"
             />
         }
     </div>
     <form asp-page-handler="CreateWatchdogWebPage"
-          asp-route-id="@Model.WatchdogArgs.WatchdogId"
+          asp-route-id="@Model.WatchdogDetailArgs.WatchdogId"
           data-watchdogs--detail-target="addWebPageForm">
         <button type="submit" class="btn btn-primary">
             Add web page to monitor
         </button>
     </form>
-</div>
-
-<div>
-    <a asp-page="/Index">Back to List of watchdogs</a>
 </div>

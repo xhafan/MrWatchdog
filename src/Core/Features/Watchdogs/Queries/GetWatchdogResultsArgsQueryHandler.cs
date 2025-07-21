@@ -5,14 +5,14 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public class GetWatchdogArgsQueryHandler(
+public class GetWatchdogResultsArgsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
     IRepository<Watchdog> watchdogRepository
-) : BaseNhibernateQueryHandler<GetWatchdogArgsQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetWatchdogResultsArgsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogArgsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogResultsArgsQuery query)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (TResult)(object)watchdog.GetWatchdogArgs();
+        return (TResult)(object)watchdog.GetWatchdogResultsArgs();
     }
 }

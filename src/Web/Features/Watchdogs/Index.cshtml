@@ -1,0 +1,20 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
+@model IndexModel
+@inject IStringLocalizer<Resource> SharedLocalizer
+
+@{
+    ViewData["Title"] = SharedLocalizer[Resource.ListOfWatchdogs];
+}
+
+<div>
+    <h1 class="display-4">@SharedLocalizer[Resource.ListOfWatchdogs]</h1>
+    
+    @foreach (var watchdog in Model.WatchdogResults)
+    {
+        <div>
+            <a asp-page="/Watchdogs/Results/Results" asp-route-id="@watchdog.Id">@watchdog.Name</a>
+        </div>
+    }
+</div>

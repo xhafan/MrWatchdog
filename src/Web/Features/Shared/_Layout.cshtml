@@ -1,4 +1,9 @@
-﻿@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@inject IStringLocalizer<Resource> SharedLocalizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +14,12 @@
     @* <meta name="turbo-refresh-method" content="morph"> *@
     @* <meta name="turbo-refresh-scroll" content="preserve"> *@
 
-    <title>@ViewData["Title"] - Mr Watchdog</title>
+    <title>@ViewData["Title"] - @SharedLocalizer[Resource.MrWatchdog]</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/5.3.6/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="~/assets/bundle.css" />
-    
+
     <script src="~/lib/bootstrap/5.3.6/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/hotwired/turbo/8.0.13/turbo.es2017-esm.min.js"></script>
     <script src="~/lib/jquery/3.7.1/jquery.min.js"></script>
@@ -29,16 +35,39 @@
     <header>
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Mr Watchdog</a>
+                <a class="navbar-brand" asp-page="/Index">@SharedLocalizer[Resource.MrWatchdog]</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @{
+                        var razorPageContext = ViewContext.ActionDescriptor as CompiledPageActionDescriptor;
+
+                        HtmlString MarkIfActive(string pagePath) => pagePath == razorPageContext?.ViewEnginePath
+                            ? new HtmlString("active")
+                            : HtmlString.Empty;
+                    }
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link @MarkIfActive("/Index")" asp-page="/Index">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @MarkIfActive("/Watchdogs/Index")" asp-page="/Watchdogs/Index">
+                                @SharedLocalizer[Resource.ListOfWatchdogs]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @MarkIfActive("/Watchdogs/Alerts/Alerts")" asp-page="/Watchdogs/Alerts/Alerts">
+                                @SharedLocalizer[Resource.MyAlerts]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @MarkIfActive("/Watchdogs/Manage/Manage")" asp-page="/Watchdogs/Manage/Manage">
+                                @SharedLocalizer[Resource.ManageWatchdogs]
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -46,6 +75,11 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    @await RenderSectionAsync("Navigation", required: false)
+                </div>
+            </div>
             @RenderBody()
         </main>
     </div>

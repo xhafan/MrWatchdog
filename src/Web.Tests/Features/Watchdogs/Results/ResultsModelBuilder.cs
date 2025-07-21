@@ -6,32 +6,32 @@ using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Watchdogs.Results;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Results;
 
-public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class ResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     
-    public DetailModelBuilder WithBus(ICoreBus bus)
+    public ResultsModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }    
     
-    public DetailModel Build()
+    public ResultsModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogResultsArgsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
         
-        var model = new DetailModel(
+        var model = new ResultsModel(
             new QueryExecutor(queryHandlerFactory),
             _bus
         );

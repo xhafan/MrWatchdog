@@ -1,4 +1,7 @@
 ﻿using CoreDdd.Domain.Events;
+using CoreUtils;
+using CoreUtils.Extensions;
+using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
@@ -73,26 +76,42 @@ public class WatchdogWebPage : VersionedEntity
         ScrapingErrorMessage = null;
     }
 
-    public virtual void SetSelectedElements(IEnumerable<string> selectedElements)
+    public virtual void SetSelectedElements(ICollection<string> selectedElements)
     {
         _ResetScrapingData();
 
         if (SelectText)
         {
-            selectedElements = selectedElements.Select(html =>
-            {
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(html);
-                var textNodes = htmlDoc.DocumentNode
-                    .DescendantsAndSelf()
-                    .Where(x => x.NodeType == HtmlNodeType.Text)
-                    .Select(x => x.InnerText.Trim())
-                    .Where(x => !string.IsNullOrEmpty(x));
-                var joinedText = string.Join(" ", textNodes);
-                return HttpUtility.HtmlDecode(joinedText);
-            });
-        }
+            selectedElements = selectedElements
+                .Select(html =>
+                {
+                    var htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(html);
+                    var textNodes = htmlDoc.DocumentNode
+                        .DescendantsAndSelf()
+                        .Where(x => x.NodeType == HtmlNodeType.Text)
+                        .Select(x => x.InnerText.Trim())
+                        .Where(x => !string.IsNullOrEmpty(x));
+                    var joinedText = string.Join(" ", textNodes);
+                    return HttpUtility.HtmlDecode(joinedText);
+                })
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
 
+            if (selectedElements.IsEmpty())
+            {
+                SetScrapingErrorMessage("No text inside selected HTML.");
+                return;
+            }
+        }
+        else
+        {
+            Guard.Hope(selectedElements.Any(x => !string.IsNullOrWhiteSpace(x)), "All selected elements are empty.");
+
+            var sanitizer = new HtmlSanitizer();
+            selectedElements = selectedElements.Select(x => sanitizer.Sanitize(x)).ToList();
+        }
+        
         _selectedElements.AddRange(selectedElements);
         ScrapedOn = DateTime.UtcNow;
     }
@@ -107,5 +126,20 @@ public class WatchdogWebPage : VersionedEntity
     public virtual WatchdogWebPageSelectedElementsDto GetWatchdogWebPageSelectedElementsDto()
     {
         return new WatchdogWebPageSelectedElementsDto(Watchdog.Id, Id, _selectedElements, ScrapedOn, ScrapingErrorMessage);
-    }      
+    }
+
+    public virtual WatchdogWebPageScrapingResultsArgs? GetWatchdogWebPageScrapingResultsArgs()
+    {
+        return !string.IsNullOrWhiteSpace(Url) 
+               && !string.IsNullOrWhiteSpace(Name)
+               && string.IsNullOrWhiteSpace(ScrapingErrorMessage)
+               && ScrapedOn != null
+            ? new WatchdogWebPageScrapingResultsArgs
+            {
+                Name = Name,
+                SelectedElements = _selectedElements.ToList(),
+                Url = Url
+            }
+            : null;
+    }
 }

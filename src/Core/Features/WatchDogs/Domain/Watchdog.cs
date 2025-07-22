@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Domain;
 using CoreUtils;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Infrastructure.Extensions;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -75,7 +76,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         _webPages.Remove(webPage);
     }
 
-    public virtual void SetSelectedElements(long watchdogWebPageId, IEnumerable<string> selectedElements)
+    public virtual void SetSelectedElements(long watchdogWebPageId, ICollection<string> selectedElements)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
         webPage.SetSelectedElements(selectedElements);
@@ -98,7 +99,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return new WatchdogScrapingResultsArgs
         {
             WatchdogId = Id,
-            Name = Name
+            Name = Name,
+            WebPages = _webPages
+                .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
+                .WhereNotNull()
+                .ToList()
         };
     }    
 }

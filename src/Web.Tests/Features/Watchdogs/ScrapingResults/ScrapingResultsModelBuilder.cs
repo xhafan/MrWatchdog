@@ -8,7 +8,7 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Results;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {

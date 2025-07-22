@@ -5,7 +5,7 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = $"Watchdog results - {Model.WatchdogScrapingResultsArgs.Name}";
+    ViewData["Title"] = Model.WatchdogScrapingResultsArgs.Name;
 }
 
 @section Navigation {
@@ -20,4 +20,36 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<label class="form-label fw-bold">Monitored web pages</label>
+
+@foreach (var watchdogWebPageArgs in Model.WatchdogScrapingResultsArgs.WebPages)
+{
+    <div class="card mb-1">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@watchdogWebPageArgs.Name</span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="@watchdogWebPageArgs.Url" class="form-label fw-bold"></label>
+                        <div><a href="@watchdogWebPageArgs.Url" target="_blank">@watchdogWebPageArgs.Url</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Results</label>
+                    <ul>
+                        @foreach (var selectedElement in watchdogWebPageArgs.SelectedElements)
+                        {
+                            <li>
+                                @Html.Raw(selectedElement)
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 

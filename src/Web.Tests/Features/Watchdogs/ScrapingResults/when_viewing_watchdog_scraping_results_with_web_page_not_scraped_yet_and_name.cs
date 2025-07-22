@@ -3,10 +3,10 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Results;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_results : BaseDatabaseTest
+public class when_viewing_watchdog_scraping_results_with_web_page_not_scraped_yet : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -23,16 +23,21 @@ public class when_viewing_watchdog_results : BaseDatabaseTest
     }
 
     [Test]
-    public void model_is_correct()
+    public void watchdog_scraping_result_web_pages_are_empty()
     {
-        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogScrapingResultsArgs.Name.ShouldBe("watchdog name");
+        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
     }
 
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
+            .WithWebPage(new WatchdogWebPageArgs
+            {
+                Url = "http://url.com/page",
+                Selector = ".selector",
+                Name = "url.com/page"
+            })
             .Build();
     }    
 }

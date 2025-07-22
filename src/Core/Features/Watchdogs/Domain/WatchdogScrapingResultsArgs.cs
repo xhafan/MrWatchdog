@@ -2,9 +2,10 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogScrapingResultsArgs
+public record WatchdogScrapingResultsArgs
 {
     [NotDefault]
     public required long WatchdogId { get; set; }
-    public required string Name { get; set; } = null!;
+    public required string Name { get; set; }
+    public required IEnumerable<WatchdogWebPageScrapingResultsArgs> WebPages { get; set; }
 }

@@ -7,7 +7,7 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = $"Watchdog detail - {Model.WatchdogDetailArgs.Name}";
+    ViewData["Title"] = Model.WatchdogDetailArgs.Name;
 }
 
 @section Navigation {

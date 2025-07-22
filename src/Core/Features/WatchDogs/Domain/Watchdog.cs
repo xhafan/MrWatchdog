@@ -93,9 +93,9 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return webPage.GetWatchdogWebPageSelectedElementsDto();
     }
     
-    public virtual WatchdogResultsArgs GetWatchdogResultsArgs()
+    public virtual WatchdogScrapingResultsArgs GetWatchdogScrapingResultsArgs()
     {
-        return new WatchdogResultsArgs
+        return new WatchdogScrapingResultsArgs
         {
             WatchdogId = Id,
             Name = Name

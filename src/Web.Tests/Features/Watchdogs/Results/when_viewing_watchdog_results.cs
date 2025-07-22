@@ -1,14 +1,14 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Results;
+using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Results;
 
 [TestFixture]
 public class when_viewing_watchdog_results : BaseDatabaseTest
 {
-    private ResultsModel _model = null!;
+    private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
 
     [SetUp]
@@ -16,7 +16,7 @@ public class when_viewing_watchdog_results : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new ResultsModelBuilder(UnitOfWork)
+        _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
         await _model.OnGet(_watchdog.Id);
@@ -25,8 +25,8 @@ public class when_viewing_watchdog_results : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogResultsArgs.Name.ShouldBe("watchdog name");
+        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogScrapingResultsArgs.Name.ShouldBe("watchdog name");
     }
 
     private void _BuildEntities()

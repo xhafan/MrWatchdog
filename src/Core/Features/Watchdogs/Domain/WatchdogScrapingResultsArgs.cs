@@ -2,7 +2,7 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogResultsArgs
+public class WatchdogScrapingResultsArgs
 {
     [NotDefault]
     public required long WatchdogId { get; set; }

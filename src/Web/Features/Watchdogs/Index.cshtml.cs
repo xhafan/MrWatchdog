@@ -6,10 +6,10 @@ namespace MrWatchdog.Web.Features.Watchdogs;
 
 public class IndexModel(IQueryExecutor queryExecutor) : PageModel
 {
-    public IEnumerable<GetWatchdogsQueryResult> WatchdogResults { get; private set; } = null!;
+    public IEnumerable<GetWatchdogsQueryResult> WatchdogScrapingResults { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        WatchdogResults = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(new GetWatchdogsQuery());
+        WatchdogScrapingResults = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(new GetWatchdogsQuery());
     }
 }

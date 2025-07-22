@@ -25,7 +25,7 @@ public class when_viewing_existing_watchdogs : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogResults.ShouldBe([
+        _model.WatchdogScrapingResults.ShouldBe([
             new GetWatchdogsQueryResult
             {
                 Id = _watchdog.Id, 

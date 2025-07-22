@@ -11,10 +11,10 @@
 <div>
     <h1 class="display-4">@SharedLocalizer[Resource.ListOfWatchdogs]</h1>
     
-    @foreach (var watchdog in Model.WatchdogResults)
+    @foreach (var watchdogScrapingResults in Model.WatchdogScrapingResults)
     {
         <div>
-            <a asp-page="/Watchdogs/Results/Results" asp-route-id="@watchdog.Id">@watchdog.Name</a>
+            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-id="@watchdogScrapingResults.Id">@watchdogScrapingResults.Name</a>
         </div>
     }
 </div>

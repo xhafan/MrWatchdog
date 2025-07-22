@@ -15,7 +15,7 @@
         <a asp-page="/Watchdogs/Create/Create"><i class="fa-solid fa-plus"></i> Create watchdog</a>
     </div>
 
-    @foreach (var watchdog in Model.WatchdogResults)
+    @foreach (var watchdog in Model.WatchdogScrapingResults)
     {
         <div>
             <a asp-page="/Watchdogs/Detail/Detail" asp-route-id="@watchdog.Id">@watchdog.Name</a>

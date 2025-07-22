@@ -1,11 +1,11 @@
 ﻿@page "{id}"
 @using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
-@model ResultsModel
+@model ScrapingResultsModel
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = $"Watchdog results - {Model.WatchdogResultsArgs.Name}";
+    ViewData["Title"] = $"Watchdog results - {Model.WatchdogScrapingResultsArgs.Name}";
 }
 
 @section Navigation {

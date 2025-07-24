@@ -37,5 +37,7 @@ public abstract class BaseDatabaseTest
         }
         
         TestFixtureContext.RaisedDomainEvents.Value = null;
+        
+        NotDeletedRecordsChecker.CheckNotDeletedRecords(UnitOfWork);
     }
 }

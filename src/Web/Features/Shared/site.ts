@@ -13,6 +13,7 @@ import WatchdogsCreateController from "../Watchdogs/Create/CreateController";
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailWebPageController from "../Watchdogs/Detail/WebPage/WebPageController";
 import WatchdogsDetailWebPageOverviewController from "../Watchdogs/Detail/WebPage/WebPageOverviewController";
+import WatchdogsScrapingResultsController from "../Watchdogs/ScrapingResults/ScrapingResultsController";
 
 
 const application = Application.start();
@@ -24,6 +25,7 @@ application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateControl
 application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailController);
 application.register(StimulusControllers.watchdogsDetailWebPage, WatchdogsDetailWebPageController);
 application.register(StimulusControllers.watchdogsDetailWebPageOverview, WatchdogsDetailWebPageOverviewController);
+application.register(StimulusControllers.watchdogsScrapingResults, WatchdogsScrapingResultsController);
 
 
 attachValidationAfterTurboLoad();

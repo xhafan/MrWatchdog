@@ -15,14 +15,14 @@ public class DetailModel(
 {
     public WatchdogDetailArgs WatchdogDetailArgs { get; private set; } = null!;
     
-    public async Task OnGet(long id)
+    public async Task OnGet(long watchdogId)
     {
-        WatchdogDetailArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(new GetWatchdogDetailArgsQuery(id));
+        WatchdogDetailArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(new GetWatchdogDetailArgsQuery(watchdogId));
     }
     
-    public async Task<IActionResult> OnPostCreateWatchdogWebPage(long id)
+    public async Task<IActionResult> OnPostCreateWatchdogWebPage(long watchdogId)
     {
-        var command = new CreateWatchdogWebPageCommand(WatchdogId: id);
+        var command = new CreateWatchdogWebPageCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

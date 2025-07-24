@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
@@ -11,7 +10,7 @@ using MrWatchdog.Web.Features.Jobs;
 namespace MrWatchdog.Web.Tests.Features.Jobs.E2e;
 
 [TestFixture]
-public class when_getting_related_domain_event_job
+public class when_getting_related_domain_event_job : BaseDatabaseTest
 {
     private readonly Guid _commandJobGuid = Guid.NewGuid();
     private Job _commandJob = null!;
@@ -20,17 +19,17 @@ public class when_getting_related_domain_event_job
     [SetUp]
     public void Context()
     {
-        using var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        unitOfWork.BeginTransaction();
-
-        _commandJob = new JobBuilder(unitOfWork)
+        _commandJob = new JobBuilder(UnitOfWork)
             .WithGuid(_commandJobGuid)
             .Build();
         
-        _domainEventJob = new JobBuilder(unitOfWork)
+        _domainEventJob = new JobBuilder(UnitOfWork)
             .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
             .Build();
         _domainEventJob.SetRelatedCommandJob(_commandJob);
+        
+        UnitOfWork.Commit();
+        UnitOfWork.BeginTransaction();
     }
 
     [Test]
@@ -49,14 +48,21 @@ public class when_getting_related_domain_event_job
     [TearDown]
     public async Task TearDown()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        var jobRepository = new JobRepository(newUnitOfWork);
+        var jobRepository = new JobRepository(UnitOfWork);
 
-        _domainEventJob = await jobRepository.LoadByGuidAsync(_domainEventJob.Guid);
-        await jobRepository.DeleteAsync(_domainEventJob);
+        var domainEventJob = await jobRepository.GetByGuidAsync(_domainEventJob.Guid);
+        if (domainEventJob != null)
+        {
+            await jobRepository.DeleteAsync(domainEventJob); 
+        }
 
-        _commandJob = await jobRepository.LoadByGuidAsync(_commandJobGuid);
-        await jobRepository.DeleteAsync(_commandJob);
+        var commandJob = await jobRepository.GetByGuidAsync(_commandJobGuid);
+        if (commandJob != null)
+        {
+            await jobRepository.DeleteAsync(commandJob);
+        }
+
+        await UnitOfWork.CommitAsync();
+        UnitOfWork.BeginTransaction();        
     }    
 }

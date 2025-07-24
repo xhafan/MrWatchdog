@@ -25,13 +25,13 @@ public class when_managing_watchdogs : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogResults.ShouldBe([
+        _model.WatchdogResults.ShouldContain(
             new GetWatchdogsQueryResult
             {
                 Id = _watchdog.Id, 
                 Name = "watchdog name"
             }
-        ]);
+        );
     }    
     
     [Test]

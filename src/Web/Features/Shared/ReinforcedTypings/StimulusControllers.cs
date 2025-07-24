@@ -26,4 +26,7 @@ public static class StimulusControllers
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsDetailWebPageOverview = "watchdogs--detail-web-page-overview";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsScrapingResults = "watchdogs--scraping-results";
 }

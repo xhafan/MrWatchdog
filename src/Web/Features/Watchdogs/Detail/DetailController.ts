@@ -5,6 +5,7 @@ import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { watchdogWebPageRemovedEvent } from "./WebPage/WebPageController";
+import { WatchdogConstants } from "../../Shared/Generated/WatchdogConstants";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [
@@ -27,7 +28,9 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     throw new Error("Error getting created WatchdogWebPage.");
                 }
 
-                const webPageTurboFrameUrl = this.modelValue.webPageTurboFrameUrl.replace("$watchdogWebPageId", String(watchdogWebPageEntity.entityId));
+                const webPageTurboFrameUrl = WatchdogConstants.watchdogDetailWebPageTurboFrameUrl
+                    .replace(WatchdogConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
+                    .replace(WatchdogConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
 
                 const response = await fetch(webPageTurboFrameUrl);
                 if (response.ok) {

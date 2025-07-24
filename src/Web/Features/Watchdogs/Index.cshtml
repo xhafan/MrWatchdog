@@ -14,7 +14,7 @@
     @foreach (var watchdogScrapingResults in Model.WatchdogScrapingResults)
     {
         <div>
-            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-id="@watchdogScrapingResults.Id">@watchdogScrapingResults.Name</a>
+            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogScrapingResults.Id">@watchdogScrapingResults.Name</a>
         </div>
     }
 </div>

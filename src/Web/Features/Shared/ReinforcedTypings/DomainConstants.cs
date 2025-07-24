@@ -16,4 +16,6 @@ public static class DomainConstants
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogWebPageScrapingDataUpdatedDomainEventName = nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent);
     
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogAlertEntityName = nameof(WatchdogAlert);
 }

@@ -32,7 +32,7 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? Url { get; protected set; }
     public virtual string? Selector { get; protected set; }
     public virtual bool SelectText { get; protected set; }
-    public virtual IEnumerable<string> SelectedElements => _selectedElements;
+    public virtual IEnumerable<string> SelectedElements => _selectedElements; // todo: rename to ScrapedResults
     public virtual string? Name { get; protected set; }
     public virtual DateTime? ScrapedOn { get; protected set; }
     public virtual string? ScrapingErrorMessage { get; protected set; }
@@ -100,7 +100,7 @@ public class WatchdogWebPage : VersionedEntity
 
             if (selectedElements.IsEmpty())
             {
-                SetScrapingErrorMessage("No text inside selected HTML.");
+                SetScrapingErrorMessage("No text inside selected HTML."); // todo: refactor this? setting text outside the method
                 return;
             }
         }

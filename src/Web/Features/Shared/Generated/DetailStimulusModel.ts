@@ -4,5 +4,5 @@
 
 export interface DetailStimulusModel
 {
-	webPageTurboFrameUrl: string;
+	watchdogId: number;
 }

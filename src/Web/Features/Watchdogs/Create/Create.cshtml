@@ -23,13 +23,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row"
-     @Stimulus.Controller(
-         StimulusControllers.WatchdogsCreate, 
-            new CreateStimulusModel(
-                Url.Page("/Watchdogs/Detail/Detail", new { id = "$id"})
-     ))
-     >
+<div class="row" @Stimulus.Controller(StimulusControllers.WatchdogsCreate)>
     <div class="col-md-6">
         <form method="post" 
               data-watchdogs--create-target="form"

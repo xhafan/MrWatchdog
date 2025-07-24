@@ -32,9 +32,9 @@ public class WebPageModel(
         WatchdogWebPageName = watchdogWebPageArgs.Name;
     }
     
-    public async Task<IActionResult> OnPostRemoveWatchdogWebPage(long id, long watchdogWebPageId)
+    public async Task<IActionResult> OnPostRemoveWatchdogWebPage(long watchdogId, long watchdogWebPageId)
     {
-        var command = new RemoveWatchdogWebPageCommand(WatchdogId: id, watchdogWebPageId);
+        var command = new RemoveWatchdogWebPageCommand(watchdogId, watchdogWebPageId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }     

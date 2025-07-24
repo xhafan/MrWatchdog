@@ -19,5 +19,4 @@ public static class JobConstants
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string GetRelatedDomainEventJobUrl = $"/api/Jobs/GetRelatedDomainEventJob?commandJobGuid={CommandJobGuidVariable}&type={DomainEventTypeVariable}";
-    
 }

@@ -1,4 +1,4 @@
-﻿@page "{id}"
+﻿@page "{watchdogId}"
 @using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
@@ -25,13 +25,8 @@
 
 <div @Stimulus.Controller(
          StimulusControllers.WatchdogsDetail,
-         new DetailStimulusModel(
-             WebPageTurboFrameUrl: Url.Page("WebPage/WebPageTurboFrame", new
-             {
-                 watchdogId = Model.WatchdogDetailArgs.WatchdogId,
-                 watchdogWebPageId = "$watchdogWebPageId"
-             })
-     ))
+         new DetailStimulusModel(Model.WatchdogDetailArgs.WatchdogId)
+     )
      >
     <div class="row">
         <div class="col-md-6">
@@ -51,7 +46,7 @@
         }
     </div>
     <form asp-page-handler="CreateWatchdogWebPage"
-          asp-route-id="@Model.WatchdogDetailArgs.WatchdogId"
+          asp-route-watchdogId="@Model.WatchdogDetailArgs.WatchdogId"
           data-watchdogs--detail-target="addWebPageForm">
         <button type="submit" class="btn btn-primary">
             Add web page to monitor

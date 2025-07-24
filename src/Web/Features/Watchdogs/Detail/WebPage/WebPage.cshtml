@@ -12,7 +12,7 @@
                 @Model.WatchdogWebPageName
             </span>
             <form asp-page-handler="RemoveWatchdogWebPage"
-                  asp-route-id="@Model.WatchdogId"
+                  asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
                   method="post"
                   data-watchdogs--detail-web-page-target="removeWebPageForm"

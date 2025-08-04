@@ -29,7 +29,7 @@ public class when_viewing_watchdog_web_page_scraping_results : BaseDatabaseTest
     {
         _model.WatchdogWebPageScrapingResultsDto.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogWebPageScrapingResultsDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageScrapingResultsDto.ScrapingResults.ShouldBe(["<div></div>"]);
+        _model.WatchdogWebPageScrapingResultsDto.ScrapingResults.ShouldBe(["<div>text</div>"]);
         _model.WatchdogWebPageScrapingResultsDto.ScrapedOn.ShouldNotBeNull();
         _model.WatchdogWebPageScrapingResultsDto.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _model.WatchdogWebPageScrapingResultsDto.ScrapingErrorMessage.ShouldBe(null);
@@ -46,6 +46,6 @@ public class when_viewing_watchdog_web_page_scraping_results : BaseDatabaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingResults(_watchdogWebPageId, ["<div></div>"]);
+        _watchdog.SetScrapingResults(_watchdogWebPageId, ["<div>text</div>"]);
     }    
 }

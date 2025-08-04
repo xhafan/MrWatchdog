@@ -80,40 +80,54 @@ public class WatchdogWebPage : VersionedEntity
     {
         _ResetScrapingData();
 
+        var sanitizer = new HtmlSanitizer();
+
         if (SelectText)
         {
             scrapingResults = scrapingResults
-                .Select(html =>
-                {
-                    var htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(html);
-                    var textNodes = htmlDoc.DocumentNode
-                        .DescendantsAndSelf()
-                        .Where(x => x.NodeType == HtmlNodeType.Text)
-                        .Select(x => x.InnerText.Trim())
-                        .Where(x => !string.IsNullOrEmpty(x));
-                    var joinedText = string.Join(" ", textNodes);
-                    return HttpUtility.HtmlDecode(joinedText);
-                })
-                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(html => _getTextFromHtml(sanitizer.Sanitize(html)))
+                .Where(text => !string.IsNullOrWhiteSpace(text))
                 .ToList();
 
             if (scrapingResults.IsEmpty())
             {
-                SetScrapingErrorMessage("No text inside selected HTML."); // todo: refactor this? setting text outside the method
+                SetScrapingErrorMessage("All selected HTML results have empty text.");
                 return;
             }
         }
         else
         {
-            Guard.Hope(scrapingResults.Any(x => !string.IsNullOrWhiteSpace(x)), "All scraping results are empty.");
 
-            var sanitizer = new HtmlSanitizer();
-            scrapingResults = scrapingResults.Select(x => sanitizer.Sanitize(x)).ToList();
+            var scrapingResultsWithNonEmptyText = scrapingResults
+                .Select(html => sanitizer.Sanitize(html))
+                .Where(html => !string.IsNullOrWhiteSpace(_getTextFromHtml(html)))
+                .ToList();
+            
+            if (scrapingResultsWithNonEmptyText.IsEmpty())
+            {
+                SetScrapingErrorMessage("All selected HTML results have empty text.");
+                return;
+            }            
+            
+            scrapingResults = scrapingResultsWithNonEmptyText;
         }
         
         _scrapingResults.AddRange(scrapingResults);
         ScrapedOn = DateTime.UtcNow;
+        return;
+
+        string _getTextFromHtml(string html)
+        {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+            var textNodes = htmlDoc.DocumentNode
+                .DescendantsAndSelf()
+                .Where(x => x.NodeType == HtmlNodeType.Text)
+                .Select(x => x.InnerText.Trim())
+                .Where(x => !string.IsNullOrEmpty(x));
+            var joinedText = string.Join(" ", textNodes);
+            return HttpUtility.HtmlDecode(joinedText);
+        }
     }
     
     public virtual void SetScrapingErrorMessage(string scrapingErrorMessage)

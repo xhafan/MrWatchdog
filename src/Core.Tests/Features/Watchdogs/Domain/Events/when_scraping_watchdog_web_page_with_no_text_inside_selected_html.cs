@@ -9,7 +9,7 @@ using MrWatchdog.TestsShared.HttpClients;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html_with_no_text_inside_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_no_text_inside_selected_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -65,11 +65,9 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                 Selector = """
                            div#article-body p.infoUpdate-log
                            """,
-                SelectText = true,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

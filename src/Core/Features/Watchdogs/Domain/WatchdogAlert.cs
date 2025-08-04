@@ -22,7 +22,7 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         var scrapingResults = watchdog.WebPages.SelectMany(x => x.ScrapingResults);
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            scrapingResults = scrapingResults.Where(x => x.Contains(searchTerm)); // todo: extract text from HTML and implement diacritics-insensitive and case-insensitive search
+            scrapingResults = scrapingResults.Where(x => x.ContainsIgnoringDiacritics(searchTerm));
         }
         _currentScrapingResults.AddRange(scrapingResults);
     }

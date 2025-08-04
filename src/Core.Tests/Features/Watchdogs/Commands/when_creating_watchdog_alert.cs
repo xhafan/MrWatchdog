@@ -38,7 +38,7 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
         _watchdogAlert.ShouldNotBeNull();
         _watchdogAlert.SearchTerm.ShouldBe("text");
         _watchdogAlert.PreviousScrapingResults.ShouldBeEmpty();
-        _watchdogAlert.CurrentScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 3</div>"]);
+        _watchdogAlert.CurrentScrapingResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
     }
     
     private void _BuildEntities()
@@ -52,6 +52,6 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
             })
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
+        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
     }
 }

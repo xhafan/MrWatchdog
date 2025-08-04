@@ -106,7 +106,7 @@ public class WatchdogWebPage : VersionedEntity
         }
         else
         {
-            Guard.Hope(scrapingResults.Any(x => !string.IsNullOrWhiteSpace(x)), "All selected elements are empty.");
+            Guard.Hope(scrapingResults.Any(x => !string.IsNullOrWhiteSpace(x)), "All scraping results are empty.");
 
             var sanitizer = new HtmlSanitizer();
             scrapingResults = scrapingResults.Select(x => sanitizer.Sanitize(x)).ToList();

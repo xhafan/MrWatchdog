@@ -26,7 +26,7 @@ export default class ScrapingResultsWebPagesController extends Controller {
 
         this.scrapingResultTargets.forEach(scrapingResult => {
             if (!scrapingResult.textContent) {
-                throw new Error("scrapingResult does not contain any text."); // todo: make sure selected element always has text - when scraping the web page and selecting results, make sure there is text and not just empty element
+                throw new Error("scraping result does not contain any text."); // todo: make sure the scraping result always has text - when scraping the web page and selecting results, make sure there is text and not just empty element
             }
             if (searchTerm && !this.includesIgnoringDiacritics(scrapingResult.textContent, searchTerm)) {
                 scrapingResult.style.display = "none";

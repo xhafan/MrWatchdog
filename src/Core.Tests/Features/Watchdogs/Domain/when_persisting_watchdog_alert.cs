@@ -22,7 +22,7 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
                 Name = "url.com/page"
             })
             .Build();
-        watchdog.SetSelectedElements(watchdog.WebPages.Single().Id, ["<div>text</div>", "<div>hello</div>"]);
+        watchdog.SetScrapingResults(watchdog.WebPages.Single().Id, ["<div>text</div>", "<div>hello</div>"]);
         _newWatchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(watchdog)
             .WithSearchTerm("text")
@@ -42,7 +42,7 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
 
         _persistedWatchdogAlert.Watchdog.ShouldBe(_newWatchdogAlert.Watchdog);
         _persistedWatchdogAlert.SearchTerm.ShouldBe("text");
-        _persistedWatchdogAlert.PreviousScrapedResults.ShouldBeEmpty();
-        _persistedWatchdogAlert.CurrentScrapedResults.ShouldBe(["<div>text</div>"]);
+        _persistedWatchdogAlert.PreviousScrapingResults.ShouldBeEmpty();
+        _persistedWatchdogAlert.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
     }
 }

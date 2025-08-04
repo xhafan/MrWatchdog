@@ -51,7 +51,7 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBeEmpty();
+        webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe("No text inside selected HTML.");
     }

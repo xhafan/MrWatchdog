@@ -12,7 +12,7 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class WatchdogWebPage : VersionedEntity
 {
-    private readonly IList<string> _selectedElements = new List<string>();
+    private readonly IList<string> _scrapingResults = new List<string>();
     
     protected WatchdogWebPage() {}
 
@@ -32,7 +32,7 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? Url { get; protected set; }
     public virtual string? Selector { get; protected set; }
     public virtual bool SelectText { get; protected set; }
-    public virtual IEnumerable<string> SelectedElements => _selectedElements; // todo: rename to ScrapedResults
+    public virtual IEnumerable<string> ScrapingResults => _scrapingResults;
     public virtual string? Name { get; protected set; }
     public virtual DateTime? ScrapedOn { get; protected set; }
     public virtual string? ScrapingErrorMessage { get; protected set; }
@@ -71,18 +71,18 @@ public class WatchdogWebPage : VersionedEntity
 
     private void _ResetScrapingData()
     {
-        _selectedElements.Clear();
+        _scrapingResults.Clear();
         ScrapedOn = null;
         ScrapingErrorMessage = null;
     }
 
-    public virtual void SetSelectedElements(ICollection<string> selectedElements)
+    public virtual void SetScrapingResults(ICollection<string> scrapingResults)
     {
         _ResetScrapingData();
 
         if (SelectText)
         {
-            selectedElements = selectedElements
+            scrapingResults = scrapingResults
                 .Select(html =>
                 {
                     var htmlDoc = new HtmlDocument();
@@ -98,7 +98,7 @@ public class WatchdogWebPage : VersionedEntity
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToList();
 
-            if (selectedElements.IsEmpty())
+            if (scrapingResults.IsEmpty())
             {
                 SetScrapingErrorMessage("No text inside selected HTML."); // todo: refactor this? setting text outside the method
                 return;
@@ -106,13 +106,13 @@ public class WatchdogWebPage : VersionedEntity
         }
         else
         {
-            Guard.Hope(selectedElements.Any(x => !string.IsNullOrWhiteSpace(x)), "All selected elements are empty.");
+            Guard.Hope(scrapingResults.Any(x => !string.IsNullOrWhiteSpace(x)), "All selected elements are empty.");
 
             var sanitizer = new HtmlSanitizer();
-            selectedElements = selectedElements.Select(x => sanitizer.Sanitize(x)).ToList();
+            scrapingResults = scrapingResults.Select(x => sanitizer.Sanitize(x)).ToList();
         }
         
-        _selectedElements.AddRange(selectedElements);
+        _scrapingResults.AddRange(scrapingResults);
         ScrapedOn = DateTime.UtcNow;
     }
     
@@ -123,9 +123,9 @@ public class WatchdogWebPage : VersionedEntity
         ScrapingErrorMessage = scrapingErrorMessage;
     }    
     
-    public virtual WatchdogWebPageSelectedElementsDto GetWatchdogWebPageSelectedElementsDto()
+    public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto()
     {
-        return new WatchdogWebPageSelectedElementsDto(Watchdog.Id, Id, _selectedElements, ScrapedOn, ScrapingErrorMessage);
+        return new WatchdogWebPageScrapingResultsDto(Watchdog.Id, Id, _scrapingResults, ScrapedOn, ScrapingErrorMessage);
     }
 
     public virtual WatchdogWebPageScrapingResultsArgs? GetWatchdogWebPageScrapingResultsArgs()
@@ -137,7 +137,7 @@ public class WatchdogWebPage : VersionedEntity
             ? new WatchdogWebPageScrapingResultsArgs
             {
                 Name = Name,
-                SelectedElements = _selectedElements.ToList(),
+                ScrapingResults = _scrapingResults.ToList(),
                 Url = Url
             }
             : null;

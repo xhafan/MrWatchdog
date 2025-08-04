@@ -6,8 +6,8 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class WatchdogAlert : VersionedEntity, IAggregateRoot
 {
-    private readonly IList<string> _previousScrapedResults = new List<string>(); // todo: store previous scraped results
-    private readonly IList<string> _currentScrapedResults = new List<string>();
+    private readonly IList<string> _previousScrapingResults = new List<string>(); // todo: store previous scraping results
+    private readonly IList<string> _currentScrapingResults = new List<string>();
     
     protected WatchdogAlert() {}
 
@@ -19,18 +19,18 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         Watchdog = watchdog;
         SearchTerm = searchTerm;
 
-        var scrapedResults = watchdog.WebPages.SelectMany(x => x.SelectedElements);
+        var scrapingResults = watchdog.WebPages.SelectMany(x => x.ScrapingResults);
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            scrapedResults = scrapedResults.Where(x => x.Contains(searchTerm)); // todo: extract text from HTML and implement diacritics-insensitive and case-insensitive search
+            scrapingResults = scrapingResults.Where(x => x.Contains(searchTerm)); // todo: extract text from HTML and implement diacritics-insensitive and case-insensitive search
         }
-        _currentScrapedResults.AddRange(scrapedResults);
+        _currentScrapingResults.AddRange(scrapingResults);
     }
     
     public virtual Watchdog Watchdog { get; } = null!;
     public virtual string? SearchTerm { get; protected set; }
-    public virtual IEnumerable<string> PreviousScrapedResults => _previousScrapedResults;
-    public virtual IEnumerable<string> CurrentScrapedResults => _currentScrapedResults;
+    public virtual IEnumerable<string> PreviousScrapingResults => _previousScrapingResults;
+    public virtual IEnumerable<string> CurrentScrapingResults => _currentScrapingResults;
 
     public virtual WatchdogAlertArgs GetWatchdogAlertArgs()
     {

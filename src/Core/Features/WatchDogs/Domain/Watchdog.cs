@@ -76,10 +76,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         _webPages.Remove(webPage);
     }
 
-    public virtual void SetSelectedElements(long watchdogWebPageId, ICollection<string> selectedElements)
+    public virtual void SetScrapingResults(long watchdogWebPageId, ICollection<string> scrapingResults)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
-        webPage.SetSelectedElements(selectedElements);
+        webPage.SetScrapingResults(scrapingResults);
     }
     
     public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
@@ -88,10 +88,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         webPage.SetScrapingErrorMessage(scrapingErrorMessage);
     }    
     
-    public virtual WatchdogWebPageSelectedElementsDto GetWatchdogWebPageSelectedElementsDto(long watchdogWebPageId)
+    public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto(long watchdogWebPageId)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
-        return webPage.GetWatchdogWebPageSelectedElementsDto();
+        return webPage.GetWatchdogWebPageScrapingResultsDto();
     }
     
     public virtual WatchdogScrapingResultsArgs GetWatchdogScrapingResultsArgs()

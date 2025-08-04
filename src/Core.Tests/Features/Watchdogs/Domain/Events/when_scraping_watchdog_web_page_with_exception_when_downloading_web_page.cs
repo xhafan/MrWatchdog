@@ -37,7 +37,7 @@ public class when_scraping_watchdog_web_page_with_exception_when_downloading_web
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBeEmpty();
+        webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe("No such host is known");
     }

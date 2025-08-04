@@ -1,0 +1,39 @@
+﻿@page
+@model WebPageScrapingResultsModel
+@{
+   Layout = null;
+}
+<!turbo-frame id="watchdog_web_page_scraping_results_@(Model.WatchdogWebPageScrapingResultsDto.WatchdogWebPageId)">
+    <div class="mb-3">
+        <label class="form-label fw-bold">Selected Elements</label>
+        <div>
+            @if (Model.WatchdogWebPageScrapingResultsDto.ScrapingResults.Any())
+            {
+                <div style="max-height:360px; overflow-y:auto;">
+                    @foreach (var scrapingResults in Model.WatchdogWebPageScrapingResultsDto.ScrapingResults)
+                    {
+                        <textarea readonly style="width:100%" rows="7">@scrapingResults</textarea>
+                    }
+                </div>
+            }
+            else
+            {
+                <span class="text-danger">
+                    @if (Model.WatchdogWebPageScrapingResultsDto.ScrapingErrorMessage != null)
+                    {
+                        @:Error: @Model.WatchdogWebPageScrapingResultsDto.ScrapingErrorMessage
+                    }
+                    else
+                    {
+                        @:Web page not scraped yet
+                    }
+                </span>
+            }
+        </div>
+        @if (Model.WatchdogWebPageScrapingResultsDto.ScrapedOn != null)
+        {
+            <span>Scraped on: @($"{Model.WatchdogWebPageScrapingResultsDto.ScrapedOn:yyyy-MM-dd HH:mm:ss UTC}")</span>
+        }
+    </div>
+</!turbo-frame>
+

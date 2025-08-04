@@ -31,7 +31,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         
         var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.SelectedElements.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");
     }
 
@@ -47,7 +47,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
             })
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetSelectedElements(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         UnitOfWork.Save(_watchdog);
     }    
 }

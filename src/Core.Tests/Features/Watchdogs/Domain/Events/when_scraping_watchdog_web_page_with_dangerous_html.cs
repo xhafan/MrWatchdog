@@ -50,7 +50,7 @@ public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseT
     public void dangerous_html_is_removed()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBe([
+        webPage.ScrapingResults.ShouldBe([
             """
             <p>text one</p>
             """

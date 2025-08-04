@@ -7,8 +7,8 @@ public class WatchdogWebPageMappingOverrides : IAutoMappingOverride<WatchdogWebP
 {
     public void Override(AutoMapping<WatchdogWebPage> mapping)
     {
-        mapping.HasMany(x => x.SelectedElements)
-            .Table($"{nameof(WatchdogWebPage)}SelectedElement")
+        mapping.HasMany(x => x.ScrapingResults)
+            .Table($"{nameof(WatchdogWebPage)}{nameof(WatchdogWebPage.ScrapingResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();

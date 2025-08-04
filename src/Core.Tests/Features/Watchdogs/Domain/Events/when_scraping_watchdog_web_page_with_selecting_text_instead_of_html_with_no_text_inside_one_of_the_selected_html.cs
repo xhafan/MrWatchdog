@@ -51,10 +51,10 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     }
 
     [Test]
-    public void web_page_is_scraped_and_selected_elements_values_contain_only_non_empty_text()
+    public void web_page_is_scraped_and_scraping_results_values_contain_only_non_empty_text()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBe(["Text one"]);
+        webPage.ScrapingResults.ShouldBe(["Text one"]);
     }
     
     private void _BuildEntities()

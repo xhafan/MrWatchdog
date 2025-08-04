@@ -5,10 +5,10 @@ export const searchTermModifiedEventName = "searchTermModified";
 
 export default class ScrapingResultsWebPagesController extends Controller {
     static targets = [
-        "selectedElement",
+        "scrapingResult",
     ];
    
-    declare selectedElementTargets: HTMLElement[];
+    declare scrapingResultTargets: HTMLElement[];
 
     connect() {
         this.registerSearchTermModifiedEventHandler();
@@ -24,15 +24,15 @@ export default class ScrapingResultsWebPagesController extends Controller {
     private handleSearchTermModifiedEvent(event: CustomEventInit<string>) {
         const searchTerm = event.detail;
 
-        this.selectedElementTargets.forEach(selectedElement => {
-            if (!selectedElement.textContent) {
-                throw new Error("selectedElement does not contain any text."); // todo: make sure selected element always has text - when scraping the web page and selecting results, make sure there is text and not just empty element
+        this.scrapingResultTargets.forEach(scrapingResult => {
+            if (!scrapingResult.textContent) {
+                throw new Error("scrapingResult does not contain any text."); // todo: make sure selected element always has text - when scraping the web page and selecting results, make sure there is text and not just empty element
             }
-            if (searchTerm && !this.includesIgnoringDiacritics(selectedElement.textContent, searchTerm)) {
-                selectedElement.style.display = "none";
+            if (searchTerm && !this.includesIgnoringDiacritics(scrapingResult.textContent, searchTerm)) {
+                scrapingResult.style.display = "none";
             }
             else {
-                selectedElement.style.display = "list-item";
+                scrapingResult.style.display = "list-item";
             }
         });
     }

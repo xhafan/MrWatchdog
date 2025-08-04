@@ -7,15 +7,15 @@ public class WatchdogAlertMappingOverrides : IAutoMappingOverride<WatchdogAlert>
 {
     public void Override(AutoMapping<WatchdogAlert> mapping)
     {
-        mapping.HasMany(x => x.PreviousScrapedResults)
-            .Table($"{nameof(WatchdogAlert)}PreviousScrapedResult")
+        mapping.HasMany(x => x.PreviousScrapingResults)
+            .Table($"{nameof(WatchdogAlert)}{nameof(WatchdogAlert.PreviousScrapingResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();
                 x.Length(10000);
             });
-        mapping.HasMany(x => x.CurrentScrapedResults)
-            .Table($"{nameof(WatchdogAlert)}CurrentScrapedResult")
+        mapping.HasMany(x => x.CurrentScrapingResults)
+            .Table($"{nameof(WatchdogAlert)}{nameof(WatchdogAlert.CurrentScrapingResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();

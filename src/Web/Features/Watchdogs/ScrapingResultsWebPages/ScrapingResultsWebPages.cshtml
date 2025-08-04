@@ -13,10 +13,10 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Results</label>
                     <ul>
-                        @foreach (var selectedElement in watchdogWebPageArgs.SelectedElements)
+                        @foreach (var scrapingResult in watchdogWebPageArgs.ScrapingResults)
                         {
-                            <li data-watchdogs--scraping-results-web-pages-target="selectedElement">
-                                @Html.Raw(selectedElement)
+                            <li data-watchdogs--scraping-results-web-pages-target="scrapingResult">
+                                @Html.Raw(scrapingResult)
                             </li>
                         }
                     </ul>

@@ -46,7 +46,7 @@ public class when_creating_duplicate_watchdog_alert : BaseDatabaseTest
             })
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetSelectedElements(watchdogWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
+        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
         
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)

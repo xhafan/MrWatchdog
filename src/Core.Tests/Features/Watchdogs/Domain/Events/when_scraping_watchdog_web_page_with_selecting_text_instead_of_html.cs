@@ -49,10 +49,10 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     }
 
     [Test]
-    public void web_page_is_scraped_and_selected_elements_values_are_text_instead_of_html()
+    public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBe(["One Two Point & Hospital Two"]);
+        webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
     }
     
     private void _BuildEntities()

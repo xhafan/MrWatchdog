@@ -25,7 +25,7 @@ public class when_persisting_watchdog_web_page : BaseDatabaseTest
             })
             .Build();
         _newWatchdogWebPage = _newWatchdog.WebPages.Single();
-        _newWatchdog.SetSelectedElements(_newWatchdogWebPage.Id, ["<div>text</div>"]);
+        _newWatchdog.SetScrapingResults(_newWatchdogWebPage.Id, ["<div>text</div>"]);
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
@@ -42,7 +42,7 @@ public class when_persisting_watchdog_web_page : BaseDatabaseTest
         _persistedWatchdogWebPage.Selector.ShouldBe(".selector");
         _persistedWatchdogWebPage.SelectText.ShouldBe(true);
         _persistedWatchdogWebPage.Name.ShouldBe("url.com/page");
-        _persistedWatchdogWebPage.SelectedElements.ShouldBe(["text"]);
+        _persistedWatchdogWebPage.ScrapingResults.ShouldBe(["text"]);
         _persistedWatchdogWebPage.ScrapedOn.ShouldNotBeNull();
         _persistedWatchdogWebPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
     }

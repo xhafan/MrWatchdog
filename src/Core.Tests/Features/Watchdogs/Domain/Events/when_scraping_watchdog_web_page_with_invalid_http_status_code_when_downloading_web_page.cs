@@ -40,7 +40,7 @@ public class when_scraping_watchdog_web_page_with_invalid_http_status_code_when_
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.SelectedElements.ShouldBeEmpty();
+        webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe("Error scraping web page, HTTP status code: 404 Not Found");
     }

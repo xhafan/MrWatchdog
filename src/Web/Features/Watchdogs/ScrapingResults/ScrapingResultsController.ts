@@ -9,13 +9,11 @@ import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/Scraping
 export default class ScrapingResultsController extends Controller {
     static targets = [
         "searchTerm",
-        "selectedElement",
         "createWatchdogAlert",
         "createWatchdogAlertForm"
     ];
    
     declare searchTermTarget: HTMLInputElement;
-    declare selectedElementTargets: HTMLElement[];
     declare createWatchdogAlertTarget: HTMLButtonElement;
     declare createWatchdogAlertFormTarget: HTMLFormElement;
 

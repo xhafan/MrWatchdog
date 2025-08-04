@@ -33,13 +33,13 @@
                                  />
                 </div>
                 <div class="col-md-6">
-                    <turbo-frame id="watchdog_web_page_selected_elements_@Model.WatchdogWebPageId"
-                                 src="@Url.Page("WebPageSelectedElements", new
+                    <turbo-frame id="watchdog_web_page_scraping_results_@Model.WatchdogWebPageId"
+                                 src="@Url.Page("WebPageScrapingResults", new
                                       {
                                           watchdogId = Model.WatchdogId,
                                           watchdogWebPageId = Model.WatchdogWebPageId
                                       })"
-                                 data-watchdogs--detail-web-page-target="webPageSelectedElements"
+                                 data-watchdogs--detail-web-page-target="webPageScrapingResults"
                                  />
                 </div>
             </div>

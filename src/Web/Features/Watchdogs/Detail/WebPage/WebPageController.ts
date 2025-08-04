@@ -12,13 +12,13 @@ export default class WebPageController extends Controller {
     static targets = [
         "removeWebPageForm",
         "webPageOverview",
-        "webPageSelectedElements",
+        "webPageScrapingResults",
         "webPageName"
     ];
    
     declare removeWebPageFormTarget: HTMLFormElement;
     declare webPageOverviewTarget: FrameElement;
-    declare webPageSelectedElementsTarget: FrameElement;
+    declare webPageScrapingResultsTarget: FrameElement;
     declare webPageNameTarget: HTMLSpanElement;
 
     connect() {
@@ -46,7 +46,7 @@ export default class WebPageController extends Controller {
 
         var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
 
-        this.webPageSelectedElementsTarget.reload();
+        this.webPageScrapingResultsTarget.reload();
     }
 
     private async onWatchdogWebPageNameModified(event: CustomEventInit<string>) {

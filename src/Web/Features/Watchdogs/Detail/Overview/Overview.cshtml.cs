@@ -13,11 +13,11 @@ public class OverviewModel(IQueryExecutor queryExecutor, ICoreBus bus) : BasePag
     [BindProperty]
     public WatchdogOverviewArgs WatchdogOverviewArgs { get; set; } = null!;
 
-    public async Task OnGet(long id)
+    public async Task OnGet(long watchdogId)
     {
         WatchdogOverviewArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(
-                new GetWatchdogOverviewArgsQuery(id));
+                new GetWatchdogOverviewArgsQuery(watchdogId));
     }
     
     public async Task<IActionResult> OnPost()

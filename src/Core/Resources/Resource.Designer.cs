@@ -61,6 +61,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alert.
+        /// </summary>
+        public static string Alert {
+            get {
+                return ResourceManager.GetString("Alert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Watchdogs.
         /// </summary>
         public static string ListOfWatchdogs {

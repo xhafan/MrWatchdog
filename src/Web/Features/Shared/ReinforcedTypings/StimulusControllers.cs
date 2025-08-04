@@ -29,4 +29,13 @@ public static class StimulusControllers
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsScrapingResults = "watchdogs--scraping-results";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsScrapingResultsWebPages = "watchdogs--scraping-results-web-pages";    
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogAlert = "watchdogs--alert";    
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogAlertOverview = "watchdogs--alert-overview";    
 }

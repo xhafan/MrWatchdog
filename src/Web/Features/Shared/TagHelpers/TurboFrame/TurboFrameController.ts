@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
 import { formEditingCancelledEventName, formSubmitJobCompletedEventName } from "../ViewOrEditForm/ViewOrEditFormController";
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../BodyController";
 
 export default class TurboFrameController extends Controller {
 

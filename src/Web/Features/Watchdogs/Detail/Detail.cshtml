@@ -31,8 +31,7 @@
     <div class="row">
         <div class="col-md-6">
             <turbo-frame id="watchdog_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
-                         src="@Url.Page("Overview/Overview", new{id = Model.WatchdogDetailArgs.WatchdogId})"
-            >
+                         src="@Url.Page("Overview/Overview", new {Model.WatchdogDetailArgs.WatchdogId})">
             </turbo-frame>
         </div>
     </div>

@@ -14,6 +14,9 @@ import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailWebPageController from "../Watchdogs/Detail/WebPage/WebPageController";
 import WatchdogsDetailWebPageOverviewController from "../Watchdogs/Detail/WebPage/WebPageOverviewController";
 import WatchdogsScrapingResultsController from "../Watchdogs/ScrapingResults/ScrapingResultsController";
+import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import WatchdogsAlertController from "../Watchdogs/Alert/AlertController";
+import WatchdogsAlertOverviewController from "../Watchdogs/Alert/Overview/OverviewController";
 
 
 const application = Application.start();
@@ -26,6 +29,9 @@ application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailControl
 application.register(StimulusControllers.watchdogsDetailWebPage, WatchdogsDetailWebPageController);
 application.register(StimulusControllers.watchdogsDetailWebPageOverview, WatchdogsDetailWebPageOverviewController);
 application.register(StimulusControllers.watchdogsScrapingResults, WatchdogsScrapingResultsController);
+application.register(StimulusControllers.watchdogsScrapingResultsWebPages, WatchdogsScrapingResultsWebPagesController);
+application.register(StimulusControllers.watchdogAlert, WatchdogsAlertController);
+application.register(StimulusControllers.watchdogAlertOverview, WatchdogsAlertOverviewController);
 
 
 attachValidationAfterTurboLoad();

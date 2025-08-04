@@ -1,0 +1,27 @@
+﻿@model ScrapingResultsWebPages
+
+<label class="form-label fw-bold">Monitored web pages</label>
+
+@foreach (var watchdogWebPageArgs in Model.WatchdogScrapingResultsArgs.WebPages)
+{
+    <div class="card mb-1">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><a href="@watchdogWebPageArgs.Url" target="_blank">@watchdogWebPageArgs.Name</a></span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Results</label>
+                    <ul>
+                        @foreach (var selectedElement in watchdogWebPageArgs.SelectedElements)
+                        {
+                            <li data-watchdogs--scraping-results-web-pages-target="selectedElement">
+                                @Html.Raw(selectedElement)
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}

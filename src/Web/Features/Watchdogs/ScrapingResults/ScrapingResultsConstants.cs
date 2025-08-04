@@ -6,8 +6,8 @@ namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 public static class ScrapingResultsConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string CreateAlertButtonDefaultLabel = "Alert about new results";
+    public const string CreateAlertButtonNewResultsLabel = "Alert about new results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string CreateAlertButtonSearchLabel = "Alert about new matching results";
+    public const string CreateAlertButtonNewMatchingResultsLabel = "Alert about new matching results";
 }

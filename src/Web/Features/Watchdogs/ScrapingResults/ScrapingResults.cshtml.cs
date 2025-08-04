@@ -10,9 +10,7 @@ namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
 public class ScrapingResultsModel(
     IQueryExecutor queryExecutor,
-#pragma warning disable CS9113 // Parameter is unread.
     ICoreBus bus
-#pragma warning restore CS9113 // Parameter is unread.
 ) : BasePageModel
 {
     public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;

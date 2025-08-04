@@ -99,7 +99,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return new WatchdogScrapingResultsArgs
         {
             WatchdogId = Id,
-            Name = Name,
+            WatchdogName = Name,
             WebPages = _webPages
                 .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
                 .WhereNotNull()

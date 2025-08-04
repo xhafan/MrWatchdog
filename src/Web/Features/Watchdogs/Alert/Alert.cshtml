@@ -1,12 +1,43 @@
 ﻿@page "{watchdogAlertId}"
 @using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model AlertModel
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = "Alert";
+    var searchTermPrefix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogAlertArgs.SearchTerm) ? $"{Model.WatchdogAlertArgs.SearchTerm} - " : "")}";
+    var title = $"{searchTermPrefix}{Model.WatchdogScrapingResultsArgs.WatchdogName}";
+    ViewData["Title"] = title;
 }
 
-<h1>@ViewData["Title"]</h1>
+@section Navigation {
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Watchdogs/Alerts/Alerts">@SharedLocalizer[Resource.MyAlerts]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
+        </ol>
+    </nav>
+}
 
+<div @Stimulus.Controller(StimulusControllers.WatchdogAlert)>
+    <h1>
+        <span data-watchdogs--alert-target="searchTermPrefix">@searchTermPrefix</span>
+        <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@Model.WatchdogAlertArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
+    </h1>
+
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <turbo-frame id="watchdog_alert_overview_@(Model.WatchdogAlertArgs.WatchdogAlertId)"
+                             src="@Url.Page("Overview/Overview", new {Model.WatchdogAlertArgs.WatchdogAlertId})">
+                </turbo-frame>
+            </div>
+        </div>
+
+        <scraping-results-web-pages watchdog-scraping-results-args="Model.WatchdogScrapingResultsArgs"></scraping-results-web-pages>
+    </div>
+</div>

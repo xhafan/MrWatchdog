@@ -4,6 +4,6 @@
 
 export abstract class ScrapingResultsConstants
 {
-	public static createAlertButtonDefaultLabel: string = `Alert about new results`;
-	public static createAlertButtonSearchLabel: string = `Alert about new matching results`;
+	public static createAlertButtonNewResultsLabel: string = `Alert about new results`;
+	public static createAlertButtonNewMatchingResultsLabel: string = `Alert about new matching results`;
 }

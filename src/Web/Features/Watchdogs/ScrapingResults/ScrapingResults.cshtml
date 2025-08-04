@@ -7,7 +7,8 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = Model.WatchdogScrapingResultsArgs.Name;
+    var title = Model.WatchdogScrapingResultsArgs.WatchdogName;
+    ViewData["Title"] = title;
 }
 
 @section Navigation {
@@ -16,12 +17,12 @@
             <li class="breadcrumb-item">
                 <a asp-page="/Watchdogs/Index">@SharedLocalizer[Resource.ListOfWatchdogs]</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
         </ol>
     </nav>
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>@title</h1>
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogsScrapingResults)>
     <form asp-page-handler="CreateWatchdogAlert"
@@ -40,34 +41,10 @@
             </div>
             <button class="btn btn-primary mt-3"
                     data-watchdogs--scraping-results-target="createWatchdogAlert">
-                @ScrapingResultsConstants.CreateAlertButtonDefaultLabel
+                @ScrapingResultsConstants.CreateAlertButtonNewResultsLabel
             </button>
         </div>
     </form>
-
-    <label class="form-label fw-bold">Monitored web pages</label>
-
-    @foreach (var watchdogWebPageArgs in Model.WatchdogScrapingResultsArgs.WebPages)
-    {
-        <div class="card mb-1">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span><a href="@watchdogWebPageArgs.Url" target="_blank">@watchdogWebPageArgs.Name</a></span>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Results</label>
-                        <ul>
-                            @foreach (var selectedElement in watchdogWebPageArgs.SelectedElements)
-                            {
-                                <li data-watchdogs--scraping-results-target="selectedElement">
-                                    @Html.Raw(selectedElement)
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+    
+    <scraping-results-web-pages watchdog-scraping-results-args="Model.WatchdogScrapingResultsArgs"></scraping-results-web-pages>
 </div>

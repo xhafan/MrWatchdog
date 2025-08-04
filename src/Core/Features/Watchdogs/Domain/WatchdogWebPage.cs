@@ -1,5 +1,4 @@
 ﻿using CoreDdd.Domain.Events;
-using CoreUtils;
 using CoreUtils.Extensions;
 using Ganss.Xss;
 using HtmlAgilityPack;

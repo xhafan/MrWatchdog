@@ -13,13 +13,14 @@ public class GetWatchdogsQueryHandler(
 
     public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogsQuery query)
     {
-        GetWatchdogsQueryResult getWatchdogsQueryResult = null!;
+        GetWatchdogsQueryResult result = null!;
 
         var results = await _unitOfWork.Session!.QueryOver<Watchdog>()
             .SelectList(list => list
-                .Select(x => x.Id).WithAlias(() => getWatchdogsQueryResult.Id)
-                .Select(x => x.Name).WithAlias(() => getWatchdogsQueryResult.Name)
+                .Select(x => x.Id).WithAlias(() => result.WatchdogId)
+                .Select(x => x.Name).WithAlias(() => result.WatchdogName)
             )
+            .OrderByAlias(() => result.WatchdogName).Asc
             .TransformUsing(Transformers.AliasToBean<GetWatchdogsQueryResult>())
             .ListAsync<TResult>();
         

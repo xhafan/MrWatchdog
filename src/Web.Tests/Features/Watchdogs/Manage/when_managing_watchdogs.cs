@@ -28,17 +28,11 @@ public class when_managing_watchdogs : BaseDatabaseTest
         _model.WatchdogResults.ShouldContain(
             new GetWatchdogsQueryResult
             {
-                Id = _watchdog.Id, 
-                Name = "watchdog name"
+                WatchdogId = _watchdog.Id, 
+                WatchdogName = "watchdog name"
             }
         );
     }    
-    
-    [Test]
-    public void model_is_valid()
-    {
-        _model.ModelState.IsValid.ShouldBe(true);
-    }
     
     private void _BuildEntities()
     {

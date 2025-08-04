@@ -8,13 +8,11 @@
     ViewData["Title"] = SharedLocalizer[Resource.ListOfWatchdogs];
 }
 
-<div>
-    <h1 class="display-4">@SharedLocalizer[Resource.ListOfWatchdogs]</h1>
-    
-    @foreach (var watchdogScrapingResults in Model.WatchdogScrapingResults)
-    {
-        <div>
-            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogScrapingResults.Id">@watchdogScrapingResults.Name</a>
-        </div>
-    }
-</div>
+<h1 class="display-4">@SharedLocalizer[Resource.ListOfWatchdogs]</h1>
+
+@foreach (var watchdogScrapingResults in Model.WatchdogScrapingResults)
+{
+    <div>
+        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogScrapingResults.WatchdogId">@watchdogScrapingResults.WatchdogName</a>
+    </div>
+}

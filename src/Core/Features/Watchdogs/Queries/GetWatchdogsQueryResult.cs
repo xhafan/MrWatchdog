@@ -2,6 +2,6 @@
 
 public record GetWatchdogsQueryResult
 {
-    public required long Id { get; init; }
-    public required string Name { get; init; } = null!;
+    public required long WatchdogId { get; init; }
+    public required string WatchdogName { get; init; } = null!;
 }

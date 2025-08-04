@@ -1,10 +1,10 @@
 using CoreDdd.Queries;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Manage;
 
-public class ManageModel(IQueryExecutor queryExecutor) : PageModel
+public class ManageModel(IQueryExecutor queryExecutor) : BasePageModel
 {
     public IEnumerable<GetWatchdogsQueryResult> WatchdogResults { get; private set; } = null!;
     

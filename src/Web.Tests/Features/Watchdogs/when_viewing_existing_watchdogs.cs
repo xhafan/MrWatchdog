@@ -28,8 +28,8 @@ public class when_viewing_existing_watchdogs : BaseDatabaseTest
         _model.WatchdogScrapingResults.ShouldContain(
             new GetWatchdogsQueryResult
             {
-                Id = _watchdog.Id, 
-                Name = "watchdog name"
+                WatchdogId = _watchdog.Id, 
+                WatchdogName = "watchdog name"
             }
         );
     }    

@@ -5,8 +5,17 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = SharedLocalizer[Resource.MyAlerts];
+    var title = SharedLocalizer[Resource.MyAlerts];
+    ViewData["Title"] = title;
 }
 
-<h1>@SharedLocalizer[Resource.MyAlerts]</h1>
+<h1 class="display-4">@title</h1>
 
+@foreach (var watchdogAlert in Model.WatchdogAlerts)
+{
+    <div>
+        <a asp-page="/Watchdogs/Alert/Alert" asp-route-watchdogAlertId="@watchdogAlert.WatchdogAlertId">
+            @(!string.IsNullOrWhiteSpace(watchdogAlert.SearchTerm) ? $"{watchdogAlert.SearchTerm} - " : "")@watchdogAlert.WatchdogName
+        </a>
+    </div>
+}

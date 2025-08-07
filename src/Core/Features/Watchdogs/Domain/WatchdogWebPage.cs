@@ -84,7 +84,7 @@ public class WatchdogWebPage : VersionedEntity
         if (SelectText)
         {
             scrapingResults = scrapingResults
-                .Select(html => _getTextFromHtml(sanitizer.Sanitize(html)))
+                .Select(_getTextFromHtml)
                 .Where(text => !string.IsNullOrWhiteSpace(text))
                 .ToList();
 
@@ -96,7 +96,6 @@ public class WatchdogWebPage : VersionedEntity
         }
         else
         {
-
             var scrapingResultsWithNonEmptyText = scrapingResults
                 .Select(html => sanitizer.Sanitize(html))
                 .Where(html => !string.IsNullOrWhiteSpace(_getTextFromHtml(html)))

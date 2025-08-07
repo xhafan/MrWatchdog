@@ -10,10 +10,14 @@
             @if (Model.WatchdogWebPageScrapingResultsDto.ScrapingResults.Any())
             {
                 <div style="max-height:360px; overflow-y:auto;">
-                    @foreach (var scrapingResults in Model.WatchdogWebPageScrapingResultsDto.ScrapingResults)
-                    {
-                        <textarea readonly style="width:100%" rows="7">@scrapingResults</textarea>
-                    }
+                    <ul>
+                        @foreach (var scrapingResults in Model.WatchdogWebPageScrapingResultsDto.ScrapingResults)
+                        {
+                            <li>
+                                @Html.Raw(scrapingResults)
+                            </li>
+                        }
+                    </ul>
                 </div>
             }
             else
@@ -32,7 +36,7 @@
         </div>
         @if (Model.WatchdogWebPageScrapingResultsDto.ScrapedOn != null)
         {
-            <span>Scraped on: @($"{Model.WatchdogWebPageScrapingResultsDto.ScrapedOn:yyyy-MM-dd HH:mm:ss UTC}")</span>
+            <div class="mt-3">Scraped on: @($"{Model.WatchdogWebPageScrapingResultsDto.ScrapedOn:yyyy-MM-dd HH:mm:ss UTC}")</div>
         }
     </div>
 </!turbo-frame>

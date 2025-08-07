@@ -168,13 +168,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
             if (!response.IsSuccessStatusCode)
             {
-                scrapingErrorMessage =
-                    $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}{(
-                        !string.IsNullOrWhiteSpace(responseContent)
-                            ? $": {responseContent}"
-                            : ""
-                    )}";
-
+                scrapingErrorMessage = $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}";
             }
         }
         catch (Exception ex)

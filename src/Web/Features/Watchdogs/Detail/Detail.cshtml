@@ -67,7 +67,7 @@
         </div>
     </div>
     <h2>Watched web pages</h2>
-    <div id="web_pages_to_monitor" data-watchdogs--detail-target="webPages">
+    <div data-watchdogs--detail-target="webPages">
         @foreach (var watchdogWebPageId in Model.WatchdogDetailArgs.WebPageIds)
         {
             <partial name="WebPage/WebPageTurboFramePartial"

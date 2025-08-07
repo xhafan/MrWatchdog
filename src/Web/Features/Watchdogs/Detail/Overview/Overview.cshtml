@@ -4,26 +4,40 @@
    Layout = null;
 }
 <!turbo-frame id="watchdog_overview_@(Model.WatchdogOverviewArgs.WatchdogId)">
-    <view-or-edit-form action="@Url.Page("Overview")">
-        
-        <view-mode-item>
-            <div class="mb-3">
-                <label asp-for="WatchdogOverviewArgs.Name" class="form-label fw-bold"></label>
-                <div>@Model.WatchdogOverviewArgs.Name</div>
-            </div>
-        </view-mode-item>
-        
-        <edit-mode-item>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="WatchdogOverviewArgs.WatchdogId" type="hidden" />
+    <div class="card">
+        <div class="card-body">
+            <view-or-edit-form action="@Url.Page("Overview")">
+                
+                <view-mode-item>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.Name" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogOverviewArgs.Name</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
+                    </div>
+                </view-mode-item>
+                
+                <edit-mode-item>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="WatchdogOverviewArgs.WatchdogId" type="hidden" />
 
-            <div class="mb-3">
-                <label asp-for="WatchdogOverviewArgs.Name" class="form-label fw-bold"></label>
-                <input asp-for="WatchdogOverviewArgs.Name" class="form-control" />
-                <span asp-validation-for="WatchdogOverviewArgs.Name" class="text-danger"></span>
-            </div>
-        </edit-mode-item>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.Name" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogOverviewArgs.Name" class="form-control" />
+                        <span asp-validation-for="WatchdogOverviewArgs.Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-control" />
+                        <span asp-validation-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="text-danger"></span>
+                    </div>
+                </edit-mode-item>
 
-    </view-or-edit-form>
+            </view-or-edit-form>
+        </div>
+    </div>
 </!turbo-frame>
 

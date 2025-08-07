@@ -6,7 +6,7 @@
    Layout = null;
 }
 <!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageId)">
-    <div class="card mb-1" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
+    <div class="card mb-3" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
         <div class="card-header d-flex justify-content-between align-items-center">
             <span data-watchdogs--detail-web-page-target="webPageName">
                 @Model.WatchdogWebPageName
@@ -17,7 +17,7 @@
                   method="post"
                   data-watchdogs--detail-web-page-target="removeWebPageForm"
                   >
-                <button type="submit" class="btn-close"></button>
+                <button type="submit" class="border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
             </form>
         </div>
         <div class="card-body">

@@ -24,10 +24,42 @@
 }
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogAlert)>
-    <h1>
-        <span data-watchdogs--alert-target="searchTermPrefix">@searchTermPrefix</span>
-        <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@Model.WatchdogAlertArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
-    </h1>
+    
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1>
+                <span data-watchdogs--alert-target="searchTermPrefix">@searchTermPrefix</span>
+                <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@Model.WatchdogAlertArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
+            </h1>
+        </div>
+        <div>
+            <div class="dropdown">
+                <button
+                    class="btn btn-sm"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    >
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <form asp-page-handler="DeleteWatchdogAlert"
+                              asp-route-watchdogAlertId="@Model.WatchdogAlertArgs.WatchdogAlertId"
+                              method="post"
+                              data-watchdogs--alert-target="deleteWatchdogAlertForm"
+                              >
+                            <button class="dropdown-item text-danger" 
+                                    type="submit"
+                                    >
+                                Delete watchdog alert
+                            </button>
+                        </form>
+                         
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <div>
         <div class="row">

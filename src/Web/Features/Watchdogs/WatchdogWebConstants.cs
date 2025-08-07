@@ -3,7 +3,7 @@
 namespace MrWatchdog.Web.Features.Watchdogs;
 
 [TsClass(IncludeNamespace = false)]
-public static class WatchdogConstants
+public static class WatchdogWebConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]    
     public const string WatchdogIdVariable = "$watchdogId";
@@ -23,4 +23,10 @@ public static class WatchdogConstants
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogAlertUrl = $"/Watchdogs/Alert/{WatchdogAlertIdVariable}";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string ManageWatchdogsUrl = "/Watchdogs/Manage";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsAlertsUrl = "/Watchdogs/Alerts";
 }

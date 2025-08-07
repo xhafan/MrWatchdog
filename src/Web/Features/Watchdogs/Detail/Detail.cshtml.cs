@@ -26,4 +26,11 @@ public class DetailModel(
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }
+    
+    public async Task<IActionResult> OnPostDeleteWatchdog(long watchdogId)
+    {
+        var command = new DeleteWatchdogCommand(watchdogId);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
+    }    
 }

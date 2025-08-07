@@ -8,9 +8,9 @@ using MrWatchdog.TestsShared.Extensions;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
 
 [TestFixture]
-public class when_updating_watchdog_overview : BaseDatabaseTest
+public class when_deleting_watchdog : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Watchdog? _watchdog;
 
     [SetUp]
     public async Task Context()
@@ -19,26 +19,20 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new UpdateWatchdogOverviewCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new DeleteWatchdogCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
 
-        await handler.Handle(new UpdateWatchdogOverviewCommand(new WatchdogOverviewArgs
-        {
-            WatchdogId = _watchdog.Id,
-            Name = "updated watchdog Name",
-            ScrapingIntervalInSeconds = 30
-        }));
+        await handler.Handle(new DeleteWatchdogCommand(_watchdog!.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _watchdog = UnitOfWork.Get<Watchdog>(_watchdog.Id);
     }
 
     [Test]
-    public void watchdog_overview_is_updated()
+    public void watchdog_is_deleted()
     {
-        _watchdog.Name.ShouldBe("updated watchdog Name");
-        _watchdog.ScrapingIntervalInSeconds.ShouldBe(30);
+        _watchdog.ShouldBeNull();
     }
 
     private void _BuildEntities()

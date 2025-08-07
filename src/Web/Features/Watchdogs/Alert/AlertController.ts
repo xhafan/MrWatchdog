@@ -1,16 +1,28 @@
 import { Controller } from "@hotwired/stimulus";
 import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
+import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
+import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
 
 export default class AlertController extends Controller {
     static targets  = [
-        "searchTermPrefix"
+        "searchTermPrefix",
+        "deleteWatchdogAlertForm"
     ];
 
     declare searchTermPrefixTarget: HTMLSpanElement;
+    declare deleteWatchdogAlertFormTarget: HTMLFormElement;
 
     connect() {
         this.registerSearchTermModifiedEventHandler();
+
+        formSubmitWithWaitForJobCompletion(
+            this.deleteWatchdogAlertFormTarget, 
+            async jobDto => {
+                Turbo.visit(WatchdogWebConstants.watchdogsAlertsUrl);
+            },
+            "Really delete the watchdog alert?"
+        );
     }
 
     private registerSearchTermModifiedEventHandler() {

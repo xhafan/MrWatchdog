@@ -29,5 +29,6 @@ public class when_creating_watchdog : BaseDatabaseTest
     public void new_watchdog_is_created()
     {
         _newWatchdog.ShouldNotBeNull();
+        _newWatchdog.ScrapingIntervalInSeconds.ShouldBe(86400);
     }
 }

@@ -27,7 +27,7 @@ export default class WebPageController extends Controller {
             async jobDto => {
                 this.element.dispatchEvent(new CustomEvent(watchdogWebPageRemovedEvent, { bubbles: true, detail: this.element }));
             },
-            "Really remove the web page to monitor?"
+            "Really remove the web page to watch?"
         );
 
         this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateWatchdogWebPageJobCompleted.bind(this), {});

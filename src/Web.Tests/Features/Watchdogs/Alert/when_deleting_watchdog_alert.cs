@@ -5,42 +5,36 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Alert;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Alert;
 
 [TestFixture]
-public class when_updating_watchdog_detail_overview : BaseDatabaseTest
+public class when_deleting_watchdog_alert : BaseDatabaseTest
 {
+    private AlertModel _model = null!;
+    private WatchdogAlert _watchdogAlert = null!;
+    private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
-    private OverviewModel _model = null!;
-    private ICoreBus _bus = null!;    
-    private Watchdog _watchdog = null!;
-
+    
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
+        
         _bus = A.Fake<ICoreBus>();
         
-        _model = new OverviewModelBuilder(UnitOfWork)
+        _model = new AlertModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .Build();
-        _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
-        {
-            WatchdogId = _watchdog.Id,
-            Name = "watchdog updated name",
-            ScrapingIntervalInSeconds = 60
-        };
-
-        _actionResult = await _model.OnPost();
+        
+        _actionResult = await _model.OnPostDeleteWatchdogAlert(_watchdogAlert.Id);
     }
 
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new UpdateWatchdogOverviewCommand(_model.WatchdogOverviewArgs)))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new DeleteWatchdogAlertCommand(_watchdogAlert.Id))).MustHaveHappenedOnceExactly();
     }
     
     [Test]
@@ -52,10 +46,10 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
         value.ShouldBeOfType<string>();
         var jobGuid = (string) value;
         jobGuid.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
-    }    
+    }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-    }    
+        _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork).Build();
+    }
 }

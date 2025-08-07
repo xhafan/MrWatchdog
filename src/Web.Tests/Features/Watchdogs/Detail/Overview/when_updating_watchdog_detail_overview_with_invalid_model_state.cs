@@ -25,7 +25,8 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
         _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
         {
             WatchdogId = _watchdog.Id,
-            Name = null!
+            Name = null!,
+            ScrapingIntervalInSeconds = 0
         };
         ModelValidator.ValidateModel(_model);
 
@@ -44,11 +45,19 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
     public void model_is_invalid()
     {
         _model.ModelState.IsValid.ShouldBe(false);
-        const string key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.Name)}";
-        _model.ModelState.Keys.ShouldBe([key]);
+        
+        var key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.Name)}";
+        _model.ModelState.ShouldContainKey(key);
         var nameErrors = _model.ModelState[key]?.Errors;
         nameErrors.ShouldNotBeNull();
         nameErrors.ShouldContain(x => x.ErrorMessage.Contains("required"));
+        
+        key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.ScrapingIntervalInSeconds)}";
+        _model.ModelState.ShouldContainKey(key);
+        var scrapingIntervalInSecondsErrors = _model.ModelState[key]?.Errors;
+        scrapingIntervalInSecondsErrors.ShouldNotBeNull();
+        scrapingIntervalInSecondsErrors.ShouldContain(x => x.ErrorMessage.Contains("greater than"));
+        
     }   
 
     private void _BuildEntities()

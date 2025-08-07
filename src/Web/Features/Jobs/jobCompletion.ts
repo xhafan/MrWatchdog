@@ -6,7 +6,7 @@ import { RebusConstants } from "../Shared/Generated/RebusConstants";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
-    onJobCompletion: (job: JobDto) => void,
+    onJobCompletion: (job: JobDto) => void,    
     confirmationMessage: string | undefined = undefined
 ) {
     form.onsubmit = async (event: SubmitEvent) => {
@@ -85,9 +85,7 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
             }
             else if (jobDto.numberOfHandlingAttempts >= RebusConstants.maxDeliveryAttempts) {
                 let jobLastException = getJobLastException(jobDto);
-                if (jobLastException) {
-                    return jobDto;
-                }
+                throw new Error(`Job ${jobDto.guid} failed: ${jobLastException}`);
             }
         }
         return pollJob(Math.min(delay * 2, 8000));
@@ -98,7 +96,7 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
     return jobDto;
 }
 
-function getJobLastException(jobDto: JobDto) : string | null {
+function getJobLastException(jobDto: JobDto) : string {
     let lastJobHandlingAttempt = Enumerable.from(jobDto.handlingAttempts).orderByDescending(x => x.endedOn).first();
     return lastJobHandlingAttempt.exception;
 }

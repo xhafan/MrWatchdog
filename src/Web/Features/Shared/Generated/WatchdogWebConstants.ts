@@ -2,7 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export abstract class WatchdogConstants
+export abstract class WatchdogWebConstants
 {
 	public static watchdogIdVariable: string = `$watchdogId`;
 	public static watchdogDetailUrl: string = `/Watchdogs/Detail/$watchdogId`;
@@ -10,4 +10,6 @@ export abstract class WatchdogConstants
 	public static watchdogDetailWebPageTurboFrameUrl: string = `/Watchdogs/Detail/WebPage/WebPageTurboFrame?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
 	public static watchdogAlertIdVariable: string = `$watchdogAlertId`;
 	public static watchdogAlertUrl: string = `/Watchdogs/Alert/$watchdogAlertId`;
+	public static manageWatchdogsUrl: string = `/Watchdogs/Manage`;
+	public static watchdogsAlertsUrl: string = `/Watchdogs/Alerts`;
 }

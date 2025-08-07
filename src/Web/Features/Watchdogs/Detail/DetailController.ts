@@ -5,18 +5,20 @@ import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { watchdogWebPageRemovedEvent } from "./WebPage/WebPageController";
-import { WatchdogConstants } from "../../Shared/Generated/WatchdogConstants";
+import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [
         "webPages",
         "addWebPageForm",
-        "webPageTurboFrame"
+        "webPageTurboFrame",
+        "deleteWatchdogForm"
     ];
    
     declare webPagesTarget: HTMLDivElement;
     declare addWebPageFormTarget: HTMLFormElement;
     declare webPageTurboFrameTargets: HTMLFormElement[];
+    declare deleteWatchdogFormTarget: HTMLFormElement;
 
     connect() {
         formSubmitWithWaitForJobCompletion(
@@ -28,9 +30,9 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     throw new Error("Error getting created WatchdogWebPage.");
                 }
 
-                const webPageTurboFrameUrl = WatchdogConstants.watchdogDetailWebPageTurboFrameUrl
-                    .replace(WatchdogConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
-                    .replace(WatchdogConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
+                const webPageTurboFrameUrl = WatchdogWebConstants.watchdogDetailWebPageTurboFrameUrl
+                    .replace(WatchdogWebConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
+                    .replace(WatchdogWebConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
 
                 const response = await fetch(webPageTurboFrameUrl);
                 if (response.ok) {
@@ -38,6 +40,14 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     this.webPagesTarget.insertAdjacentHTML("beforeend", html);
                 }
             }
+        );
+
+        formSubmitWithWaitForJobCompletion(
+            this.deleteWatchdogFormTarget, 
+            async jobDto => {
+                Turbo.visit(WatchdogWebConstants.manageWatchdogsUrl);
+            },
+            "Really delete the watchdog with all watched web pages?"
         );
 
         this.element.addEventListener(watchdogWebPageRemovedEvent, this.onWatchdogWebPageRemoved.bind(this));

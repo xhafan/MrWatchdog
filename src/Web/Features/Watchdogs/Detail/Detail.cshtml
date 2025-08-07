@@ -21,21 +21,52 @@
     </nav>
 }
 
-<h1>@ViewData["Title"]</h1>
-
 <div @Stimulus.Controller(
          StimulusControllers.WatchdogsDetail,
          new DetailStimulusModel(Model.WatchdogDetailArgs.WatchdogId)
-     )
-     >
-    <div class="row">
+     )>
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div>
+            <div class="dropdown">
+                 <button
+                     class="btn btn-sm"
+                     type="button"
+                     data-bs-toggle="dropdown"
+                     >
+                     <i class="fa-solid fa-bars"></i>
+                 </button>
+                 <ul class="dropdown-menu dropdown-menu-end">
+                     <li>
+                         <form asp-page-handler="DeleteWatchdog"
+                               asp-route-watchdogId="@Model.WatchdogDetailArgs.WatchdogId"
+                               method="post"
+                               data-watchdogs--detail-target="deleteWatchdogForm"
+                               >
+                             <button class="dropdown-item text-danger" 
+                                     type="submit"
+                                     >
+                                 Delete watchdog
+                             </button>
+                         </form>
+                         
+                     </li>
+                 </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-3">
         <div class="col-md-6">
             <turbo-frame id="watchdog_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
                          src="@Url.Page("Overview/Overview", new {Model.WatchdogDetailArgs.WatchdogId})">
             </turbo-frame>
         </div>
     </div>
-    <label class="form-label fw-bold">Web pages to monitor</label>
+    <h2>Watched web pages</h2>
     <div id="web_pages_to_monitor" data-watchdogs--detail-target="webPages">
         @foreach (var watchdogWebPageId in Model.WatchdogDetailArgs.WebPageIds)
         {
@@ -48,7 +79,7 @@
           asp-route-watchdogId="@Model.WatchdogDetailArgs.WatchdogId"
           data-watchdogs--detail-target="addWebPageForm">
         <button type="submit" class="btn btn-primary">
-            Add web page to monitor
+            Add web page to watch
         </button>
     </form>
 </div>

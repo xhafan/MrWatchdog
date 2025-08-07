@@ -1,5 +1,8 @@
 ﻿using CoreDdd.Domain;
 using CoreUtils;
+using CoreUtils.Extensions;
+using Fizzler.Systems.HtmlAgilityPack;
+using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Extensions;
 
@@ -7,6 +10,8 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class Watchdog : VersionedEntity, IAggregateRoot
 {
+    private const int ScrapingIntervalOneDayInSeconds = 86400;
+    
     private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
 
     protected Watchdog() {}
@@ -14,9 +19,12 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public Watchdog(string name)
     {
         Name = name;
+        ScrapingIntervalInSeconds = ScrapingIntervalOneDayInSeconds;
     }
     
     public virtual string Name { get; protected set; } = null!;
+    public virtual int ScrapingIntervalInSeconds { get; protected set; }
+    public virtual DateTime? NextScrapingOn { get; protected set; }
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
 
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
@@ -34,7 +42,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return new WatchdogOverviewArgs
         {
             WatchdogId = Id, 
-            Name = Name
+            Name = Name,
+            ScrapingIntervalInSeconds = ScrapingIntervalInSeconds
         };
     }
 
@@ -43,6 +52,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         Guard.Hope(Id == watchdogOverviewArgs.WatchdogId, "Invalid watchdog Id.");
         
         Name = watchdogOverviewArgs.Name;
+        ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
     }
 
     public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
@@ -105,5 +115,84 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                 .WhereNotNull()
                 .ToList()
         };
-    }    
+    }
+
+    public virtual async Task Scrape(IHttpClientFactory httpClientFactory)
+    {
+        var webPagesToScrape = _webPages.Where(x => !string.IsNullOrWhiteSpace(x.Url)).ToList();
+
+        await Parallel.ForEachAsync(
+            webPagesToScrape,
+                new ParallelOptions {MaxDegreeOfParallelism = 5},
+                async (webPage, _) =>
+                {
+                    await ScrapeWebPage(webPage.Id, httpClientFactory);
+                }
+            );        
+        
+        NextScrapingOn ??= DateTime.UtcNow;
+        NextScrapingOn = NextScrapingOn.Value.AddSeconds(ScrapingIntervalInSeconds);
+    }
+    
+    public virtual void SetNextScrapingOn(DateTime? nextScrapingOn)
+    {
+        NextScrapingOn = nextScrapingOn;
+    }
+
+    public virtual async Task ScrapeWebPage(long watchdogWebPageId, IHttpClientFactory httpClientFactory)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+
+        var httpClient = httpClientFactory.CreateClient();
+        
+        string? responseContent = null;
+        string? scrapingErrorMessage = null;
+        
+        try
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, webPage.Url);
+            var response = await httpClient.SendAsync(request);
+            responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                scrapingErrorMessage =
+                    $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}{(
+                        !string.IsNullOrWhiteSpace(responseContent)
+                            ? $": {responseContent}"
+                            : ""
+                    )}";
+
+            }
+        }
+        catch (Exception ex)
+        {
+            scrapingErrorMessage = ex.Message;
+        }
+
+        if (scrapingErrorMessage != null)
+        {
+            webPage.SetScrapingErrorMessage(scrapingErrorMessage);
+            return;
+        }
+        
+        Guard.Hope(responseContent != null, nameof(responseContent) + " is null");
+
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(responseContent);
+        
+        var nodes = htmlDoc.DocumentNode.QuerySelectorAll(webPage.Selector).ToList();
+        if (nodes.IsEmpty())
+        {
+            scrapingErrorMessage = "No HTML node selected. Please review the Selector.";
+        } 
+
+        if (scrapingErrorMessage != null)
+        {
+            webPage.SetScrapingErrorMessage(scrapingErrorMessage);
+            return;
+        }        
+        
+        webPage.SetScrapingResults(nodes.Select(x => x.OuterHtml).ToList());
+    }
 }

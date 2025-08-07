@@ -20,7 +20,7 @@ using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
 
-namespace MrWatchdog.Web;
+namespace MrWatchdog.Web.HostedServices;
 
 public class RebusHostedService(
     string environmentInputQueueName,

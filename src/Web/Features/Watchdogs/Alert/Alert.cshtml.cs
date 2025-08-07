@@ -1,13 +1,16 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Alert;
 
 public class AlertModel(
-    IQueryExecutor queryExecutor
+    IQueryExecutor queryExecutor,
+    ICoreBus bus
 ) : BasePageModel
 {
     public WatchdogAlertArgs WatchdogAlertArgs { get; private set; } = null!;
@@ -30,4 +33,11 @@ public class AlertModel(
                 new GetWatchdogScrapingResultsArgsQuery(WatchdogAlertArgs.WatchdogId)
             );       
     }
+    
+    public async Task<IActionResult> OnPostDeleteWatchdogAlert(long watchdogAlertId)
+    {
+        var command = new DeleteWatchdogAlertCommand(watchdogAlertId);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
+    }    
 }

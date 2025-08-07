@@ -16,6 +16,7 @@ using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using System.Text.RegularExpressions;
 using MrWatchdog.Core.Resources;
+using MrWatchdog.Web.HostedServices;
 using Rebus.Transport.InMem;
 
 namespace MrWatchdog.Web;
@@ -113,6 +114,9 @@ public class Program
                 serviceProvider.GetRequiredService<IConfiguration>()
             )
         );
+        
+        builder.Services.Configure<WatchdogScrapingSchedulerHostedServiceOptions>(builder.Configuration.GetSection(nameof(WatchdogScrapingSchedulerHostedService)));
+        builder.Services.AddHostedService<WatchdogScrapingSchedulerHostedService>();
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -121,6 +125,7 @@ public class Program
         
         builder.Services.AddHttpClient();
         builder.Services.AddLocalization();
+       
         
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();

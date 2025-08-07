@@ -8,41 +8,41 @@ using NHibernate;
 
 namespace MrWatchdog.Web.HostedServices;
 
-public class WatchdogScrapingSchedulerHostedService(
+public class KickOffDueWatchdogsScrapingHostedService(
     INhibernateConfigurator nhibernateConfigurator,
     ICoreBus bus,
-    IOptions<WatchdogScrapingSchedulerHostedServiceOptions> options,
-    ILogger<WatchdogScrapingSchedulerHostedService> logger
+    IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions> options,
+    ILogger<KickOffDueWatchdogsScrapingHostedService> logger
 ) : BackgroundService
 {
-    private const int ScheduleScrapingIntervalInSeconds = ScrapingConstants.ScrapingIntervalInSeconds;
+    private const int ScrapingIntervalInSeconds = ScrapingConstants.ScrapingIntervalInSeconds;
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         if (options.Value.IsDisabled)
         {
-            logger.LogInformation($"{nameof(WatchdogScrapingSchedulerHostedService)} is disabled.");
+            logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is disabled.");
             return;
         }
 
-        logger.LogInformation($"{nameof(WatchdogScrapingSchedulerHostedService)} is starting.");
+        logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is starting.");
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            await _ScheduleWatchdogsScraping();
+            await _KickOffDueWatchdogsScraping();
 
-            await Task.Delay(TimeSpan.FromSeconds(ScheduleScrapingIntervalInSeconds), cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(ScrapingIntervalInSeconds), cancellationToken);
         }
 
-        logger.LogInformation($"{nameof(WatchdogScrapingSchedulerHostedService)} is stopping.");
+        logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is stopping.");
     }
     
-    private async Task _ScheduleWatchdogsScraping()
+    private async Task _KickOffDueWatchdogsScraping()
     {
         using var unitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
         unitOfWork.BeginTransaction();
 
-        var watchdogsToScrape = await unitOfWork.Session
+        var dueWatchdogsToScrape = await unitOfWork.Session
             .CreateSQLQuery(
                 """
                 SELECT
@@ -56,9 +56,11 @@ public class WatchdogScrapingSchedulerHostedService(
             .SetParameter("utcNow", DateTime.UtcNow, NHibernateUtil.DateTime)
             .ListAsync<Watchdog>();
 
-        foreach (var watchdogToScrape in watchdogsToScrape)
+        foreach (var watchdogToScrape in dueWatchdogsToScrape)
         {
             await bus.Send(new ScrapeWatchdogCommand(watchdogToScrape.Id));
+            
+            watchdogToScrape.ScheduleNextScraping();
         }
     }    
 }

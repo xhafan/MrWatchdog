@@ -10,7 +10,7 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.HostedServices;
 
-namespace MrWatchdog.Web.Tests.HostedServices.WatchdogScrapingSchedulerHostedServices;
+namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueWatchdogsScrapingHostedServices;
 
 [TestFixture]
 public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_hosted_service_disabled : BaseDatabaseTest
@@ -26,16 +26,16 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
         await UnitOfWork.CommitAsync();
         UnitOfWork.BeginTransaction();
         
-        var logger = A.Fake<ILogger<WatchdogScrapingSchedulerHostedService>>();
+        var logger = A.Fake<ILogger<KickOffDueWatchdogsScrapingHostedService>>();
         _bus = A.Fake<ICoreBus>();
         
-        var watchdogScrapingSchedulerHostedServiceOptions = A.Fake<IOptions<WatchdogScrapingSchedulerHostedServiceOptions>>();
-        A.CallTo(() => watchdogScrapingSchedulerHostedServiceOptions.Value).Returns(new WatchdogScrapingSchedulerHostedServiceOptions {IsDisabled = true});
+        var options = A.Fake<IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions>>();
+        A.CallTo(() => options.Value).Returns(new KickOffDueWatchdogsScrapingHostedServiceOptions {IsDisabled = true});
         
-        var hostedService = new WatchdogScrapingSchedulerHostedService(
+        var hostedService = new KickOffDueWatchdogsScrapingHostedService(
             TestFixtureContext.NhibernateConfigurator,
             _bus,
-            watchdogScrapingSchedulerHostedServiceOptions,
+            options,
             logger
         );
         using var cts = new CancellationTokenSource();

@@ -67,13 +67,6 @@ public class when_scraping_watchdog : BaseDatabaseTest
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }
 
-    [Test]
-    public void watchdog_next_scraping_on_is_set()
-    {
-        _watchdog.NextScrapingOn.ShouldNotBeNull();
-        _watchdog.NextScrapingOn.Value.ShouldBe(DateTime.UtcNow.AddSeconds(60), tolerance: TimeSpan.FromSeconds(5));
-    }
-    
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork)
@@ -85,7 +78,6 @@ public class when_scraping_watchdog : BaseDatabaseTest
                            """,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
-            .WithScrapingIntervalInSeconds(60)
             .Build();
     }
 }

@@ -115,8 +115,8 @@ public class Program
             )
         );
         
-        builder.Services.Configure<WatchdogScrapingSchedulerHostedServiceOptions>(builder.Configuration.GetSection(nameof(WatchdogScrapingSchedulerHostedService)));
-        builder.Services.AddHostedService<WatchdogScrapingSchedulerHostedService>();
+        builder.Services.Configure<KickOffDueWatchdogsScrapingHostedServiceOptions>(builder.Configuration.GetSection(nameof(KickOffDueWatchdogsScrapingHostedService)));
+        builder.Services.AddHostedService<KickOffDueWatchdogsScrapingHostedService>();
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -167,6 +167,9 @@ public class Program
 
         DomainEvents.Initialize(new DomainEventHandlerFactory());
 
+        
+               
+        
         await app.RunAsync();
 
         // Castle Windsor is the root container and it needs to be disposed manually.

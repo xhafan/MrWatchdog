@@ -52,6 +52,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         Guard.Hope(Id == watchdogOverviewArgs.WatchdogId, "Invalid watchdog Id.");
         
         Name = watchdogOverviewArgs.Name;
+
+        NextScrapingOn = NextScrapingOn?
+            .AddSeconds(-ScrapingIntervalInSeconds + watchdogOverviewArgs.ScrapingIntervalInSeconds);
+
         ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
     }
 
@@ -128,12 +132,20 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                 {
                     await ScrapeWebPage(webPage.Id, httpClientFactory);
                 }
-            );        
-        
-        NextScrapingOn ??= DateTime.UtcNow;
-        NextScrapingOn = NextScrapingOn.Value.AddSeconds(ScrapingIntervalInSeconds);
+            );
     }
     
+    public virtual void ScheduleNextScraping()
+    {
+        var utcNow = DateTime.UtcNow;
+        NextScrapingOn ??= utcNow;
+        NextScrapingOn = NextScrapingOn.Value.AddSeconds(ScrapingIntervalInSeconds);
+        if (NextScrapingOn.Value < utcNow)
+        {
+            NextScrapingOn = utcNow.AddSeconds(ScrapingIntervalInSeconds);
+        }
+    }
+
     public virtual void SetNextScrapingOn(DateTime? nextScrapingOn)
     {
         NextScrapingOn = nextScrapingOn;

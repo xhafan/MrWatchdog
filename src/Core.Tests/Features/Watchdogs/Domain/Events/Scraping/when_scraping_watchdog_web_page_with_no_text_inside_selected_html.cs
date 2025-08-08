@@ -6,10 +6,10 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_no_text_inside_selected_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -31,7 +31,6 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                         <body>
                         <div id="article-body">
                         <p class="infoUpdate-log">
-                        One<a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">  Two Point &amp; Hospital  </a>Two
                         </p>
                         </div>
                         </body>
@@ -49,10 +48,12 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
+    public void web_page_scraping_error_message_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
+        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedOn.ShouldBe(null);
+        webPage.ScrapingErrorMessage.ShouldBe("All selected HTML results have empty text.");
     }
     
     private void _BuildEntities()
@@ -64,11 +65,9 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                 Selector = """
                            div#article-body p.infoUpdate-log
                            """,
-                SelectText = true,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

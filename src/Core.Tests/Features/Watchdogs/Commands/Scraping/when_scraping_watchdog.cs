@@ -1,11 +1,12 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.TestsShared.HttpClients;
 using System.Net;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.Scraping;
 
@@ -67,6 +68,12 @@ public class when_scraping_watchdog : BaseDatabaseTest
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }
 
+    [Test]
+    public void watchdog_scraping_completed_domain_event_is_raised()
+    {
+        RaisedDomainEvents.ShouldContain(new WatchdogScrapingCompletedDomainEvent(_watchdog.Id));
+    }
+    
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork)

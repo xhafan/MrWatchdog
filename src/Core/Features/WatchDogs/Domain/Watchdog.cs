@@ -1,9 +1,11 @@
 ﻿using CoreDdd.Domain;
+using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using MrWatchdog.Core.Infrastructure.Extensions;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -133,6 +135,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                     await ScrapeWebPage(webPage.Id, httpClientFactory);
                 }
             );
+        
+        DomainEvents.RaiseEvent(new WatchdogScrapingCompletedDomainEvent(Id));
     }
     
     public virtual void ScheduleNextScraping()

@@ -6,10 +6,10 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -30,9 +30,7 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
                         <html>
                         <body>
                         <div id="article-body">
-                        <p class="infoUpdate-log">
-                        <a href="https://invalid_url" target="_blank">Two Point Hospital</a>
-                        </p>
+                        <p class="infoUpdate-log">text one<script>console.log("Hello from the script!");</script></p>
                         </div>
                         </body>
                         </html>
@@ -49,12 +47,14 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
     }
 
     [Test]
-    public void web_page_scraping_error_message_is_set()
+    public void dangerous_html_is_removed()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
-        webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("No HTML node selected. Please review the Selector.");
+        webPage.ScrapingResults.ShouldBe([
+            """
+            <p>text one</p>
+            """
+        ]);
     }
     
     private void _BuildEntities()
@@ -64,7 +64,7 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
-                           div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
+                           div#article-body p.infoUpdate-log
                            """,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })

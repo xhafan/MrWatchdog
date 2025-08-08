@@ -6,10 +6,10 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_invalid_http_status_code_when_downloading_web_page : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -24,7 +24,19 @@ public class when_scraping_watchdog_web_page_with_invalid_http_status_code_when_
                 "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 () => new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(
+                        """
+                        <html>
+                        <body>
+                        <div id="article-body">
+                        <p class="infoUpdate-log">
+                        One<a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">  Two Point &amp; Hospital  </a>Two
+                        </p>
+                        </div>
+                        </body>
+                        </html>
+                        """)
                 }))
             .Build();
         
@@ -37,12 +49,10 @@ public class when_scraping_watchdog_web_page_with_invalid_http_status_code_when_
     }
 
     [Test]
-    public void web_page_scraping_error_message_is_set()
+    public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
-        webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("Error scraping web page, HTTP status code: 404 Not Found");
+        webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
     }
     
     private void _BuildEntities()
@@ -52,11 +62,13 @@ public class when_scraping_watchdog_web_page_with_invalid_http_status_code_when_
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
-                           div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
+                           div#article-body p.infoUpdate-log
                            """,
+                SelectText = true,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

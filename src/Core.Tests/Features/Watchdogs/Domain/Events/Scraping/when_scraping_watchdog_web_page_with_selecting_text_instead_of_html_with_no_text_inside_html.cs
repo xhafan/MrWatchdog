@@ -1,14 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using System.Net;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_exception_when_downloading_web_page : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html_with_no_text_inside_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -21,8 +22,21 @@ public class when_scraping_watchdog_web_page_with_exception_when_downloading_web
         var httpClientFactory = new HttpClientFactoryBuilder()
             .WithRequestResponse(new HttpMessageRequestResponse(
                 "https://www.pcgamer.com/epic-games-store-free-games-list/",
-                () => throw new HttpRequestException("No such host is known")
-            ))
+                () => new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(
+                        """
+                        <html>
+                        <body>
+                        <div id="article-body">
+                        <p class="infoUpdate-log">
+                        </p>
+                        </div>
+                        </body>
+                        </html>
+                        """)
+                }))
             .Build();
         
         var handler = new ScrapeWatchdogWebPageDomainEventMessageHandler(
@@ -39,7 +53,7 @@ public class when_scraping_watchdog_web_page_with_exception_when_downloading_web
         var webPage = _watchdog.WebPages.Single();
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("No such host is known");
+        webPage.ScrapingErrorMessage.ShouldBe("All selected HTML results have empty text.");
     }
     
     private void _BuildEntities()
@@ -49,11 +63,13 @@ public class when_scraping_watchdog_web_page_with_exception_when_downloading_web
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
-                           div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
+                           div#article-body p.infoUpdate-log
                            """,
+                SelectText = true,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

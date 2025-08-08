@@ -6,10 +6,10 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_multiple_html_nodes_selected : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -32,6 +32,7 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
                         <div id="article-body">
                         <p class="infoUpdate-log">
                         <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
                         </p>
                         </div>
                         </body>
@@ -55,6 +56,9 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
         webPage.ScrapingResults.ShouldBe([
             """
             <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+            """,
+            """
+            <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
             """
         ]);
         webPage.ScrapedOn.ShouldNotBeNull();
@@ -75,6 +79,5 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

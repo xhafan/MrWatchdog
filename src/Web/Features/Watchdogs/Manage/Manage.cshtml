@@ -5,10 +5,22 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = SharedLocalizer[Resource.ManageWatchdogs];
+    var title = SharedLocalizer[Resource.ManageWatchdogs];
+    ViewData["Title"] = title;
 }
 
-<h1 class="display-4">@SharedLocalizer[Resource.ManageWatchdogs]</h1>
+@section Navigation {
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
+        </ol>
+    </nav>
+}
+
+<h1 class="display-4">@title</h1>
 
 <div class="my-3">
     <a asp-page="/Watchdogs/Create/Create"><i class="fa-solid fa-plus"></i> Create watchdog</a>

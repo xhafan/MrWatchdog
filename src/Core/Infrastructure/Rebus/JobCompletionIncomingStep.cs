@@ -10,7 +10,6 @@ namespace MrWatchdog.Core.Infrastructure.Rebus;
 /// Completes the job in the main unit of work transaction.
 /// This step is executed within <see cref="JobTrackingIncomingStep" />
 /// </summary>
-/// <param name="jobRepositoryFactory"></param>
 public class JobCompletionIncomingStep(
     IJobRepositoryFactory jobRepositoryFactory
 ) : IIncomingStep

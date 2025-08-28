@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RootNamespace>MrWatchdog.Core.Tests</RootNamespace>
     <AssemblyName>MrWatchdog.Core.Tests</AssemblyName>
+    <UserSecretsId>9415da77-0c91-4852-a86c-51b447fef23b</UserSecretsId>
   </PropertyGroup>
 
   <Import Project="..\SharedAssemblyInfo.props" />
@@ -21,6 +22,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>

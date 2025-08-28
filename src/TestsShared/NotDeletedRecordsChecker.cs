@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Users.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 
 namespace MrWatchdog.TestsShared;

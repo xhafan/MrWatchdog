@@ -1,0 +1,1 @@
+alter table "LoginToken" add "Email" text not null;

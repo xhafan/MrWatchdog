@@ -1,4 +1,3 @@
-using System.Data;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using CoreDdd.AspNetCore.Middlewares;
@@ -7,17 +6,23 @@ using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
 using DatabaseBuilder;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
+using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Configurations;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
+using MrWatchdog.Core.Resources;
+using MrWatchdog.Web.HostedServices;
 using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
-using System.Text.RegularExpressions;
-using MrWatchdog.Core.Resources;
-using MrWatchdog.Web.HostedServices;
 using Rebus.Transport.InMem;
+using System.Data;
+using System.Text.RegularExpressions;
 
 namespace MrWatchdog.Web;
 
@@ -126,6 +131,17 @@ public class Program
         builder.Services.AddHttpClient();
         builder.Services.AddLocalization();
        
+        builder.Services.Configure<EmailSenderOptions>(builder.Configuration.GetSection(nameof(EmailSender)));
+        
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
+        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+        builder.Services.Configure<RuntimeOptions>(builder.Configuration.GetSection("Runtime"));
+        
+        builder.Services.AddSingleton<IJobCompletionAwaiter, JobCompletionAwaiter>();
         
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
@@ -152,6 +168,7 @@ public class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapStaticAssets();

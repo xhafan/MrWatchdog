@@ -25,26 +25,24 @@
     </nav>
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="display-4">@title</h1>
 
-<div class="row" @Stimulus.Controller(StimulusControllers.WatchdogsCreate)>
-    <div class="col-md-6">
-        <form method="post" 
-              data-watchdogs--create-target="form"
-              >
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label fw-bold"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            
-            <div class="mb-3">
-                <button class="btn btn-primary" type="submit">
-                    Create
-                </button>
-            </div>
-        </form>
-    </div>
+<div @Stimulus.Controller(StimulusControllers.WatchdogsCreate)>
+    <form method="post" 
+          data-watchdogs--create-target="form"
+          style="max-width: 600px;">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">
+                Create
+            </button>
+        </div>
+    </form>
 </div>

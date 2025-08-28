@@ -127,15 +127,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         var webPagesToScrape = _webPages.Where(x => !string.IsNullOrWhiteSpace(x.Url)).ToList();
 
-        await Parallel.ForEachAsync(
-            webPagesToScrape,
-                new ParallelOptions {MaxDegreeOfParallelism = 5},
-                async (webPage, _) =>
-                {
-                    await ScrapeWebPage(webPage.Id, httpClientFactory);
-                }
-            );
-        
+        foreach (var webPage in webPagesToScrape)
+        {
+            await ScrapeWebPage(webPage.Id, httpClientFactory);
+        }
+       
         DomainEvents.RaiseEvent(new WatchdogScrapingCompletedDomainEvent(Id));
     }
     

@@ -18,6 +18,8 @@ import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/ScrapingRes
 import WatchdogsAlertController from "../Watchdogs/Alert/AlertController";
 import WatchdogsAlertOverviewController from "../Watchdogs/Alert/Overview/OverviewController";
 
+import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSentController";
+
 
 const application = Application.start();
 application.register(StimulusControllers.body, BodyController);
@@ -32,6 +34,8 @@ application.register(StimulusControllers.watchdogsScrapingResults, WatchdogsScra
 application.register(StimulusControllers.watchdogsScrapingResultsWebPages, WatchdogsScrapingResultsWebPagesController);
 application.register(StimulusControllers.watchdogAlert, WatchdogsAlertController);
 application.register(StimulusControllers.watchdogAlertOverview, WatchdogsAlertOverviewController);
+
+application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
 
 
 attachValidationAfterTurboLoad();

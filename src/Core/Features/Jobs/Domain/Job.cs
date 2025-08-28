@@ -117,4 +117,11 @@ public class Job : VersionedEntity, IAggregateRoot
     {
         return CompletedOn != null;
     }
+
+    public virtual string? GetLastException()
+    {
+        return CompletedOn.HasValue 
+            ? null
+            : _handlingAttempts.OrderByDescending(x => x.StartedOn).FirstOrDefault()?.Exception;
+    }
 }

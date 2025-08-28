@@ -38,6 +38,19 @@ a.navbar-brand {
 
 a {
     color: #0077cc;
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
+}
+
+.btn-link {
+    text-decoration: none;
+}
+
+.btn-link:hover, .btn-link:focus {
+    text-decoration: underline;
 }
 
 .btn-primary {
@@ -76,4 +89,3 @@ button.accept-policy {
     white-space: nowrap;
     line-height: 60px;
 }
-

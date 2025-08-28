@@ -1,7 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { JobDto } from "../../Shared/Generated/JobDto";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
-import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";

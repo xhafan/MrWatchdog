@@ -14,7 +14,6 @@ public static class StimulusControllers
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ViewOrEditForm = "view-or-edit-form";
 
-    
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsCreate = "watchdogs--create";
     
@@ -31,11 +30,14 @@ public static class StimulusControllers
     public const string WatchdogsScrapingResults = "watchdogs--scraping-results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsScrapingResultsWebPages = "watchdogs--scraping-results-web-pages";    
+    public const string WatchdogsScrapingResultsWebPages = "watchdogs--scraping-results-web-pages";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlert = "watchdogs--alert";    
+    public const string WatchdogAlert = "watchdogs--alert";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlertOverview = "watchdogs--alert-overview";    
+    public const string WatchdogAlertOverview = "watchdogs--alert-overview";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string AccountLoginLinkSent = "account--login-link-sent";
 }

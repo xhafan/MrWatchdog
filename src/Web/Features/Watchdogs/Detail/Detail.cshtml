@@ -7,7 +7,8 @@
 @inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = Model.WatchdogDetailArgs.Name;
+    var title = Model.WatchdogDetailArgs.Name;
+    ViewData["Title"] = title;
 }
 
 @section Navigation {
@@ -19,7 +20,7 @@
             <li class="breadcrumb-item">
                 <a asp-page="/Watchdogs/Manage/Manage">@SharedLocalizer[Resource.ManageWatchdogs]</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
         </ol>
     </nav>
 }
@@ -31,7 +32,7 @@
 
     <div class="d-flex justify-content-between">
         <div>
-            <h1>@ViewData["Title"]</h1>
+            <h1 class="display-4">@title</h1>
         </div>
         <div>
             <div class="dropdown">

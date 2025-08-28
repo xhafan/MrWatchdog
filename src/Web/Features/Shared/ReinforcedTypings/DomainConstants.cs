@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using Reinforced.Typings.Attributes;
 
@@ -18,4 +19,9 @@ public static class DomainConstants
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogAlertEntityName = nameof(WatchdogAlert);
+    
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string AccountLoginTokenEntityName = nameof(LoginToken);
+    
 }

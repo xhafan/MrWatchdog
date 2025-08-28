@@ -5,16 +5,17 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5026;http://localhost:5025",
+      "applicationUrl": "https://mrwatchdog.localhost:5026;http://mrwatchdog.localhost:5025;https://0.0.0.0:5026",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Runtime:Url": "https://192.168.0.4:5026"
       }
     },
     "Development2": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5028;http://localhost:5027",
+      "applicationUrl": "https://mrwatchdog.localhost:5028;http://mrwatchdog.localhost:5027",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

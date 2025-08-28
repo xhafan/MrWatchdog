@@ -9,10 +9,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @* <meta name="turbo-cache-control" content="no-cache"> *@
-    @* <meta name="turbo-prefetch" content="false"> *@
-    @* <meta name="turbo-refresh-method" content="morph"> *@
-    @* <meta name="turbo-refresh-scroll" content="preserve"> *@
 
     <title>@ViewData["Title"] - @SharedLocalizer[Resource.MrWatchdog]</title>
 
@@ -35,7 +31,7 @@
     <header>
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-page="/Index">@SharedLocalizer[Resource.MrWatchdog]</a>
+                <a class="navbar-brand" asp-page="/Index"><i class="fas fa-dog"></i> @SharedLocalizer[Resource.MrWatchdog]</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -64,8 +60,20 @@
                                 @SharedLocalizer[Resource.ManageWatchdogs]
                             </a>
                         </li>
-
                     </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-controller="Login"
+                              asp-action="Logout"
+                              class="d-flex align-items-center">
+                            <span>
+                                <i class="fas fa-user"></i> @User.Identity?.Name
+                            </span>
+                            <button class="btn btn-link" type="submit">
+                                <span><i class="fas fa-sign-out"></i> Logout</span>
+                            </button>
+                        </form>
+                    }
                 </div>
             </div>
         </nav>

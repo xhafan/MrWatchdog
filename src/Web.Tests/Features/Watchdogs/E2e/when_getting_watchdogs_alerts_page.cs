@@ -1,5 +1,5 @@
-﻿using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs;
+﻿using MrWatchdog.Core.Features.Watchdogs;
+using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.E2e;
 

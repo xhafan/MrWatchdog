@@ -1,0 +1,25 @@
+@page
+@model LoginModel
+@{
+    const string title = "Login / Register";
+    ViewData["Title"] = title;
+}
+<h1 class="display-4">@title</h1>
+
+<div>
+    <form method="post" 
+          style="max-width: 600px;"
+          >
+        <div class="mb-3">
+            <label type="email" asp-for="Email" class="form-label fw-bold" placeholder="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">
+                Send login link
+            </button>
+        </div>
+    </form>
+</div>

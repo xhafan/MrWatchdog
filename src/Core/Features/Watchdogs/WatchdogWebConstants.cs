@@ -1,9 +1,9 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Watchdogs;
+namespace MrWatchdog.Core.Features.Watchdogs;
 
 [TsClass(IncludeNamespace = false)]
-public static class WatchdogWebConstants
+public static class WatchdogWebConstants // todo: rename to WatchdogUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]    
     public const string WatchdogIdVariable = "$watchdogId";

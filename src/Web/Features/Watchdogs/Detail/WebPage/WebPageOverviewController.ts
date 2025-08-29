@@ -5,7 +5,7 @@ import BaseStimulusModelController from "../../../Shared/BaseStimulusModelContro
 import { WebPageOverviewStimulusModel } from "../../../Shared/Generated/WebPageOverviewStimulusModel";
 import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
 import { JobDto } from "../../../Shared/Generated/JobDto";
-import { JobConstants } from "../../../Shared/Generated/JobConstants";
+import { JobUrlConstants } from "../../../Shared/Generated/JobUrlConstants";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 
 export const watchdogWebPageNameModifiedEventName = "watchdogwebPageNameModified";

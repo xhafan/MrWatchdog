@@ -1,6 +1,6 @@
 import Enumerable from "linq";
 import { DomainConstants } from "../Shared/Generated/DomainConstants";
-import { JobConstants } from "../Shared/Generated/JobConstants";
+import { JobUrlConstants } from "../Shared/Generated/JobUrlConstants";
 import { JobDto } from "../Shared/Generated/JobDto";
 import { RebusConstants } from "../Shared/Generated/RebusConstants";
 
@@ -73,7 +73,7 @@ export async function sendRequestAndWaitForJobCompletion(
 }
 
 export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
-    let getJobUrl = JobConstants.getJobUrl.replace(JobConstants.jobGuidVariable, jobGuid);
+    let getJobUrl = JobUrlConstants.getJobUrl.replace(JobUrlConstants.jobGuidVariable, jobGuid);
 
     const pollJob = async (delay = 300): Promise<JobDto> => {
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -102,9 +102,9 @@ function getJobLastException(jobDto: JobDto) : string {
 }
 
 export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domainEventType: string): Promise<string | null> {
-    let getRelatedDomainEventJobUrl = JobConstants.getRelatedDomainEventJobUrl
-        .replace(JobConstants.commandJobGuidVariable, commandJobGuid)
-        .replace(JobConstants.domainEventTypeVariable, domainEventType);
+    let getRelatedDomainEventJobUrl = JobUrlConstants.getRelatedDomainEventJobUrl
+        .replace(JobUrlConstants.commandJobGuidVariable, commandJobGuid)
+        .replace(JobUrlConstants.domainEventTypeVariable, domainEventType);
 
     const response = await fetch(getRelatedDomainEventJobUrl);
     if (response.ok) {

@@ -30,9 +30,9 @@ public class when_getting_watchdog_detail_web_page_turbo_frame : BaseDatabaseTes
     [Test]
     public async Task watchdog_detail_web_page_turbo_frame_page_can_be_fetched()
     {
-        var watchdogDetailUrl = WatchdogWebConstants.WatchdogDetailWebPageTurboFrameUrl
-            .Replace(WatchdogWebConstants.WatchdogIdVariable, $"{_watchdog.Id}")
-            .Replace(WatchdogWebConstants.WatchdogWebPageIdVariable, $"{_watchdog.WebPages.Single().Id}");
+        var watchdogDetailUrl = WatchdogUrlConstants.WatchdogDetailWebPageTurboFrameUrl
+            .Replace(WatchdogUrlConstants.WatchdogIdVariable, $"{_watchdog.Id}")
+            .Replace(WatchdogUrlConstants.WatchdogWebPageIdVariable, $"{_watchdog.WebPages.Single().Id}");
         var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(watchdogDetailUrl);
         response.EnsureSuccessStatusCode();
     }

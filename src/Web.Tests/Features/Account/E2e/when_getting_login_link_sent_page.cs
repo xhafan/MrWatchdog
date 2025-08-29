@@ -26,7 +26,7 @@ public class when_getting_login_link_sent_page : BaseDatabaseTest
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
             .GetAsync(AccountUrlConstants.AccountLoginLinkSentUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()));
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     
     [Test]

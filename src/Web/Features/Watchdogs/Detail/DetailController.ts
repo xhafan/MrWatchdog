@@ -5,7 +5,7 @@ import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { watchdogWebPageRemovedEvent } from "./WebPage/WebPageController";
-import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 
 export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
     static targets = [
@@ -30,9 +30,9 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     throw new Error("Error getting created WatchdogWebPage.");
                 }
 
-                const webPageTurboFrameUrl = WatchdogWebConstants.watchdogDetailWebPageTurboFrameUrl
-                    .replace(WatchdogWebConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
-                    .replace(WatchdogWebConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
+                const webPageTurboFrameUrl = WatchdogUrlConstants.watchdogDetailWebPageTurboFrameUrl
+                    .replace(WatchdogUrlConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
+                    .replace(WatchdogUrlConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
 
                 const response = await fetch(webPageTurboFrameUrl);
                 if (response.ok) {
@@ -45,7 +45,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
         formSubmitWithWaitForJobCompletion(
             this.deleteWatchdogFormTarget, 
             async jobDto => {
-                Turbo.visit(WatchdogWebConstants.manageWatchdogsUrl);
+                Turbo.visit(WatchdogUrlConstants.manageWatchdogsUrl);
             },
             "Really delete the watchdog with all watched web pages?"
         );

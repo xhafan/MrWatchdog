@@ -3,7 +3,7 @@
 namespace MrWatchdog.Core.Features.Watchdogs;
 
 [TsClass(IncludeNamespace = false)]
-public static class WatchdogWebConstants // todo: rename to WatchdogUrlConstants
+public static class WatchdogUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]    
     public const string WatchdogIdVariable = "$watchdogId";

@@ -3,7 +3,7 @@ import { ScrapingResultsConstants } from "../../Shared/Generated/ScrapingResults
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
-import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 
 export default class ScrapingResultsController extends Controller {
@@ -27,8 +27,8 @@ export default class ScrapingResultsController extends Controller {
                     throw new Error("Error getting WatchdogAlert.");
                 }
                 
-                const watchdogAlertUrl = WatchdogWebConstants.watchdogAlertUrl
-                    .replace(WatchdogWebConstants.watchdogAlertIdVariable, String(watchdogAlertEntity.entityId));
+                const watchdogAlertUrl = WatchdogUrlConstants.watchdogAlertUrl
+                    .replace(WatchdogUrlConstants.watchdogAlertIdVariable, String(watchdogAlertEntity.entityId));
                 Turbo.visit(watchdogAlertUrl);
             }
         );

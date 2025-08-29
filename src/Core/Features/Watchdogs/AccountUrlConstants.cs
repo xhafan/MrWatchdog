@@ -6,7 +6,7 @@ namespace MrWatchdog.Core.Features.Watchdogs;
 public static class AccountUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string TokenVariable = "$token"; // todo: rename to TokenParam (rename all other variables in other classes as well)
+    public const string TokenVariable = "$token";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountConfirmLoginUrl = $"/Account/ConfirmLogin?token={TokenVariable}";

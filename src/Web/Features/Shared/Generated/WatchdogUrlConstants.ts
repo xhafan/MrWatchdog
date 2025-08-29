@@ -2,7 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export abstract class WatchdogWebConstants
+export abstract class WatchdogUrlConstants
 {
 	public static watchdogIdVariable: string = `$watchdogId`;
 	public static watchdogDetailUrl: string = `/Watchdogs/Detail/$watchdogId`;

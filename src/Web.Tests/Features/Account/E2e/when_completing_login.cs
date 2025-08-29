@@ -36,7 +36,9 @@ public class when_completing_login : BaseDatabaseTest
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value.PostAsync(
             AccountUrlConstants.ApiCompleteLoginUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()), content: null);
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+        response.Headers.Location.ShouldNotBeNull();
+        response.Headers.Location.ToString().ShouldBe(LoginTokenBuilder.TokenReturnUrl);
     }
     
     [Test]

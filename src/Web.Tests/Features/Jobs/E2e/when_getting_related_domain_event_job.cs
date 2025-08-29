@@ -35,9 +35,9 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
     [Test]
     public async Task domain_event_job_data_is_correct()
     {
-        var getRelatedDomainEventJobUrl = JobConstants.GetRelatedDomainEventJobUrl
-            .Replace(JobConstants.CommandJobGuidVariable, _commandJobGuid.ToString())
-            .Replace(JobConstants.DomainEventTypeVariable, nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
+        var getRelatedDomainEventJobUrl = JobUrlConstants.GetRelatedDomainEventJobUrl
+            .Replace(JobUrlConstants.CommandJobGuidVariable, _commandJobGuid.ToString())
+            .Replace(JobUrlConstants.DomainEventTypeVariable, nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
         var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(getRelatedDomainEventJobUrl);
         response.EnsureSuccessStatusCode();
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();

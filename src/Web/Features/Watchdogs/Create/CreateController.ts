@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
-import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 
 export default class CreateController extends Controller {
     static targets  = [
@@ -22,7 +22,7 @@ export default class CreateController extends Controller {
                     throw new Error("Error getting created Watchdog.");
                 }
 
-                const watchdogDetailUrl = WatchdogWebConstants.watchdogDetailUrl.replace(WatchdogWebConstants.watchdogIdVariable, String(watchdogEntity.entityId));
+                const watchdogDetailUrl = WatchdogUrlConstants.watchdogDetailUrl.replace(WatchdogUrlConstants.watchdogIdVariable, String(watchdogEntity.entityId));
 
                 Turbo.visit(watchdogDetailUrl);
             }

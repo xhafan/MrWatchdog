@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
-import { WatchdogWebConstants } from "../../Shared/Generated/WatchdogWebConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 
 export default class AlertController extends Controller {
     static targets  = [
@@ -19,7 +19,7 @@ export default class AlertController extends Controller {
         formSubmitWithWaitForJobCompletion(
             this.deleteWatchdogAlertFormTarget, 
             async jobDto => {
-                Turbo.visit(WatchdogWebConstants.watchdogsAlertsUrl);
+                Turbo.visit(WatchdogUrlConstants.watchdogsAlertsUrl);
             },
             "Really delete the watchdog alert?"
         );

@@ -26,7 +26,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
             .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()));
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     
     [Test]

@@ -28,13 +28,13 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                     if (completeLoginResponse.ok) {
                         Turbo.visit(completeLoginResponse.url);
                     } else {
-                        throw new Error(`Error completing login: HTTP ${loginTokenConfirmationResponse.status}`);
+                        throw new Error(`Error completing login: HTTP ${completeLoginResponse.status}`);
                     }
                 }
             }
             else {
                 clearInterval(interval);
-                throw new Error(`Error getting login token confirmation: HTTP ${loginTokenConfirmationResponse.status}`); // todo: test this
+                throw new Error(`Error getting login token confirmation: HTTP ${loginTokenConfirmationResponse.status}`);
             }
         }, 1000);
     }

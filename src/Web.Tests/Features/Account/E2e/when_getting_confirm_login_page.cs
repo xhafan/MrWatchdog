@@ -30,7 +30,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
             .GetAsync(AccountUrlConstants.AccountConfirmLoginUrl.Replace(AccountUrlConstants.TokenVariable, _loginToken.Token));
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     
     [Test]

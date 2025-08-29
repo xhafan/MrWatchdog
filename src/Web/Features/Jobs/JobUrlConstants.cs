@@ -3,7 +3,7 @@
 namespace MrWatchdog.Web.Features.Jobs;
 
 [TsClass(IncludeNamespace = false)]
-public static class JobConstants // todo: rename to JobUrlConstants
+public static class JobUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string JobGuidVariable = "$jobGuid";

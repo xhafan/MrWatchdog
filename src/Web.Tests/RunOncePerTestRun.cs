@@ -25,7 +25,7 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
                     });
                 });
         });
-        WebApplicationClient = new Lazy<HttpClient>(() => WebApplicationFactory.Value.CreateClient());
+        WebApplicationClient = new Lazy<HttpClient>(() => WebApplicationFactory.Value.CreateDefaultClient());
     }
     
     [OneTimeTearDown]

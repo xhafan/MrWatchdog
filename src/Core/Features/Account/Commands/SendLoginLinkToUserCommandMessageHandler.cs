@@ -4,7 +4,6 @@ using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
-using Microsoft.Extensions.Localization;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Resources;
 
@@ -14,8 +13,7 @@ public class SendLoginLinkToUserCommandMessageHandler(
     ILoginTokenRepository loginTokenRepository,
     IEmailSender emailSender,
     IOptions<JwtOptions> iJwtOptions,
-    IOptions<RuntimeOptions> iRuntimeOptions,
-    IStringLocalizer<Resource> localizer
+    IOptions<RuntimeOptions> iRuntimeOptions
 ) 
     : IHandleMessages<SendLoginLinkToUserCommand>
 {
@@ -34,8 +32,10 @@ public class SendLoginLinkToUserCommandMessageHandler(
         var tokenParam = Uri.EscapeDataString(tokenString);
         var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrl}".Replace(AccountUrlConstants.TokenVariable, tokenParam);
 
-        var mrWatchdogResource = localizer[Resource.MrWatchdog];
-        await emailSender.SendEmail(command.Email, $"{mrWatchdogResource} login link",
+        var mrWatchdogResource = Resource.MrWatchdog;
+        await emailSender.SendEmail(
+            command.Email,
+            $"{mrWatchdogResource} login link",
             $"""
              <p>
                 If you just requested to log in to {mrWatchdogResource}, click <a href="{accountConfirmLoginUrl}">here</a>. 
@@ -43,6 +43,7 @@ public class SendLoginLinkToUserCommandMessageHandler(
              <p>
                 This link expires in {jwtOptions.ExpireMinutes} minutes.
              </p>
-             """);
+             """
+        );
     }
 }

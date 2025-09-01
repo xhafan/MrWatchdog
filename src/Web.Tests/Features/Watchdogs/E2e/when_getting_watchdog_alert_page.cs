@@ -41,6 +41,10 @@ public class when_getting_watchdog_alert_page : BaseDatabaseTest
             var watchdogRepository = new NhibernateRepository<Watchdog>(UnitOfWork);
             var watchdog = await watchdogRepository.LoadByIdAsync(_watchdogAlert.Watchdog.Id);
             await watchdogRepository.DeleteAsync(watchdog);
+            
+            var userRepository = new UserRepository(UnitOfWork);
+            var user = await userRepository.LoadByIdAsync(_watchdogAlert.User.Id);
+            await userRepository.DeleteAsync(user);
         }
         
         await UnitOfWork.CommitAsync();

@@ -1,11 +1,9 @@
 ﻿@page
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @model IndexModel
-@inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    var title = SharedLocalizer[Resource.ManageWatchdogs];
+    var title = Resource.ManageWatchdogs;
     ViewData["Title"] = title;
 }
 

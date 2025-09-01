@@ -2,14 +2,12 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreDdd.Queries;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Core.Infrastructure;
 
@@ -45,10 +43,7 @@ public static class WindsorContainerRegistrator
                 .Instance(mainWindsorContainer.Resolve<IHttpClientFactory>()),
             
             Component.For(typeof(IOptions<>))
-                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(IOptions<>).MakeGenericType(creationContext.GenericArguments[0]))),
-            
-            Component.For<IStringLocalizer<Resource>>()
-                .Instance(mainWindsorContainer.Resolve<IStringLocalizer<Resource>>())
+                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(IOptions<>).MakeGenericType(creationContext.GenericArguments[0])))
         );
     }
 }

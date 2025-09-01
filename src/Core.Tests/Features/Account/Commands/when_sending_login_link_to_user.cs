@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using FakeItEasy;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
@@ -8,7 +7,6 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Resources;
 using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Features.Account.Commands;
@@ -32,8 +30,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
             new LoginTokenRepository(UnitOfWork),
             _emailSender,
             _iJwtOptions,
-            OptionsRetriever.Retrieve<RuntimeOptions>(),
-            A.Fake<IStringLocalizer<Resource>>()
+            OptionsRetriever.Retrieve<RuntimeOptions>()
         );
 
         await handler.Handle(new SendLoginLinkToUserCommand(_email, ReturnUrl: "/Watchdogs/Alerts"));

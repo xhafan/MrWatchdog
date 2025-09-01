@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
@@ -19,7 +20,15 @@ public class when_sending_command_message : BaseDatabaseTest
     public async Task Context()
     {
         _bus = A.Fake<IBus>();
-        _coreBus = new CoreBus(_bus, new ExistingTransactionJobCreator(UnitOfWork));
+        
+        var actingUserAccessor = A.Fake<IActingUserAccessor>();
+        A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(23);
+
+        _coreBus = new CoreBus(
+            _bus,
+            new ExistingTransactionJobCreator(UnitOfWork),
+            actingUserAccessor
+        );
         _command = new CreateWatchdogCommand("watchdog name");
         
         await _coreBus.Send(_command);
@@ -30,7 +39,8 @@ public class when_sending_command_message : BaseDatabaseTest
     {
         A.CallTo(() => _bus.Send(
                 A<CreateWatchdogCommand>.That.Matches(p => p.Name == "watchdog name" 
-                                                           && !p.Guid.Equals(Guid.Empty)),
+                                                           && !p.Guid.Equals(Guid.Empty)
+                                                           && p.ActingUserId == 23),
                 A<IDictionary<string, string>>.That.Matches(p => p.ContainsKey(Headers.MessageId) && p[Headers.MessageId] == _command.Guid.ToString())
             )
         ).MustHaveHappenedOnceExactly();

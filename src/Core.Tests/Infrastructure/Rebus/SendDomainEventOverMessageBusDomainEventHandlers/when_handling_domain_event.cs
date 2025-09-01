@@ -26,6 +26,7 @@ public class when_handling_domain_event : BaseDatabaseTest
 
         JobContext.RaisedDomainEvents.Value = [];
         JobContext.CommandGuid.Value = _commandGuid;
+        JobContext.ActingUserId.Value = 23;
         _testDomainEvent = new TestDomainEvent {RelatedCommandGuid = _commandGuid};
 
         _bus = A.Fake<ISyncBus>();
@@ -38,11 +39,21 @@ public class when_handling_domain_event : BaseDatabaseTest
     public void domain_event_is_sent_over_message_bus()
     {
         A.CallTo(() => _bus.Send(
-            _testDomainEvent,
+            A<object>.That.Matches(p => _MatchingDomainEvent(p)),
             A<Dictionary<string, string>>.That.Matches(p => _MatchingDomainEventMessageHeaders(p))
         )).MustHaveHappenedOnceExactly();
     }
-    
+
+    private bool _MatchingDomainEvent(object message)
+    {
+        message.ShouldBeOfType<TestDomainEvent>();
+        var testDomainEvent = (TestDomainEvent) message;
+        testDomainEvent.RelatedCommandGuid.ShouldBe(_commandGuid);
+        testDomainEvent.ActingUserId.ShouldBe(23);
+
+        return true;
+    }
+
     private bool _MatchingDomainEventMessageHeaders(Dictionary<string, string> domainEventMessageHeaders)
     {
         domainEventMessageHeaders.ShouldNotBeNull();

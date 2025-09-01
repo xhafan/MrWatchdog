@@ -5,7 +5,7 @@ using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Extensions;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;

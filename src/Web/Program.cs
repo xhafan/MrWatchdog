@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -22,7 +23,9 @@ using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
 using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
+using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 
 namespace MrWatchdog.Web;
 
@@ -30,6 +33,8 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // enable support for "windows-1250" and other legacy encodings to make HttpClient.ReadAsStringAsync() work correctly
+        
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Logging.AddSimpleConsole(options =>
@@ -142,6 +147,9 @@ public class Program
         builder.Services.Configure<RuntimeOptions>(builder.Configuration.GetSection("Runtime"));
         
         builder.Services.AddSingleton<IJobCompletionAwaiter, JobCompletionAwaiter>();
+        
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<IActingUserAccessor, HttpContextActingUserAccessor>();
         
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();

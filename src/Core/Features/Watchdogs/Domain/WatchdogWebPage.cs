@@ -3,9 +3,9 @@ using CoreUtils.Extensions;
 using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using System.Web;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 

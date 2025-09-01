@@ -1,15 +1,15 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html_with_no_text_inside_one_of_the_selected_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -31,9 +31,7 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                         <body>
                         <div id="article-body">
                         <p class="infoUpdate-log">
-                        </p>
-                        <p class="infoUpdate-log">
-                        Text one
+                        One<a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">  Two Point &amp; Hospital  </a>Two
                         </p>
                         </div>
                         </body>
@@ -51,10 +49,10 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_values_contain_only_non_empty_text()
+    public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe(["Text one"]);
+        webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
     }
     
     private void _BuildEntities()

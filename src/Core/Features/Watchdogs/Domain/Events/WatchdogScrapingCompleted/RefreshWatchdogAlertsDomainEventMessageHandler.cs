@@ -4,9 +4,9 @@ using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 
-public class TriggerWatchdogAlertsDomainEventMessageHandler(
+public class RefreshWatchdogAlertsDomainEventMessageHandler(
     IQueryExecutor queryExecutor,
     ICoreBus bus
 ) 

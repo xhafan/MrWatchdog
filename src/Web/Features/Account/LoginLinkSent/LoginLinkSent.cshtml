@@ -1,10 +1,8 @@
 @page
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model LoginLinkSentModel
-@inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
     const string title = "Login link sent";
@@ -22,7 +20,7 @@
     <p>
         <small>
             If you can't find the email, please check your spam folder and mark it as <i>Not Spam</i> 
-            to ensure you receive future emails from @SharedLocalizer[Resource.MrWatchdog].
+            to ensure you receive future emails from @Resource.MrWatchdog.
         </small>
     </p>
 </div>

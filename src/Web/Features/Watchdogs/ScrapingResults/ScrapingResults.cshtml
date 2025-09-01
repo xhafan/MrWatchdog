@@ -1,10 +1,8 @@
 ﻿@page "{watchdogId}"
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model ScrapingResultsModel
-@inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
     var title = Model.WatchdogScrapingResultsArgs.WatchdogName;
@@ -18,7 +16,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Index">@SharedLocalizer[Resource.ListOfWatchdogs]</a>
+                <a asp-page="/Watchdogs/Index">@Resource.ListOfWatchdogs</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">@title</li>
         </ol>

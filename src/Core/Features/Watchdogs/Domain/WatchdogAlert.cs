@@ -1,12 +1,14 @@
 ﻿using CoreDdd.Domain;
+using CoreDdd.Domain.Events;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogAlertScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Extensions;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class WatchdogAlert : VersionedEntity, IAggregateRoot
 {
-    private readonly IList<string> _previousScrapingResults = new List<string>();
     private readonly IList<string> _currentScrapingResults = new List<string>();
     private readonly IList<string> _scrapingResultsToAlertAbout = new List<string>();
     
@@ -14,10 +16,12 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
 
     public WatchdogAlert(
         Watchdog watchdog,
+        User user,
         string? searchTerm
     )
     {
         Watchdog = watchdog;
+        User = user;
         SearchTerm = searchTerm;
 
         var scrapingResults = _GetWatchdogScrapingResults();
@@ -26,8 +30,8 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
     }
 
     public virtual Watchdog Watchdog { get; } = null!;
+    public virtual User User { get; } = null!;
     public virtual string? SearchTerm { get; protected set; }
-    public virtual IEnumerable<string> PreviousScrapingResults => _previousScrapingResults;
     public virtual IEnumerable<string> CurrentScrapingResults => _currentScrapingResults;
     public virtual IEnumerable<string> ScrapingResultsToAlertAbout => _scrapingResultsToAlertAbout;
 
@@ -63,12 +67,24 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
 
     public virtual void Refresh()
     {
-        _previousScrapingResults.Clear();
-        _previousScrapingResults.AddRange(_currentScrapingResults);
+        var previousScrapingResults = _currentScrapingResults.ToList();
         
         _currentScrapingResults.Clear();
         _currentScrapingResults.AddRange(_GetWatchdogScrapingResults());
+
+        var newScrapingResultsSincePreviousScrapingResults = _currentScrapingResults.Except(previousScrapingResults).ToList();
+        var newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout = newScrapingResultsSincePreviousScrapingResults.Except(_scrapingResultsToAlertAbout).ToList();
+            
+        if (newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout.Any())
+        {
+            DomainEvents.RaiseEvent(new WatchdogAlertScrapingResultsUpdatedDomainEvent(Id));
+        }
         
-        _scrapingResultsToAlertAbout.AddRange(_currentScrapingResults.Except(_previousScrapingResults));
+        _scrapingResultsToAlertAbout.AddRange(newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout);
+    }
+
+    public virtual void ClearScrapingResultsToAlertAbout()
+    {
+        _scrapingResultsToAlertAbout.Clear();
     }
 }

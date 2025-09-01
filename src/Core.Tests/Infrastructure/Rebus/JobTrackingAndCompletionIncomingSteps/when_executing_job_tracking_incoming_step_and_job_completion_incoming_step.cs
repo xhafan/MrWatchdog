@@ -28,6 +28,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private IWindsorContainer? _jobContextWindsorContainerInTheNextIncomingStep;
     private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
+    private long _jobContentActingUserId;
 
     [SetUp]
     public async Task Context()
@@ -57,14 +58,21 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
+        _command = new CreateWatchdogCommand("watchdog name")
+        {
+            Guid = Guid.NewGuid(),
+            ActingUserId = 23
+        };
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
         {
+            _jobContentActingUserId = JobContext.ActingUserId.Value;
+            
             await jobCompletionIncomingStep.Process(incomingStepContext, _next);
         });
 
+        
         await UnitOfWork.FlushAsync();
         return;
 
@@ -98,7 +106,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.Type.ShouldBe(nameof(CreateWatchdogCommand));
         job.InputData.ShouldBe($$"""
-                               {"guid": "{{job.Guid}}", "name": "watchdog name"}
+                               {"guid": "{{job.Guid}}", "name": "watchdog name", "actingUserId": 23}
                                """);
         job.Kind.ShouldBe(JobKind.Command);
         job.NumberOfHandlingAttempts.ShouldBe(1);
@@ -136,6 +144,12 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     public void job_context_command_guid_is_set_in_the_next_incoming_step()
     {
         _jobContextCommandGuidInTheNextIncomingStep.ShouldBe(_command.Guid);
+    }
+
+    [Test]
+    public void acting_user_id_is_set_on_job_context()
+    {
+        _jobContentActingUserId.ShouldBe(23);
     }
     
     [TearDown]

@@ -1,10 +1,8 @@
 ﻿@page "{watchdogAlertId}"
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model AlertModel
-@inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
     var searchTermPrefix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogAlertArgs.SearchTerm) ? $"{Model.WatchdogAlertArgs.SearchTerm} - " : "")}";
@@ -19,7 +17,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Alerts/Alerts">@SharedLocalizer[Resource.MyAlerts]</a>
+                <a asp-page="/Watchdogs/Alerts/Alerts">@Resource.MyAlerts</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">@title</li>
         </ol>

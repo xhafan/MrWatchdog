@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using Rebus.Bus;
@@ -17,7 +18,11 @@ public class when_sending_command_message_with_guid_already_set : BaseDatabaseTe
     public void Context()
     {
         _bus = A.Fake<IBus>();
-        _coreBus = new CoreBus(_bus, new ExistingTransactionJobCreator(UnitOfWork));
+        _coreBus = new CoreBus(
+            _bus, 
+            new ExistingTransactionJobCreator(UnitOfWork),
+            A.Fake<IActingUserAccessor>()
+        );
         _command = new CreateWatchdogCommand("watchdog name")
         {
             Guid = Guid.NewGuid()

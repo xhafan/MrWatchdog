@@ -1,11 +1,17 @@
 ﻿using CoreUtils;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Messages;
 using Rebus.Bus;
 using Rebus.Messages;
 
 namespace MrWatchdog.Core.Infrastructure.Rebus;
 
-public class CoreBus(IBus bus, IJobCreator jobCreator) : ICoreBus
+public class CoreBus(
+    IBus bus, 
+    IJobCreator jobCreator,
+    IActingUserAccessor actingUserAccessor
+    
+) : ICoreBus
 {
     public async Task Send(Command commandMessage)
     {
@@ -13,6 +19,9 @@ public class CoreBus(IBus bus, IJobCreator jobCreator) : ICoreBus
         commandMessage.Guid = Guid.NewGuid();
 
         await jobCreator.CreateJob(commandMessage, commandMessage.Guid, shouldMarkJobAsHandlingStarted: false);
+
+        var actingUserId = actingUserAccessor.GetActingUserId();
+        commandMessage.ActingUserId = actingUserId;
         
         await bus.Send(commandMessage, new Dictionary<string, string> {{Headers.MessageId, commandMessage.Guid.ToString()}});
     }

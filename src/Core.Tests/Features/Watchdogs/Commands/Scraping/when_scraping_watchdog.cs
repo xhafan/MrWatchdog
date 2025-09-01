@@ -1,12 +1,12 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.TestsShared.HttpClients;
 using System.Net;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.Scraping;
 

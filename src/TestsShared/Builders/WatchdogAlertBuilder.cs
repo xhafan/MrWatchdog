@@ -1,4 +1,5 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared.Extensions;
 
@@ -9,11 +10,18 @@ public class WatchdogAlertBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const string SearchTerm = "search term";
 
     private Watchdog? _watchdog;
+    private User? _user;
     private string? _searchTerm = SearchTerm;
 
     public WatchdogAlertBuilder WithWatchdog(Watchdog watchdog)
     {
         _watchdog = watchdog;
+        return this;
+    } 
+    
+    public WatchdogAlertBuilder WithUser(User user)
+    {
+        _user = user;
         return this;
     } 
 
@@ -26,8 +34,9 @@ public class WatchdogAlertBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public  WatchdogAlert Build()
     {
         _watchdog ??= new WatchdogBuilder(unitOfWork).Build();
+        _user ??= new UserBuilder(unitOfWork).Build();
 
-        var watchdogAlert = new WatchdogAlert(_watchdog, _searchTerm);
+        var watchdogAlert = new WatchdogAlert(_watchdog, _user, _searchTerm);
 
         if (unitOfWork == null)
         {

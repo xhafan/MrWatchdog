@@ -1,14 +1,13 @@
 ﻿@page
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @model IndexModel
-@inject IStringLocalizer<Resource> SharedLocalizer
 
 @{
-    ViewData["Title"] = SharedLocalizer[Resource.MrWatchdog];
+    var title = Resource.MrWatchdog;
+    ViewData["Title"] = title;
 }
 
-<h1 class="display-4">@SharedLocalizer[Resource.MrWatchdog]</h1>
+<h1 class="display-4">@title</h1>
 
 <div class="row">
     <div class="col-md-6">

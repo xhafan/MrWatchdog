@@ -1,16 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.RazorPages
-@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
-@inject IStringLocalizer<Resource> SharedLocalizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - @SharedLocalizer[Resource.MrWatchdog]</title>
+    <title>@ViewData["Title"] - @Resource.MrWatchdog</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/5.3.6/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/6.7.2/css/all.min.css" />
@@ -31,7 +29,7 @@
     <header>
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-page="/Index"><i class="fas fa-dog"></i> @SharedLocalizer[Resource.MrWatchdog]</a>
+                <a class="navbar-brand" asp-page="/Index"><i class="fas fa-dog"></i> @Resource.MrWatchdog</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -47,17 +45,17 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link @MarkIfActive("/Watchdogs/Index")" asp-page="/Watchdogs/Index">
-                                @SharedLocalizer[Resource.ListOfWatchdogs]
+                                @Resource.ListOfWatchdogs
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @MarkIfActive("/Watchdogs/Alerts/Alerts")" asp-page="/Watchdogs/Alerts/Alerts">
-                                @SharedLocalizer[Resource.MyAlerts]
+                                @Resource.MyAlerts
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @MarkIfActive("/Watchdogs/Manage/Manage")" asp-page="/Watchdogs/Manage/Manage">
-                                @SharedLocalizer[Resource.ManageWatchdogs]
+                                @Resource.ManageWatchdogs
                             </a>
                         </li>
                     </ul>

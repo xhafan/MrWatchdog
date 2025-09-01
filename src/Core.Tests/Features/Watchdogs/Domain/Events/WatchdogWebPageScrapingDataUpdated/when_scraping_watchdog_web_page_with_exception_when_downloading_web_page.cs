@@ -1,15 +1,14 @@
-﻿using System.Net;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_exception_when_downloading_web_page : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -22,22 +21,8 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
         var httpClientFactory = new HttpClientFactoryBuilder()
             .WithRequestResponse(new HttpMessageRequestResponse(
                 "https://www.pcgamer.com/epic-games-store-free-games-list/",
-                () => new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(
-                        """
-                        <html>
-                        <body>
-                        <div id="article-body">
-                        <p class="infoUpdate-log">
-                        <a href="https://invalid_url" target="_blank">Two Point Hospital</a>
-                        </p>
-                        </div>
-                        </body>
-                        </html>
-                        """)
-                }))
+                () => throw new HttpRequestException("No such host is known")
+            ))
             .Build();
         
         var handler = new ScrapeWatchdogWebPageDomainEventMessageHandler(
@@ -54,7 +39,7 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
         var webPage = _watchdog.WebPages.Single();
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("No HTML node selected. Please review the Selector.");
+        webPage.ScrapingErrorMessage.ShouldBe("No such host is known");
     }
     
     private void _BuildEntities()

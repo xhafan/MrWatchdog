@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -10,11 +11,13 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
 {
     private WatchdogAlert _newWatchdogAlert = null!;
     private WatchdogAlert? _persistedWatchdogAlert;
+    private Watchdog _watchdog = null!;
+    private User _user = null!;
 
     [SetUp]
     public void Context()
     {
-        var watchdog = new WatchdogBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithWebPage(new WatchdogWebPageArgs
             {
                 Url = "http://url.com/page",
@@ -22,9 +25,13 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
                 Name = "url.com/page"
             })
             .Build();
-        watchdog.SetScrapingResults(watchdog.WebPages.Single().Id, ["<div>text</div>", "<div>hello</div>"]);
+        _watchdog.SetScrapingResults(_watchdog.WebPages.Single().Id, ["<div>text</div>", "<div>hello</div>"]);
+        
+        _user = new UserBuilder(UnitOfWork).Build();
+        
         _newWatchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
-            .WithWatchdog(watchdog)
+            .WithWatchdog(_watchdog)
+            .WithUser(_user)
             .WithSearchTerm("text")
             .Build();
         
@@ -40,9 +47,9 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
         _persistedWatchdogAlert.ShouldNotBeNull();
         _persistedWatchdogAlert.ShouldBe(_newWatchdogAlert);
 
-        _persistedWatchdogAlert.Watchdog.ShouldBe(_newWatchdogAlert.Watchdog);
+        _persistedWatchdogAlert.Watchdog.ShouldBe(_watchdog);
+        _persistedWatchdogAlert.User.ShouldBe(_user);
         _persistedWatchdogAlert.SearchTerm.ShouldBe("text");
-        _persistedWatchdogAlert.PreviousScrapingResults.ShouldBeEmpty();
         _persistedWatchdogAlert.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
     }
 }

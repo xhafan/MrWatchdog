@@ -4,7 +4,7 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Messages;
@@ -64,7 +64,8 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         );
         _domainEvent = new WatchdogWebPageScrapingDataUpdatedDomainEvent(WatchdogId: _watchdog.Id, WatchdogWebPageId: _watchdogWebPageIdOne)
         {
-            RelatedCommandGuid = _relatedCommandGuid
+            RelatedCommandGuid = _relatedCommandGuid,
+            ActingUserId = 23
         };
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _domainEventJobGuid.ToString()}}, _domainEvent));
 
@@ -105,9 +106,10 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.CompletedOn.ShouldNotBeNull();
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.Type.ShouldBe(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
-        job.InputData.ShouldBe($$"""
-                                 {"watchdogId": {{_watchdog.Id}}, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
-                                 """);
+        job.InputData.ShouldBe(
+            $$"""
+            {"watchdogId": {{_watchdog.Id}}, "actingUserId": 23, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
+            """);
         job.Kind.ShouldBe(JobKind.DomainEvent);
         job.NumberOfHandlingAttempts.ShouldBe(1);
         job.RelatedCommandJob.ShouldBe(_commandJob);

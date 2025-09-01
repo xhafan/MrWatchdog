@@ -1,15 +1,15 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -30,7 +30,9 @@ public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseT
                         <html>
                         <body>
                         <div id="article-body">
-                        <p class="infoUpdate-log">text one<script>console.log("Hello from the script!");</script></p>
+                        <p class="infoUpdate-log">
+                        <a href="https://invalid_url" target="_blank">Two Point Hospital</a>
+                        </p>
                         </div>
                         </body>
                         </html>
@@ -47,14 +49,12 @@ public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseT
     }
 
     [Test]
-    public void dangerous_html_is_removed()
+    public void web_page_scraping_error_message_is_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe([
-            """
-            <p>text one</p>
-            """
-        ]);
+        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedOn.ShouldBe(null);
+        webPage.ScrapingErrorMessage.ShouldBe("No HTML node selected. Please review the Selector.");
     }
     
     private void _BuildEntities()
@@ -64,7 +64,7 @@ public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseT
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
-                           div#article-body p.infoUpdate-log
+                           div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
                            """,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })

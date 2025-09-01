@@ -1,16 +1,18 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
+﻿using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.CreatingWatchdogAlert;
 
 [TestFixture]
 public class when_creating_duplicate_watchdog_alert : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private WatchdogAlert _watchdogAlert = null!;
+    private User _user = null!;
 
     [SetUp]
     public async Task Context()
@@ -20,10 +22,11 @@ public class when_creating_duplicate_watchdog_alert : BaseDatabaseTest
         var handler = new CreateWatchdogAlertCommandMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             new NhibernateRepository<WatchdogAlert>(UnitOfWork),
+            new UserRepository(UnitOfWork),
             UnitOfWork
         );
 
-        await handler.Handle(new CreateWatchdogAlertCommand(_watchdog.Id, SearchTerm: "text"));
+        await handler.Handle(new CreateWatchdogAlertCommand(_watchdog.Id, SearchTerm: "text") { ActingUserId = _user.Id});
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -37,6 +40,8 @@ public class when_creating_duplicate_watchdog_alert : BaseDatabaseTest
     
     private void _BuildEntities()
     {
+        _user = new UserBuilder(UnitOfWork).Build();
+        
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithWebPage(new WatchdogWebPageArgs
             {
@@ -51,6 +56,7 @@ public class when_creating_duplicate_watchdog_alert : BaseDatabaseTest
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)
             .WithSearchTerm("text")
+            .WithUser(_user)
             .Build();
     }
 }

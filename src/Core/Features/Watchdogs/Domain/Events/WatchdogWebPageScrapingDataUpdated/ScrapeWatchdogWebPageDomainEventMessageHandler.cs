@@ -1,7 +1,7 @@
 ﻿using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 public class ScrapeWatchdogWebPageDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,

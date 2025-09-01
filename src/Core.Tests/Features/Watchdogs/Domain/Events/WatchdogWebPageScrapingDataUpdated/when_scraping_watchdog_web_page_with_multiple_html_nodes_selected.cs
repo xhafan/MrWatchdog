@@ -1,15 +1,15 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html_with_no_text_inside_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_multiple_html_nodes_selected : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -31,6 +31,8 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                         <body>
                         <div id="article-body">
                         <p class="infoUpdate-log">
+                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
                         </p>
                         </div>
                         </body>
@@ -48,12 +50,20 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
     }
 
     [Test]
-    public void web_page_scraping_error_message_is_set()
+    public void web_page_is_scraped_and_scraping_results_are_set()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
-        webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("All selected HTML results have empty text.");
+        webPage.ScrapingResults.ShouldBe([
+            """
+            <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+            """,
+            """
+            <a href="https://store.epicgames.com/en-US/p/two-point-hospital2" target="_blank">Two Point Hospital2</a>
+            """
+        ]);
+        webPage.ScrapedOn.ShouldNotBeNull();
+        webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
+        webPage.ScrapingErrorMessage.ShouldBe(null);
     }
     
     private void _BuildEntities()
@@ -63,13 +73,11 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
-                           div#article-body p.infoUpdate-log
+                           div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
                            """,
-                SelectText = true,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

@@ -1,15 +1,15 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_no_text_inside_selected_html : BaseDatabaseTest
+public class when_scraping_watchdog_web_page_with_dangerous_html : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -30,8 +30,7 @@ public class when_scraping_watchdog_web_page_with_no_text_inside_selected_html :
                         <html>
                         <body>
                         <div id="article-body">
-                        <p class="infoUpdate-log">
-                        </p>
+                        <p class="infoUpdate-log">text one<script>console.log("Hello from the script!");</script></p>
                         </div>
                         </body>
                         </html>
@@ -48,12 +47,14 @@ public class when_scraping_watchdog_web_page_with_no_text_inside_selected_html :
     }
 
     [Test]
-    public void web_page_scraping_error_message_is_set()
+    public void dangerous_html_is_removed()
     {
         var webPage = _watchdog.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
-        webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("All selected HTML results have empty text.");
+        webPage.ScrapingResults.ShouldBe([
+            """
+            <p>text one</p>
+            """
+        ]);
     }
     
     private void _BuildEntities()

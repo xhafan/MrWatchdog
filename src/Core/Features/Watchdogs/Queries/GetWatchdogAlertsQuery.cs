@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public record GetWatchdogAlertsQuery : IQuery;
+public record GetWatchdogAlertsQuery(long UserId) : IQuery;

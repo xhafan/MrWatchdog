@@ -1,6 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Web.Features.Shared.ReinforcedTypings;

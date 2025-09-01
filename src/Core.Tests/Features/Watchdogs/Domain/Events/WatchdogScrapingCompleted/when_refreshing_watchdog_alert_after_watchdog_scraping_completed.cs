@@ -2,16 +2,16 @@
 using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 
 [TestFixture]
-public class when_triggering_watchdog_alert : BaseDatabaseTest
+public class when_refreshing_watchdog_alert_after_watchdog_scraping_completed : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -29,7 +29,7 @@ public class when_triggering_watchdog_alert : BaseDatabaseTest
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         queryHandlerFactory.RegisterQueryHandler(new GetWatchdogAlertsForWatchdogQueryHandler(UnitOfWork));
         
-        var handler = new TriggerWatchdogAlertsDomainEventMessageHandler(
+        var handler = new RefreshWatchdogAlertsDomainEventMessageHandler(
             new QueryExecutor(queryHandlerFactory),
             _bus
         );

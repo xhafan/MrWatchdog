@@ -10,4 +10,5 @@ public static class JobContext
     public static readonly AmbientStorage<IWindsorContainer?> WindsorContainer = new();
     public static readonly AmbientStorage<HashSet<IDomainEvent>?> RaisedDomainEvents = new();
     public static readonly AmbientStorage<Guid> CommandGuid = new();
+    public static readonly AmbientStorage<long> ActingUserId = new();
 }

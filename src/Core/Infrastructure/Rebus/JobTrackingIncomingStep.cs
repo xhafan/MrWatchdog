@@ -44,6 +44,8 @@ public class JobTrackingIncomingStep(
                 throw new NotSupportedException($"Unsupported BaseMessage type {baseMessage.GetType().FullName}");
         }
         
+        JobContext.ActingUserId.Value = baseMessage.ActingUserId;
+
         JobContext.AffectedEntities.Value = [];
         Job? job = null;
 

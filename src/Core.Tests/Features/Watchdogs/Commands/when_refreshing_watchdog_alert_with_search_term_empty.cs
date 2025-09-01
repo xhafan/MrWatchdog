@@ -33,8 +33,8 @@ public class when_refreshing_watchdog_alert_with_search_term_empty : BaseDatabas
     [Test]
     public void watchdog_alert_is_refreshed()
     {
-        _watchdogAlert.PreviousScrapingResults.ShouldBe(["Another World", "Doom 1"]);
         _watchdogAlert.CurrentScrapingResults.ShouldBe(["Doom 1", "Prince Of Persia"]);
+        _watchdogAlert.ScrapingResultsToAlertAbout.ShouldBe(["Prince Of Persia"]);
     }
     
     private void _BuildEntities()

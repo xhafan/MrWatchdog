@@ -10,6 +10,7 @@ using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
 using Rebus.CastleWindsor;
@@ -56,6 +57,7 @@ public class RebusHostedService(
             Component.For<IJobCreator>().ImplementedBy<ExistingTransactionJobCreator>().LifeStyle.PerRebusMessage(),
             Component.For<IJobCreator>().ImplementedBy<NewTransactionJobCreator>().LifeStyle.Singleton.Named(nameof(NewTransactionJobCreator)),
             Component.For<ICoreBus>().ImplementedBy<CoreBus>().LifeStyle.PerRebusMessage(),
+            Component.For<IActingUserAccessor>().ImplementedBy<JobContextActingUserAccessor>().LifeStyle.PerRebusMessage(),
             Classes
                 .FromAssemblyContaining(typeof(SendDomainEventOverMessageBusDomainEventHandler<>))
                 .BasedOn(typeof(IDomainEventHandler<>))

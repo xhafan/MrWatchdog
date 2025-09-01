@@ -8,6 +8,7 @@ namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 public class CreateWatchdogAlertCommandMessageHandler(
     IRepository<Watchdog> watchdogRepository,
     IRepository<WatchdogAlert> watchdogAlertRepository,
+    IUserRepository userRepository,
     NhibernateUnitOfWork unitOfWork
 ) 
     : IHandleMessages<CreateWatchdogAlertCommand>
@@ -15,15 +16,17 @@ public class CreateWatchdogAlertCommandMessageHandler(
     public async Task Handle(CreateWatchdogAlertCommand command)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogId);
+        var user = await userRepository.LoadByIdAsync(command.ActingUserId);
 
         var watchdogAlert = await unitOfWork.Session!.QueryOver<WatchdogAlert>()
             .Where(x => x.Watchdog == watchdog 
+                        && x.User == user
                         && x.SearchTerm == command.SearchTerm)
             .SingleOrDefaultAsync();
         
         if (watchdogAlert != null) return;
 
-        var newWatchdog = new WatchdogAlert(watchdog, command.SearchTerm);
+        var newWatchdog = new WatchdogAlert(watchdog, user, command.SearchTerm);
         await watchdogAlertRepository.SaveAsync(newWatchdog);
     }
 }

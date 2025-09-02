@@ -1,15 +1,23 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Manage;
 
-public class ManageModel(IQueryExecutor queryExecutor) : BasePageModel
+[Authorize]
+public class ManageModel(
+    IQueryExecutor queryExecutor,
+    IActingUserAccessor actingUserAccessor
+) : BasePageModel
 {
-    public IEnumerable<GetWatchdogsQueryResult> WatchdogResults { get; private set; } = null!;
+    public IEnumerable<GetWatchdogsQueryResult> Watchdogs { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        WatchdogResults = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(new GetWatchdogsQuery());
+        Watchdogs = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(
+            new GetWatchdogsQuery(actingUserAccessor.GetActingUserId())
+        );
     }
 }

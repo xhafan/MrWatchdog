@@ -23,7 +23,7 @@ public class when_sending_command_message_with_guid_already_set : BaseDatabaseTe
             new ExistingTransactionJobCreator(UnitOfWork),
             A.Fake<IActingUserAccessor>()
         );
-        _command = new CreateWatchdogCommand("watchdog name")
+        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name")
         {
             Guid = Guid.NewGuid()
         };

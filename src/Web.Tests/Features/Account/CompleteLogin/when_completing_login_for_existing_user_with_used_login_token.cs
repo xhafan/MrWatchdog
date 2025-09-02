@@ -1,6 +1,4 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
@@ -14,11 +12,9 @@ public class when_completing_login_for_existing_user_with_used_login_token : Bas
     private LoginToken _loginToken = null!;
 
     [SetUp]
-    public async Task Context()
+    public void Context()
     {
         _BuildEntities();
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
         
         _controller = new CompleteLoginControllerBuilder(UnitOfWork).Build();
     }
@@ -29,20 +25,6 @@ public class when_completing_login_for_existing_user_with_used_login_token : Bas
         var ex = Should.Throw<Exception>(async () => await _controller.CompleteLogin(_loginToken.Guid));
         
         ex.Message.ShouldContain("Login token has been already used.");
-    }
-
-    [TearDown]
-    public async Task TearDown()
-    {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        var loginTokenRepository = new LoginTokenRepository(newUnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }        
     }
     
     private void _BuildEntities()

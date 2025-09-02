@@ -1,5 +1,4 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
@@ -24,11 +22,9 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
     private User _user = null!;
 
     [SetUp]
-    public async Task Context()
+    public void Context()
     {
         _BuildEntities();
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
         
         _bus = A.Fake<ICoreBus>();
         
@@ -59,27 +55,6 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
         ex.Message.ShouldContain("The token is expired");
     }
 
-    [TearDown]
-    public async Task TearDown()
-    {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        var userRepository = new UserRepository(newUnitOfWork);
-        var user = await userRepository.GetAsync(_user.Id);
-        if (user != null)
-        {
-            await userRepository.DeleteAsync(user);
-        }
-        
-        var loginTokenRepository = new LoginTokenRepository(newUnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }        
-    }
-    
     private void _BuildEntities()
     {
         _user = new UserBuilder(UnitOfWork).Build();

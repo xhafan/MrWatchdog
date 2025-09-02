@@ -1,4 +1,5 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared.Extensions;
 
@@ -9,11 +10,18 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const string Name = "watchdog name";
     public const int ScrapingIntervalInSeconds = 60;
 
+    private User? _user;
     private string _name = Name;
     private int _scrapingIntervalInSeconds = ScrapingIntervalInSeconds;
 
     private WatchdogWebPageArgs[]? _watchdogWebPageArgses;
     private DateTime? _nextScrapingOn;
+
+    public WatchdogBuilder WithUser(User user)
+    {
+        _user = user;
+        return this;
+    }
 
     public WatchdogBuilder WithName(string name)
     {
@@ -41,7 +49,9 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
     
     public Watchdog Build()
     {
-        var watchdog = new Watchdog(_name);
+        _user ??= new UserBuilder(unitOfWork).Build();
+        
+        var watchdog = new Watchdog(_user, _name);
 
         if (_watchdogWebPageArgses != null)
         {

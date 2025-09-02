@@ -20,9 +20,9 @@
 
 <h1 class="display-4">@title</h1>
 
-@foreach (var watchdogScrapingResults in Model.WatchdogScrapingResults)
+@foreach (var watchdogs in Model.Watchdogs)
 {
     <div>
-        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogScrapingResults.WatchdogId">@watchdogScrapingResults.WatchdogName</a>
+        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogs.WatchdogId">@watchdogs.WatchdogName</a>
     </div>
 }

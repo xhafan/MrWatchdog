@@ -2,7 +2,6 @@
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -24,10 +23,10 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
         _createJobTask = Task.Run(async () =>
         {
             // simulate command handler in a separate transaction
-            using var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-            unitOfWork.BeginTransaction();
+            using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+            newUnitOfWork.BeginTransaction();
 
-            _job = new JobBuilder(unitOfWork)
+            _job = new JobBuilder(newUnitOfWork)
                 .WithGuid(_jobGuid)
                 .Build();
 
@@ -55,14 +54,8 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
     {
         await _createJobTask;
         
-        var jobRepository = new JobRepository(UnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(_jobGuid);
-        if (job != null)
-        {
-            await jobRepository.DeleteAsync(job);
-        }
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+        await newUnitOfWork.DeleteJobCascade(_jobGuid);
     }
 }

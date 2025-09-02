@@ -1,5 +1,6 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -18,20 +19,20 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private CreateWatchdogCommand _command = null!;
     private Watchdog _newWatchdog = null!;
     private Job _job = null!;
+    private User _user = null!;
 
     [SetUp]
     public async Task Context()
     {
-        var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
-            .Build();
+        _BuildEntitiesInSeparateTransaction();
+
+        var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder().Build();
         
         var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
 
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
-        _CreateJobInSeparateTransaction();
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
@@ -52,13 +53,13 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     [Test]
     public void existing_job_is_fetched_and_completed()
     {
-        _job = _GetJob(UnitOfWork);
+        _job = UnitOfWork.LoadById<Job>(_job.Id);
 
         _job.CompletedOn.ShouldNotBeNull();
         _job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _job.NumberOfHandlingAttempts.ShouldBe(1);
-        
-        var jobAffectedEntity = _job.AffectedEntities.ShouldHaveSingleItem();
+
+        var jobAffectedEntity = _job.AffectedEntities.Single(x => x.EntityName == nameof(Watchdog));
         jobAffectedEntity.EntityName.ShouldBe(nameof(Watchdog));
         jobAffectedEntity.EntityId.ShouldBe(_newWatchdog.Id);
         
@@ -74,17 +75,21 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         await UnitOfWork.FlushAsync();
         await UnitOfWork.RollbackAsync();
         UnitOfWork.BeginTransaction();
-        
+
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        var job = _GetJob(newUnitOfWork);
-        await newUnitOfWork.Session!.DeleteAsync(job);
+        await newUnitOfWork.DeleteJobCascade(_job);
+        await newUnitOfWork.DeleteUserCascade(_user);
     }
 
-    private void _CreateJobInSeparateTransaction()
+    private void _BuildEntitiesInSeparateTransaction()
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
+
+        _user = new UserBuilder(newUnitOfWork).Build();
+
+        _command = new CreateWatchdogCommand(_user.Id, "watchdog name") {Guid = Guid.NewGuid()};
 
         _job = new JobBuilder(newUnitOfWork)
             .WithGuid(_command.Guid)
@@ -92,10 +97,5 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             .WithInputData(_command)
             .WithKind(JobKind.Command)
             .Build();
-    }
-
-    private Job _GetJob(NhibernateUnitOfWork unitOfWork)
-    {
-        return unitOfWork.LoadById<Job>(_job.Id);
     }
 }

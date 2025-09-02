@@ -33,8 +33,8 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name") {Guid = Guid.NewGuid()};
-        _CreateJobInSeparateTransaction();
+        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name") {Guid = Guid.NewGuid()};
+        _BuildEntitiesInSeparateTransaction();
         _incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await _jobTrackingIncomingStep.Process(_incomingStepContext,
@@ -66,11 +66,10 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        var job = _GetJob(newUnitOfWork);
-        await newUnitOfWork.Session!.DeleteAsync(job);
+        await newUnitOfWork.DeleteJobCascade(_job);
     }
 
-    private void _CreateJobInSeparateTransaction()
+    private void _BuildEntitiesInSeparateTransaction()
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
@@ -84,10 +83,5 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _job.HandlingStarted();
         _job.Complete();
         newUnitOfWork.Save(_job);
-    }
-
-    private Job _GetJob(NhibernateUnitOfWork unitOfWork)
-    {
-        return unitOfWork.LoadById<Job>(_job.Id);
     }
 }

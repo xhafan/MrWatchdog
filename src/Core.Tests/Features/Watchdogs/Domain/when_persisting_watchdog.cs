@@ -28,6 +28,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.ShouldNotBeNull();
         _persistedWatchdog.ShouldBe(_newWatchdog);
 
+        _persistedWatchdog.User.ShouldBe(_newWatchdog.User);
         _persistedWatchdog.Name.ShouldBe(WatchdogBuilder.Name);
         _persistedWatchdog.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
     }

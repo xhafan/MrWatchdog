@@ -1,9 +1,9 @@
-﻿using System.Net;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using System.Net;
 
 namespace MrWatchdog.Web.Tests.Features.Account.E2e;
 
@@ -15,11 +15,8 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _loginToken = new LoginTokenBuilder(UnitOfWork).Build();
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
-    }    
+        _BuildEntitiesInSeparateTransaction();
+    } 
     
     [Test]
     public async Task login_token_confirmation_can_be_retrieved()
@@ -49,14 +46,17 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        var loginTokenRepository = new LoginTokenRepository(UnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();         
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+    }
+
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _loginToken = new LoginTokenBuilder(newUnitOfWork).Build();
     }
 }

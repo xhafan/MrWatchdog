@@ -1,53 +1,46 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using System.Net;
+using CoreDdd.Nhibernate.UnitOfWorks;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.E2e;
 
 [TestFixture]
 public class when_getting_watchdog_alert_page : BaseDatabaseTest
 {
-    private WatchdogAlert _watchdogAlert = null!;
+    private WatchdogAlert? _watchdogAlert;
 
     [SetUp]
     public void Context()
     {
-        _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork).Build();
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
     }
 
     [Test]
     public async Task watchdog_alert_page_can_be_fetched()
     {
         var watchdogAlertUrl = WatchdogUrlConstants.WatchdogAlertUrl
-            .Replace(WatchdogUrlConstants.WatchdogAlertIdVariable, $"{_watchdogAlert.Id}");
+            .Replace(WatchdogUrlConstants.WatchdogAlertIdVariable, $"{_watchdogAlert!.Id}");
         var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(watchdogAlertUrl);
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     
     [TearDown]
     public async Task TearDown()
     {
-        var watchdogAlertRepository = new NhibernateRepository<WatchdogAlert>(UnitOfWork);
-        var watchdogAlert = await watchdogAlertRepository.GetAsync(_watchdogAlert.Id);
-        if (watchdogAlert != null)
-        {
-            await watchdogAlertRepository.DeleteAsync(watchdogAlert);
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-            var watchdogRepository = new NhibernateRepository<Watchdog>(UnitOfWork);
-            var watchdog = await watchdogRepository.LoadByIdAsync(_watchdogAlert.Watchdog.Id);
-            await watchdogRepository.DeleteAsync(watchdog);
-            
-            var userRepository = new UserRepository(UnitOfWork);
-            var user = await userRepository.LoadByIdAsync(_watchdogAlert.User.Id);
-            await userRepository.DeleteAsync(user);
-        }
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();         
-    }    
+        await newUnitOfWork.DeleteWatchdogAlertCascade(_watchdogAlert);
+    } 
+
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _watchdogAlert = new WatchdogAlertBuilder(newUnitOfWork).Build();
+    }
 }

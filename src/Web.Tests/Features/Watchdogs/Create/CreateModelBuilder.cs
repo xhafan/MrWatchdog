@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Watchdogs.Create;
 
@@ -7,6 +8,7 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
 public class CreateModelBuilder
 {
     private ICoreBus? _bus;
+    private IActingUserAccessor? _actingUserAccessor;
     private string? _name;
 
     public CreateModelBuilder WithBus(ICoreBus bus)
@@ -15,6 +17,12 @@ public class CreateModelBuilder
         return this;
     }
     
+    public CreateModelBuilder WithActingUserAccessor(IActingUserAccessor actingUserAccessor)
+    {
+        _actingUserAccessor = actingUserAccessor;
+        return this;
+    }
+
     public CreateModelBuilder WithName(string name)
     {
         _name = name;
@@ -24,8 +32,9 @@ public class CreateModelBuilder
     public CreateModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
+        _actingUserAccessor ??= A.Fake<IActingUserAccessor>();
 
-        var model = new CreateModel(_bus)
+        var model = new CreateModel(_bus, _actingUserAccessor)
         {
             Name = _name!
         };

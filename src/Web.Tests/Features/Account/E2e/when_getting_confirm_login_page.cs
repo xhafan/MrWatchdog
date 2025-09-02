@@ -1,13 +1,13 @@
-﻿using MrWatchdog.Core.Features.Account.Commands;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using System.Net;
 using NHibernate;
 using NHibernate.Criterion;
+using System.Net;
 
 namespace MrWatchdog.Web.Tests.Features.Account.E2e;
 
@@ -19,10 +19,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _loginToken = new LoginTokenBuilder(UnitOfWork).Build();
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
     }    
     
     [Test]
@@ -44,14 +41,12 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        var loginTokenRepository = new LoginTokenRepository(UnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        var job = await UnitOfWork.Session!.QueryOver<Job>()
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+
+        var job = await newUnitOfWork.Session!.QueryOver<Job>()
             .Where(x => x.Type == nameof(ConfirmLoginTokenCommand))
             .And(Expression.Sql(
                 """
@@ -61,13 +56,14 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
                 NHibernateUtil.String)
             )
             .SingleOrDefaultAsync();
-        if (job != null)
-        {
-            var jobRepository = new JobRepository(UnitOfWork);
-            await jobRepository.DeleteAsync(job);
-        }        
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();         
+        await newUnitOfWork.DeleteJobCascade(job);  
+    }
+
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _loginToken = new LoginTokenBuilder(newUnitOfWork).Build();
     }
 }

@@ -23,21 +23,21 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
         _createJobTask = Task.Run(async () =>
         {
             // simulate command handler in a separate transaction
-            using (var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
+            using (var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
             {
-                unitOfWork.BeginTransaction();
+                newUnitOfWork.BeginTransaction();
 
-                _job = new JobBuilder(unitOfWork)
+                _job = new JobBuilder(newUnitOfWork)
                     .WithGuid(_jobGuid)
                     .Build();
-                unitOfWork.Save(_job);
+                newUnitOfWork.Save(_job);
 
                 await Task.Delay(200);
             }
-            using (var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
+            using (var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
             {
-                unitOfWork.BeginTransaction();
-                var jobRepository = new JobRepository(unitOfWork);
+                newUnitOfWork.BeginTransaction();
+                var jobRepository = new JobRepository(newUnitOfWork);
                 _job = await jobRepository.LoadByIdAsync(_job.Id);
 
                 _job.HandlingStarted();
@@ -54,9 +54,6 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
     [Test]
     public void after_the_wait_the_job_is_completed()
     {
-        UnitOfWork.Rollback();
-        UnitOfWork.BeginTransaction();
-        
         _job.ShouldNotBeNull();
         _job = UnitOfWork.LoadById<Job>(_job.Id);
         _job.CompletedOn.ShouldNotBe(null);
@@ -67,14 +64,8 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
     {
         await _createJobTask;
         
-        var jobRepository = new JobRepository(UnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(_jobGuid);
-        if (job != null)
-        {
-            await jobRepository.DeleteAsync(job);
-        }
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+        await newUnitOfWork.DeleteJobCascade(_jobGuid);
     }
 }

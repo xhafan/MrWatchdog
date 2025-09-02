@@ -23,7 +23,6 @@ public class AlertsModelBuilder(NhibernateUnitOfWork unitOfWork)
     public AlertsModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        
         queryHandlerFactory.RegisterQueryHandler(new GetWatchdogAlertsQueryHandler(unitOfWork));
 
         _actingUser ??= new UserBuilder(unitOfWork).Build();

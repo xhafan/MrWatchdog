@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.HostedServices;
@@ -21,10 +20,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
     [SetUp]
     public async Task Context()
     {
-        _BuildEntities();
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
         
         var logger = A.Fake<ILogger<KickOffDueWatchdogsScrapingHostedService>>();
         _bus = A.Fake<ICoreBus>();
@@ -59,17 +55,15 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        
-        var watchdogRepository = new NhibernateRepository<Watchdog>(newUnitOfWork);
-        var watchdog = await watchdogRepository.GetAsync(_watchdogWithoutNextScrapingOnSet.Id);
-        if (watchdog != null)
-        {
-            await watchdogRepository.DeleteAsync(watchdog);
-        }
+
+        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
     }    
     
-    private void _BuildEntities()
+    private void _BuildEntitiesInSeparateTransaction()
     {
-        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(UnitOfWork).Build();
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork).Build();
     }
 }

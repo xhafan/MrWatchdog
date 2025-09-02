@@ -6,10 +6,11 @@ namespace MrWatchdog.Web.Features.Watchdogs;
 
 public class IndexModel(IQueryExecutor queryExecutor) : PageModel
 {
-    public IEnumerable<GetWatchdogsQueryResult> WatchdogScrapingResults { get; private set; } = null!;
+    public IEnumerable<GetWatchdogsQueryResult> Watchdogs { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        WatchdogScrapingResults = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(new GetWatchdogsQuery());
+        // todo: add a new query to load public watchdogs only
+        Watchdogs = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(new GetWatchdogsQuery(0)); // todo: get actual user id
     }
 }

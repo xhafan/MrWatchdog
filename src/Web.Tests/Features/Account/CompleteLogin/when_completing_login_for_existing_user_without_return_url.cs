@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
@@ -26,9 +25,7 @@ public class when_completing_login_for_existing_user_without_return_url : BaseDa
     [SetUp]
     public async Task Context()
     {
-        _BuildEntities();
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
         
         _bus = A.Fake<ICoreBus>();
         
@@ -66,31 +63,21 @@ public class when_completing_login_for_existing_user_without_return_url : BaseDa
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-
-        var userRepository = new UserRepository(newUnitOfWork);
-        var user = await userRepository.GetAsync(_user.Id);
-        if (user != null)
-        {
-            await userRepository.DeleteAsync(user);
-        }
-        
-        var loginTokenRepository = new LoginTokenRepository(newUnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }        
+        await newUnitOfWork.DeleteUserCascade(_user);
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
     }
     
-    private void _BuildEntities()
+    private void _BuildEntitiesInSeparateTransaction()
     {
-        _user = new UserBuilder(UnitOfWork).Build();
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        _loginToken = new LoginTokenBuilder(UnitOfWork)
+        _user = new UserBuilder(newUnitOfWork).Build();
+
+        _loginToken = new LoginTokenBuilder(newUnitOfWork)
             .WithEmail(_user.Email)
             .WithTokenReturnUrl(null)
             .Build();
         _loginToken.Confirm();
-
     }    
 }

@@ -1,6 +1,6 @@
 ﻿@page
 @using MrWatchdog.Core.Resources
-@model IndexModel
+@model ManageModel
 
 @{
     var title = Resource.ManageWatchdogs;
@@ -24,7 +24,7 @@
     <a asp-page="/Watchdogs/Create/Create"><i class="fa-solid fa-plus"></i> Create watchdog</a>
 </div>
 
-@foreach (var watchdog in Model.WatchdogScrapingResults)
+@foreach (var watchdog in Model.Watchdogs)
 {
     <div>
         <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId">@watchdog.WatchdogName</a>

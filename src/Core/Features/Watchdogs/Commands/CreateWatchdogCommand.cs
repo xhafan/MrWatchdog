@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public record CreateWatchdogCommand(string Name) : Command;
+public record CreateWatchdogCommand(long UserId, string Name) : Command;

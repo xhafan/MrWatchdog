@@ -6,7 +6,6 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -58,20 +57,8 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        
-        var jobRepository = new JobRepository(newUnitOfWork);
-        var job = await jobRepository.GetAsync(_job.Id);
-        if (job != null)
-        {
-            await jobRepository.DeleteAsync(job);
-        }
-
-        var loginTokenRepository = new LoginTokenRepository(newUnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }
+        await newUnitOfWork.DeleteJobCascade(_job);
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
     }
     
     private void _SimulateLoginTokenAndJobCreationOnSendLoginLinkToUserCommand()
@@ -87,22 +74,22 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
             .Invokes(call =>
             {
                 // simulate the command handler in a separate transaction
-                using var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-                unitOfWork.BeginTransaction();
+                using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+                newUnitOfWork.BeginTransaction();
 
-                _loginToken = new LoginTokenBuilder(unitOfWork).Build();
-                unitOfWork.Save(_loginToken);
+                _loginToken = new LoginTokenBuilder(newUnitOfWork).Build();
+                newUnitOfWork.Save(_loginToken);
 
                 var command = (SendLoginLinkToUserCommand) call.Arguments.Single()!;
                 command.Guid = Guid.NewGuid();
                 
-                _job = new JobBuilder(unitOfWork)
+                _job = new JobBuilder(newUnitOfWork)
                     .WithGuid(command.Guid)
                     .WithType(nameof(SendLoginLinkToUserCommand))
                     .WithKind(JobKind.Command)
                     .Build();
                 _job.AddAffectedEntity(DomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
-                unitOfWork.Save(_job);
+                newUnitOfWork.Save(_job);
             });
     }
 }

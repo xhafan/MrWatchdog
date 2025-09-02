@@ -8,7 +8,7 @@ namespace MrWatchdog.TestsShared.Builders;
 public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string Type = nameof(CreateWatchdogCommand);
-    public static readonly object InputData = new CreateWatchdogCommand("watchdog name");
+    public static readonly object InputData = new CreateWatchdogCommand(23, "watchdog name");
     public const JobKind Kind = JobKind.Command;
 
     private Guid _guid;

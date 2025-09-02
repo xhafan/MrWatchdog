@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Jobs;
@@ -19,17 +19,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _commandJob = new JobBuilder(UnitOfWork)
-            .WithGuid(_commandJobGuid)
-            .Build();
-        
-        _domainEventJob = new JobBuilder(UnitOfWork)
-            .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
-            .Build();
-        _domainEventJob.SetRelatedCommandJob(_commandJob);
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
     }
 
     [Test]
@@ -48,21 +38,25 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        var jobRepository = new JobRepository(UnitOfWork);
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        var domainEventJob = await jobRepository.GetByGuidAsync(_domainEventJob.Guid);
-        if (domainEventJob != null)
-        {
-            await jobRepository.DeleteAsync(domainEventJob); 
-        }
+        await newUnitOfWork.DeleteJobCascade(_domainEventJob.Guid);
+        await newUnitOfWork.DeleteJobCascade(_commandJobGuid);
+    } 
 
-        var commandJob = await jobRepository.GetByGuidAsync(_commandJobGuid);
-        if (commandJob != null)
-        {
-            await jobRepository.DeleteAsync(commandJob);
-        }
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();        
-    }    
+        _commandJob = new JobBuilder(newUnitOfWork)
+            .WithGuid(_commandJobGuid)
+            .Build();
+        
+        _domainEventJob = new JobBuilder(newUnitOfWork)
+            .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
+            .Build();
+        _domainEventJob.SetRelatedCommandJob(_commandJob);
+    }
 }

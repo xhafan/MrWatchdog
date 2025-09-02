@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -33,9 +32,7 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
     [SetUp]
     public async Task Context()
     {
-        _BuildEntities();
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
         
         _bus = A.Fake<ICoreBus>();
         
@@ -121,23 +118,8 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-
-        if (_user != null)
-        {
-            var userRepository = new UserRepository(newUnitOfWork);
-            var user = await userRepository.GetAsync(_user.Id);
-            if (user != null)
-            {
-                await userRepository.DeleteAsync(user);
-            }
-        }
-        
-        var loginTokenRepository = new LoginTokenRepository(newUnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }        
+        await newUnitOfWork.DeleteUserCascade(_user);
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
     }
     
     private void _SimulateUserCreationOnCreateUserCommand()
@@ -152,10 +134,10 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
             .Invokes(_ =>
             {
                 // simulate the command handler in a separate transaction
-                using var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-                unitOfWork.BeginTransaction();
+                using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+                newUnitOfWork.BeginTransaction();
 
-                _user = new UserBuilder(unitOfWork)
+                _user = new UserBuilder(newUnitOfWork)
                     .WithEmail(_tokenEmail)
                     .Build();
             });
@@ -173,17 +155,20 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
             .Invokes(_ =>
             {
                 // simulate the command handler in a separate transaction
-                using var unitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-                unitOfWork.BeginTransaction();
+                using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+                newUnitOfWork.BeginTransaction();
 
-                var loginToken = unitOfWork.LoadById<LoginToken>(_loginToken.Id);
+                var loginToken = newUnitOfWork.LoadById<LoginToken>(_loginToken.Id);
                 loginToken.MarkAsUsed();
             });
     }    
     
-    private void _BuildEntities()
-    {
-        _loginToken = new LoginTokenBuilder(UnitOfWork)
+    private void _BuildEntitiesInSeparateTransaction()
+    {        
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+        
+        _loginToken = new LoginTokenBuilder(newUnitOfWork)
             .WithEmail(_tokenEmail)
             .Build();
         _loginToken.Confirm();

@@ -20,6 +20,8 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionInc
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step : BaseDatabaseTest
 {
+    private const long ActingUserId = 23;
+    
     private CreateWatchdogCommand _command = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageIdOne;
@@ -58,10 +60,11 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand("watchdog name")
+        
+        _command = new CreateWatchdogCommand(UserId: ActingUserId, "watchdog name")
         {
             Guid = Guid.NewGuid(),
-            ActingUserId = 23
+            ActingUserId = ActingUserId
         };
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
@@ -106,7 +109,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.Type.ShouldBe(nameof(CreateWatchdogCommand));
         job.InputData.ShouldBe($$"""
-                               {"guid": "{{job.Guid}}", "name": "watchdog name", "actingUserId": 23}
+                               {"guid": "{{job.Guid}}", "name": "watchdog name", "userId": 23, "actingUserId": 23}
                                """);
         job.Kind.ShouldBe(JobKind.Command);
         job.NumberOfHandlingAttempts.ShouldBe(1);
@@ -149,7 +152,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     [Test]
     public void acting_user_id_is_set_on_job_context()
     {
-        _jobContentActingUserId.ShouldBe(23);
+        _jobContentActingUserId.ShouldBe(ActingUserId);
     }
     
     [TearDown]
@@ -161,12 +164,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        var jobRepository = new JobRepository(newUnitOfWork);
-        var job = await jobRepository.GetByGuidAsync(_command.Guid);
-        if (job != null)
-        {
-            await jobRepository.DeleteAsync(job);
-        }
+        await newUnitOfWork.DeleteJobCascade(_command.Guid);
     }
 
     private record TestDomainEvent : DomainEvent;

@@ -2,12 +2,12 @@
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 using System.Net;
+using CoreDdd.Nhibernate.UnitOfWorks;
 
 namespace MrWatchdog.Web.Tests.Features.Account.E2e;
 
@@ -20,17 +20,9 @@ public class when_completing_login : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _user = new UserBuilder(UnitOfWork).Build();
-        
-        _loginToken = new LoginTokenBuilder(UnitOfWork)
-            .WithEmail(_user.Email)
-            .Build();
-        _loginToken.Confirm();
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
-    }    
-    
+        _BuildEntitiesInSeparateTransaction();
+    }
+
     [Test]
     public async Task confirm_login_succeeds()
     {
@@ -61,21 +53,13 @@ public class when_completing_login : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        var loginTokenRepository = new LoginTokenRepository(UnitOfWork);
-        var loginToken = await loginTokenRepository.GetAsync(_loginToken.Id);
-        if (loginToken != null)
-        {
-            await loginTokenRepository.DeleteAsync(loginToken);
-        }
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
 
-        var userRepository = new UserRepository(UnitOfWork);
-        var user = await userRepository.GetAsync(_user.Id);
-        if (user != null)
-        {
-            await userRepository.DeleteAsync(user);
-        }        
-        
-        var job = await UnitOfWork.Session!.QueryOver<Job>()
+        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+        await newUnitOfWork.DeleteUserCascade(_user);
+
+        var job = await newUnitOfWork.Session!.QueryOver<Job>()
             .Where(x => x.Type == nameof(MarkLoginTokenAsUsedCommand))
             .And(Expression.Sql(
                 """
@@ -85,13 +69,19 @@ public class when_completing_login : BaseDatabaseTest
                 NHibernateUtil.String)
             )
             .SingleOrDefaultAsync();
-        if (job != null)
-        {
-            var jobRepository = new JobRepository(UnitOfWork);
-            await jobRepository.DeleteAsync(job);
-        }        
+        await newUnitOfWork.DeleteJobCascade(job);
+    }
+
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _user = new UserBuilder(newUnitOfWork).Build();
         
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();         
+        _loginToken = new LoginTokenBuilder(newUnitOfWork)
+            .WithEmail(_user.Email)
+            .Build();
+        _loginToken.Confirm();
     }
 }

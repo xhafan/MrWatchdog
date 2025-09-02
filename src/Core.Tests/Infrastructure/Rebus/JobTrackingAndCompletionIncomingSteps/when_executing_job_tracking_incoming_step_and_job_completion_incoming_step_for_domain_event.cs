@@ -35,7 +35,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     [SetUp]
     public async Task Context()
     {
-        _BuildCommandJob();
+        _BuildEntitiesInSeparateTransaction();
         
         _windsorContainer = A.Fake<IWindsorContainer>();
         JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
@@ -148,16 +148,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     {
         _jobContextCommandGuidInTheNextIncomingStep.ShouldBe(_domainEvent.RelatedCommandGuid);
     }
- 
-    private void _BuildCommandJob()
-    {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        
-        _commandJob = new JobBuilder(newUnitOfWork)
-            .WithGuid(_relatedCommandGuid)
-            .Build();        
-    }
     
     [TearDown]
     public async Task TearDown()
@@ -168,20 +158,19 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        var jobRepository = new JobRepository(newUnitOfWork);
-        
-        var domainEventJob = await jobRepository.GetByGuidAsync(_domainEventJobGuid);
-        if (domainEventJob != null)
-        {
-            await jobRepository.DeleteAsync(domainEventJob);
-        }
-        
-        var commandJob = await jobRepository.GetByGuidAsync(_relatedCommandGuid);
-        if (commandJob != null)
-        {
-            await jobRepository.DeleteAsync(commandJob);
-        }        
+        await newUnitOfWork.DeleteJobCascade(_domainEventJobGuid);
+        await newUnitOfWork.DeleteJobCascade(_relatedCommandGuid);
     }
 
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+        
+        _commandJob = new JobBuilder(newUnitOfWork)
+            .WithGuid(_relatedCommandGuid)
+            .Build();        
+    }
+    
     private record TestDomainEvent : DomainEvent;
 }

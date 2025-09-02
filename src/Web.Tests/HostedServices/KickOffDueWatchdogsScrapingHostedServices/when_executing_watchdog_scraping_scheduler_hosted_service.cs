@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -24,10 +23,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
     [SetUp]
     public async Task Context()
     {
-        _BuildEntities();
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
         
         var logger = A.Fake<ILogger<KickOffDueWatchdogsScrapingHostedService>>();
         _bus = A.Fake<ICoreBus>();
@@ -91,37 +87,27 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
-        
-        var watchdogRepository = new NhibernateRepository<Watchdog>(newUnitOfWork);
-        var watchdog = await watchdogRepository.GetAsync(_watchdogWithoutNextScrapingOnSet.Id);
-        if (watchdog != null)
-        {
-            await watchdogRepository.DeleteAsync(watchdog);
-        }
-        watchdog = await watchdogRepository.GetAsync(_watchdogWithNextScrapingOnSetInTheFarPast.Id);
-        if (watchdog != null)
-        {
-            await watchdogRepository.DeleteAsync(watchdog);
-        }
-        watchdog = await watchdogRepository.GetAsync(_watchdogWithNextScrapingOnSetInTheFuture.Id);
-        if (watchdog != null)
-        {
-            await watchdogRepository.DeleteAsync(watchdog);
-        }
+
+        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
+        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFarPast);
+        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFuture);
     }    
     
-    private void _BuildEntities()
+    private void _BuildEntitiesInSeparateTransaction()
     {
-        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(UnitOfWork)
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
             .WithScrapingIntervalInSeconds(60)
             .Build();
         
-        _watchdogWithNextScrapingOnSetInTheFarPast = new WatchdogBuilder(UnitOfWork)
+        _watchdogWithNextScrapingOnSetInTheFarPast = new WatchdogBuilder(newUnitOfWork)
             .WithScrapingIntervalInSeconds(120)
             .WithNextScrapingOn(DateTime.UtcNow.AddYears(-1))
             .Build();
         
-        _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(UnitOfWork)
+        _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(newUnitOfWork)
             .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(120))
             .Build();  
     }

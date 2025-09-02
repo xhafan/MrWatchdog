@@ -29,7 +29,7 @@ public class when_sending_command_message : BaseDatabaseTest
             new ExistingTransactionJobCreator(UnitOfWork),
             actingUserAccessor
         );
-        _command = new CreateWatchdogCommand("watchdog name");
+        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name");
         
         await _coreBus.Send(_command);
     }

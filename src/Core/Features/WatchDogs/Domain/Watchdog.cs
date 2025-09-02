@@ -4,6 +4,7 @@ using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Extensions;
@@ -18,12 +19,17 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     protected Watchdog() {}
 
-    public Watchdog(string name)
+    public Watchdog(
+        User user, 
+        string name
+    )
     {
+        User = user;
         Name = name;
         ScrapingIntervalInSeconds = ScrapingIntervalOneDayInSeconds;
     }
     
+    public virtual User User { get; protected set; } = null!;
     public virtual string Name { get; protected set; } = null!;
     public virtual int ScrapingIntervalInSeconds { get; protected set; }
     public virtual DateTime? NextScrapingOn { get; protected set; }

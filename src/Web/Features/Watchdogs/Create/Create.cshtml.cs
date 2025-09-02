@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Create;
 
-public class CreateModel(ICoreBus bus) : BasePageModel
+public class CreateModel(ICoreBus bus, IActingUserAccessor actingUserAccessor) : BasePageModel
 {
     [BindProperty]
     [Required]
@@ -19,7 +20,7 @@ public class CreateModel(ICoreBus bus) : BasePageModel
             return PageWithUnprocessableEntityStatus422();
         }
 
-        var command = new CreateWatchdogCommand(Name);
+        var command = new CreateWatchdogCommand(actingUserAccessor.GetActingUserId(), Name);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }    

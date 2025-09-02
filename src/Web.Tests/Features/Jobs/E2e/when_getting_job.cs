@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Jobs;
@@ -17,12 +17,7 @@ public class when_getting_job : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _job = new JobBuilder(UnitOfWork)
-            .WithGuid(_jobGuid)
-            .Build();
-        
-        UnitOfWork.Commit();
-        UnitOfWork.BeginTransaction();
+        _BuildEntitiesInSeparateTransaction();
     }
 
     [Test]
@@ -39,14 +34,19 @@ public class when_getting_job : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        var jobRepository = new JobRepository(UnitOfWork);
-        _job = await jobRepository.GetByGuidAsync(_jobGuid);
-        if (_job != null)
-        {
-            await jobRepository.DeleteAsync(_job);
-        }
-        
-        await UnitOfWork.CommitAsync();
-        UnitOfWork.BeginTransaction();
-    }    
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        await newUnitOfWork.DeleteJobCascade(_job);
+    } 
+
+    private void _BuildEntitiesInSeparateTransaction()
+    {
+        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
+        newUnitOfWork.BeginTransaction();
+
+        _job = new JobBuilder(newUnitOfWork)
+            .WithGuid(_jobGuid)
+            .Build();
+    }
 }

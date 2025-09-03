@@ -1,0 +1,7 @@
+﻿-- Ids are generared by NHibernate HiLo algorithm from value 100, so the range 1-99 is free
+
+INSERT INTO "User" ("Id", "Version", "Email", "SuperAdmin")
+VALUES (1, 1, '<enter your email here>', true)
+ON CONFLICT ("Email") DO UPDATE
+SET "Version" = "User"."Version" + 1,
+    "SuperAdmin" = true;

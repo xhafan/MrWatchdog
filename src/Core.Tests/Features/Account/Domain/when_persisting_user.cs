@@ -29,5 +29,6 @@ public class when_persisting_user : BaseDatabaseTest
         _persistedUser.ShouldBe(_newUser);
 
         _persistedUser.Email.ShouldBe(_newUser.Email);
+        _persistedUser.SuperAdmin.ShouldBe(false);
     }
 }

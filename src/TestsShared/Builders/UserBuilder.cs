@@ -7,6 +7,7 @@ namespace MrWatchdog.TestsShared.Builders;
 public class UserBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     private string _email = $"user+{Guid.NewGuid()}@email.com";
+    private bool _superAdmin;
 
     public UserBuilder WithEmail(string email)
     {
@@ -14,10 +15,20 @@ public class UserBuilder(NhibernateUnitOfWork? unitOfWork = null)
         return this;
     }
     
+    public UserBuilder WithSuperAdmin(bool superAdmin)
+    {
+        _superAdmin = superAdmin;
+        return this;
+    }
+
     public User Build()
     {
         
         var user = new User(_email);
+        if (_superAdmin)
+        {
+            user.MakeSuperAdmin();
+        }
 
         unitOfWork?.Save(user);
         

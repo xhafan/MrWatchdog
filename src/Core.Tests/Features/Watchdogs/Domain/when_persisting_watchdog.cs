@@ -31,5 +31,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.User.ShouldBe(_newWatchdog.User);
         _persistedWatchdog.Name.ShouldBe(WatchdogBuilder.Name);
         _persistedWatchdog.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
+        _persistedWatchdog.MakePublicRequested.ShouldBe(false);
+        _persistedWatchdog.Public.ShouldBe(false);
     }
 }

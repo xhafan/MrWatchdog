@@ -34,6 +34,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual int ScrapingIntervalInSeconds { get; protected set; }
     public virtual DateTime? NextScrapingOn { get; protected set; }
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
+    public virtual bool MakePublicRequested { get; protected set; }
+    public virtual bool Public { get; protected set; }
 
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
     {
@@ -41,7 +43,9 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         {
             WatchdogId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
-            Name = Name
+            Name = Name,
+            MakePublicRequested = MakePublicRequested,
+            Public = Public
         };
     }
     
@@ -206,5 +210,25 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         }        
         
         webPage.SetScrapingResults(nodes.Select(x => x.OuterHtml).ToList());
+    }
+
+    public virtual void RequestToMakePublic()
+    {
+        Guard.Hope(!Public, "Watchdog is already public.");
+
+        MakePublicRequested = true;
+    }
+
+    public virtual void MakePublic()
+    {
+        Public = true;
+        MakePublicRequested = false;
+    }
+
+    public virtual void MakePrivate()
+    {
+        Guard.Hope(Public, "Watchdog is already private.");
+
+        Public = false;
     }
 }

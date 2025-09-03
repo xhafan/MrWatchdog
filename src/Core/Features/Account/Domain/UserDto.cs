@@ -2,5 +2,6 @@
 
 public record UserDto(
     long Id,
-    string Email
+    string Email,
+    bool SuperAdmin
 );

@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@using MrWatchdog.Web.Infrastructure.Authorizations
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,8 +65,8 @@
                         <form asp-controller="Login"
                               asp-action="Logout"
                               class="d-flex align-items-center">
-                            <span>
-                                <i class="fas fa-user"></i> @User.Identity?.Name
+                            <span @(User.IsSuperAdmin() ? "title=superadmin" : "")>
+                                <i class="fas @(User.IsSuperAdmin() ? "fa-user-ninja" : "fa-user")"></i> @User.Identity?.Name
                             </span>
                             <button class="btn btn-link" type="submit">
                                 <span><i class="fas fa-sign-out"></i> Logout</span>

@@ -26,6 +26,7 @@ using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web;
 
@@ -143,6 +144,11 @@ public class Program
             {
                 options.LoginPath = "/Account/Login";
             });
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireClaim(CustomClaimTypes.SuperAdmin, true.ToString().ToLowerInvariant()));
+        });
+
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
         builder.Services.Configure<RuntimeOptions>(builder.Configuration.GetSection("Runtime"));
         

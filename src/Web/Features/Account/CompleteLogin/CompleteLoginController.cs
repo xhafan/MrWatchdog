@@ -58,7 +58,8 @@ public class CompleteLoginController(
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, email)
+            new(ClaimTypes.Name, email),
+            new(CustomClaimTypes.SuperAdmin, user.SuperAdmin.ToString().ToLowerInvariant())
         };
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var cookieClaimsPrincipal = new ClaimsPrincipal(identity);

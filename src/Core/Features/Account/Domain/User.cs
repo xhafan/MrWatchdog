@@ -13,9 +13,19 @@ public class User : VersionedEntity, IAggregateRoot
     }
 
     public virtual string Email { get; protected set; } = null!;
+    public virtual bool SuperAdmin { get; protected set; }
 
     public virtual UserDto GetDto()
     {
-        return new UserDto(Id, Email);
+        return new UserDto(
+            Id,
+            Email,
+            SuperAdmin
+        );
+    }
+
+    public virtual void MakeSuperAdmin()
+    {
+        SuperAdmin = true;
     }
 }

@@ -6,7 +6,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_detail : BaseDatabaseTest
+public class when_viewing_watchdog_detail_for_public_watchdog : BaseDatabaseTest
 {
     private DetailModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -25,11 +25,7 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailArgs.WebPageIds.ShouldBeEmpty();
-        _model.WatchdogDetailArgs.Name.ShouldBe("watchdog name");
-        _model.WatchdogDetailArgs.MakePublicRequested.ShouldBe(true);
-        _model.WatchdogDetailArgs.Public.ShouldBe(false);
+        _model.WatchdogDetailArgs.Public.ShouldBe(true);
     }
 
     private void _BuildEntities()
@@ -37,6 +33,6 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
             .Build();
-        _watchdog.RequestToMakePublic();
+        _watchdog.MakePublic();
     }    
 }

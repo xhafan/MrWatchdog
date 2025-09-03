@@ -2,6 +2,7 @@
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model DetailModel
 
 @{
@@ -28,9 +29,32 @@
          new DetailStimulusModel(Model.WatchdogDetailArgs.WatchdogId)
      )>
 
-    <div class="d-flex justify-content-between">
-        <div>
-            <h1 class="display-4">@title</h1>
+    <div>
+        <h1 class="display-4">@title</h1>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group" role="group">
+            @if (!User.IsSuperAdmin() 
+                 && !Model.WatchdogDetailArgs.MakePublicRequested 
+                 && !Model.WatchdogDetailArgs.Public)
+            {
+                <button
+                    class="btn btn-outline-primary"
+                    type="button"
+                    >
+                    Request to make public
+                </button>
+            }
+            @if (User.IsSuperAdmin() 
+                 && !Model.WatchdogDetailArgs.Public)
+            {
+                <button
+                    class="btn btn-outline-primary"
+                    type="button"
+                    >
+                    Make public
+                </button>
+            }
         </div>
         <div>
             <div class="dropdown">

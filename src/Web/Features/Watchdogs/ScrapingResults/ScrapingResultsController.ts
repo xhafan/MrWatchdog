@@ -27,7 +27,7 @@ export default class ScrapingResultsController extends Controller {
                     throw new Error("Error getting WatchdogAlert.");
                 }
                 
-                const watchdogAlertUrl = WatchdogUrlConstants.watchdogAlertUrl
+                const watchdogAlertUrl = WatchdogUrlConstants.watchdogAlertUrlTemplate
                     .replace(WatchdogUrlConstants.watchdogAlertIdVariable, String(watchdogAlertEntity.entityId));
                 Turbo.visit(watchdogAlertUrl);
             }

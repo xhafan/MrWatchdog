@@ -34,7 +34,7 @@ public class AlertUserAboutNewWatchdogAlertScrapingResultsDomainEventMessageHand
                   Hello,
               </p>
               <p>
-                  We've found new results for your alert <a href="{iRuntimeOptions.Value.Url}{WatchdogUrlConstants.WatchdogAlertUrl.Replace(WatchdogUrlConstants.WatchdogAlertIdVariable, watchdogAlert.Id.ToString())}">{watchdogAlert.Watchdog.Name}</a>:
+                  We've found new results for your alert <a href="{iRuntimeOptions.Value.Url}{WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(watchdogAlert.Id)}">{watchdogAlert.Watchdog.Name}</a>:
               </p>
               <ul>
                   {string.Join("\n    ", watchdogAlert.ScrapingResultsToAlertAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}

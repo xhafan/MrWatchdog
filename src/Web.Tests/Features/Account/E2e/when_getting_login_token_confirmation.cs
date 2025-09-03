@@ -22,7 +22,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     public async Task login_token_confirmation_can_be_retrieved()
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
-            .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()));
+            .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrlTemplate.WithLoginTokenGuid(_loginToken.Guid));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     
@@ -30,7 +30,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     public async Task login_token_confirmation_with_empty_login_token_guid_cannot_be_retrieved()
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
-            .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, Guid.Empty.ToString()));
+            .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrlTemplate.WithLoginTokenGuid(Guid.Empty));
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("must not have the default value");
     }

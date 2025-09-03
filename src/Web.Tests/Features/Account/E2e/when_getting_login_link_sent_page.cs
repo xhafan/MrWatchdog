@@ -22,7 +22,7 @@ public class when_getting_login_link_sent_page : BaseDatabaseTest
     public async Task login_link_page_can_be_fetched()
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
-            .GetAsync(AccountUrlConstants.AccountLoginLinkSentUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()));
+            .GetAsync(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(_loginToken.Guid));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     

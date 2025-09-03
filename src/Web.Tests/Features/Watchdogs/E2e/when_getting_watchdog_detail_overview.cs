@@ -1,14 +1,14 @@
-﻿using MrWatchdog.Core.Features.Watchdogs;
+﻿using System.Net;
+using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using System.Net;
-using CoreDdd.Nhibernate.UnitOfWorks;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.E2e;
 
 [TestFixture]
-public class when_getting_watchdog_detail_page : BaseDatabaseTest
+public class when_getting_watchdog_detail_overview : BaseDatabaseTest
 {
     private Watchdog? _watchdog;
 
@@ -19,13 +19,13 @@ public class when_getting_watchdog_detail_page : BaseDatabaseTest
     }
 
     [Test]
-    public async Task watchdog_detail_page_redirects_to_login_page()
+    public async Task watchdog_detail_overview_page_redirects_to_login_page()
     {
-        var url = WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(_watchdog!.Id);
+        var url = WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(_watchdog!.Id);
         var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
-        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FDetail%2F{_watchdog!.Id}");
+        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FDetail%2FOverview%2F{_watchdog!.Id}");
     }
     
     [TearDown]

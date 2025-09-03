@@ -5,11 +5,15 @@
 export abstract class WatchdogUrlConstants
 {
 	public static watchdogIdVariable: string = `$watchdogId`;
-	public static watchdogDetailUrl: string = `/Watchdogs/Detail/$watchdogId`;
 	public static watchdogWebPageIdVariable: string = `$watchdogWebPageId`;
-	public static watchdogDetailWebPageTurboFrameUrl: string = `/Watchdogs/Detail/WebPage/WebPageTurboFrame?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
 	public static watchdogAlertIdVariable: string = `$watchdogAlertId`;
-	public static watchdogAlertUrl: string = `/Watchdogs/Alert/$watchdogAlertId`;
+	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;
+	public static watchdogDetailOverviewUrlTemplate: string = `/Watchdogs/Detail/Overview/$watchdogId`;
+	public static watchdogDetailWebPageUrlTemplate: string = `/Watchdogs/Detail/WebPage?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
+	public static watchdogDetailWebPageOverviewUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageOverview?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
+	public static watchdogDetailWebPageTurboFrameUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageTurboFrame?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
+	public static watchdogDetailWebPageScrapingResultsUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageScrapingResults?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
+	public static watchdogAlertUrlTemplate: string = `/Watchdogs/Alert/$watchdogAlertId`;
 	public static manageWatchdogsUrl: string = `/Watchdogs/Manage`;
 	public static watchdogsAlertsUrl: string = `/Watchdogs/Alerts`;
 }

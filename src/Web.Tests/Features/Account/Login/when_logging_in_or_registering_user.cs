@@ -43,7 +43,7 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
     {
         _actionResult.ShouldBeOfType<RedirectResult>();
         var redirectResult = (RedirectResult) _actionResult;
-        redirectResult.Url.ShouldBe(AccountUrlConstants.AccountLoginLinkSentUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, _loginToken.Guid.ToString()));
+        redirectResult.Url.ShouldBe(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(_loginToken.Guid));
     }
 
     [Test]

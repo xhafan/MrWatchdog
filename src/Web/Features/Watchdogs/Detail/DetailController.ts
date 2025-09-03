@@ -30,7 +30,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
                     throw new Error("Error getting created WatchdogWebPage.");
                 }
 
-                const webPageTurboFrameUrl = WatchdogUrlConstants.watchdogDetailWebPageTurboFrameUrl
+                const webPageTurboFrameUrl = WatchdogUrlConstants.watchdogDetailWebPageTurboFrameUrlTemplate
                     .replace(WatchdogUrlConstants.watchdogIdVariable, String(this.modelValue.watchdogId))
                     .replace(WatchdogUrlConstants.watchdogWebPageIdVariable, String(watchdogWebPageEntity.entityId));
 

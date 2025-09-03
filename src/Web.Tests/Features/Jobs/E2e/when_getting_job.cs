@@ -23,8 +23,8 @@ public class when_getting_job : BaseDatabaseTest
     [Test]
     public async Task job_data_is_correct()
     {
-        var getJobUrl = JobUrlConstants.GetJobUrl.Replace(JobUrlConstants.JobGuidVariable, _jobGuid.ToString());
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(getJobUrl);
+        var url = JobUrlConstants.GetJobUrlTemplate.WithJobGuid(_jobGuid);
+        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
         response.EnsureSuccessStatusCode();
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();
         jobDto.ShouldNotBeNull();

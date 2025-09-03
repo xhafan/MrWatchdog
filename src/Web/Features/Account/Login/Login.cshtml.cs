@@ -45,6 +45,6 @@ public class LoginModel(
         var loginTokenId = jobDto.AffectedEntities.Single(x => x.EntityName == DomainConstants.AccountLoginTokenEntityName).EntityId;
         var loginTokenDto = await queryExecutor.ExecuteSingleAsync<GetLoginTokenByIdQuery, LoginTokenDto>(new GetLoginTokenByIdQuery(loginTokenId));
         
-        return Redirect(AccountUrlConstants.AccountLoginLinkSentUrl.Replace(AccountUrlConstants.LoginTokenGuidVariable, loginTokenDto.Guid.ToString()));
+        return Redirect(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(loginTokenDto.Guid));
     }
 }

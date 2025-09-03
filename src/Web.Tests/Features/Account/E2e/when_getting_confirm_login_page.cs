@@ -26,7 +26,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     public async Task confirm_login_page_can_be_fetched()
     {
         var response = await RunOncePerTestRun.WebApplicationClient.Value
-            .GetAsync(AccountUrlConstants.AccountConfirmLoginUrl.Replace(AccountUrlConstants.TokenVariable, _loginToken.Token));
+            .GetAsync(AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(_loginToken.Token));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     

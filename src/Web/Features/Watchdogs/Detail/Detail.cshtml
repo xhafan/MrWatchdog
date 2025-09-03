@@ -1,4 +1,5 @@
 ﻿@page "{watchdogId}"
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
@@ -88,7 +89,7 @@
     <div class="row my-3">
         <div class="col-md-6">
             <turbo-frame id="watchdog_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
-                         src="@Url.Page("Overview/Overview", new {Model.WatchdogDetailArgs.WatchdogId})">
+                         src="@WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)">
             </turbo-frame>
         </div>
     </div>

@@ -5,9 +5,9 @@
 export abstract class AccountUrlConstants
 {
 	public static tokenVariable: string = `$token`;
-	public static accountConfirmLoginUrl: string = `/Account/ConfirmLogin?token=$token`;
 	public static loginTokenGuidVariable: string = `$loginTokenGuid`;
-	public static accountLoginLinkSentUrl: string = `/Account/LoginLinkSent?loginTokenGuid=$loginTokenGuid`;
-	public static apiGetLoginTokenConfirmationUrl: string = `/api/Login/GetLoginTokenConfirmation?loginTokenGuid=$loginTokenGuid`;
-	public static apiCompleteLoginUrl: string = `/api/CompleteLogin?loginTokenGuid=$loginTokenGuid`;
+	public static accountConfirmLoginUrlTemplate: string = `/Account/ConfirmLogin?token=$token`;
+	public static accountLoginLinkSentUrlTemplate: string = `/Account/LoginLinkSent?loginTokenGuid=$loginTokenGuid`;
+	public static apiGetLoginTokenConfirmationUrlTemplate: string = `/api/Login/GetLoginTokenConfirmation?loginTokenGuid=$loginTokenGuid`;
+	public static apiCompleteLoginUrlTemplate: string = `/api/CompleteLogin?loginTokenGuid=$loginTokenGuid`;
 }

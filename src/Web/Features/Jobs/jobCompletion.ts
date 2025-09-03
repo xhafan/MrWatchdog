@@ -73,7 +73,7 @@ export async function sendRequestAndWaitForJobCompletion(
 }
 
 export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
-    let getJobUrl = JobUrlConstants.getJobUrl.replace(JobUrlConstants.jobGuidVariable, jobGuid);
+    let getJobUrl = JobUrlConstants.getJobUrlTemplate.replace(JobUrlConstants.jobGuidVariable, jobGuid);
 
     const pollJob = async (delay = 300): Promise<JobDto> => {
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -102,7 +102,7 @@ function getJobLastException(jobDto: JobDto) : string {
 }
 
 export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domainEventType: string): Promise<string | null> {
-    let getRelatedDomainEventJobUrl = JobUrlConstants.getRelatedDomainEventJobUrl
+    let getRelatedDomainEventJobUrl = JobUrlConstants.getRelatedDomainEventJobUrlTemplate
         .replace(JobUrlConstants.commandJobGuidVariable, commandJobGuid)
         .replace(JobUrlConstants.domainEventTypeVariable, domainEventType);
 

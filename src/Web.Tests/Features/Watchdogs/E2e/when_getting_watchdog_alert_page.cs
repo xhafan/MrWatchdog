@@ -21,9 +21,8 @@ public class when_getting_watchdog_alert_page : BaseDatabaseTest
     [Test]
     public async Task watchdog_alert_page_can_be_fetched()
     {
-        var watchdogAlertUrl = WatchdogUrlConstants.WatchdogAlertUrl
-            .Replace(WatchdogUrlConstants.WatchdogAlertIdVariable, $"{_watchdogAlert!.Id}");
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(watchdogAlertUrl);
+        var url = WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(_watchdogAlert!.Id);
+        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     

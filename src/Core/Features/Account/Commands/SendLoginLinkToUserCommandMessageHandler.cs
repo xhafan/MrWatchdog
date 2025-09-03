@@ -30,7 +30,7 @@ public class SendLoginLinkToUserCommandMessageHandler(
         await loginTokenRepository.SaveAsync(loginToken);
         
         var tokenParam = Uri.EscapeDataString(tokenString);
-        var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrl}".Replace(AccountUrlConstants.TokenVariable, tokenParam);
+        var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(tokenParam)}";
 
         var mrWatchdogResource = Resource.MrWatchdog;
         await emailSender.SendEmail(

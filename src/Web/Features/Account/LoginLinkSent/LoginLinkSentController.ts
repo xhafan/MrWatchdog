@@ -10,7 +10,7 @@ export default class LoginLinkSentController extends BaseStimulusModelController
     connect() {
 
         const loginTokenGuid = this.modelValue.loginTokenGuid;
-        const loginTokenConfirmationUrl = AccountUrlConstants.apiGetLoginTokenConfirmationUrl
+        const loginTokenConfirmationUrl = AccountUrlConstants.apiGetLoginTokenConfirmationUrlTemplate
             .replace(AccountUrlConstants.loginTokenGuidVariable, loginTokenGuid);
 
         const interval = setInterval(async () => {
@@ -20,7 +20,7 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                 if (loginTokenConfirmed) {
                     clearInterval(interval);
                     const completeLoginResponse = await fetch(
-                        AccountUrlConstants.apiCompleteLoginUrl.replace(AccountUrlConstants.loginTokenGuidVariable, loginTokenGuid), 
+                        AccountUrlConstants.apiCompleteLoginUrlTemplate.replace(AccountUrlConstants.loginTokenGuidVariable, loginTokenGuid), 
                         {
                             method: "POST"
                         }

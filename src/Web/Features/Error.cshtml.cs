@@ -7,9 +7,10 @@ namespace MrWatchdog.Web.Features;
 [IgnoreAntiforgeryToken]
 public class ErrorModel : BasePageModel
 {
+    [BindProperty(SupportsGet = true)]
     public string? RequestId { get; set; }
 
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    public bool ShowRequestId => !string.IsNullOrWhiteSpace(RequestId);
 
     [BindProperty(SupportsGet = true)]
     public string? ErrorMessage { get; set; }
@@ -19,6 +20,6 @@ public class ErrorModel : BasePageModel
 
     public void OnGet()
     {
-        RequestId = HttpContext.TraceIdentifier;
+        RequestId ??= HttpContext.TraceIdentifier;
     }
 }

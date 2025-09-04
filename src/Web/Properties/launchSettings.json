@@ -15,7 +15,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://mrwatchdog.localhost:5028;http://mrwatchdog.localhost:5027",
+      "applicationUrl": "https://mrwatchdog.localhost:5028;http://mrwatchdog.localhost:5027;https://0.0.0.0:5028",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

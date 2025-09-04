@@ -47,4 +47,17 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+	<DatabaseScripts Include="../DatabaseScripts/ChangeScripts/**/*.*"/>
+  </ItemGroup>
+
+  <Target Name="CopyChangeScripts" AfterTargets="Publish">
+    <Copy
+      SourceFiles="@(DatabaseScripts)"
+      DestinationFolder="$(PublishDir)/DatabaseScripts/ChangeScripts/%(RecursiveDir)"
+      SkipUnchangedFiles="true"
+	/>
+  </Target>
+
 </Project>
+

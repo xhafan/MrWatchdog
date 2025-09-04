@@ -18,6 +18,8 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.HostedServices;
+using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
@@ -25,8 +27,7 @@ using Rebus.Transport.InMem;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
-using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Web.Infrastructure.Authorizations;
+using Microsoft.AspNetCore.Authentication;
 
 namespace MrWatchdog.Web;
 
@@ -38,6 +39,11 @@ public class Program
         
         var builder = WebApplication.CreateBuilder(args);
 
+        if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "LocalStaging")
+        {
+            builder.Configuration.AddUserSecrets<Program>();
+        }
+        
         builder.Logging.AddSimpleConsole(options =>
         {
             options.TimestampFormat = "yyyy-MM-dd HH:mm:ss.fff ";
@@ -143,7 +149,45 @@ public class Program
             .AddCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = redirectContext =>
+                    {
+                        if (_isApiOrPostRequest(redirectContext))
+                        {
+                            redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        }
+                        else
+                        {
+                            redirectContext.Response.Redirect(new Uri(redirectContext.RedirectUri).PathAndQuery);
+                        }
+
+                        return Task.CompletedTask;
+                    },
+                    OnRedirectToAccessDenied = redirectContext =>
+                    {
+                        if (_isApiOrPostRequest(redirectContext))
+                        {
+                            redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        }
+                        else
+                        {
+                            redirectContext.Response.Redirect(new Uri(redirectContext.RedirectUri).PathAndQuery);
+                        }
+                    
+                        return Task.CompletedTask;
+                    }
+                };
+                return;
+
+                bool _isApiOrPostRequest(RedirectContext<CookieAuthenticationOptions> redirectContext)
+                {
+                    return redirectContext.Request.Path.StartsWithSegments("/api") 
+                           || redirectContext.Request.Method == HttpMethods.Post;
+                }
             });
+
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireClaim(CustomClaimTypes.SuperAdmin, true.ToString().ToLowerInvariant()));
@@ -157,15 +201,30 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<IActingUserAccessor, HttpContextActingUserAccessor>();
         
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+        });        
+        
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
         _buildDatabase();
 
+        app.UseResponseCompression();
+        
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Error");
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(context =>
+                {
+                    var requestId = context.TraceIdentifier;
+                    context.Response.Redirect($"/Error?requestId={requestId}");
+                    return Task.CompletedTask;
+                });
+            });            
         }
 
         var getOrHeadRequestPathsWithoutDefaultDatabaseTransaction = new List<Regex>

@@ -1,6 +1,8 @@
 ﻿@page
 @using System.Net
 @model ErrorModel
+@inject IWebHostEnvironment Environment
+
 @{
     var title = "Error";
     ViewData["Title"] = title;
@@ -21,7 +23,7 @@
         <strong>Status Code:</strong> <code>@Model.HttpStatusCode @((HttpStatusCode)Model.HttpStatusCode)</code>
     </p>
 }
-@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage) && Environment.IsDevelopment())
 {
     <p>
         <strong>Error message:</strong> @Model.ErrorMessage

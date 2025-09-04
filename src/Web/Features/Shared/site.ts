@@ -39,6 +39,8 @@ application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkS
 
 
 attachValidationAfterTurboLoad();
+handleErrorsGlobally();
+
 
 function attachValidationAfterTurboLoad() {
     document.addEventListener("turbo:load", function () {
@@ -49,4 +51,42 @@ function attachValidationAfterTurboLoad() {
         const target = e.target as Element;
         $.validator.unobtrusive.parse(target);
     });
+}
+
+function handleErrorsGlobally() {
+    
+    window.onerror = (message, source, lineno, colno, error) => {
+        const errorInfo = {
+            message,
+            source,
+            lineno,
+            colno,
+            error: error
+              ? { name: error.name, message: error.message, stack: error.stack }
+              : null
+          };
+
+        const errorMessage = `JS error: ${JSON.stringify(errorInfo)}`;
+        navigateToErrorPage(errorMessage);
+        return false;
+    };
+
+    window.addEventListener("unhandledrejection", (event) => {
+        const reason = event.reason;
+
+        const errorInfo = {
+            type: "Unhandled promise rejection",
+            message: reason?.message || String(reason),
+            name: reason?.name || typeof reason,
+            stack: reason?.stack || null,
+        };
+        const errorMessage = `JS error: ${JSON.stringify(errorInfo)}`;
+        navigateToErrorPage(errorMessage);
+        return false;
+    });
+
+    function navigateToErrorPage(errorMessage: string) {
+        const encodedMessage = encodeURIComponent(errorMessage);
+        Turbo.visit(`/Error?errorMessage=${encodedMessage}`);
+    }
 }

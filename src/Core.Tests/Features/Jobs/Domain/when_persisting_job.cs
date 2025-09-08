@@ -53,5 +53,6 @@ public class when_persisting_job : BaseDatabaseTest
         _persistedJob.AffectedEntities.ShouldBeEmpty();
         _persistedJob.HandlingAttempts.Count().ShouldBe(1);
         _persistedJob.RelatedCommandJob.ShouldBe(_relatedCommandJob);
+        _persistedJob.RequestId.ShouldBe(JobBuilder.RequestId);
     }
 }

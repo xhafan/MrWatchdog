@@ -5,6 +5,7 @@ import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/View
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { JobDto } from "../../../Shared/Generated/JobDto";
 import { watchdogWebPageNameModifiedEventName } from "./WebPageOverviewController";
+import { logError } from "../../../Shared/logging";
 
 export const watchdogWebPageRemovedEvent = "watchdogWebPageRemoved";
 
@@ -44,9 +45,14 @@ export default class WebPageController extends Controller {
         
         if (!watchdogWebPageScrapingDataUpdatedDomainEventJobGuid) return;
 
-        var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
+        try {
+            var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
 
-        this.webPageScrapingResultsTarget.reload();
+            this.webPageScrapingResultsTarget.reload();
+        }
+        catch (error) {
+            await logError(error, {}, true, true);
+        }
     }
 
     private async onWatchdogWebPageNameModified(event: CustomEventInit<string>) {

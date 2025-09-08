@@ -12,6 +12,7 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.Core.Messages;
 using Rebus.CastleWindsor;
 using Rebus.Config;
@@ -58,6 +59,7 @@ public class RebusHostedService(
             Component.For<IJobCreator>().ImplementedBy<NewTransactionJobCreator>().LifeStyle.Singleton.Named(nameof(NewTransactionJobCreator)),
             Component.For<ICoreBus>().ImplementedBy<CoreBus>().LifeStyle.PerRebusMessage(),
             Component.For<IActingUserAccessor>().ImplementedBy<JobContextActingUserAccessor>().LifeStyle.PerRebusMessage(),
+            Component.For<IRequestIdAccessor>().ImplementedBy<JobContextRequestIdAccessor>().LifeStyle.PerRebusMessage(),
             Classes
                 .FromAssemblyContaining(typeof(SendDomainEventOverMessageBusDomainEventHandler<>))
                 .BasedOn(typeof(IDomainEventHandler<>))
@@ -123,6 +125,8 @@ public class RebusHostedService(
                     x.SetMaxParallelism(5);
                     x.Decorate<IPipeline>(resolutionContext =>
                     {
+                        var messageLoggingIncomingStep = new MessageLoggingIncomingStep(_hostedServiceWindsorContainer.Resolve<ILogger<MessageLoggingIncomingStep>>());
+                        
                         var jobTrackingIncomingStep = new JobTrackingIncomingStep(
                             nhibernateConfigurator,
                             _hostedServiceWindsorContainer.Resolve<ILogger<JobTrackingIncomingStep>>(),
@@ -136,6 +140,7 @@ public class RebusHostedService(
 
                         var pipeline = resolutionContext.Get<IPipeline>();
                         return new PipelineStepInjector(pipeline)
+                                .OnReceive(messageLoggingIncomingStep, PipelineRelativePosition.After, typeof(DeserializeIncomingMessageStep))
                                 .OnReceive(jobTrackingIncomingStep, PipelineRelativePosition.After, typeof(DeserializeIncomingMessageStep))
                                 .OnReceive(jobCompletionIncomingStep, PipelineRelativePosition.Before, typeof(ActivateHandlersStep))
                             ;

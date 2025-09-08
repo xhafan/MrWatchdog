@@ -12,6 +12,7 @@ public record JobDto(
     string InputData,
     JobKind Kind,
     int NumberOfHandlingAttempts,
+    string? RequestId,
     IEnumerable<JobAffectedEntityDto> AffectedEntities,
     IEnumerable<JobHandlingAttemptDto> HandlingAttempts
 );

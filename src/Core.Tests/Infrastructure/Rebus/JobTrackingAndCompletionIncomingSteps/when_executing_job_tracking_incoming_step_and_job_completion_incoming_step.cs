@@ -31,6 +31,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
     private long _jobContentActingUserId;
+    private string? _jobContextRequestId;
 
     [SetUp]
     public async Task Context()
@@ -64,13 +65,15 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _command = new CreateWatchdogCommand(UserId: ActingUserId, "watchdog name")
         {
             Guid = Guid.NewGuid(),
-            ActingUserId = ActingUserId
+            ActingUserId = ActingUserId,
+            RequestId = "0HNFBP8T98MQS:00000045"
         };
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
         {
             _jobContentActingUserId = JobContext.ActingUserId.Value;
+            _jobContextRequestId = JobContext.RequestId.Value;
             
             await jobCompletionIncomingStep.Process(incomingStepContext, _next);
         });
@@ -155,6 +158,12 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _jobContentActingUserId.ShouldBe(ActingUserId);
     }
     
+    [Test]
+    public void request_id_is_set_on_job_context()
+    {
+        _jobContextRequestId.ShouldBe("0HNFBP8T98MQS:00000045");
+    }
+
     [TearDown]
     public async Task TearDown()
     {

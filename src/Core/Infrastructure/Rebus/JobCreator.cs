@@ -35,7 +35,8 @@ public abstract class BaseJobCreator : IJobCreator
                 jobGuid,
                 baseMessage.GetType().Name,
                 baseMessage, 
-                jobKind
+                jobKind,
+                baseMessage.RequestId
             );
 
             if (baseMessage is DomainEvent evnt)

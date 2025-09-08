@@ -15,6 +15,7 @@ export interface JobDto
 	inputData: string;
 	kind: JobKind;
 	numberOfHandlingAttempts: number;
+	requestId: string;
 	affectedEntities: JobAffectedEntityDto[];
 	handlingAttempts: JobHandlingAttemptDto[];
 }

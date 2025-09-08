@@ -27,6 +27,7 @@ public class when_handling_domain_event : BaseDatabaseTest
         JobContext.RaisedDomainEvents.Value = [];
         JobContext.CommandGuid.Value = _commandGuid;
         JobContext.ActingUserId.Value = 23;
+        JobContext.RequestId.Value = "0HNFBP8T98MQS:00000045";
         _testDomainEvent = new TestDomainEvent {RelatedCommandGuid = _commandGuid};
 
         _bus = A.Fake<ISyncBus>();
@@ -50,6 +51,7 @@ public class when_handling_domain_event : BaseDatabaseTest
         var testDomainEvent = (TestDomainEvent) message;
         testDomainEvent.RelatedCommandGuid.ShouldBe(_commandGuid);
         testDomainEvent.ActingUserId.ShouldBe(23);
+        testDomainEvent.RequestId.ShouldBe("0HNFBP8T98MQS:00000045");
 
         return true;
     }

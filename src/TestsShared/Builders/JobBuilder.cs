@@ -10,11 +10,13 @@ public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const string Type = nameof(CreateWatchdogCommand);
     public static readonly object InputData = new CreateWatchdogCommand(23, "watchdog name");
     public const JobKind Kind = JobKind.Command;
+    public const string RequestId = "0HNFBP8T98MQS:00000045";
 
     private Guid _guid;
     private string _type = Type;
     private object _inputData = InputData;
     private JobKind _kind = Kind;
+    private string? _requestId = RequestId;
 
     public JobBuilder WithGuid(Guid guid)
     {
@@ -40,6 +42,12 @@ public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
         return this;
     }    
     
+    public JobBuilder WithRequestId(string? requestId)
+    {
+        _requestId = requestId;
+        return this;
+    }        
+    
     public Job Build()
     {
         if (_guid == Guid.Empty)
@@ -51,7 +59,8 @@ public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
             _guid,
             _type,
             _inputData,
-            _kind
+            _kind,
+            _requestId
         );
 
         unitOfWork?.Save(job);

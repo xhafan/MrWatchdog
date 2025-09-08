@@ -3,6 +3,7 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.TestsShared;
 using Rebus.Bus;
 using Rebus.Messages;
@@ -24,10 +25,14 @@ public class when_sending_command_message : BaseDatabaseTest
         var actingUserAccessor = A.Fake<IActingUserAccessor>();
         A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(23);
 
+        var requestIdAccessor = A.Fake<IRequestIdAccessor>();
+        A.CallTo(() => requestIdAccessor.GetRequestId()).Returns("0HNFBP8T98MQS:00000045");
+
         _coreBus = new CoreBus(
             _bus,
             new ExistingTransactionJobCreator(UnitOfWork),
-            actingUserAccessor
+            actingUserAccessor,
+            requestIdAccessor
         );
         _command = new CreateWatchdogCommand(UserId: 23, "watchdog name");
         
@@ -40,7 +45,9 @@ public class when_sending_command_message : BaseDatabaseTest
         A.CallTo(() => _bus.Send(
                 A<CreateWatchdogCommand>.That.Matches(p => p.Name == "watchdog name" 
                                                            && !p.Guid.Equals(Guid.Empty)
-                                                           && p.ActingUserId == 23),
+                                                           && p.ActingUserId == 23
+                                                           && p.RequestId == "0HNFBP8T98MQS:00000045"
+                                                           ),
                 A<IDictionary<string, string>>.That.Matches(p => p.ContainsKey(Headers.MessageId) && p[Headers.MessageId] == _command.Guid.ToString())
             )
         ).MustHaveHappenedOnceExactly();
@@ -54,5 +61,6 @@ public class when_sending_command_message : BaseDatabaseTest
         job.Guid.ShouldBe(_command.Guid);
         job.Type.ShouldBe(nameof(CreateWatchdogCommand));
         job.HandlingAttempts.ShouldBeEmpty();
+        job.RequestId.ShouldBe("0HNFBP8T98MQS:00000045");
     }
 }

@@ -28,6 +28,10 @@ using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication;
+using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
+using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
+using Serilog;
+using Serilog.Sinks.PostgreSQL;
 
 namespace MrWatchdog.Web;
 
@@ -38,6 +42,8 @@ public class Program
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // enable support for "windows-1250" and other legacy encodings to make HttpClient.ReadAsStringAsync() work correctly
         
         var builder = WebApplication.CreateBuilder(args);
+
+        _configureLogging();
 
         if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "LocalStaging")
         {
@@ -200,6 +206,7 @@ public class Program
         
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<IActingUserAccessor, HttpContextActingUserAccessor>();
+        builder.Services.AddSingleton<IRequestIdAccessor, HttpContextRequestIdAccessor>();
         
         builder.Services.AddResponseCompression(options =>
         {
@@ -234,6 +241,18 @@ public class Program
             new(@"^/favicon\.ico$", RegexOptions.IgnoreCase)
         };
 
+        app.Use(async (httpContext, next) =>
+        {
+            var requestId = httpContext.TraceIdentifier;
+            using (Serilog.Context.LogContext.PushProperty(LogConstants.RequestId, requestId))
+            {
+                
+                await next();
+            }
+        });
+        
+        app.UseMiddleware<RequestLoggingMiddleware>();
+        
         app.UseMiddleware<UnitOfWorkDependencyInjectionMiddleware>(
             IsolationLevel.ReadCommitted,
             getOrHeadRequestPathsWithoutDefaultDatabaseTransaction
@@ -257,13 +276,18 @@ public class Program
 
         DomainEvents.Initialize(new DomainEventHandlerFactory());
 
-        
-               
-        
-        await app.RunAsync();
 
-        // Castle Windsor is the root container and it needs to be disposed manually.
-        mainWindsorContainer.Dispose();
+        try
+        {
+            await app.RunAsync();
+        }
+        finally
+        {
+            // Castle Windsor is the root container and it needs to be disposed manually.
+            mainWindsorContainer.Dispose();
+        
+            await Log.CloseAndFlushAsync();
+        }
         return;
 
         void _buildDatabase()
@@ -273,6 +297,46 @@ public class Program
             var connectionString = $"{configuration.GetConnectionString("Database")}CommandTimeout=120;";
             var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
             DatabaseBuilderHelper.BuildDatabase(connectionString, databaseScriptsDirectoryPath, logger);
+        }
+
+        void _configureLogging()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.PostgreSQL(
+                    connectionString: builder.Configuration.GetConnectionString("Database"),
+                    tableName: """
+                               "Logs"
+                               """,
+                    needAutoCreateTable: true,
+                    columnOptions: new Dictionary<string, ColumnWriterBase>
+                    {
+                        {"""
+                         "TimeStamp"
+                         """, new TimestampColumnWriter()},
+                        {"""
+                         "Message"
+                         """, new RenderedMessageColumnWriter()},
+                        {"""
+                         "MessageTemplate"
+                         """, new MessageTemplateColumnWriter()},
+                        {"""
+                         "Level"
+                         """, new LevelColumnWriter()},
+                        {"""
+                         "Exception"
+                         """, new ExceptionColumnWriter()},
+                        {"""
+                         "Properties"
+                         """, new PropertiesColumnWriter()}
+                    },
+                    formatProvider: null
+                )
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
         }
     }
 }

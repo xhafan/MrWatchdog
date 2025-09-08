@@ -1,6 +1,7 @@
 import type { TurboFrameLoadEvent } from "@hotwired/turbo";
 import { Application } from "@hotwired/stimulus";
 import { StimulusControllers } from "./Generated/StimulusControllers";
+import { logError } from "./logging";
 
 import "./site.css";
 
@@ -55,38 +56,22 @@ function attachValidationAfterTurboLoad() {
 
 function handleErrorsGlobally() {
     
-    window.onerror = (message, source, lineno, colno, error) => {
-        const errorInfo = {
-            message,
-            source,
-            lineno,
-            colno,
-            error: error
-              ? { name: error.name, message: error.message, stack: error.stack }
-              : null
-          };
-
-        const errorMessage = `JS error: ${JSON.stringify(errorInfo)}`;
-        navigateToErrorPage(errorMessage);
-        return false;
+    window.onerror = async (message, source, lineno, colno, error) => {
+        await logError(error ?? message, {source, lineno, colno});
     };
 
-    window.addEventListener("unhandledrejection", (event) => {
-        const reason = event.reason;
-
-        const errorInfo = {
-            type: "Unhandled promise rejection",
-            message: reason?.message || String(reason),
-            name: reason?.name || typeof reason,
-            stack: reason?.stack || null,
-        };
-        const errorMessage = `JS error: ${JSON.stringify(errorInfo)}`;
-        navigateToErrorPage(errorMessage);
-        return false;
+    window.addEventListener("unhandledrejection", async (event: PromiseRejectionEvent) => {
+        await logError(event.reason);
     });
 
-    function navigateToErrorPage(errorMessage: string) {
-        const encodedMessage = encodeURIComponent(errorMessage);
-        Turbo.visit(`/Error?errorMessage=${encodedMessage}`);
+    application.handleError = async (error: Error, message: string, detail: object) => {
+        console.error(error, message, detail);
+
+        // @ts-ignore
+        let stimulusIdentifier = detail?.identifier;
+        // @ts-ignore
+        let elementId = detail?.element?.id;
+
+        await logError(error, {stimulusIdentifier, elementId});
     }
 }

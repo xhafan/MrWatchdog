@@ -22,7 +22,8 @@ export default class CreateController extends Controller {
                     throw new Error("Error getting created Watchdog.");
                 }
 
-                const watchdogDetailUrl = WatchdogUrlConstants.watchdogDetailUrlTemplate.replace(WatchdogUrlConstants.watchdogIdVariable, String(watchdogEntity.entityId));
+                const watchdogDetailUrl = WatchdogUrlConstants.watchdogDetailUrlTemplate
+                    .replace(WatchdogUrlConstants.watchdogIdVariable, String(watchdogEntity.entityId));
 
                 Turbo.visit(watchdogDetailUrl);
             }

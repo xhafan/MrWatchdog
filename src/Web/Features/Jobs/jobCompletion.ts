@@ -3,6 +3,7 @@ import { DomainConstants } from "../Shared/Generated/DomainConstants";
 import { JobUrlConstants } from "../Shared/Generated/JobUrlConstants";
 import { JobDto } from "../Shared/Generated/JobDto";
 import { RebusConstants } from "../Shared/Generated/RebusConstants";
+import { logError } from "../Shared/logging";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
@@ -42,7 +43,7 @@ export function formSubmitWithWaitForJobCompletion(
     };
 }
 
-export async function sendRequestAndWaitForJobCompletion(
+async function sendRequestAndWaitForJobCompletion(
     actionUrl: string,
     formData: FormData | undefined,
     submitter: HTMLElement | null = null,
@@ -51,24 +52,31 @@ export async function sendRequestAndWaitForJobCompletion(
 ) {       
     disableElementAndAddSpinner(submitter);
 
-    const response = await fetch(actionUrl, {
-        method,
-        body: formData
-    });
+    try {
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to submit form: HTTP ${response.status} - ${errorText}`);
-    }
+        const response = await fetch(actionUrl, {
+            method,
+            body: formData
+        });
 
-    let jobGuid = await response.text()
-    if (!jobGuid) {
-        throw new Error("Error getting job Guid.");
-    }
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to submit form: HTTP ${response.status} - ${errorText}`);
+        }
 
-    const jobDto = await waitForJobCompletion(jobGuid);
+        let jobGuid = await response.text()
+        if (!jobGuid) {
+            throw new Error("Error getting job Guid.");
+        }
+
+        const jobDto = await waitForJobCompletion(jobGuid);
        
-    onJobCompletion(jobDto);
+        onJobCompletion(jobDto);
+    }
+    catch (error) {
+        await logError(error, {}, true, true);
+    }
+       
     enableElementAndRemoveSpinner(submitter);
 }
 
@@ -84,8 +92,7 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
                 return jobDto;
             }
             else if (jobDto.numberOfHandlingAttempts >= RebusConstants.maxDeliveryAttempts) {
-                let jobLastException = getJobLastException(jobDto);
-                throw new Error(`Job ${jobDto.guid} failed: ${jobLastException}`);
+                throw new Error(`Job ${jobDto.guid} failed.`);
             }
         }
         return pollJob(Math.min(delay * 2, 8000));
@@ -94,11 +101,6 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
     const jobDto = await pollJob();
     
     return jobDto;
-}
-
-function getJobLastException(jobDto: JobDto) : string {
-    let lastJobHandlingAttempt = Enumerable.from(jobDto.handlingAttempts).orderByDescending(x => x.endedOn).first();
-    return lastJobHandlingAttempt.exception;
 }
 
 export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domainEventType: string): Promise<string | null> {

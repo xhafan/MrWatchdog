@@ -43,6 +43,7 @@ public class when_getting_job : BaseDatabaseTest
         jobDto.InputData.ShouldBe(_job.InputData);
         jobDto.Kind.ShouldBe(_job.Kind);
         jobDto.NumberOfHandlingAttempts.ShouldBe(_job.NumberOfHandlingAttempts);
+        jobDto.RequestId.ShouldBe(JobBuilder.RequestId);
         
         var jobAffectedEntityDto = jobDto.AffectedEntities.ShouldHaveSingleItem();
         jobAffectedEntityDto.EntityName.ShouldBe(nameof(Watchdog));

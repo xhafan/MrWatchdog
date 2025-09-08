@@ -25,6 +25,8 @@
     <PackageReference Include="Rebus.ServiceProvider" Version="10.3.0" />
     <PackageReference Include="Rebus.UnitOfWork" Version="7.0.1" />
     <PackageReference Include="Reinforced.Typings" Version="1.6.5" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />    
   </ItemGroup>
 
@@ -48,15 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<DatabaseScripts Include="../DatabaseScripts/ChangeScripts/**/*.*"/>
+	<DatabaseScripts Include="../DatabaseScripts/ChangeScripts/**/*.*" />
   </ItemGroup>
 
   <Target Name="CopyChangeScripts" AfterTargets="Publish">
-    <Copy
-      SourceFiles="@(DatabaseScripts)"
-      DestinationFolder="$(PublishDir)/DatabaseScripts/ChangeScripts/%(RecursiveDir)"
-      SkipUnchangedFiles="true"
-	/>
+    <Copy SourceFiles="@(DatabaseScripts)" DestinationFolder="$(PublishDir)/DatabaseScripts/ChangeScripts/%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>

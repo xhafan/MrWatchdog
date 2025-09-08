@@ -18,6 +18,7 @@ public class SendDomainEventOverMessageBusDomainEventHandler<TDomainEvent>(ISync
     {
         domainEvent.RelatedCommandGuid = JobContext.CommandGuid.Value;
         domainEvent.ActingUserId = JobContext.ActingUserId.Value;
+        domainEvent.RequestId = JobContext.RequestId.Value;
 
         Guard.Hope(JobContext.RaisedDomainEvents.Value != null, $"{nameof(JobContext)} {nameof(JobContext.RaisedDomainEvents)} is null");
         

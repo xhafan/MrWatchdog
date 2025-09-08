@@ -14,6 +14,7 @@
     "@types/jquery.validation": "^1.17.0",
     "esbuild": "^0.25.4",
     "linq": "^4.0.3",
+    "stacktrace-js": "^2.0.2",
     "typescript": "^5.8.3"
   },
   "-vs-binding": {

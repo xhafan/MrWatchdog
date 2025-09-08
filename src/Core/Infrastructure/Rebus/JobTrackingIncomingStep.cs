@@ -45,7 +45,9 @@ public class JobTrackingIncomingStep(
         }
         
         JobContext.ActingUserId.Value = baseMessage.ActingUserId;
-
+        JobContext.RequestId.Value = baseMessage.RequestId;
+        Serilog.Context.LogContext.PushProperty(LogConstants.RequestId, baseMessage.RequestId);
+        
         JobContext.AffectedEntities.Value = [];
         Job? job = null;
 

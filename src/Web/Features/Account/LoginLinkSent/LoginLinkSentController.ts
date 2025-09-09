@@ -7,7 +7,10 @@ import { LoginLinkSentStimulusModel } from "../../Shared/Generated/LoginLinkSent
 import { LoginTokenDto } from "../../Shared/Generated/LoginTokenDto";
 
 export default class LoginLinkSentController extends BaseStimulusModelController<LoginLinkSentStimulusModel>  {
+    connected = false;
+
     connect() {
+        this.connected = true;
 
         const loginTokenGuid = this.modelValue.loginTokenGuid;
         const loginTokenConfirmationUrl = AccountUrlConstants.apiGetLoginTokenConfirmationUrlTemplate
@@ -26,7 +29,9 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                         }
                     );
                     if (completeLoginResponse.ok) {
-                        Turbo.visit(completeLoginResponse.url);
+                        if (this.connected) {
+                            Turbo.visit(completeLoginResponse.url);
+                        }
                     } else {
                         throw new Error(`Error completing login: HTTP ${completeLoginResponse.status}`);
                     }
@@ -37,5 +42,9 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                 throw new Error(`Error getting login token confirmation: HTTP ${loginTokenConfirmationResponse.status}`);
             }
         }, 1000);
+    }
+
+    disconnect() {
+        this.connected = false;
     }
 }

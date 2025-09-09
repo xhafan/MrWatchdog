@@ -1,3 +1,4 @@
+using AspNetCore.ReCaptcha;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using CoreDdd.AspNetCore.Middlewares;
@@ -6,6 +7,7 @@ using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
 using DatabaseBuilder;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Features.Account;
@@ -15,23 +17,23 @@ using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.Core.Resources;
+using MrWatchdog.Web.Features.Account.Login;
 using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
 using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
+using Serilog;
+using Serilog.Sinks.PostgreSQL;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authentication;
-using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
-using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
-using Serilog;
-using Serilog.Sinks.PostgreSQL;
 
 namespace MrWatchdog.Web;
 
@@ -211,7 +213,11 @@ public class Program
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
-        });        
+        });
+
+        var reCaptchaConfigurationSection = builder.Configuration.GetSection("ReCaptcha");
+        builder.Services.AddReCaptcha(reCaptchaConfigurationSection);        
+        builder.Services.Configure<ReCaptchaOptions>(reCaptchaConfigurationSection);
         
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();

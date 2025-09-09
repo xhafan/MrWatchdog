@@ -39,5 +39,8 @@ public static class StimulusControllers
     public const string WatchdogAlertOverview = "watchdogs--alert-overview";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string AccountLogin = "account--login";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountLoginLinkSent = "account--login-link-sent";
 }

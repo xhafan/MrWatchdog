@@ -1,3 +1,4 @@
+using AspNetCore.ReCaptcha;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Commands;
@@ -13,6 +14,7 @@ using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 
 namespace MrWatchdog.Web.Features.Account.Login;
 
+[ValidateReCaptcha]
 public class LoginModel(
     ICoreBus bus,
     IJobCompletionAwaiter jobCompletionAwaiter,
@@ -26,6 +28,9 @@ public class LoginModel(
     [BindProperty]
     public string? ReturnUrl { get; set; }
     
+    // this field is here just to see ReCaptcha validation error
+    public string Recaptcha { get; set; } = null!;
+
     public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)

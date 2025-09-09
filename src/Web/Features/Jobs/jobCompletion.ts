@@ -10,7 +10,7 @@ export function formSubmitWithWaitForJobCompletion(
     onJobCompletion: (job: JobDto) => void,    
     confirmationMessage: string | undefined = undefined
 ) {
-    form.onsubmit = async (event: SubmitEvent) => {
+    form.addEventListener("submit", async (event: SubmitEvent) => {
         event.preventDefault();
 
         if (!$(form).valid()) {
@@ -20,18 +20,18 @@ export function formSubmitWithWaitForJobCompletion(
         if (confirmationMessage) {
             bootbox.confirm(
                 confirmationMessage,
-                result => {
+                async result => {
                     if (!result) return;
 
-                    sendRequestAndWaitForJobCompletionCommon();
+                    await sendRequestAndWaitForJobCompletionCommon();
                 }
             );
         }
         else {
-            sendRequestAndWaitForJobCompletionCommon();
+            await sendRequestAndWaitForJobCompletionCommon();
         }
             
-        function sendRequestAndWaitForJobCompletionCommon() {
+        async function sendRequestAndWaitForJobCompletionCommon() {
             sendRequestAndWaitForJobCompletion(
                 form.action, 
                 new FormData(form), 
@@ -40,7 +40,7 @@ export function formSubmitWithWaitForJobCompletion(
                 form.method
             );
         }
-    };
+    });
 }
 
 async function sendRequestAndWaitForJobCompletion(
@@ -117,7 +117,7 @@ export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domai
     return null;
 }
 
-function disableElementAndAddSpinner(element: HTMLElement | null) {
+export function disableElementAndAddSpinner(element: HTMLElement | null) {
     if (!element) return;
 
     element.setAttribute("disabled", "disabled");

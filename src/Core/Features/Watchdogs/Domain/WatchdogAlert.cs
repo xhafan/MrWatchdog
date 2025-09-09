@@ -3,7 +3,9 @@ using CoreDdd.Domain.Events;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogAlertScrapingResultsUpdated;
+using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using Serilog;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -71,9 +73,12 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         
         _currentScrapingResults.Clear();
         _currentScrapingResults.AddRange(_GetWatchdogScrapingResults());
-
+        Log.Information("Watchdog alert {Id} _currentScrapingResults: {currentScrapingResults}", Id, JsonHelper.Serialize(_currentScrapingResults)); // todo: remove once not needed
+        
         var newScrapingResultsSincePreviousScrapingResults = _currentScrapingResults.Except(previousScrapingResults).ToList();
+        Log.Information("Watchdog alert {Id} newScrapingResultsSincePreviousScrapingResults: {currentScrapingResults}", Id, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults)); // todo: remove once not needed
         var newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout = newScrapingResultsSincePreviousScrapingResults.Except(_scrapingResultsToAlertAbout).ToList();
+        Log.Information("Watchdog alert {Id} newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout: {currentScrapingResults}", Id, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout)); // todo: remove once not needed
             
         if (newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout.Any())
         {

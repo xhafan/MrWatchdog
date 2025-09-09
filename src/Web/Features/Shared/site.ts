@@ -19,6 +19,7 @@ import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/ScrapingRes
 import WatchdogsAlertController from "../Watchdogs/Alert/AlertController";
 import WatchdogsAlertOverviewController from "../Watchdogs/Alert/Overview/OverviewController";
 
+import AccountLoginController from "../Account/Login/LoginController";
 import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSentController";
 
 
@@ -36,6 +37,7 @@ application.register(StimulusControllers.watchdogsScrapingResultsWebPages, Watch
 application.register(StimulusControllers.watchdogAlert, WatchdogsAlertController);
 application.register(StimulusControllers.watchdogAlertOverview, WatchdogsAlertOverviewController);
 
+application.register(StimulusControllers.accountLogin, AccountLoginController);
 application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
 
 

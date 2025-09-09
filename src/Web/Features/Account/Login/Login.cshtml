@@ -1,21 +1,35 @@
 @page
+@using Microsoft.Extensions.Options
+@using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @model LoginModel
+@inject IOptions<ReCaptchaOptions> ReCaptchaOptions
 @{
     const string title = "Login / Register";
     ViewData["Title"] = title;
+    ViewData[ViewDataConstants.DisableTurboOnPage] = true;
 }
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?render=@(ReCaptchaOptions.Value.SiteKey)"></script>
+}
+
 <h1 class="display-4">@title</h1>
 
-<div>
+<div @Stimulus.Controller(StimulusControllers.AccountLogin, new LoginStimulusModel(ReCaptchaOptions.Value.SiteKey))>
     <form method="post" 
           style="max-width: 600px;"
+          data-account--login-target="form"
           >
         <div class="mb-3">
             <label type="email" asp-for="Email" class="form-label fw-bold" placeholder="Email"></label>
             <input asp-for="Email" class="form-control" />
             <span asp-validation-for="Email" class="text-danger"></span>
+            <span asp-validation-for="Recaptcha" class="text-danger"></span>
         </div>
-    
+
+        <input id="g-recaptcha-response-1" name="g-recaptcha-response" type="hidden" />
+        
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">
                 Send login link

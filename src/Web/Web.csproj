@@ -11,6 +11,7 @@
   <Target Name="CompileTypeScript" /> <!-- This is added here just to make Reinforced.Typings happy -->
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.ReCaptcha" Version="1.8.2" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
     <PackageReference Include="CoreDdd.AspNetCore" Version="3.3.1" />
     <PackageReference Include="CoreDdd.Nhibernate.Register.Castle" Version="3.3.0" />

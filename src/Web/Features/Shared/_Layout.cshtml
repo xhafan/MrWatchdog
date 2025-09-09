@@ -21,12 +21,15 @@
     <script src="~/lib/jquery-validation/1.21.0/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootbox.js/6.0.4/bootbox.min.js"></script>
-    
+
     <script type="module" src="~/assets/bundle.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </head>
-<body data-controller="@StimulusControllers.Body">
+@{
+    var disableTurboOnPage = (bool)(ViewData[ViewDataConstants.DisableTurboOnPage] ?? false);
+}
+<body data-controller="@StimulusControllers.Body" data-turbo="@((!disableTurboOnPage).ToString().ToLower())">
     <header>
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">

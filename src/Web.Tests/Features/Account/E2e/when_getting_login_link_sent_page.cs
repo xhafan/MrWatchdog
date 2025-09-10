@@ -21,7 +21,7 @@ public class when_getting_login_link_sent_page : BaseDatabaseTest
     [Test]
     public async Task login_link_page_can_be_fetched()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value
             .GetAsync(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(_loginToken.Guid));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -29,7 +29,7 @@ public class when_getting_login_link_sent_page : BaseDatabaseTest
     [Test]
     public async Task login_link_page_with_missing_login_token_guid_cannot_be_fetched()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync("/Account/LoginLinkSent");
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync("/Account/LoginLinkSent");
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("required");
     }     

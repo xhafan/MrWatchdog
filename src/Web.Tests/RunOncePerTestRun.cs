@@ -8,7 +8,7 @@ namespace MrWatchdog.Web.Tests;
 public class RunOncePerTestRun : BaseRunOncePerTestRun
 {
     public static Lazy<WebApplicationFactory<Program>> WebApplicationFactory = null!;
-    public static Lazy<HttpClient> WebApplicationClient = null!;
+    public static Lazy<HttpClient> SharedWebApplicationClient = null!;
     
     [OneTimeSetUp]
     public void SetUp()
@@ -25,15 +25,15 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
                     });
                 });
         });
-        WebApplicationClient = new Lazy<HttpClient>(() => WebApplicationFactory.Value.CreateDefaultClient());
+        SharedWebApplicationClient = new Lazy<HttpClient>(() => WebApplicationFactory.Value.CreateDefaultClient());
     }
     
     [OneTimeTearDown]
     public void TearDown()
     {
-        if (WebApplicationClient.IsValueCreated)
+        if (SharedWebApplicationClient.IsValueCreated)
         {
-            WebApplicationClient.Value.Dispose();
+            SharedWebApplicationClient.Value.Dispose();
         }
         if (WebApplicationFactory.IsValueCreated)
         {

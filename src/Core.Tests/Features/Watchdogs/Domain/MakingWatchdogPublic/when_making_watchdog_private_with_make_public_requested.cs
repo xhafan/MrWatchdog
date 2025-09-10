@@ -4,7 +4,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.MakingWatchdogPublic;
 
 [TestFixture]
-public class when_making_watchdog_private_with_the_watchdog_not_being_public
+public class when_making_watchdog_private_with_make_public_requested
 {
     private Watchdog _watchdog = null!;
 
@@ -12,13 +12,14 @@ public class when_making_watchdog_private_with_the_watchdog_not_being_public
     public void Context()
     {
         _watchdog = new WatchdogBuilder().Build();
+        _watchdog.RequestToMakePublic();
+
+        _watchdog.MakePrivate();
     }
 
     [Test]
-    public void exception_is_thrown()
+    public void make_public_requested_flag_is_reset()
     {
-        var ex = Should.Throw<Exception>(() => _watchdog.MakePrivate());
-
-        ex.Message.ShouldBe("Watchdog is already private.");
+        _watchdog.MakePublicRequested.ShouldBe(false);
     }
 }

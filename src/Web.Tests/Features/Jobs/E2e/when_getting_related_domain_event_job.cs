@@ -28,7 +28,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
         var url = JobUrlConstants.GetRelatedDomainEventJobUrlTemplate
             .WithCommandJobGuid(_commandJobGuid)
             .WithDomainEventType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.EnsureSuccessStatusCode();
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();
         jobDto.ShouldNotBeNull();

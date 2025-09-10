@@ -177,7 +177,7 @@ public class Program
                     {
                         if (_isApiOrPostRequest(redirectContext))
                         {
-                            redirectContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            redirectContext.Response.StatusCode = StatusCodes.Status403Forbidden;
                         }
                         else
                         {

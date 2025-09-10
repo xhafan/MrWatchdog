@@ -8,7 +8,8 @@ import { logError } from "../Shared/logging";
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
     onJobCompletion: (job: JobDto) => void,    
-    confirmationMessage: string | undefined = undefined
+    confirmationMessage: string | undefined = undefined,
+    confirmationTitle: string | undefined = undefined
 ) {
     form.addEventListener("submit", async (event: SubmitEvent) => {
         event.preventDefault();
@@ -18,14 +19,26 @@ export function formSubmitWithWaitForJobCompletion(
         }
 
         if (confirmationMessage) {
-            bootbox.confirm(
-                confirmationMessage,
-                async result => {
-                    if (!result) return;
+            if (!confirmationTitle) {
+                bootbox.confirm(
+                    confirmationMessage,
+                    async result => {
+                        if (!result) return;
 
-                    await sendRequestAndWaitForJobCompletionCommon();
-                }
-            );
+                        await sendRequestAndWaitForJobCompletionCommon();
+                    }
+                );
+            } else {
+                bootbox.confirm({                                      
+                    title: confirmationTitle,
+                    message: confirmationMessage,
+                    callback: async result => {
+                        if (!result) return;
+
+                        await sendRequestAndWaitForJobCompletionCommon();
+                    }
+                });
+            }
         }
         else {
             await sendRequestAndWaitForJobCompletionCommon();
@@ -60,8 +73,7 @@ async function sendRequestAndWaitForJobCompletion(
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to submit form: HTTP ${response.status} - ${errorText}`);
+            throw new Error(`Failed to submit form: HTTP ${response.status}`);
         }
 
         let jobGuid = await response.text()

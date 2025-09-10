@@ -1,0 +1,28 @@
+﻿@page "{watchdogId}"
+@model BadgesModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
+<span class="badge text-bg-primary"
+      style="@(Model.WatchdogDetailPublicStatusArgs is { Public: false, MakePublicRequested: false } ? "" : "display:none")"
+      data-watchdogs--detail-target="publicBadge"
+      title="The watchdog is private and not discoverable by other users."
+>
+    Private
+</span>
+<span class="badge text-bg-warning"
+      style="@(Model.WatchdogDetailPublicStatusArgs is { MakePublicRequested: true } ? "" : "display:none")"
+      data-watchdogs--detail-target="makePublicRequestedBadge"
+      title="The watchdog has been requested to be made public and discoverable by other users."
+>
+    Requested to make public
+</span>
+<span class="badge text-bg-success"
+      style="@(Model.WatchdogDetailPublicStatusArgs is { Public: true } ? "" : "display:none")"
+      data-watchdogs--detail-target="publicBadge"
+      title="The watchdog is public and discoverable by other users."
+>
+    Public
+</span>
+</!turbo-frame>

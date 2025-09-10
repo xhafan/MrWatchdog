@@ -1,0 +1,22 @@
+using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Web.Features.Shared;
+
+namespace MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
+
+[Authorize]
+public class BadgesModel(IQueryExecutor queryExecutor) : BasePageModel
+{
+    [BindProperty]
+    public WatchdogDetailPublicStatusArgs WatchdogDetailPublicStatusArgs { get; set; } = null!;
+    
+    public async Task OnGet(long watchdogId)
+    {
+        WatchdogDetailPublicStatusArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
+                new GetWatchdogDetailPublicStatusArgsQuery(watchdogId));
+    }
+}

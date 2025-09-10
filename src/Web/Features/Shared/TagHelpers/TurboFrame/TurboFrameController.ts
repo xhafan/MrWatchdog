@@ -1,11 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
 import { formEditingCancelledEventName, formSubmitJobCompletedEventName } from "../ViewOrEditForm/ViewOrEditFormController";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../BodyController";
 
 export default class TurboFrameController extends Controller {
+    
+    static values = {
+        reloadOnEvent: String
+    }
+
+    declare reloadOnEventValue?: string;
 
     connect() {
         this.attachEventListeners();
+
+        if (this.reloadOnEventValue) {
+            this.dispatch(registerGlobalEventHandlerEventName, {
+                prefix: "",
+                detail: new EventHandlerRegistration(this.reloadOnEventValue, () => {
+                    this.reload();
+                })
+            });
+        }
     }
 
     private attachEventListeners() {

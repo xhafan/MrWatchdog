@@ -1,0 +1,62 @@
+﻿@page "{watchdogId}"
+@using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@using MrWatchdog.Web.Infrastructure.Authorizations
+@model ActionsModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
+<div @Stimulus.Controller(StimulusControllers.WatchdogsDetailActions)
+     class="btn-group" 
+     role="group">
+    @{
+        var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
+                                               && !Model.WatchdogDetailPublicStatusArgs.MakePublicRequested
+        && !Model.WatchdogDetailPublicStatusArgs.Public;
+    }
+    <form asp-page-handler="RequestToMakePublic"
+          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+          method="post"
+          data-watchdogs--detail-actions-target="requestToMakePublicForm"
+          style="@(!isRequestToMakePublicFormVisible ? "display:none" : "")"
+    >
+        <button class="btn btn-outline-primary"
+                type="submit"
+        >
+            Request to make public
+        </button>
+    </form>
+    @{
+        var isMakePublicFormVisible = User.IsSuperAdmin()
+                                      && !Model.WatchdogDetailPublicStatusArgs.Public;
+    }
+    <form asp-page-handler="MakePublic"
+          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+          method="post"
+          data-watchdogs--detail-actions-target="makePublicForm"
+          style="@(!isMakePublicFormVisible ? "display:none" : "")"
+    >
+        <button class="btn btn-outline-primary"
+                type="submit"
+        >
+            Make public
+        </button>
+    </form>
+    @{
+        var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.Public;
+    }
+    <form asp-page-handler="MakePrivate"
+          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+          method="post"
+          data-watchdogs--detail-actions-target="makePrivateForm"
+          style="@(!isMakePrivateFormVisible ? "display:none" : "")"
+    >
+        <button class="btn btn-outline-primary"
+                type="submit"
+                >
+            Make private
+        </button>
+    </form>
+</div>
+</!turbo-frame>

@@ -14,6 +14,9 @@ export abstract class WatchdogUrlConstants
 	public static watchdogDetailWebPageOverviewUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageOverview?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
 	public static watchdogDetailWebPageTurboFrameUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageTurboFrame?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
 	public static watchdogDetailWebPageScrapingResultsUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageScrapingResults?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
+	public static watchdogDetailBadgesUrlTemplate: string = `/Watchdogs/Detail/Badges/$watchdogId`;
+	public static watchdogDetailActionsUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId`;
+	public static watchdogDetailActionsMakePublicUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId?handler=MakePublic`;
 	public static watchdogAlertUrlTemplate: string = `/Watchdogs/Alert/$watchdogAlertId`;
 	public static manageWatchdogsUrl: string = `/Watchdogs/Manage`;
 	public static watchdogsAlertsUrl: string = `/Watchdogs/Alerts`;

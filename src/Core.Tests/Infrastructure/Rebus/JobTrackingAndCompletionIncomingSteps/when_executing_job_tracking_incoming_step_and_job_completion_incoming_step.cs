@@ -112,7 +112,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.Type.ShouldBe(nameof(CreateWatchdogCommand));
         job.InputData.ShouldBe($$"""
-                               {"guid": "{{job.Guid}}", "name": "watchdog name", "userId": 23, "actingUserId": 23}
+                               {"guid": "{{job.Guid}}", "name": "watchdog name", "userId": 23, "requestId": "0HNFBP8T98MQS:00000045", "actingUserId": 23}
                                """);
         job.Kind.ShouldBe(JobKind.Command);
         job.NumberOfHandlingAttempts.ShouldBe(1);

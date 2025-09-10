@@ -108,7 +108,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.Type.ShouldBe(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
         job.InputData.ShouldBe(
             $$"""
-            {"watchdogId": {{_watchdog.Id}}, "actingUserId": 23, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
+            {"requestId": null, "watchdogId": {{_watchdog.Id}}, "actingUserId": 23, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
             """);
         job.Kind.ShouldBe(JobKind.DomainEvent);
         job.NumberOfHandlingAttempts.ShouldBe(1);

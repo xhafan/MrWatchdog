@@ -24,7 +24,7 @@ public class when_getting_job : BaseDatabaseTest
     public async Task job_data_is_correct()
     {
         var url = JobUrlConstants.GetJobUrlTemplate.WithJobGuid(_jobGuid);
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.EnsureSuccessStatusCode();
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();
         jobDto.ShouldNotBeNull();

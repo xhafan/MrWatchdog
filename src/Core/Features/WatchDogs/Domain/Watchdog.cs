@@ -214,7 +214,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     public virtual void RequestToMakePublic()
     {
-        Guard.Hope(!Public, "Watchdog is already public.");
+        Guard.Hope(!Public, "Watchdog is already public."); // todo: make this UserException shown to the user
 
         MakePublicRequested = true;
     }
@@ -227,8 +227,17 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     public virtual void MakePrivate()
     {
-        Guard.Hope(Public, "Watchdog is already private.");
-
         Public = false;
+        MakePublicRequested = false;
     }
+    
+    public virtual WatchdogDetailPublicStatusArgs GetWatchdogDetailPublicStatusArgs()
+    {
+        return new WatchdogDetailPublicStatusArgs
+        {
+            WatchdogId = Id, 
+            MakePublicRequested = MakePublicRequested,
+            Public = Public
+        };
+    }    
 }

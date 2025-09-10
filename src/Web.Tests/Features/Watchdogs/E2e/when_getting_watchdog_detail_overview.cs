@@ -22,7 +22,7 @@ public class when_getting_watchdog_detail_overview : BaseDatabaseTest
     public async Task watchdog_detail_overview_page_redirects_to_login_page()
     {
         var url = WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(_watchdog!.Id);
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync(url);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
         response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FDetail%2FOverview%2F{_watchdog!.Id}");

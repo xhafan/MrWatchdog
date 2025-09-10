@@ -26,7 +26,7 @@ public class when_completing_login : BaseDatabaseTest
     [Test]
     public async Task confirm_login_succeeds()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.PostAsync(
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.PostAsync(
             AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(_loginToken.Guid), content: null);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
@@ -36,7 +36,7 @@ public class when_completing_login : BaseDatabaseTest
     [Test]
     public async Task confirm_login_with_empty_login_token_guid_fails()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.PostAsync(
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.PostAsync(
             AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(Guid.Empty), content: null);
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("must not have the default value");
@@ -45,7 +45,7 @@ public class when_completing_login : BaseDatabaseTest
     [Test]
     public async Task confirm_login_with_missing_login_token_guid_fails()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.PostAsync("/api/CompleteLogin", content: null);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.PostAsync("/api/CompleteLogin", content: null);
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("required");
     }  

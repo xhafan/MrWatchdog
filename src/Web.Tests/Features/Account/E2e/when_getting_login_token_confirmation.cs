@@ -21,7 +21,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     [Test]
     public async Task login_token_confirmation_can_be_retrieved()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value
             .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrlTemplate.WithLoginTokenGuid(_loginToken.Guid));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -29,7 +29,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     [Test]
     public async Task login_token_confirmation_with_empty_login_token_guid_cannot_be_retrieved()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value
             .GetAsync(AccountUrlConstants.ApiGetLoginTokenConfirmationUrlTemplate.WithLoginTokenGuid(Guid.Empty));
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("must not have the default value");
@@ -38,7 +38,7 @@ public class when_getting_login_token_confirmation : BaseDatabaseTest
     [Test]
     public async Task login_token_confirmation_without_login_token_guid_cannot_be_retrieved()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync("/api/Login/GetLoginTokenConfirmation");
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync("/api/Login/GetLoginTokenConfirmation");
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("required");
     }    

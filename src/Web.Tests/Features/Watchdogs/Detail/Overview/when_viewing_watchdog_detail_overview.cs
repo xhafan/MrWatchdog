@@ -23,7 +23,7 @@ public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
     }
 
     [Test]
-    public void action_result_is_correct()
+    public void model_is_correct()
     {
         _model.WatchdogOverviewArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogOverviewArgs.Name.ShouldBe(WatchdogBuilder.Name);

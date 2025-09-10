@@ -12,6 +12,7 @@ import ViewOrEditFormController from "./TagHelpers/ViewOrEditForm/ViewOrEditForm
 
 import WatchdogsCreateController from "../Watchdogs/Create/CreateController";
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
+import WatchdogsDetailActionsController from "../Watchdogs/Detail/Actions/ActionsController";
 import WatchdogsDetailWebPageController from "../Watchdogs/Detail/WebPage/WebPageController";
 import WatchdogsDetailWebPageOverviewController from "../Watchdogs/Detail/WebPage/WebPageOverviewController";
 import WatchdogsScrapingResultsController from "../Watchdogs/ScrapingResults/ScrapingResultsController";
@@ -30,6 +31,7 @@ application.register(StimulusControllers.viewOrEditForm, ViewOrEditFormControlle
 
 application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateController);
 application.register(StimulusControllers.watchdogsDetail, WatchdogsDetailController);
+application.register(StimulusControllers.watchdogsDetailActions, WatchdogsDetailActionsController);
 application.register(StimulusControllers.watchdogsDetailWebPage, WatchdogsDetailWebPageController);
 application.register(StimulusControllers.watchdogsDetailWebPageOverview, WatchdogsDetailWebPageOverviewController);
 application.register(StimulusControllers.watchdogsScrapingResults, WatchdogsScrapingResultsController);

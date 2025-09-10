@@ -40,6 +40,15 @@ public static class WatchdogUrlConstants
         $"/Watchdogs/Detail/WebPage/WebPageScrapingResults?watchdogId={WatchdogIdVariable}&watchdogWebPageId={WatchdogWebPageIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogDetailBadgesUrlTemplate = $"/Watchdogs/Detail/Badges/{WatchdogIdVariable}";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogDetailActionsUrlTemplate = $"/Watchdogs/Detail/Actions/{WatchdogIdVariable}";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogDetailActionsMakePublicUrlTemplate = $"/Watchdogs/Detail/Actions/{WatchdogIdVariable}?handler=MakePublic";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogAlertUrlTemplate = $"/Watchdogs/Alert/{WatchdogAlertIdVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

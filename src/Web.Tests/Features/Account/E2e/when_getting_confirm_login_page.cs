@@ -25,7 +25,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     [Test]
     public async Task confirm_login_page_can_be_fetched()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value
             .GetAsync(AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(_loginToken.Token));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -33,7 +33,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     [Test]
     public async Task confirm_login_page_with_missing_token_cannot_be_fetched()
     {
-        var response = await RunOncePerTestRun.WebApplicationClient.Value.GetAsync("/Account/ConfirmLogin");
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync("/Account/ConfirmLogin");
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("required");
     }     

@@ -1,9 +1,11 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 
 namespace MrWatchdog.Web.Features.Watchdogs;
 
+[AllowAnonymous]
 public class IndexModel(IQueryExecutor queryExecutor) : PageModel
 {
     public IEnumerable<GetWatchdogsQueryResult> Watchdogs { get; private set; } = null!;

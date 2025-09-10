@@ -1,18 +1,20 @@
 using CoreDdd.Queries;
 using CoreUtils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
+using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using System.Security.Claims;
-using MrWatchdog.Core.Features.Jobs.Services;
 
 namespace MrWatchdog.Web.Features.Account.ConfirmLogin;
 
+[AllowAnonymous]
 public class ConfirmLoginModel(
     ICoreBus bus,
     IOptions<JwtOptions> iJwtOptions,

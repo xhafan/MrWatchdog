@@ -1,5 +1,4 @@
 using CoreDdd.Queries;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
@@ -7,7 +6,6 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
 
-[Authorize]
 public class BadgesModel(IQueryExecutor queryExecutor) : BasePageModel
 {
     [BindProperty]

@@ -23,18 +23,17 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
     private HttpClient _webApplicationClient = null!;
 
     [SetUp]
-    public void Context()
+    public async Task Context()
     {
         _BuildEntitiesInSeparateTransaction();
 
         _webApplicationClient = RunOncePerTestRun.WebApplicationFactory.Value.CreateDefaultClient(new CookieContainerHandler(new CookieContainer()));
+        await E2ETestHelper.LogUserIn(_webApplicationClient, _loginToken.Guid);
     }
 
     [Test]
     public async Task non_super_admin_user_is_denied_making_watchdog_public()
     {
-        await E2ETestHelper.LogUserIn(_webApplicationClient, _loginToken.Guid);
-
         var response = await _webApplicationClient.GetAsync(
             WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

@@ -1,5 +1,4 @@
 using CoreDdd.Queries;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -9,7 +8,6 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-[Authorize]
 public class WebPageOverviewModel(
     IQueryExecutor queryExecutor, 
     ICoreBus bus

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
@@ -8,7 +7,6 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Create;
 
-[Authorize]
 public class CreateModel(ICoreBus bus, IActingUserAccessor actingUserAccessor) : BasePageModel
 {
     [BindProperty]

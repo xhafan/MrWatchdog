@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-[Authorize]
 public class WebPageTurboFrameModel : BasePageModel
 {
     public long WatchdogId { get; private set; }

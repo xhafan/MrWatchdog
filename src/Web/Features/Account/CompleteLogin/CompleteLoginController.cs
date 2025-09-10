@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CoreDdd.Queries;
+﻿using CoreDdd.Queries;
 using CoreUtils;
+using CoreUtils.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
@@ -11,14 +12,15 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using System.Security.Claims;
-using CoreUtils.Extensions;
 using MrWatchdog.Core.Infrastructure.Validations;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public class CompleteLoginController(
     ICoreBus bus,
     IJobCompletionAwaiter jobCompletionAwaiter,

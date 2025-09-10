@@ -10,7 +10,6 @@ using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
 
-[Authorize]
 public class ActionsModel(
     IQueryExecutor queryExecutor, 
     ICoreBus bus,

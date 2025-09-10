@@ -1,4 +1,5 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -8,6 +9,7 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
+[AllowAnonymous]
 public class ScrapingResultsModel(
     IQueryExecutor queryExecutor,
     ICoreBus bus

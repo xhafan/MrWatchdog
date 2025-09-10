@@ -7,6 +7,8 @@ export abstract class WatchdogUrlConstants
 	public static watchdogIdVariable: string = `$watchdogId`;
 	public static watchdogWebPageIdVariable: string = `$watchdogWebPageId`;
 	public static watchdogAlertIdVariable: string = `$watchdogAlertId`;
+	public static watchdogsUrlTemplate: string = `/Watchdogs`;
+	public static watchdogScrapingResultsUrlTemplate: string = `/Watchdogs/ScrapingResults/$watchdogId`;
 	public static watchdogCreateUrl: string = `/Watchdogs/Create`;
 	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;
 	public static watchdogDetailOverviewUrlTemplate: string = `/Watchdogs/Detail/Overview/$watchdogId`;
@@ -18,6 +20,7 @@ export abstract class WatchdogUrlConstants
 	public static watchdogDetailActionsUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId`;
 	public static watchdogDetailActionsMakePublicUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId?handler=MakePublic`;
 	public static watchdogAlertUrlTemplate: string = `/Watchdogs/Alert/$watchdogAlertId`;
+	public static watchdogAlertOverviewUrlTemplate: string = `/Watchdogs/Alert/Overview/$watchdogAlertId`;
 	public static manageWatchdogsUrl: string = `/Watchdogs/Manage`;
 	public static watchdogsAlertsUrl: string = `/Watchdogs/Alerts`;
 }

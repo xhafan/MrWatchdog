@@ -1,12 +1,10 @@
 using CoreDdd.Queries;
-using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-[Authorize]
 public class WebPageScrapingResultsModel(IQueryExecutor queryExecutor) : BasePageModel
 {
     public WatchdogWebPageScrapingResultsDto WatchdogWebPageScrapingResultsDto { get; private set; } = null!;

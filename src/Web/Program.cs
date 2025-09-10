@@ -34,6 +34,8 @@ using Serilog.Sinks.PostgreSQL;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace MrWatchdog.Web;
 
@@ -70,8 +72,15 @@ public class Program
             {
                 options.RootDirectory = "/Features";
                 options.Conventions.Add(new PageRouteModelConvention());
+                options.Conventions.AuthorizeFolder("/");
             });
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
 
         if (builder.Environment.IsDevelopment())
         {

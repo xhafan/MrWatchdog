@@ -1,5 +1,6 @@
 using AspNetCore.ReCaptcha;
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
@@ -15,6 +16,7 @@ using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 namespace MrWatchdog.Web.Features.Account.Login;
 
 [ValidateReCaptcha]
+[AllowAnonymous]
 public class LoginModel(
     ICoreBus bus,
     IJobCompletionAwaiter jobCompletionAwaiter,

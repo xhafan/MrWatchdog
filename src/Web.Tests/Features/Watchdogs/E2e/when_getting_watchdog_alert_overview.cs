@@ -1,14 +1,14 @@
-﻿using MrWatchdog.Core.Features.Watchdogs;
+﻿using System.Net;
+using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using System.Net;
-using CoreDdd.Nhibernate.UnitOfWorks;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.E2e;
 
 [TestFixture]
-public class when_getting_watchdog_alert_page : BaseDatabaseTest
+public class when_getting_watchdog_alert_overview : BaseDatabaseTest
 {
     private WatchdogAlert? _watchdogAlert;
 
@@ -19,13 +19,13 @@ public class when_getting_watchdog_alert_page : BaseDatabaseTest
     }
 
     [Test]
-    public async Task watchdog_alert_page_redirects_to_login_page()
+    public async Task watchdog_alert_overview_page_redirects_to_login_page()
     {
-        var url = WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(_watchdogAlert!.Id);
+        var url = WatchdogUrlConstants.WatchdogAlertOverviewUrlTemplate.WithWatchdogAlertId(_watchdogAlert!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
-        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FAlert%2F{_watchdogAlert.Id}");
+        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FAlert%2FOverview%2F{_watchdogAlert.Id}");
     }
     
     [TearDown]

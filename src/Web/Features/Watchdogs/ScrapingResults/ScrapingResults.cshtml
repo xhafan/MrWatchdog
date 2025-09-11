@@ -47,19 +47,19 @@
                 />
             </div>
             <button class="btn btn-primary mt-3"
-                data-watchdogs--scraping-results-target="createWatchdogAlert"
-                type="submit"
-                style="@(User.IsAuthenticated() ? "" : "display: none")"
+                    data-watchdogs--scraping-results-target="createWatchdogAlert"
+                    type="submit"
+                    style="@(User.IsAuthenticated() ? "" : "display: none")"
             >
                 @ScrapingResultsConstants.CreateAlertButtonNewResultsLabel
             </button> 
             <button class="btn btn-primary mt-3"
-                    data-watchdogs--scraping-results-target="login"
+                    data-watchdogs--scraping-results-target="loginToCreateWatchdogAlert"
                     type="button"
                     data-action="@StimulusControllers.WatchdogsScrapingResults#loginToAlertAboutNewResults"
                     style="@(User.IsAuthenticated() ? "display: none" : "")"
                     >
-                Login or register to alert about new results
+                Log in or register to alert about new results
             </button>
         </div>
     </form>

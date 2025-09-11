@@ -14,11 +14,13 @@ export default class ScrapingResultsController extends Controller {
     static targets = [
         "searchTerm",
         "createWatchdogAlert",
-        "createWatchdogAlertForm"
+        "loginToCreateWatchdogAlert",
+        "createWatchdogAlertForm",
     ];
    
     declare searchTermTarget: HTMLInputElement;
     declare createWatchdogAlertTarget: HTMLButtonElement;
+    declare loginToCreateWatchdogAlertTarget: HTMLButtonElement;
     declare createWatchdogAlertFormTarget: HTMLFormElement;
 
     connect() {
@@ -48,6 +50,10 @@ export default class ScrapingResultsController extends Controller {
         this.createWatchdogAlertTarget.textContent = searchTerm 
             ? ScrapingResultsConstants.createAlertButtonNewMatchingResultsLabel
             : ScrapingResultsConstants.createAlertButtonNewResultsLabel;
+
+        this.loginToCreateWatchdogAlertTarget.textContent = searchTerm 
+            ? ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewMatchingResultsLabels
+            : ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewResultsLabel;
     }
 
     loginToAlertAboutNewResults() {

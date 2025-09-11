@@ -53,9 +53,9 @@ public class when_completing_login_for_existing_user_without_return_url : BaseDa
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<RedirectResult>();
-        var redirectResult = (RedirectResult) _actionResult;
-        redirectResult.Url.ShouldBe("/");
+        _actionResult.ShouldBeOfType<OkObjectResult>();
+        var okObjectResult = (OkObjectResult) _actionResult;
+        okObjectResult.Value.ShouldBe("/");
     }
 
     [TearDown]

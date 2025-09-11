@@ -12,6 +12,12 @@ public static class AccountUrlConstants
     public const string LoginTokenGuidVariable = "$loginTokenGuid";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string ReturnUrlVariable = "$returnUrl";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string AccountLoginUrlTemplate = $"/Account/Login?ReturnUrl={ReturnUrlVariable}";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountConfirmLoginUrlTemplate = $"/Account/ConfirmLogin?token={TokenVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

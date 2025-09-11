@@ -32,7 +32,7 @@ public static partial class E2ETestHelper
     {
         var response = await webApplicationClient.PostAsync(
             AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(loginTokenGuid), content: null);
-        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     public static async Task DeleteMarkLoginTokenAsUsedCommandJob(Guid loginTokenGuid, NhibernateUnitOfWork unitOfWork)

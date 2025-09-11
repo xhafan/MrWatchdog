@@ -1,23 +1,20 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
 [AllowAnonymous]
 public class ScrapingResultsModel(
-    IQueryExecutor queryExecutor,
-    ICoreBus bus
+    IQueryExecutor queryExecutor
 ) : BasePageModel
 {
     public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;
     
-    [BindProperty]
+    [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
     
     public async Task OnGet(long watchdogId)
@@ -27,14 +24,4 @@ public class ScrapingResultsModel(
                 new GetWatchdogScrapingResultsArgsQuery(watchdogId)
             );
     }
-    
-    public async Task<IActionResult> OnPostCreateWatchdogAlert(
-        long watchdogId, 
-        [FromForm] string? searchTerm
-    )
-    {
-        var command = new CreateWatchdogAlertCommand(watchdogId, searchTerm?.Trim());
-        await bus.Send(command);
-        return Ok(command.Guid.ToString());
-    }    
 }

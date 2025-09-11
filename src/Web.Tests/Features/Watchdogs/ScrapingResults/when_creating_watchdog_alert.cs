@@ -11,7 +11,7 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 [TestFixture]
 public class when_creating_watchdog_alert : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapingResultsController _controller = null!;
     private Watchdog _watchdog = null!;
     private ICoreBus _bus = null!;
 
@@ -22,11 +22,11 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
         
         _bus = A.Fake<ICoreBus>();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _controller = new ScrapingResultsControllerBuilder()
             .WithBus(_bus)
             .Build();
         
-        await _model.OnPostCreateWatchdogAlert(_watchdog.Id, " search term ");
+        await _controller.CreateWatchdogAlert(_watchdog.Id, " search term ");
     }
 
     [Test]

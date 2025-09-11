@@ -2,6 +2,7 @@
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model ScrapingResultsModel
 
 @{
@@ -26,9 +27,14 @@
 <h1 class="display-4">@title</h1>
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogsScrapingResults)>
-    <form asp-page-handler="CreateWatchdogAlert"
+    <form asp-controller="ScrapingResults"
+          asp-action="CreateWatchdogAlert"
           asp-route-watchdogId="@Model.WatchdogScrapingResultsArgs.WatchdogId"
-          data-watchdogs--scraping-results-target="createWatchdogAlertForm">
+          data-watchdogs--scraping-results-target="createWatchdogAlertForm"
+    >
+        <!-- Prevent implicit submission of the form by hitting enter on inputs -->
+        <button type="submit" disabled style="display: none"></button>
+
         <div class="my-3">
             <div class="input-group">
                 <span class="input-group-text">
@@ -41,11 +47,22 @@
                 />
             </div>
             <button class="btn btn-primary mt-3"
-                    data-watchdogs--scraping-results-target="createWatchdogAlert">
+                data-watchdogs--scraping-results-target="createWatchdogAlert"
+                type="submit"
+                style="@(User.IsAuthenticated() ? "" : "display: none")"
+            >
                 @ScrapingResultsConstants.CreateAlertButtonNewResultsLabel
+            </button> 
+            <button class="btn btn-primary mt-3"
+                    data-watchdogs--scraping-results-target="login"
+                    type="button"
+                    data-action="@StimulusControllers.WatchdogsScrapingResults#loginToAlertAboutNewResults"
+                    style="@(User.IsAuthenticated() ? "display: none" : "")"
+                    >
+                Login or register to alert about new results
             </button>
         </div>
     </form>
-    
+
     <scraping-results-web-pages watchdog-scraping-results-args="Model.WatchdogScrapingResultsArgs"></scraping-results-web-pages>
 </div>

@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
+import { watchdogScrapingResultsWebPagesInitializedEventName } from "../ScrapingResults/ScrapingResultsController";
 
 export const searchTermModifiedEventName = "searchTermModified";
 
@@ -12,6 +13,8 @@ export default class ScrapingResultsWebPagesController extends Controller {
 
     connect() {
         this.registerSearchTermModifiedEventHandler();
+
+        this.dispatch(watchdogScrapingResultsWebPagesInitializedEventName, { prefix: "" });
     }
 
     private registerSearchTermModifiedEventHandler() {

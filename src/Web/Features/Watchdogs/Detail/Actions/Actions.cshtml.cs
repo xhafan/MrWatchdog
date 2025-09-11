@@ -35,7 +35,7 @@ public class ActionsModel(
     
     public async Task<IActionResult> OnPostMakePublic(long watchdogId)
     {
-        if (!(await authorizationService.AuthorizeAsync(User, Policies.SuperAdmin)).Succeeded)
+        if (!(await authorizationService.AuthorizeAsync(User, Policies.SuperAdmin)).Succeeded) // todo: refactor into a controller and use [Authorize(Policies.SuperAdmin]
         {
             return Forbid();
         }

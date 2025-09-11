@@ -9,4 +9,9 @@ public static class ClaimsPrincipalExtensions
     {
         return user.FindFirst(CustomClaimTypes.SuperAdmin)?.Value == true.ToString().ToLowerInvariant();
     }
+    
+    public static bool IsAuthenticated(this ClaimsPrincipal user)
+    {
+        return user.Identity?.IsAuthenticated == true;
+    }    
 }

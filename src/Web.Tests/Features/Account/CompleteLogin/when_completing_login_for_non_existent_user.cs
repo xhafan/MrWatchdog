@@ -64,9 +64,9 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<RedirectResult>();
-        var redirectResult = (RedirectResult) _actionResult;
-        redirectResult.Url.ShouldBe(LoginTokenBuilder.TokenReturnUrl);
+        _actionResult.ShouldBeOfType<OkObjectResult>();
+        var okObjectResult = (OkObjectResult) _actionResult;
+        okObjectResult.Value.ShouldBe(LoginTokenBuilder.TokenReturnUrl);
     }
 
     [Test]

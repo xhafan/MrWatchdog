@@ -30,7 +30,8 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                     );
                     if (completeLoginResponse.ok) {
                         if (this.connected) {
-                            Turbo.visit(completeLoginResponse.url);
+                            const returnUrl = await completeLoginResponse.text();
+                            Turbo.visit(returnUrl);
                         }
                     } else {
                         throw new Error(`Error completing login: HTTP ${completeLoginResponse.status}`);

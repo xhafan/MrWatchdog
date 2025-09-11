@@ -74,7 +74,7 @@ public class CompleteLoginController(
 
         var returnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
 
-        return Redirect(
+        return Ok(
             !string.IsNullOrWhiteSpace(returnUrl)
                 ? returnUrl
                 : "/"

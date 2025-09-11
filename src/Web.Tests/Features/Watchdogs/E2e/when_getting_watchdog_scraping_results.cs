@@ -19,7 +19,7 @@ public class when_getting_watchdog_scraping_results : BaseDatabaseTest
     }
 
     [Test]
-    public async Task watchdog_detail_page_can_be_fetched_unauthenticated()
+    public async Task watchdog_scraping_results_page_can_be_fetched_unauthenticated()
     {
         var url = WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(_watchdog!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);

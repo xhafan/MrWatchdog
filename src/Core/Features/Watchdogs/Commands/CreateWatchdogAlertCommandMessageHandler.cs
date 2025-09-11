@@ -18,13 +18,13 @@ public class CreateWatchdogAlertCommandMessageHandler(
         var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogId);
         var user = await userRepository.LoadByIdAsync(command.ActingUserId);
 
-        var watchdogAlert = await unitOfWork.Session!.QueryOver<WatchdogAlert>()
+        var watchdogAlerts = await unitOfWork.Session!.QueryOver<WatchdogAlert>()
             .Where(x => x.Watchdog == watchdog 
                         && x.User == user
                         && x.SearchTerm == command.SearchTerm)
-            .SingleOrDefaultAsync();
+            .ListAsync();
         
-        if (watchdogAlert != null) return;
+        if (watchdogAlerts.Any()) return;
 
         var newWatchdog = new WatchdogAlert(watchdog, user, command.SearchTerm);
         await watchdogAlertRepository.SaveAsync(newWatchdog);

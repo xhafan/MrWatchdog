@@ -73,12 +73,12 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         
         _currentScrapingResults.Clear();
         _currentScrapingResults.AddRange(_GetWatchdogScrapingResults());
-        Log.Information("Watchdog alert {Id} _currentScrapingResults: {currentScrapingResults}", Id, JsonHelper.Serialize(_currentScrapingResults)); // todo: remove once not needed
+        Log.Information("Watchdog alert refresh, Id {Id} _currentScrapingResults (SearchTerm: {SearchTerm}): {_currentScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(_currentScrapingResults));
         
         var newScrapingResultsSincePreviousScrapingResults = _currentScrapingResults.Except(previousScrapingResults).ToList();
-        Log.Information("Watchdog alert {Id} newScrapingResultsSincePreviousScrapingResults: {currentScrapingResults}", Id, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults)); // todo: remove once not needed
+        Log.Information("Watchdog alert refresh, Id {Id}, newScrapingResultsSincePreviousScrapingResults (SearchTerm: {SearchTerm}): {newScrapingResultsSincePreviousScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults));
         var newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout = newScrapingResultsSincePreviousScrapingResults.Except(_scrapingResultsToAlertAbout).ToList();
-        Log.Information("Watchdog alert {Id} newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout: {currentScrapingResults}", Id, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout)); // todo: remove once not needed
+        Log.Information("Watchdog alert refresh, Id {Id} newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout (SearchTerm: {SearchTerm}): {newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout));
             
         if (newScrapingResultsNotAlreadyInScrapingResultsToAlertAbout.Any())
         {

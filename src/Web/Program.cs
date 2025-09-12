@@ -256,18 +256,6 @@ public class Program
             new(@"^/favicon\.ico$", RegexOptions.IgnoreCase)
         };
 
-        app.Use(async (httpContext, next) =>
-        {
-            var requestId = httpContext.TraceIdentifier;
-            using (Serilog.Context.LogContext.PushProperty(LogConstants.RequestId, requestId))
-            {
-                
-                await next();
-            }
-        });
-        
-        app.UseMiddleware<RequestLoggingMiddleware>();
-        
         app.UseMiddleware<UnitOfWorkDependencyInjectionMiddleware>(
             IsolationLevel.ReadCommitted,
             getOrHeadRequestPathsWithoutDefaultDatabaseTransaction
@@ -276,6 +264,9 @@ public class Program
         app.UseRouting();
 
         app.UseAuthentication();
+        app.UseMiddleware<SerilogRequestIdEnricherMiddleware>();
+        app.UseMiddleware<SerilogUserEnricherMiddleware>();
+        app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseAuthorization();
 
         app.MapStaticAssets();

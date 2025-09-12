@@ -27,6 +27,7 @@ public class MessageLoggingIncomingStep(ILogger<MessageLoggingIncomingStep> logg
         using (LogContext.PushProperty(LogConstants.MessageId, messageId))
         using (LogContext.PushProperty(LogConstants.MessageType, messageType))
         using (LogContext.PushProperty(LogConstants.RequestId, baseMessage.RequestId))
+        using (LogContext.PushProperty(LogConstants.UserId, baseMessage.ActingUserId))
         {
             logger.LogInformation("Message {MessageId} / {MessageType} (RequestId {RequestId}) handling started", messageId, messageType, baseMessage.RequestId);
             try

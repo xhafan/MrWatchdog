@@ -6,6 +6,7 @@ namespace MrWatchdog.Core.Infrastructure;
 public static class LogConstants
 {
     public const string RequestId = nameof(RequestId);
+    public const string UserId = nameof(UserId);
     public const string MessageType = nameof(MessageType);
     public const string MessageId = nameof(MessageId);
     

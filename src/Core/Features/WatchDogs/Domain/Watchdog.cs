@@ -8,6 +8,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using Serilog;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -194,11 +195,21 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         
         Guard.Hope(responseContent != null, nameof(responseContent) + " is null");
 
-        var htmlDoc = new HtmlDocument();
-        htmlDoc.LoadHtml(responseContent);
+        List<HtmlNode> selectedHtmlNodes;
+        try
+        {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(responseContent);
+
+            selectedHtmlNodes = htmlDoc.DocumentNode.QuerySelectorAll(webPage.Selector).ToList();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Watchdog {WatchDogId} web page {WebPageId} scraping error, html: {responseContent}", Id, watchdogWebPageId, responseContent);
+            throw;
+        }
         
-        var nodes = htmlDoc.DocumentNode.QuerySelectorAll(webPage.Selector).ToList();
-        if (nodes.IsEmpty())
+        if (selectedHtmlNodes.IsEmpty())
         {
             scrapingErrorMessage = "No HTML node selected. Please review the Selector.";
         } 
@@ -209,7 +220,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             return;
         }        
         
-        webPage.SetScrapingResults(nodes.Select(x => x.OuterHtml).ToList());
+        webPage.SetScrapingResults(selectedHtmlNodes.Select(x => x.OuterHtml).ToList());
     }
 
     public virtual void RequestToMakePublic()

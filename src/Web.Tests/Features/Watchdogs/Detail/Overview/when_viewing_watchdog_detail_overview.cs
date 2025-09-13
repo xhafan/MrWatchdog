@@ -28,6 +28,7 @@ public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
         _model.WatchdogOverviewArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogOverviewArgs.Name.ShouldBe(WatchdogBuilder.Name);
         _model.WatchdogOverviewArgs.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
+        _model.WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultAlertsInDays);
     }
 
     private void _BuildEntities()

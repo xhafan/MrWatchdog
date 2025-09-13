@@ -13,6 +13,7 @@ using MrWatchdog.Web.HostedServices;
 namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueWatchdogsScrapingHostedServices;
 
 [TestFixture]
+[NonParallelizable] // prevent loading watchdogs created by other tests
 public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDatabaseTest
 {
     private Watchdog _watchdogWithoutNextScrapingOnSet = null!;
@@ -25,7 +26,14 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
     {
         _BuildEntitiesInSeparateTransaction();
         
-        var logger = A.Fake<ILogger<KickOffDueWatchdogsScrapingHostedService>>();
+        var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddFilter("Default", LogLevel.Debug)
+                .AddConsole();
+        });
+        
+        var logger = loggerFactory.CreateLogger<KickOffDueWatchdogsScrapingHostedService>();
         _bus = A.Fake<ICoreBus>();
         
         var options = A.Fake<IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions>>();

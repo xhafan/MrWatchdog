@@ -26,7 +26,8 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
         {
             WatchdogId = _watchdog.Id,
             Name = null!,
-            ScrapingIntervalInSeconds = 0
+            ScrapingIntervalInSeconds = 0,
+            IntervalBetweenSameResultAlertsInDays = 30
         };
         ModelValidator.ValidateModel(_model);
 

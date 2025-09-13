@@ -22,5 +22,16 @@ public class WatchdogAlertMappingOverrides : IAutoMappingOverride<WatchdogAlert>
                 x.Not.Nullable();
                 x.Length(10000);
             });
+        
+        mapping.HasMany(x => x.ScrapingResultsAlertHistory)
+            .Table($"{nameof(WatchdogAlert)}ScrapingResultAlertHistory")
+            .Component(x =>
+            {
+                x.Map(c => c.Result)
+                    .Length(10000)
+                    .Not.Nullable();
+                x.Map(c => c.AlertedOn)
+                    .Not.Nullable();
+            });     
     }
 }

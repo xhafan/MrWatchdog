@@ -14,7 +14,8 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class Watchdog : VersionedEntity, IAggregateRoot
 {
-    private const int ScrapingIntervalOneDayInSeconds = 86400;
+    public const int DefaultScrapingIntervalOneDayInSeconds = 86400; // 1 day
+    public const int DefaultIntervalBetweenSameResultAlertsInDays = 30;
     
     private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
 
@@ -27,7 +28,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         User = user;
         Name = name;
-        ScrapingIntervalInSeconds = ScrapingIntervalOneDayInSeconds;
+        ScrapingIntervalInSeconds = DefaultScrapingIntervalOneDayInSeconds;
+        IntervalBetweenSameResultAlertsInDays = DefaultIntervalBetweenSameResultAlertsInDays;
     }
     
     public virtual User User { get; protected set; } = null!;
@@ -37,6 +39,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
     public virtual bool MakePublicRequested { get; protected set; }
     public virtual bool Public { get; protected set; }
+    public virtual double IntervalBetweenSameResultAlertsInDays { get; protected set; }
+    
 
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
     {
@@ -56,7 +60,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         {
             WatchdogId = Id, 
             Name = Name,
-            ScrapingIntervalInSeconds = ScrapingIntervalInSeconds
+            ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
+            IntervalBetweenSameResultAlertsInDays = IntervalBetweenSameResultAlertsInDays
         };
     }
 
@@ -70,6 +75,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             .AddSeconds(-ScrapingIntervalInSeconds + watchdogOverviewArgs.ScrapingIntervalInSeconds);
 
         ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
+        IntervalBetweenSameResultAlertsInDays = watchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays;
     }
 
     public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)

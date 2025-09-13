@@ -17,6 +17,10 @@
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-label fw-bold"></label>
+                    <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays</div>
+                    </div>
                 </view-mode-item>
                 
                 <edit-mode-item>
@@ -33,6 +37,11 @@
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <input asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-control" />
                         <span asp-validation-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-control" />
+                        <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="text-danger"></span>
                     </div>
                 </edit-mode-item>
 

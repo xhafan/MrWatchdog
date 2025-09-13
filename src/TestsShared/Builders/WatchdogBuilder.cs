@@ -9,10 +9,12 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string Name = "watchdog name";
     public const int ScrapingIntervalInSeconds = 60;
+    public const double IntervalBetweenSameResultAlertsInDays = 20;
 
     private User? _user;
     private string _name = Name;
     private int _scrapingIntervalInSeconds = ScrapingIntervalInSeconds;
+    private double _intervalBetweenSameResultAlertsInDays = IntervalBetweenSameResultAlertsInDays;
 
     private WatchdogWebPageArgs[]? _watchdogWebPageArgses;
     private DateTime? _nextScrapingOn;
@@ -32,6 +34,12 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public WatchdogBuilder WithScrapingIntervalInSeconds(int scrapingIntervalInSeconds)
     {
         _scrapingIntervalInSeconds = scrapingIntervalInSeconds;
+        return this;
+    }
+
+    public WatchdogBuilder WithIntervalBetweenSameResultAlertsInDays(double intervalBetweenSameResultAlertsInDays)
+    {
+        _intervalBetweenSameResultAlertsInDays = intervalBetweenSameResultAlertsInDays;
         return this;
     }
 
@@ -76,7 +84,8 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
         {
             WatchdogId = watchdog.Id,
             Name = _name, 
-            ScrapingIntervalInSeconds = _scrapingIntervalInSeconds
+            ScrapingIntervalInSeconds = _scrapingIntervalInSeconds,
+            IntervalBetweenSameResultAlertsInDays = _intervalBetweenSameResultAlertsInDays
         });
         
         watchdog.SetNextScrapingOn(_nextScrapingOn);

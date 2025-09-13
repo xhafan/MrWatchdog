@@ -1,9 +1,7 @@
-﻿using CoreUtils.Extensions;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogAlertScrapingResultsUpdated;
@@ -18,34 +16,7 @@ public class AlertUserAboutNewWatchdogAlertScrapingResultsDomainEventMessageHand
     public async Task Handle(WatchdogAlertScrapingResultsUpdatedDomainEvent domainEvent)
     {
         var watchdogAlert = await watchdogAlertRepository.LoadByIdAsync(domainEvent.WatchdogAlertId);
-        
-        var user = watchdogAlert.User;
-        var newScrapingResults = watchdogAlert.ScrapingResultsToAlertAbout.ToList();
-        
-        if (newScrapingResults.IsEmpty()) return;
 
-        var mrWatchdogResource = Resource.MrWatchdog;
-        
-        await emailSender.SendEmail(
-            user.Email,
-            $"New results for {mrWatchdogResource} alert {watchdogAlert.Watchdog.Name}",
-            $"""
-              <p>
-                  Hello,
-              </p>
-              <p>
-                  We've found new results for your alert <a href="{iRuntimeOptions.Value.Url}{WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(watchdogAlert.Id)}">{watchdogAlert.Watchdog.Name}</a>:
-              </p>
-              <ul>
-                  {string.Join("\n    ", watchdogAlert.ScrapingResultsToAlertAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
-              </ul>
-              <p>
-                  Best regards,<br>
-                  {mrWatchdogResource}
-              </p>
-              """
-        );
-
-        watchdogAlert.ClearScrapingResultsToAlertAbout();
+        await watchdogAlert.AlertUserAboutNewScrapingResults(emailSender, iRuntimeOptions.Value);
     }
 }

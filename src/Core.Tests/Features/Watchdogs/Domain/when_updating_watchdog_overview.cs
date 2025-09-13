@@ -18,7 +18,8 @@ public class when_updating_watchdog_overview
         {
             WatchdogId = _watchdog.Id,
             Name = "watchdog name",
-            ScrapingIntervalInSeconds = 30
+            ScrapingIntervalInSeconds = 30,
+            IntervalBetweenSameResultAlertsInDays = 2.34
         });
     }
 

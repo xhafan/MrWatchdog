@@ -30,7 +30,8 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
         {
             WatchdogId = _watchdog.Id,
             Name = "watchdog updated name",
-            ScrapingIntervalInSeconds = 60
+            ScrapingIntervalInSeconds = 60,
+            IntervalBetweenSameResultAlertsInDays = 30
         };
 
         _actionResult = await _model.OnPost();

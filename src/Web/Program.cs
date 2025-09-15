@@ -32,10 +32,14 @@ using Rebus.Transport.InMem;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using System.Data;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Timeout;
 
 namespace MrWatchdog.Web;
 
@@ -156,6 +160,23 @@ public class Program
         {
             options.SwaggerDoc("v1", new OpenApiInfo {Title = $"{Resource.MrWatchdog} API", Version = "v1"});
         });
+        
+        // retry policy taken from https://dev.to/rickystam/net-core-use-httpclientfactory-and-polly-to-build-rock-solid-services-2edh
+        // more info about timeouts: https://github.com/App-vNext/Polly/wiki/Polly-and-HttpClientFactory#use-case-applying-timeouts
+        var retryPolicy = HttpPolicyExtensions
+            .HandleTransientHttpError() // HttpRequestException, 5XX and 408
+            .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests) // 429
+            .Or<TimeoutRejectedException>() // thrown by Polly's TimeoutPolicy if the inner call times out
+            .WaitAndRetryAsync(
+                HttpClientConstants.RetryCount,
+                retryAttempt => TimeSpan.FromSeconds(HttpClientConstants.RetrySleepDurationInSecondsProvider(retryAttempt))
+            );
+
+        var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(30); // Timeout for an individual try
+
+        builder.Services.AddHttpClient(HttpClientConstants.HttpClientWithRetries)
+            .AddPolicyHandler(retryPolicy)
+            .AddPolicyHandler(timeoutPolicy); // the timeoutPolicy is inside the retryPolicy, to make it time out each try.
         
         builder.Services.AddHttpClient();
         builder.Services.AddLocalization();

@@ -54,7 +54,7 @@ public class when_scraping_watchdog_web_page_with_no_html_node_selected : BaseDa
         var webPage = _watchdog.WebPages.Single();
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("No HTML node selected. Please review the Selector.");
+        webPage.ScrapingErrorMessage.ShouldBe("No HTML node(s) selected. Please review the Selector.");
     }
     
     private void _BuildEntities()

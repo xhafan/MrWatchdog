@@ -1,14 +1,14 @@
 ﻿using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
+using Fizzler.Systems.HtmlAgilityPack;
 using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Infrastructure.Extensions;
-using System.Web;
-using Fizzler.Systems.HtmlAgilityPack;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
-using CoreUtils;
+using System.Web;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -59,10 +59,10 @@ public class WatchdogWebPage : VersionedEntity
             || Selector != watchdogWebPageArgs.Selector
             || SelectText != watchdogWebPageArgs.SelectText;
 
-        Url = watchdogWebPageArgs.Url;
-        Selector = watchdogWebPageArgs.Selector;
+        Url = watchdogWebPageArgs.Url?.Trim();
+        Selector = watchdogWebPageArgs.Selector?.Trim();
         SelectText = watchdogWebPageArgs.SelectText;
-        Name = watchdogWebPageArgs.Name;
+        Name = watchdogWebPageArgs.Name?.Trim();
 
         if (!hasScrapingDataUpdated) return;
         
@@ -136,7 +136,11 @@ public class WatchdogWebPage : VersionedEntity
         _ResetScrapingData();
         
         ScrapingErrorMessage = scrapingErrorMessage;
-    }    
+        
+        // todo: throw domain event that scraping failed
+
+        Log.Information("Setting watchdog web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);
+    }
     
     public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto()
     {
@@ -160,10 +164,9 @@ public class WatchdogWebPage : VersionedEntity
     
     public virtual async Task ScrapeWebPage(IHttpClientFactory httpClientFactory)
     {
-        var httpClient = httpClientFactory.CreateClient();
+        var httpClient = httpClientFactory.CreateClient(HttpClientConstants.HttpClientWithRetries);
         
-        string? responseContent = null;
-        string? scrapingErrorMessage = null;
+        string? responseContent;
         
         try
         {
@@ -173,22 +176,16 @@ public class WatchdogWebPage : VersionedEntity
 
             if (!response.IsSuccessStatusCode)
             {
-                scrapingErrorMessage = $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}";
+                SetScrapingErrorMessage($"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}");
+                return;
             }
         }
         catch (Exception ex)
         {
-            scrapingErrorMessage = ex.Message;
-        }
-
-        if (scrapingErrorMessage != null)
-        {
-            SetScrapingErrorMessage(scrapingErrorMessage);
+            SetScrapingErrorMessage(ex.Message);
             return;
         }
         
-        Guard.Hope(responseContent != null, nameof(responseContent) + " is null");
-
         List<HtmlNode> selectedHtmlNodes;
         try
         {
@@ -206,15 +203,10 @@ public class WatchdogWebPage : VersionedEntity
         
         if (selectedHtmlNodes.IsEmpty())
         {
-            scrapingErrorMessage = "No HTML node selected. Please review the Selector.";
+            SetScrapingErrorMessage("No HTML node(s) selected. Please review the Selector.");
+            return;
         } 
 
-        if (scrapingErrorMessage != null)
-        {
-            SetScrapingErrorMessage(scrapingErrorMessage);
-            return;
-        }        
-        
         SetScrapingResults(selectedHtmlNodes.Select(x => x.OuterHtml).ToList());
     }    
 }

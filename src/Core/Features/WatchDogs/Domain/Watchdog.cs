@@ -1,14 +1,10 @@
 ﻿using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils;
-using CoreUtils.Extensions;
-using Fizzler.Systems.HtmlAgilityPack;
-using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Extensions;
-using Serilog;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -171,62 +167,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual async Task ScrapeWebPage(long watchdogWebPageId, IHttpClientFactory httpClientFactory)
     {
         var webPage = _GetWebPage(watchdogWebPageId);
-
-        var httpClient = httpClientFactory.CreateClient();
-        
-        string? responseContent = null;
-        string? scrapingErrorMessage = null;
-        
-        try
-        {
-            using var request = new HttpRequestMessage(HttpMethod.Get, webPage.Url);
-            var response = await httpClient.SendAsync(request);
-            responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                scrapingErrorMessage = $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}";
-            }
-        }
-        catch (Exception ex)
-        {
-            scrapingErrorMessage = ex.Message;
-        }
-
-        if (scrapingErrorMessage != null)
-        {
-            webPage.SetScrapingErrorMessage(scrapingErrorMessage);
-            return;
-        }
-        
-        Guard.Hope(responseContent != null, nameof(responseContent) + " is null");
-
-        List<HtmlNode> selectedHtmlNodes;
-        try
-        {
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(responseContent);
-
-            selectedHtmlNodes = htmlDoc.DocumentNode.QuerySelectorAll(webPage.Selector).ToList();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Watchdog {WatchDogId} web page {WebPageId} scraping error, html: {responseContent}", Id, watchdogWebPageId, responseContent);
-            throw;
-        }
-        
-        if (selectedHtmlNodes.IsEmpty())
-        {
-            scrapingErrorMessage = "No HTML node selected. Please review the Selector.";
-        } 
-
-        if (scrapingErrorMessage != null)
-        {
-            webPage.SetScrapingErrorMessage(scrapingErrorMessage);
-            return;
-        }        
-        
-        webPage.SetScrapingResults(selectedHtmlNodes.Select(x => x.OuterHtml).ToList());
+        await webPage.ScrapeWebPage(httpClientFactory);
     }
 
     public virtual void RequestToMakePublic()

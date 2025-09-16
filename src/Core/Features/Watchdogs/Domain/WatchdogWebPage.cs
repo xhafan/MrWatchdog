@@ -190,8 +190,7 @@ public class WatchdogWebPage : VersionedEntity
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, Url);
-            var response = await httpClient.SendAsync(request);
-            responseContent = await response.Content.ReadAsStringAsync();
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -201,6 +200,11 @@ public class WatchdogWebPage : VersionedEntity
                 );
                 return;
             }
+            
+            responseContent = await response.Content.ReadAsStringWithLimitAsync(
+                ScrapingConstants.WebPageSizeLimitInMegaBytes,
+                $"Web page larger than {ScrapingConstants.WebPageSizeLimitInMegaBytes} MB."
+                );
         }
         catch (Exception ex)
         {

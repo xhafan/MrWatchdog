@@ -11,7 +11,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogAlertScrapingResultsUpdated;
 
 [TestFixture]
-public class when_alerting_user_about_new_watchdog_alert_scraping_results : BaseDatabaseTest
+public class when_alerting_user_about_new_watchdog_alert_scraping_results_with_search_term : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -40,26 +40,20 @@ public class when_alerting_user_about_new_watchdog_alert_scraping_results : Base
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for the watchdog alert") && p.Contains("Epic Games store free game")),
+                A<string>.That.Matches(p => p.Contains("new results for the watchdog alert") && p.Contains("M - Epic Games store free game")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for your alert")
                                             && p.Contains($"""
-                                                          <a href="https://mrwatchdog_test/Watchdogs/Alert/{_watchdogAlert.Id}">Epic Games store free game</a>
-                                                          """)
-                                            && p.Contains("""
-                                                           <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
+                                                           <a href="https://mrwatchdog_test/Watchdogs/Alert/{_watchdogAlert.Id}">M - Epic Games store free game</a>
                                                            """)
+                                            && p.Contains("""
+                                                          <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
+                                                          """)
                                             && p.Contains("""
                                                           <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
                                                           """)
                 )
             ))
             .MustHaveHappenedOnceExactly();
-    }
-
-    [Test]
-    public void watchdog_alert_scraping_results_to_alert_about_are_cleared()
-    {
-        _watchdogAlert.ScrapingResultsToAlertAbout.ShouldBeEmpty();
     }
     
     private void _BuildEntities()
@@ -82,7 +76,7 @@ public class when_alerting_user_about_new_watchdog_alert_scraping_results : Base
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)
             .WithUser(_user)
-            .WithSearchTerm(null)
+            .WithSearchTerm("M")
             .Build();
         
         _watchdog.SetScrapingResults(_watchdogWebPageId, [

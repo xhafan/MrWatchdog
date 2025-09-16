@@ -13,6 +13,10 @@ public class ScrapeWatchdogWebPageDomainEventMessageHandler(
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdog.ScrapeWebPage(domainEvent.WatchdogWebPageId, httpClientFactory);
+        await watchdog.ScrapeWebPage(
+            domainEvent.WatchdogWebPageId,
+            httpClientFactory,
+            canRaiseScrapingFailedDomainEvent: false
+        );
     }
 }

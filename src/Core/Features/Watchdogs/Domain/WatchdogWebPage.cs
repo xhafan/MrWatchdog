@@ -5,6 +5,7 @@ using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.WatchDogs.Domain.Events.WatchdogWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
@@ -78,7 +79,10 @@ public class WatchdogWebPage : VersionedEntity
         ScrapingErrorMessage = null;
     }
 
-    public virtual void SetScrapingResults(ICollection<string> scrapingResults)
+    public virtual void SetScrapingResults(
+        ICollection<string> scrapingResults,
+        bool canRaiseScrapingFailedDomainEvent
+    )
     {
         _ResetScrapingData();
 
@@ -93,7 +97,10 @@ public class WatchdogWebPage : VersionedEntity
 
             if (scrapingResults.IsEmpty())
             {
-                SetScrapingErrorMessage("All selected HTML results have empty text.");
+                SetScrapingErrorMessage(
+                    "All selected HTML results have empty text.",
+                    canRaiseScrapingFailedDomainEvent
+                );
                 return;
             }
         }
@@ -106,7 +113,10 @@ public class WatchdogWebPage : VersionedEntity
             
             if (scrapingResultsWithNonEmptyText.IsEmpty())
             {
-                SetScrapingErrorMessage("All selected HTML results have empty text.");
+                SetScrapingErrorMessage(
+                    "All selected HTML results have empty text.",
+                    canRaiseScrapingFailedDomainEvent
+                );
                 return;
             }            
             
@@ -131,13 +141,19 @@ public class WatchdogWebPage : VersionedEntity
         }
     }
     
-    public virtual void SetScrapingErrorMessage(string scrapingErrorMessage)
+    public virtual void SetScrapingErrorMessage(
+        string scrapingErrorMessage, 
+        bool canRaiseScrapingFailedDomainEvent
+    )
     {
         _ResetScrapingData();
         
         ScrapingErrorMessage = scrapingErrorMessage;
-        
-        // todo: throw domain event that scraping failed
+
+        if (canRaiseScrapingFailedDomainEvent && Watchdog.CanNotifyAboutFailedScraping)
+        {
+            DomainEvents.RaiseEvent(new WatchdogWebPageScrapingFailedDomainEvent(Watchdog.Id));
+        }
 
         Log.Information("Setting watchdog web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);
     }
@@ -162,7 +178,10 @@ public class WatchdogWebPage : VersionedEntity
             : null;
     }
     
-    public virtual async Task ScrapeWebPage(IHttpClientFactory httpClientFactory)
+    public virtual async Task ScrapeWebPage(
+        IHttpClientFactory httpClientFactory,
+        bool canRaiseScrapingFailedDomainEvent
+        )
     {
         var httpClient = httpClientFactory.CreateClient(HttpClientConstants.HttpClientWithRetries);
         
@@ -176,13 +195,16 @@ public class WatchdogWebPage : VersionedEntity
 
             if (!response.IsSuccessStatusCode)
             {
-                SetScrapingErrorMessage($"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}");
+                SetScrapingErrorMessage(
+                    $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}",
+                    canRaiseScrapingFailedDomainEvent
+                );
                 return;
             }
         }
         catch (Exception ex)
         {
-            SetScrapingErrorMessage(ex.Message);
+            SetScrapingErrorMessage(ex.Message, canRaiseScrapingFailedDomainEvent);
             return;
         }
         
@@ -196,17 +218,23 @@ public class WatchdogWebPage : VersionedEntity
         }
         catch (Exception ex)
         {
+            SetScrapingErrorMessage(ex.Message, canRaiseScrapingFailedDomainEvent);
+            
             Log.Error(ex, "Watchdog {WatchDogId} web page {WebPageId} scraping error, selector: {Selector}, html: {responseContent}",
                 Watchdog.Id, Id, Selector, responseContent);
-            throw;
+
+            return;
         }
         
         if (selectedHtmlNodes.IsEmpty())
         {
-            SetScrapingErrorMessage("No HTML node(s) selected. Please review the Selector.");
+            SetScrapingErrorMessage("No HTML node(s) selected. Please review the Selector.", canRaiseScrapingFailedDomainEvent);
             return;
-        } 
+        }
 
-        SetScrapingResults(selectedHtmlNodes.Select(x => x.OuterHtml).ToList());
+        SetScrapingResults(
+            selectedHtmlNodes.Select(x => x.OuterHtml).ToList(),
+            canRaiseScrapingFailedDomainEvent
+        );
     }    
 }

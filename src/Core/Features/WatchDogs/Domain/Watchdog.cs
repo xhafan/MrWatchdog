@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils;
+using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
@@ -36,6 +37,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual bool MakePublicRequested { get; protected set; }
     public virtual bool Public { get; protected set; }
     public virtual double IntervalBetweenSameResultAlertsInDays { get; protected set; }
+    public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
     
 
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
@@ -84,42 +86,42 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs(long watchdogWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = GetWebPage(watchdogWebPageId);
         return webPage.GetWatchdogWebPageArgs();
     }
 
-    private WatchdogWebPage _GetWebPage(long watchdogWebPageId)
+    public virtual WatchdogWebPage GetWebPage(long watchdogWebPageId)
     {
         return _webPages.Single(x => x.Id == watchdogWebPageId);
     }
 
     public virtual void UpdateWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
     {
-        var webPage = _GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
+        var webPage = GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
         webPage.Update(watchdogWebPageArgs);
     }
 
     public virtual void RemoveWebPage(long watchdogWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = GetWebPage(watchdogWebPageId);
         _webPages.Remove(webPage);
     }
 
     public virtual void SetScrapingResults(long watchdogWebPageId, ICollection<string> scrapingResults)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        webPage.SetScrapingResults(scrapingResults);
+        var webPage = GetWebPage(watchdogWebPageId);
+        webPage.SetScrapingResults(scrapingResults, canRaiseScrapingFailedDomainEvent: false);
     }
     
     public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        webPage.SetScrapingErrorMessage(scrapingErrorMessage);
+        var webPage = GetWebPage(watchdogWebPageId);
+        webPage.SetScrapingErrorMessage(scrapingErrorMessage, canRaiseScrapingFailedDomainEvent: false);
     }    
     
     public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto(long watchdogWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = GetWebPage(watchdogWebPageId);
         return webPage.GetWatchdogWebPageScrapingResultsDto();
     }
     
@@ -139,12 +141,20 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual async Task Scrape(IHttpClientFactory httpClientFactory)
     {
         var webPagesToScrape = _webPages.Where(x => !string.IsNullOrWhiteSpace(x.Url)).ToList();
+        
+        if (webPagesToScrape.IsEmpty()) return;
 
         foreach (var webPage in webPagesToScrape)
         {
-            await ScrapeWebPage(webPage.Id, httpClientFactory);
+            await ScrapeWebPage(
+                webPage.Id,
+                httpClientFactory,
+                canRaiseScrapingFailedDomainEvent: true
+            );
         }
-       
+
+        CanNotifyAboutFailedScraping = webPagesToScrape.All(x => x.ScrapingErrorMessage == null);
+        
         DomainEvents.RaiseEvent(new WatchdogScrapingCompletedDomainEvent(Id));
     }
     
@@ -164,10 +174,14 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         NextScrapingOn = nextScrapingOn;
     }
 
-    public virtual async Task ScrapeWebPage(long watchdogWebPageId, IHttpClientFactory httpClientFactory)
+    public virtual async Task ScrapeWebPage(
+        long watchdogWebPageId, 
+        IHttpClientFactory httpClientFactory,
+        bool canRaiseScrapingFailedDomainEvent
+    )
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        await webPage.ScrapeWebPage(httpClientFactory);
+        var webPage = GetWebPage(watchdogWebPageId);
+        await webPage.ScrapeWebPage(httpClientFactory, canRaiseScrapingFailedDomainEvent);
     }
 
     public virtual void RequestToMakePublic()
@@ -197,5 +211,5 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             MakePublicRequested = MakePublicRequested,
             Public = Public
         };
-    }    
+    }
 }

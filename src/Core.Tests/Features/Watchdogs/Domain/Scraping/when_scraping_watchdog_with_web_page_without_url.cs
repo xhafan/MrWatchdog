@@ -1,15 +1,12 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_with_web_page_without_url : BaseDatabaseTest
+public class when_scraping_watchdog_with_web_page_without_url : BaseTest
 {
     private Watchdog _watchdog = null!;
 
@@ -20,17 +17,7 @@ public class when_scraping_watchdog_with_web_page_without_url : BaseDatabaseTest
 
         var httpClientFactory = new HttpClientFactoryBuilder().Build();
         
-        var handler = new ScrapeWatchdogCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
-            httpClientFactory
-        );
-
-        await handler.Handle(new ScrapeWatchdogCommand(_watchdog.Id));
-        
-        await UnitOfWork.FlushAsync();
-        UnitOfWork.Clear();
-        
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        await _watchdog.Scrape(httpClientFactory);
     }
 
     [Test]
@@ -44,7 +31,7 @@ public class when_scraping_watchdog_with_web_page_without_url : BaseDatabaseTest
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder()
             .WithWebPage(new WatchdogWebPageArgs
             {
                 Url = null,

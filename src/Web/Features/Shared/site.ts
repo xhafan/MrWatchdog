@@ -43,19 +43,39 @@ application.register(StimulusControllers.accountLogin, AccountLoginController);
 application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
 
 
-attachValidationAfterTurboLoad();
+attachValidationOnTurboLoad();
+scrollToFragmentIdentifierOnTurboLoad();
 handleErrorsGlobally();
 
 
-function attachValidationAfterTurboLoad() {
-    document.addEventListener("turbo:load", function () {
+function attachValidationOnTurboLoad() {
+    document.addEventListener("turbo:load", () => {
         $.validator.unobtrusive.parse(document);
     });
 
-    document.addEventListener("turbo:frame-load", function (e: TurboFrameLoadEvent) {
-        const target = e.target as Element;
+    document.addEventListener("turbo:frame-load", (event: TurboFrameLoadEvent) => {
+        const target = event.target as Element;
         $.validator.unobtrusive.parse(target);
     });
+}
+
+function scrollToFragmentIdentifierOnTurboLoad() {
+    document.addEventListener("turbo:load", () => {
+        scrollFragmentIdentifierElementIntoView();
+    });
+
+    document.addEventListener("turbo:frame-load", (event: TurboFrameLoadEvent) => {
+        scrollFragmentIdentifierElementIntoView();
+    });
+
+    function scrollFragmentIdentifierElementIntoView() {
+        if (window.location.hash) {
+            const el = document.querySelector(window.location.hash);
+            if (el) {
+                el.scrollIntoView();
+            }
+        }
+    }
 }
 
 function handleErrorsGlobally() {

@@ -133,22 +133,23 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         if (newScrapingResults.IsEmpty()) return;
 
         var mrWatchdogResource = Resource.MrWatchdog;
+        var watchdogAlertName = $"{(!string.IsNullOrWhiteSpace(SearchTerm) ? $"{SearchTerm} - " : "")}{Watchdog.Name}";
         
         await emailSender.SendEmail(
             User.Email,
-            $"New results for {mrWatchdogResource} alert {Watchdog.Name}",
+            $"{mrWatchdogResource}: new results for the watchdog alert {watchdogAlertName}",
             $"""
              <p>
                  Hello,
              </p>
              <p>
-                 We've found new results for your alert <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(Id)}">{Watchdog.Name}</a>:
+                 New results have been found for your alert <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogAlertUrlTemplate.WithWatchdogAlertId(Id)}">{watchdogAlertName}</a>:
              </p>
              <ul>
                  {string.Join("\n    ", _scrapingResultsToAlertAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
              </ul>
              <p>
-                 Best regards,<br>
+                 Kind regards,<br>
                  {mrWatchdogResource}
              </p>
              """

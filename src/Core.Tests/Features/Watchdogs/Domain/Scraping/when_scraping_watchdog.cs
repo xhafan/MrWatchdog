@@ -1,18 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using System.Net;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
-using System.Net;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page : BaseDatabaseTest
+public class when_scraping_watchdog : BaseTest
 {
     private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -39,17 +37,12 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
                         """)
                 }))
             .Build();
-        
-        var handler = new ScrapeWatchdogWebPageDomainEventMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
-            httpClientFactory
-        );
 
-        await handler.Handle(new WatchdogWebPageScrapingDataUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
+        await _watchdog.Scrape(httpClientFactory);
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_are_set()
+    public void watchdog_web_page_is_scraped_and_scraping_results_are_set()
     {
         var webPage = _watchdog.WebPages.Single();
         webPage.ScrapingResults.ShouldBe([
@@ -61,10 +54,22 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
         webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }
+
+    [Test]
+    public void watchdog_scraping_completed_domain_event_is_raised()
+    {
+        RaisedDomainEvents.ShouldContain(new WatchdogScrapingCompletedDomainEvent(_watchdog.Id));
+    }
+
+    [Test]
+    public void after_successful_scraping_of_all_web_pages_the_watchdog_can_notify_about_failed_scraping()
+    {
+        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(true);
+    }
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder()
             .WithWebPage(new WatchdogWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
@@ -74,7 +79,5 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
     }
 }

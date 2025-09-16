@@ -9,12 +9,15 @@ public static class ScrapingResultsConstants
     public const string CreateAlertButtonNewResultsLabel = "Alert about new results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string CreateAlertButtonNewMatchingResultsLabel = "Alert about new matching results";
+    public const string SearchTermVariable = "$searchTerm";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string CreateAlertButtonNewMatchingResultsLabelTemplate = $"Alert about new results matching search term <i>{SearchTermVariable}</i>";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string LoginOrRegisterToCreateAlertButtonNewResultsLabel = "Log in or register to alert about new results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string LoginOrRegisterToCreateAlertButtonNewMatchingResultsLabels = "Log in or register to alert about new matching results";
-    
+    public const string LoginOrRegisterToCreateAlertButtonNewMatchingResultsLabelTemplate = 
+        $"Log in or register to alert about new results matching search term <i>{SearchTermVariable}</i>";
 }

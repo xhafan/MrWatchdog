@@ -47,12 +47,14 @@ export default class ScrapingResultsController extends Controller {
 
         this.dispatch(searchTermModifiedEventName, { detail: searchTerm, prefix: "" });
         
-        this.createWatchdogAlertTarget.textContent = searchTerm 
-            ? ScrapingResultsConstants.createAlertButtonNewMatchingResultsLabel
+        this.createWatchdogAlertTarget.innerHTML = searchTerm 
+            ? ScrapingResultsConstants.createAlertButtonNewMatchingResultsLabelTemplate
+                .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
             : ScrapingResultsConstants.createAlertButtonNewResultsLabel;
 
-        this.loginToCreateWatchdogAlertTarget.textContent = searchTerm 
-            ? ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewMatchingResultsLabels
+        this.loginToCreateWatchdogAlertTarget.innerHTML = searchTerm 
+            ? ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewMatchingResultsLabelTemplate
+                .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
             : ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewResultsLabel;
     }
 

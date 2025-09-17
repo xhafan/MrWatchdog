@@ -1,5 +1,8 @@
 ﻿@page
+@using CoreUtils.Extensions
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Watchdogs.ScrapingResults
 @model AlertsModel
 
 @{
@@ -28,3 +31,11 @@
         </a>
     </div>
 }
+
+@if (Model.WatchdogAlerts.IsEmpty())
+{
+    <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
+    @:You have no watchdog alerts. To add a new watchdog alert, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of watchdogs</a>, select one,
+    @:and click the button <i>@ScrapingResultsConstants.CreateAlertButtonNewResultsLabel</i>.
+}
+

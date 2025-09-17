@@ -15,7 +15,7 @@ public static class WatchdogUrlConstants
     public const string WatchdogAlertIdVariable = "$watchdogAlertId";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsUrlTemplate = "/Watchdogs";
+    public const string WatchdogsUrl = "/Watchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogScrapingResultsUrlTemplate = $"/Watchdogs/ScrapingResults/{WatchdogIdVariable}";

@@ -1,4 +1,5 @@
 ﻿@page
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @model ManageModel
 
@@ -28,5 +29,8 @@
 {
     <div>
         <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId">@watchdog.WatchdogName</a>
+        <turbo-frame id="watchdog_detail_badges_@(watchdog.WatchdogId)"
+                     src="@WatchdogUrlConstants.WatchdogDetailBadgesUrlTemplate.WithWatchdogId(watchdog.WatchdogId)?ShowPrivate=false">
+        </turbo-frame>
     </div>
 }

@@ -4,13 +4,16 @@
     Layout = null;
 }
 <!turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
-<span class="badge text-bg-primary"
-      style="@(Model.WatchdogDetailPublicStatusArgs is { Public: false, MakePublicRequested: false } ? "" : "display:none")"
-      data-watchdogs--detail-target="publicBadge"
-      title="The watchdog is private and not discoverable by other users."
->
-    Private
-</span>
+@if (Model.ShowPrivate)
+{
+    <span class="badge text-bg-primary"
+          style="@(Model.WatchdogDetailPublicStatusArgs is { Public: false, MakePublicRequested: false } ? "" : "display:none")"
+          data-watchdogs--detail-target="publicBadge"
+          title="The watchdog is private and not discoverable by other users."
+    >
+        Private
+    </span>
+}
 <span class="badge text-bg-warning"
       style="@(Model.WatchdogDetailPublicStatusArgs is { MakePublicRequested: true } ? "" : "display:none")"
       data-watchdogs--detail-target="makePublicRequestedBadge"

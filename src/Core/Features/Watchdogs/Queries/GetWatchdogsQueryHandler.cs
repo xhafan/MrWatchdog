@@ -22,6 +22,7 @@ public class GetWatchdogsQueryHandler(
             .SelectList(list => list
                 .Select(x => x.Id).WithAlias(() => result.WatchdogId)
                 .Select(x => x.Name).WithAlias(() => result.WatchdogName)
+                .Select(x => x.Public).WithAlias(() => result.Public)
             );
 
         if (query.UserId != 0) // todo: remove this once this query is not used for loading all watchdogs

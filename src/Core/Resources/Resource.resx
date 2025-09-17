@@ -124,12 +124,12 @@
     <value>Watchdogs</value>
   </data>
   <data name="ManageWatchdogs" xml:space="preserve">
-    <value>Manage my watchdogs</value>
+    <value>Manage watchdogs</value>
   </data>
   <data name="MrWatchdog" xml:space="preserve">
     <value>Mr Watchdog</value>
   </data>
   <data name="MyAlerts" xml:space="preserve">
-    <value>My alerts</value>
+    <value>Alerts</value>
   </data>
 </root>

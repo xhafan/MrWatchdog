@@ -3,6 +3,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Watchdogs.Manage;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Manage;
@@ -35,14 +36,16 @@ public class when_managing_watchdogs : BaseDatabaseTest
             new GetWatchdogsQueryResult
             {
                 WatchdogId = _watchdogForUserOne.Id, 
-                WatchdogName = "watchdog user one"
+                WatchdogName = "watchdog user one",
+                Public = true
             }
         );
         _model.Watchdogs.ShouldNotContain(
             new GetWatchdogsQueryResult
             {
                 WatchdogId = _watchdogForUserTwo.Id, 
-                WatchdogName = "watchdog user two"
+                WatchdogName = "watchdog user two",
+                Public = false
             }
         );
     }    
@@ -56,6 +59,8 @@ public class when_managing_watchdogs : BaseDatabaseTest
             .WithUser(_userOne)
             .WithName("watchdog user one")
             .Build();
+        _watchdogForUserOne.MakePublic();
+        UnitOfWork.Save(_watchdogForUserOne);
 
         _watchdogForUserTwo = new WatchdogBuilder(UnitOfWork)
             .WithUser(_userTwo)

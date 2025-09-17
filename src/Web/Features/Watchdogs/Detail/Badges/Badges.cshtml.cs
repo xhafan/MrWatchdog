@@ -11,6 +11,9 @@ public class BadgesModel(IQueryExecutor queryExecutor) : BasePageModel
     [BindProperty]
     public WatchdogDetailPublicStatusArgs WatchdogDetailPublicStatusArgs { get; set; } = null!;
     
+    [BindProperty(SupportsGet = true)]
+    public bool ShowPrivate { get; set; } = true;
+
     public async Task OnGet(long watchdogId)
     {
         WatchdogDetailPublicStatusArgs =

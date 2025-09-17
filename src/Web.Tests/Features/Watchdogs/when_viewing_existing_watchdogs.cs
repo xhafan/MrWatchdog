@@ -29,7 +29,8 @@ public class when_viewing_existing_watchdogs : BaseDatabaseTest
             new GetWatchdogsQueryResult
             {
                 WatchdogId = _watchdog.Id, 
-                WatchdogName = "watchdog name"
+                WatchdogName = "watchdog name",
+                Public = false
             }
         );
     }    

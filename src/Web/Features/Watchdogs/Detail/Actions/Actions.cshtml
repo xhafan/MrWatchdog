@@ -1,4 +1,5 @@
 ﻿@page "{watchdogId}"
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @using MrWatchdog.Web.Infrastructure.Authorizations
@@ -8,8 +9,12 @@
 }
 <!turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
 <div @Stimulus.Controller(StimulusControllers.WatchdogsDetailActions)
-     class="btn-group" 
-     role="group">
+     >
+    <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
+       class="btn btn-outline-primary text-decoration-none"
+       data-turbo-frame="_top">
+        View scraping results
+    </a>
     @{
         var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
                                                && !Model.WatchdogDetailPublicStatusArgs.MakePublicRequested
@@ -19,7 +24,7 @@
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
           method="post"
           data-watchdogs--detail-actions-target="requestToMakePublicForm"
-          style="@(!isRequestToMakePublicFormVisible ? "display:none" : "")"
+          style="display:@(!isRequestToMakePublicFormVisible ? "none" : "inline")"
     >
         <button class="btn btn-outline-primary"
                 type="submit"
@@ -35,7 +40,7 @@
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
           method="post"
           data-watchdogs--detail-actions-target="makePublicForm"
-          style="@(!isMakePublicFormVisible ? "display:none" : "")"
+          style="display:@(!isMakePublicFormVisible ? "none" : "inline")"
     >
         <button class="btn btn-outline-primary"
                 type="submit"
@@ -50,7 +55,7 @@
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
           method="post"
           data-watchdogs--detail-actions-target="makePrivateForm"
-          style="@(!isMakePrivateFormVisible ? "display:none" : "")"
+          style="display:@(!isMakePrivateFormVisible ? "none" : "inline")"
     >
         <button class="btn btn-outline-primary"
                 type="submit"

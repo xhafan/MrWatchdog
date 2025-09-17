@@ -5,8 +5,8 @@
 @model AlertModel
 
 @{
-    var searchTermPrefix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogAlertArgs.SearchTerm) ? $"{Model.WatchdogAlertArgs.SearchTerm} - " : "")}";
-    var title = $"{searchTermPrefix}{Model.WatchdogScrapingResultsArgs.WatchdogName}";
+    var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogAlertArgs.SearchTerm) ? $" - {Model.WatchdogAlertArgs.SearchTerm}" : "")}";
+    var title = $"{Model.WatchdogScrapingResultsArgs.WatchdogName}{searchTermSuffix}";
     ViewData["Title"] = title;
 }
 
@@ -29,8 +29,8 @@
     <div class="d-flex justify-content-between">
         <div>
             <h1 class="display-4">
-                <span data-watchdogs--alert-target="searchTermPrefix">@searchTermPrefix</span>
                 <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@Model.WatchdogAlertArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
+                <span data-watchdogs--alert-target="searchTermSuffix">@searchTermSuffix</span>
             </h1>
         </div>
         <div>

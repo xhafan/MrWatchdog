@@ -40,10 +40,10 @@ public class when_alerting_user_about_new_watchdog_alert_scraping_results_with_s
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for the watchdog alert") && p.Contains("M - Epic Games store free game")),
+                A<string>.That.Matches(p => p.Contains("new results for the watchdog alert") && p.Contains("Epic Games store free game - M")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for your alert")
                                             && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Alert/{_watchdogAlert.Id}">M - Epic Games store free game</a>
+                                                           <a href="https://mrwatchdog_test/Watchdogs/Alert/{_watchdogAlert.Id}">Epic Games store free game - M</a>
                                                            """)
                                             && p.Contains("""
                                                           <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>

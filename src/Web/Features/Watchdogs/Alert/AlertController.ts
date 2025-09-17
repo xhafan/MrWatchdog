@@ -6,11 +6,11 @@ import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstant
 
 export default class AlertController extends Controller {
     static targets  = [
-        "searchTermPrefix",
+        "searchTermSuffix",
         "deleteWatchdogAlertForm"
     ];
 
-    declare searchTermPrefixTarget: HTMLSpanElement;
+    declare searchTermSuffixTarget: HTMLSpanElement;
     declare deleteWatchdogAlertFormTarget: HTMLFormElement;
 
     connect() {
@@ -35,6 +35,6 @@ export default class AlertController extends Controller {
     private handleSearchTermModifiedEvent(event: CustomEventInit<string>) {
         const searchTerm = event.detail;
 
-        this.searchTermPrefixTarget.textContent = searchTerm ? `${searchTerm} - ` : "";
+        this.searchTermSuffixTarget.textContent = searchTerm ? ` - ${searchTerm}` : "";
     }
 }

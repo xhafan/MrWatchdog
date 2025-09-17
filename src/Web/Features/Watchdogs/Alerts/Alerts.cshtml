@@ -27,7 +27,7 @@
 {
     <div>
         <a asp-page="/Watchdogs/Alert/Alert" asp-route-watchdogAlertId="@watchdogAlert.WatchdogAlertId">
-            @(!string.IsNullOrWhiteSpace(watchdogAlert.SearchTerm) ? $"{watchdogAlert.SearchTerm} - " : "")@watchdogAlert.WatchdogName
+            @watchdogAlert.WatchdogName@(!string.IsNullOrWhiteSpace(watchdogAlert.SearchTerm) ? $" - {watchdogAlert.SearchTerm}" : "")
         </a>
     </div>
 }
@@ -36,6 +36,6 @@
 {
     <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
     @:You have no watchdog alerts. To add a new watchdog alert, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of watchdogs</a>, select one,
-    @:and click the button <i>@ScrapingResultsConstants.CreateAlertButtonNewResultsLabel</i>.
+    @:and choose <i>@ScrapingResultsConstants.CreateAlertButtonNewResultsLabel</i>.
 }
 

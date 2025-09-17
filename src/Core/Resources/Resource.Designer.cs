@@ -79,7 +79,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage watchdogs.
+        ///   Looks up a localized string similar to Manage my watchdogs.
         /// </summary>
         public static string ManageWatchdogs {
             get {

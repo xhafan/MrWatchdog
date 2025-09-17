@@ -133,7 +133,7 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         if (newScrapingResults.IsEmpty()) return;
 
         var mrWatchdogResource = Resource.MrWatchdog;
-        var watchdogAlertName = $"{(!string.IsNullOrWhiteSpace(SearchTerm) ? $"{SearchTerm} - " : "")}{Watchdog.Name}";
+        var watchdogAlertName = $"{Watchdog.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
         
         await emailSender.SendEmail(
             User.Email,

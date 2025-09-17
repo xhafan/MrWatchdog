@@ -27,7 +27,8 @@ public class GetWatchdogAlertsQueryHandler(
                 .Select(() => watchdog.Name).WithAlias(() => result.WatchdogName)
                 .Select(x => x.SearchTerm).WithAlias(() => result.SearchTerm)
             )
-            .OrderByAlias(() => result.WatchdogAlertId).Desc
+            .OrderBy(() => watchdog.Name).Asc
+            .ThenBy(x => x.SearchTerm).Asc
             .TransformUsing(Transformers.AliasToBean<GetWatchdogAlertsQueryResult>())
             .ListAsync<TResult>();
         

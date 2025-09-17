@@ -6,12 +6,10 @@ import { StimulusControllers } from "../../Shared/Generated/StimulusControllers"
 
 export const searchTermModifiedEventName = "searchTermModified";
 
-const scrapingResultTargetName = "scrapingResult";
-
 export default class ScrapingResultsWebPagesController extends Controller {
     
     static targets = [
-        scrapingResultTargetName,
+        "scrapingResult",
         "allResults",
         "noResults",
         "noResultsMessage",
@@ -49,13 +47,13 @@ export default class ScrapingResultsWebPagesController extends Controller {
                 scrapingResult.style.display = "none";
             }
             else {
-                scrapingResult.style.display = "list-item";
+                scrapingResult.style.display = "";
                 noResults = false;
             }
         });
 
-        this.allResultsTarget.style.display = noResults ? "none" : "block";
-        this.noResultsTarget.style.display = noResults ? "block" : "none";
+        this.allResultsTarget.style.display = noResults ? "none" : "";
+        this.noResultsTarget.style.display = noResults ? "" : "none";
 
         this.noResultsMessageTarget.innerHTML = `No results${(searchTerm ? ` matching search term <i>${searchTerm}</i>` : "")} currently available`;
 
@@ -73,13 +71,13 @@ export default class ScrapingResultsWebPagesController extends Controller {
     private refreshWebPagesVisibility() {
         this.webPageTargets.forEach(webPage => {
      
-            const webPageScrapingResults = webPage.querySelectorAll<HTMLElement>(
-                `[data-${StimulusControllers.watchdogsScrapingResultsWebPages}-target='${scrapingResultTargetName}']`
+            const webPageScrapingResults = Enumerable.from(this.scrapingResultTargets).where(scrapingResult =>
+                webPage.contains(scrapingResult)
             );
 
             const allHidden = Enumerable.from(webPageScrapingResults).all(x => x.style.display === "none");
 
-            webPage.style.display = allHidden ? "none" : "block";
+            webPage.style.display = allHidden ? "none" : "";
         });
     }
 }

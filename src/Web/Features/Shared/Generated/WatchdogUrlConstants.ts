@@ -8,6 +8,8 @@ export abstract class WatchdogUrlConstants
 	public static watchdogWebPageIdVariable: string = `$watchdogWebPageId`;
 	public static watchdogAlertIdVariable: string = `$watchdogAlertId`;
 	public static watchdogsUrl: string = `/Watchdogs`;
+	public static publicWatchdogsUrl: string = `/Watchdogs/PublicWatchdogs`;
+	public static userWatchdogsUrl: string = `/Watchdogs/UserWatchdogs`;
 	public static watchdogScrapingResultsUrlTemplate: string = `/Watchdogs/ScrapingResults/$watchdogId`;
 	public static watchdogCreateUrl: string = `/Watchdogs/Create`;
 	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;

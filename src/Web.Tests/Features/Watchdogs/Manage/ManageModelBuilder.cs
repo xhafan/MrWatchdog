@@ -23,7 +23,7 @@ public class ManageModelBuilder(NhibernateUnitOfWork unitOfWork)
     public ManageModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogsQueryHandler(unitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetUserWatchdogsQueryHandler(unitOfWork));
         
         _actingUser ??= new UserBuilder(unitOfWork).Build();
 

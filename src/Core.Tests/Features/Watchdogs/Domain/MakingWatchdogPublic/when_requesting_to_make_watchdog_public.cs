@@ -17,8 +17,8 @@ public class when_requesting_to_make_watchdog_public
     }
 
     [Test]
-    public void make_public_requested_flag_is_set()
+    public void public_status_is_correct()
     {
-        _watchdog.MakePublicRequested.ShouldBe(true);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
     }
 }

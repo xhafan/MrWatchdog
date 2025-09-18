@@ -1,5 +1,4 @@
 ﻿@page
-@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @model ManageModel
 
@@ -22,15 +21,18 @@
 <h1 class="display-4">@title</h1>
 
 <div class="my-3">
-    <a asp-page="/Watchdogs/Create/Create"><i class="fa-solid fa-plus"></i> Create watchdog</a>
+    <a asp-page="/Watchdogs/Create/Create" 
+       class="btn btn-outline-primary text-decoration-none">
+        Create watchdog
+    </a>
 </div>
 
 @foreach (var watchdog in Model.Watchdogs)
 {
     <div>
         <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId">@watchdog.WatchdogName</a>
-        <turbo-frame id="watchdog_detail_badges_@(watchdog.WatchdogId)"
-                     src="@WatchdogUrlConstants.WatchdogDetailBadgesUrlTemplate.WithWatchdogId(watchdog.WatchdogId)?ShowPrivate=false">
-        </turbo-frame>
+        <public-status-badge public-status="@watchdog.PublicStatus"
+                             show-private="false"
+        />
     </div>
 }

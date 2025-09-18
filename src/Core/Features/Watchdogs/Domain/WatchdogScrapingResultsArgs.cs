@@ -8,4 +8,5 @@ public record WatchdogScrapingResultsArgs
     public required long WatchdogId { get; set; }
     public required string WatchdogName { get; set; }
     public required IEnumerable<WatchdogWebPageScrapingResultsArgs> WebPages { get; set; }
+    public required long UserId { get; set; }
 }

@@ -36,6 +36,7 @@ public abstract class BaseViewTagHelper(IHtmlHelper htmlHelper) : TagHelper
         var partial = await htmlHelper.PartialAsync(viewLocation, this, null);
 
         output.TagName = TagName;
+        output.TagMode = TagMode.StartTagAndEndTag;
         output.Content.SetHtmlContent(partial);
         
         var stimulusControllerName = GetStimulusControllerName();

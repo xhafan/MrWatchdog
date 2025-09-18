@@ -25,7 +25,7 @@ public class when_viewing_watchdog_detail_for_public_watchdog : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailArgs.Public.ShouldBe(true);
+        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()

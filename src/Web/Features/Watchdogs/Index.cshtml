@@ -1,5 +1,7 @@
 ﻿@page
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model IndexModel
 
 @{
@@ -18,11 +20,19 @@
     </nav>
 }
 
-<h1 class="display-4">@title</h1>
-
-@foreach (var watchdogs in Model.Watchdogs)
-{
-    <div>
-        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@watchdogs.WatchdogId">@watchdogs.WatchdogName</a>
+<div class="row">
+    <div class="col-md-8">
+        <turbo-frame id="publicWatchdogs"
+                     src="@WatchdogUrlConstants.PublicWatchdogsUrl"
+        />
     </div>
-}
+    <div class="col-md-4">
+        @if (User.IsAuthenticated())
+        {
+            <turbo-frame id="userWatchdogs"
+                         src="@WatchdogUrlConstants.UserWatchdogsUrl"
+            />
+        }
+    </div>
+</div>
+

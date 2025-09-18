@@ -4,7 +4,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.MakingWatchdogPublic;
 
 [TestFixture]
-public class when_making_watchdog_private_with_make_public_requested
+public class when_making_make_public_requested_watchdog_private
 {
     private Watchdog _watchdog = null!;
 
@@ -18,8 +18,8 @@ public class when_making_watchdog_private_with_make_public_requested
     }
 
     [Test]
-    public void make_public_requested_flag_is_reset()
+    public void public_status_is_correct()
     {
-        _watchdog.MakePublicRequested.ShouldBe(false);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.Private);
     }
 }

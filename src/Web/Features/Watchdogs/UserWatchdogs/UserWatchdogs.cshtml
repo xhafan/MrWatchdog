@@ -1,0 +1,28 @@
+﻿@page
+@using CoreUtils.Extensions
+@model UserWatchdogsModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="userWatchdogs">
+<h1 class="display-4">My watchdogs</h1>    
+
+@foreach (var watchdog in Model.UserWatchdogs)
+{
+    <div>
+        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
+           asp-route-watchdogId="@watchdog.WatchdogId"
+           data-turbo-frame="_top"
+        >
+            @watchdog.WatchdogName
+        </a>
+    </div>
+}
+
+@if (Model.UserWatchdogs.IsEmpty())
+{
+    <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
+    @:You have no watchdogs created. You can create a watchdog 
+    <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@:.
+}
+</!turbo-frame>

@@ -28,8 +28,7 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
         _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogDetailArgs.WebPageIds.ShouldBeEmpty();
         _model.WatchdogDetailArgs.Name.ShouldBe("watchdog name");
-        _model.WatchdogDetailArgs.MakePublicRequested.ShouldBe(true);
-        _model.WatchdogDetailArgs.Public.ShouldBe(false);
+        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
     }
 
     private void _BuildEntities()

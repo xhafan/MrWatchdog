@@ -18,14 +18,8 @@ public class when_making_watchdog_public
     }
 
     [Test]
-    public void public_flag_is_set()
+    public void public_status_is_correct()
     {
-        _watchdog.Public.ShouldBe(true);
-    }
-
-    [Test]
-    public void make_public_requested_flag_is_reset()
-    {
-        _watchdog.MakePublicRequested.ShouldBe(false);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 }

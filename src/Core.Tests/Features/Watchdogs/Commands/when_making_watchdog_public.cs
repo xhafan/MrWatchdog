@@ -32,7 +32,7 @@ public class when_making_watchdog_public : BaseDatabaseTest
     [Test]
     public void watchdog_is_public()
     {
-        _watchdog.Public.ShouldBe(true);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()

@@ -6,33 +6,30 @@ using NHibernate.Transform;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public class GetWatchdogsQueryHandler(
+public class GetUserWatchdogsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetWatchdogsQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetUserWatchdogsQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogsQuery query)
+    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetUserWatchdogsQuery query)
     {
-        GetWatchdogsQueryResult result = null!;
+        Watchdog watchdogAlias = null!;
+        GetUserWatchdogsQueryResult result = null!;
         User user = null!;
 
-        var queryOver = _unitOfWork.Session!.QueryOver<Watchdog>()
+        var queryOver = _unitOfWork.Session!.QueryOver(() => watchdogAlias)
             .JoinAlias(x => x.User, () => user)
+            .Where(() => user.Id == query.UserId)
             .SelectList(list => list
                 .Select(x => x.Id).WithAlias(() => result.WatchdogId)
                 .Select(x => x.Name).WithAlias(() => result.WatchdogName)
-                .Select(x => x.Public).WithAlias(() => result.Public)
+                .Select(x => x.PublicStatus).WithAlias(() => result.PublicStatus)
             );
-
-        if (query.UserId != 0) // todo: remove this once this query is not used for loading all watchdogs
-        {
-            queryOver.Where(() => user.Id == query.UserId);
-        }
 
         var results = await queryOver
             .OrderByAlias(() => result.WatchdogName).Asc
-            .TransformUsing(Transformers.AliasToBean<GetWatchdogsQueryResult>())
+            .TransformUsing(Transformers.AliasToBean<GetUserWatchdogsQueryResult>())
             .ListAsync<TResult>();
         
         return results;

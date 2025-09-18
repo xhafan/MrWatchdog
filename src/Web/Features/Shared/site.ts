@@ -16,7 +16,7 @@ import WatchdogsDetailActionsController from "../Watchdogs/Detail/Actions/Action
 import WatchdogsDetailWebPageController from "../Watchdogs/Detail/WebPage/WebPageController";
 import WatchdogsDetailWebPageOverviewController from "../Watchdogs/Detail/WebPage/WebPageOverviewController";
 import WatchdogsScrapingResultsController from "../Watchdogs/ScrapingResults/ScrapingResultsController";
-import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import WatchdogsAlertController from "../Watchdogs/Alert/AlertController";
 import WatchdogsAlertOverviewController from "../Watchdogs/Alert/Overview/OverviewController";
 

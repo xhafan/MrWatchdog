@@ -1,5 +1,6 @@
 ﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Watchdogs.Domain
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @using MrWatchdog.Web.Infrastructure.Authorizations
@@ -15,10 +16,9 @@
        data-turbo-frame="_top">
         View scraping results
     </a>
-    @{
-        var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
-                                               && !Model.WatchdogDetailPublicStatusArgs.MakePublicRequested
-        && !Model.WatchdogDetailPublicStatusArgs.Public;
+        @{
+            var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
+                                                   && Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
     }
     <form asp-page-handler="RequestToMakePublic"
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
@@ -34,7 +34,7 @@
     </form>
     @{
         var isMakePublicFormVisible = User.IsSuperAdmin()
-                                      && !Model.WatchdogDetailPublicStatusArgs.Public;
+                                      && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
     }
     <form asp-page-handler="MakePublic"
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
@@ -49,7 +49,7 @@
         </button>
     </form>
     @{
-        var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.Public;
+        var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Public;
     }
     <form asp-page-handler="MakePrivate"
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"

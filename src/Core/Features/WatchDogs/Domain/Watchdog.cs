@@ -27,6 +27,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         Name = name;
         ScrapingIntervalInSeconds = DefaultScrapingIntervalOneDayInSeconds;
         IntervalBetweenSameResultAlertsInDays = DefaultIntervalBetweenSameResultAlertsInDays;
+        PublicStatus = PublicStatus.Private;
     }
     
     public virtual User User { get; protected set; } = null!;
@@ -34,12 +35,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual int ScrapingIntervalInSeconds { get; protected set; }
     public virtual DateTime? NextScrapingOn { get; protected set; }
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
-    public virtual bool MakePublicRequested { get; protected set; }
-    public virtual bool Public { get; protected set; }
+    public virtual PublicStatus PublicStatus { get; protected set; }
     public virtual double IntervalBetweenSameResultAlertsInDays { get; protected set; }
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
     
-
+    
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
     {
         return new WatchdogDetailArgs
@@ -47,8 +47,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
             Name = Name,
-            MakePublicRequested = MakePublicRequested,
-            Public = Public
+            PublicStatus = PublicStatus
         };
     }
     
@@ -134,7 +133,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WebPages = _webPages
                 .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
                 .WhereNotNull()
-                .ToList()
+                .ToList(),
+            UserId = User.Id
         };
     }
 
@@ -186,21 +186,19 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     public virtual void RequestToMakePublic()
     {
-        Guard.Hope(!Public, "Watchdog is already public."); // todo: make this UserException shown to the user
+        Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public."); // todo: make this UserException shown to the user
 
-        MakePublicRequested = true;
+        PublicStatus = PublicStatus.MakePublicRequested;
     }
 
     public virtual void MakePublic()
     {
-        Public = true;
-        MakePublicRequested = false;
+        PublicStatus = PublicStatus.Public;
     }
 
     public virtual void MakePrivate()
     {
-        Public = false;
-        MakePublicRequested = false;
+        PublicStatus = PublicStatus.Private;
     }
     
     public virtual WatchdogDetailPublicStatusArgs GetWatchdogDetailPublicStatusArgs()
@@ -208,8 +206,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         return new WatchdogDetailPublicStatusArgs
         {
             WatchdogId = Id, 
-            MakePublicRequested = MakePublicRequested,
-            Public = Public
+            PublicStatus = PublicStatus
         };
     }
 }

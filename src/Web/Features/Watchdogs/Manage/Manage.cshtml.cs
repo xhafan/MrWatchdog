@@ -10,12 +10,12 @@ public class ManageModel(
     IActingUserAccessor actingUserAccessor
 ) : BasePageModel
 {
-    public IEnumerable<GetWatchdogsQueryResult> Watchdogs { get; private set; } = null!;
+    public IEnumerable<GetUserWatchdogsQueryResult> Watchdogs { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        Watchdogs = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(
-            new GetWatchdogsQuery(actingUserAccessor.GetActingUserId())
+        Watchdogs = await queryExecutor.ExecuteAsync<GetUserWatchdogsQuery, GetUserWatchdogsQueryResult>(
+            new GetUserWatchdogsQuery(actingUserAccessor.GetActingUserId())
         );
     }
 }

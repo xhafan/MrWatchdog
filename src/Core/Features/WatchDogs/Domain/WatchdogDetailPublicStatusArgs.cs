@@ -6,6 +6,5 @@ public class WatchdogDetailPublicStatusArgs
 {
     [NotDefault]
     public required long WatchdogId { get; set; }
-    public required bool MakePublicRequested { get; set; }
-    public required bool Public { get; set; }
+    public required PublicStatus PublicStatus { get; set; }
 }

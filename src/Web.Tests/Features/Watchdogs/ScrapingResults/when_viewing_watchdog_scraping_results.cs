@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -11,6 +12,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
+    private User _user = null!;
 
     [SetUp]
     public async Task Context()
@@ -33,10 +35,14 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         webPageArgs.Name.ShouldBe("url.com/page");
         webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");
+        
+        _model.WatchdogScrapingResultsArgs.UserId.ShouldBe(_user.Id);
     }
 
     private void _BuildEntities()
     {
+        _user = new UserBuilder(UnitOfWork).Build();
+        
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
             .WithWebPage(new WatchdogWebPageArgs
@@ -45,6 +51,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
                 Selector = ".selector",
                 Name = "url.com/page"
             })
+            .WithUser(_user)
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);

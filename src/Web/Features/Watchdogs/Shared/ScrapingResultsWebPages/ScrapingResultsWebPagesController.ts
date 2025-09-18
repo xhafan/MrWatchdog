@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
-import { watchdogScrapingResultsWebPagesInitializedEventName } from "../ScrapingResults/ScrapingResultsController";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../Shared/BodyController";
+import { watchdogScrapingResultsWebPagesInitializedEventName } from "../../ScrapingResults/ScrapingResultsController";
 import Enumerable from "linq";
-import { StimulusControllers } from "../../Shared/Generated/StimulusControllers";
+import { StimulusControllers } from "../../../Shared/Generated/StimulusControllers";
 
 export const searchTermModifiedEventName = "searchTermModified";
 

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";

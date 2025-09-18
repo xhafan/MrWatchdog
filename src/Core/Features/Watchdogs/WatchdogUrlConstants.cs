@@ -18,6 +18,12 @@ public static class WatchdogUrlConstants
     public const string WatchdogsUrl = "/Watchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string PublicWatchdogsUrl = "/Watchdogs/PublicWatchdogs";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string UserWatchdogsUrl = "/Watchdogs/UserWatchdogs";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogScrapingResultsUrlTemplate = $"/Watchdogs/ScrapingResults/{WatchdogIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

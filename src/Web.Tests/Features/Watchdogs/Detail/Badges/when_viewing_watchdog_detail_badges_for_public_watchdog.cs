@@ -25,8 +25,7 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
     public void model_is_correct()
     {
         _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.MakePublicRequested.ShouldBe(false);
-        _model.WatchdogDetailPublicStatusArgs.Public.ShouldBe(true);
+        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()

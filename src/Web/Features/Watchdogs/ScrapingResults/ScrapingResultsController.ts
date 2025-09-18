@@ -6,7 +6,7 @@ import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
-import { searchTermModifiedEventName } from "../ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 
 export const watchdogScrapingResultsWebPagesInitializedEventName = "watchdogScrapingResultsWebPagesInitializedEventName";
 

@@ -1,0 +1,28 @@
+﻿@page
+@using CoreUtils.Extensions
+@model PublicWatchdogsModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="publicWatchdogs">
+<h1 class="display-4">Public watchdogs</h1>    
+
+@foreach (var watchdog in Model.PublicWatchdogs)
+{
+    <div>
+        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
+           asp-route-watchdogId="@watchdog.WatchdogId"
+           data-turbo-frame="_top"
+           >
+            @watchdog.WatchdogName
+        </a>
+    </div>
+}
+    
+@if (Model.PublicWatchdogs.IsEmpty())
+{
+    <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
+    @:There are no public watchdogs. You can create a watchdog 
+    <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@: and later make it public.
+}
+</!turbo-frame>

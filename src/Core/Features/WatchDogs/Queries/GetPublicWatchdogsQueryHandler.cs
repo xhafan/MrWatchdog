@@ -1,5 +1,6 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using NHibernate.Transform;
 
@@ -13,14 +14,16 @@ public class GetPublicWatchdogsQueryHandler(
 
     public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetPublicWatchdogsQuery query)
     {
-        Watchdog watchdogAlias = null!;
+        User userAlias = null!;
         GetPublicWatchdogsQueryResult result = null!;
 
-        var queryOver = _unitOfWork.Session!.QueryOver(() => watchdogAlias)
-            .Where(() => watchdogAlias.PublicStatus == PublicStatus.Public)
+        var queryOver = _unitOfWork.Session!.QueryOver<Watchdog>()
+            .JoinAlias(x => x.User, () => userAlias)
+            .Where(x => x.PublicStatus == PublicStatus.Public)
             .SelectList(list => list
                 .Select(x => x.Id).WithAlias(() => result.WatchdogId)
                 .Select(x => x.Name).WithAlias(() => result.WatchdogName)
+                .Select(() => userAlias.Id).WithAlias(() => result.UserId)
             );
 
         var results = await queryOver

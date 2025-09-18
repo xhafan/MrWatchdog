@@ -1,5 +1,6 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model PublicWatchdogsModel
 @{
     Layout = null;
@@ -12,10 +13,17 @@
     <div>
         <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
            asp-route-watchdogId="@watchdog.WatchdogId"
-           data-turbo-frame="_top"
-           >
-            @watchdog.WatchdogName
-        </a>
+           data-turbo-frame="_top">
+            @watchdog.WatchdogName</a>
+
+        @if (watchdog.UserId == User.GetUserId())
+        {
+            <span class="badge text-bg-primary"
+                  title="You created this watchdog"
+                  >
+                My watchdog
+            </span>
+        }
     </div>
 }
     

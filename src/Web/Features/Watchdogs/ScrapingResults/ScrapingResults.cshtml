@@ -26,6 +26,11 @@
 }
 
 <h1 class="display-4">@title</h1>
+<p class="text-muted">
+    This watchdog periodically watches the web page(s) below and selects results from them.
+    Below are listed current results. You can enter a search term to filter the results. 
+    Choose <i>Alert about new results</i> to set up an alert with email notification about new results.
+</p>
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogsScrapingResults)>
     <form asp-controller="ScrapingResults"
@@ -45,7 +50,7 @@
                        class="form-control" 
                        data-watchdogs--scraping-results-target="searchTerm"
                        data-action="input->@StimulusControllers.WatchdogsScrapingResults#onSearchTermModified"
-                       placeholder="Filter results"
+                       placeholder="@Resource.FilterResults"
                 />
             </div>
             <div class="mt-3">

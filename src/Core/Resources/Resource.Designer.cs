@@ -70,6 +70,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create watchdog.
+        /// </summary>
+        public static string CreateWatchdog {
+            get {
+                return ResourceManager.GetString("CreateWatchdog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter search term to filter results.
+        /// </summary>
+        public static string FilterResults {
+            get {
+                return ResourceManager.GetString("FilterResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Watchdogs.
         /// </summary>
         public static string ListOfWatchdogs {

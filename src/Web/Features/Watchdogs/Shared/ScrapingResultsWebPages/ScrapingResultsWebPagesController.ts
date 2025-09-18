@@ -55,7 +55,7 @@ export default class ScrapingResultsWebPagesController extends Controller {
         this.allResultsTarget.style.display = noResults ? "none" : "";
         this.noResultsTarget.style.display = noResults ? "" : "none";
 
-        this.noResultsMessageTarget.innerHTML = `No results${(searchTerm ? ` matching search term <i>${searchTerm}</i>` : "")} currently available`;
+        this.noResultsMessageTarget.innerHTML = `No results${(searchTerm ? ` matching the search term <i>${searchTerm}</i>` : "")} currently available`;
 
         this.refreshWebPagesVisibility();
     }

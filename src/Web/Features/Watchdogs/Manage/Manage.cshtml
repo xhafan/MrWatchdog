@@ -19,11 +19,14 @@
 }
 
 <h1 class="display-4">@title</h1>
+<p class="text-muted">
+    Here you can browse watchdogs created by you. Choose <i>@Resource.CreateWatchdog</i> to create a new watchdog.
+</p>
 
 <div class="my-3">
     <a asp-page="/Watchdogs/Create/Create" 
        class="btn btn-outline-primary text-decoration-none">
-        Create watchdog
+        @Resource.CreateWatchdog
     </a>
 </div>
 

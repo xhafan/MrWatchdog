@@ -14,6 +14,7 @@ public record WatchdogWebPageArgs
     [Required]
     public string? Url { get; set; }
 
+    [Display(Name = "CSS path selector")]
     public string? Selector { get; set; }
     
     [Display(Name = "Select text instead of HTML")]

@@ -36,6 +36,11 @@
                      reload-on-event="@StimulusControllers.WatchdogsDetailActions:@DomEvents.WatchdogPublicStatusUpdated">
         </turbo-frame>
     </div>
+    <p class="text-muted">
+        This watchdog will scrape web page(s) and will select results based on the CSS path selector. 
+        Choose <i>Add web page to watch</i> to add a new web page to watch.
+    </p>    
+
     <div class="d-flex justify-content-between align-items-center">
         <turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailArgs.WatchdogId)"
                      src="@WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)"

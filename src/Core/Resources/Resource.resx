@@ -120,6 +120,12 @@
   <data name="Alert" xml:space="preserve">
     <value>Alert</value>
   </data>
+  <data name="CreateWatchdog" xml:space="preserve">
+    <value>Create watchdog</value>
+  </data>
+  <data name="FilterResults" xml:space="preserve">
+    <value>Enter search term to filter results</value>
+  </data>
   <data name="ListOfWatchdogs" xml:space="preserve">
     <value>Watchdogs</value>
   </data>

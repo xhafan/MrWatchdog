@@ -1,5 +1,6 @@
 ﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Watchdogs.Domain
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
@@ -38,6 +39,12 @@
     </div>
     <p class="text-muted">
         This watchdog will scrape web page(s) and will select results based on the CSS path selector.
+        Choose <i>@Resource.ViewScrapingResults</i> to be able to set up an alert with email notification about new scraping results.
+        @if (Model.WatchdogDetailArgs.PublicStatus == PublicStatus.Private)
+        {
+            @:Choose <i>@Resource.RequestToMakePublic</i> to request to make the watchdog public and discoverable by other users 
+            @:who will then be able to set up alerts on it.
+        }
     </p>    
 
     <div class="d-flex justify-content-between align-items-center">

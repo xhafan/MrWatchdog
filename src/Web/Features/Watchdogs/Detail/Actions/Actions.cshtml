@@ -1,6 +1,7 @@
 ﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Features.Watchdogs.Domain
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @using MrWatchdog.Web.Infrastructure.Authorizations
@@ -14,7 +15,7 @@
     <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
        class="btn btn-outline-primary text-decoration-none"
        data-turbo-frame="_top">
-        View scraping results
+        @Resource.ViewScrapingResults
     </a>
         @{
             var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
@@ -29,7 +30,7 @@
         <button class="btn btn-outline-primary"
                 type="submit"
         >
-            Request to make public
+            @Resource.RequestToMakePublic
         </button>
     </form>
     @{
@@ -45,7 +46,7 @@
         <button class="btn btn-outline-primary"
                 type="submit"
         >
-            Make public
+            @Resource.MakePublic
         </button>
     </form>
     @{

@@ -37,9 +37,9 @@
         var isMakePublicFormVisible = User.IsSuperAdmin()
                                       && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
     }
-    <form asp-page-handler="MakePublic"
+    <form asp-controller="Actions"
+          asp-action="MakePublic"
           asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
-          method="post"
           data-watchdogs--detail-actions-target="makePublicForm"
           style="display:@(!isMakePublicFormVisible ? "none" : "inline")"
     >

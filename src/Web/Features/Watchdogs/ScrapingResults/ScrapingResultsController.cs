@@ -4,9 +4,9 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
-/// This class exist due to Razor pages (ScrapingResultsModel) not able to mix anonymous and authenticated requests
+// This class exist due to Razor pages (ScrapingResultsModel) not able to mix anonymous and authenticated requests
 [ApiController]
-[Route("api/[controller]/[action]")]
+[Route("api/Watchdogs/[controller]/[action]")]
 public class ScrapingResultsController(ICoreBus bus) : ControllerBase
 {
     [HttpPost]

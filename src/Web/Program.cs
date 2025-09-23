@@ -9,6 +9,8 @@ using CoreDdd.Register.DependencyInjection;
 using DatabaseBuilder;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Jobs.Services;
@@ -24,7 +26,11 @@ using MrWatchdog.Web.Features.Account.Login;
 using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using MrWatchdog.Web.Infrastructure.PageFilters;
 using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Timeout;
 using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
@@ -35,11 +41,6 @@ using System.Data;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Timeout;
 
 namespace MrWatchdog.Web;
 
@@ -77,6 +78,7 @@ public class Program
                 options.RootDirectory = "/Features";
                 options.Conventions.Add(new PageRouteModelConvention());
                 options.Conventions.AuthorizeFolder("/");
+                options.Conventions.ConfigureFilter(new EnforceHandlerExistsPageFilter());
             });
         builder.Services.AddControllers(options =>
         {

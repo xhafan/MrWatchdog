@@ -58,7 +58,7 @@ public static class WatchdogUrlConstants
     public const string WatchdogDetailActionsUrlTemplate = $"/Watchdogs/Detail/Actions/{WatchdogIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogDetailActionsMakePublicUrlTemplate = $"/Watchdogs/Detail/Actions/{WatchdogIdVariable}?handler=MakePublic";
+    public const string WatchdogDetailActionsMakePublicUrlTemplate = $"/api/Watchdogs/Detail/Actions/MakePublic?watchdogId={WatchdogIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogAlertUrlTemplate = $"/Watchdogs/Alert/{WatchdogAlertIdVariable}";

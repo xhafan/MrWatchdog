@@ -12,7 +12,7 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
 [TestFixture]
 public class when_making_watchdog_public : BaseDatabaseTest
 {
-    private ActionsModel _model = null!;
+    private ActionsController _controller = null!;
     private Watchdog _watchdog = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
@@ -24,11 +24,11 @@ public class when_making_watchdog_public : BaseDatabaseTest
 
         _bus = A.Fake<ICoreBus>();
         
-        _model = new ActionsModelBuilder(UnitOfWork)
+        _controller = new ActionsControllerBuilder()
             .WithBus(_bus)
             .Build();
         
-        _actionResult = await _model.OnPostMakePublic(_watchdog.Id);
+        _actionResult = await _controller.MakePublic(_watchdog.Id);
     }
 
     [Test]

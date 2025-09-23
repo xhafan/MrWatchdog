@@ -1,0 +1,19 @@
+﻿@page
+@model OtherUsersWatchdogsModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="otherUsersWatchdogs">
+    <p class="text-muted">
+        Here you can manage watchdogs created by other users.
+    </p>
+    @foreach (var watchdog in Model.OtherUsersWatchdogs)
+    {
+        <div>
+            <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId" data-turbo-frame="_top">@watchdog.WatchdogName</a>
+            (@watchdog.UserEmail)
+            <public-status-badge public-status="@watchdog.PublicStatus"
+                                 show-private="false" />
+        </div>
+    }
+</!turbo-frame>

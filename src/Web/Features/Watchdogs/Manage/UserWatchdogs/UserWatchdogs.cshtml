@@ -1,0 +1,29 @@
+﻿@page
+@using MrWatchdog.Core.Resources
+@model UserWatchdogsModel
+@{
+    Layout = null;
+}
+<!turbo-frame id="userWatchdogs">
+    <p class="text-muted">
+        Here you can manage watchdogs created by you. 
+    </p>
+    
+    <div class="my-3">
+        <a asp-page="/Watchdogs/Create/Create" 
+           class="btn btn-outline-primary text-decoration-none"
+           data-turbo-frame="_top"
+           >
+            @Resource.CreateWatchdog
+        </a>
+    </div>    
+
+    @foreach (var watchdog in Model.UserWatchdogs)
+    {
+        <div>
+            <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId" data-turbo-frame="_top">@watchdog.WatchdogName</a>
+            <public-status-badge public-status="@watchdog.PublicStatus"
+                                 show-private="false" />
+        </div>
+    }
+</!turbo-frame>

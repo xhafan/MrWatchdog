@@ -10,7 +10,7 @@ public class when_getting_public_watchdogs : BaseDatabaseTest
     [Test]
     public async Task public_watchdogs_can_be_fetched()
     {
-        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(WatchdogUrlConstants.PublicWatchdogsUrl);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(WatchdogUrlConstants.WachdogsPublicWatchdogsUrl);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

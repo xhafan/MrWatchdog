@@ -1,5 +1,7 @@
 ﻿@page
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model ManageModel
 
 @{
@@ -19,23 +21,17 @@
 }
 
 <h1 class="display-4">@title</h1>
-<p class="text-muted">
-    Here you can browse watchdogs created by you. Choose <i>@Resource.CreateWatchdog</i> to create a new watchdog.
-</p>
 
-<div class="my-3">
-    <a asp-page="/Watchdogs/Create/Create" 
-       class="btn btn-outline-primary text-decoration-none">
-        @Resource.CreateWatchdog
-    </a>
-</div>
-
-@foreach (var watchdog in Model.Watchdogs)
-{
-    <div>
-        <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId">@watchdog.WatchdogName</a>
-        <public-status-badge public-status="@watchdog.PublicStatus"
-                             show-private="false"
-        />
+<div class="row">
+    <div class="col-md-6">
+        <turbo-frame id="userWatchdogs"
+                     src="@WatchdogUrlConstants.WatchdogsManageUserWatchdogsUrl" />
     </div>
-}
+    <div class="col-md-6">
+        @if (User.IsSuperAdmin())
+        {
+            <turbo-frame id="otherUsersWatchdogs"
+                         src="@WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl" />
+        }
+    </div>
+</div>

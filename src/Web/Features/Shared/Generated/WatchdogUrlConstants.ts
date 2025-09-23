@@ -8,8 +8,8 @@ export abstract class WatchdogUrlConstants
 	public static watchdogWebPageIdVariable: string = `$watchdogWebPageId`;
 	public static watchdogAlertIdVariable: string = `$watchdogAlertId`;
 	public static watchdogsUrl: string = `/Watchdogs`;
-	public static publicWatchdogsUrl: string = `/Watchdogs/PublicWatchdogs`;
-	public static userWatchdogsUrl: string = `/Watchdogs/UserWatchdogs`;
+	public static wachdogsPublicWatchdogsUrl: string = `/Watchdogs/PublicWatchdogs`;
+	public static watchdogsUserWatchdogsUrl: string = `/Watchdogs/UserWatchdogs`;
 	public static watchdogScrapingResultsUrlTemplate: string = `/Watchdogs/ScrapingResults/$watchdogId`;
 	public static watchdogCreateUrl: string = `/Watchdogs/Create`;
 	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;
@@ -23,6 +23,8 @@ export abstract class WatchdogUrlConstants
 	public static watchdogDetailActionsMakePublicUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId?handler=MakePublic`;
 	public static watchdogAlertUrlTemplate: string = `/Watchdogs/Alert/$watchdogAlertId`;
 	public static watchdogAlertOverviewUrlTemplate: string = `/Watchdogs/Alert/Overview/$watchdogAlertId`;
-	public static manageWatchdogsUrl: string = `/Watchdogs/Manage`;
+	public static watchdogsManageUrl: string = `/Watchdogs/Manage`;
+	public static watchdogsManageUserWatchdogsUrl: string = `/Watchdogs/Manage/UserWatchdogs`;
+	public static watchdogsManageOtherUsersWatchdogsUrl: string = `/Watchdogs/Manage/OtherUsersWatchdogs`;
 	public static watchdogsAlertsUrl: string = `/Watchdogs/Alerts`;
 }

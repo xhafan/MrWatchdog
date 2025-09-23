@@ -45,7 +45,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
         formSubmitWithWaitForJobCompletion(
             this.deleteWatchdogFormTarget, 
             async jobDto => {
-                Turbo.visit(WatchdogUrlConstants.manageWatchdogsUrl);
+                Turbo.visit(WatchdogUrlConstants.watchdogsManageUrl);
             },
             "Really delete the watchdog with all watched web pages?"
         );

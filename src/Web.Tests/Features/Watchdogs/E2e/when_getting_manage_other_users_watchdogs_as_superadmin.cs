@@ -1,17 +1,16 @@
-﻿using System.Net;
-using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using System.Net;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.E2e;
 
 [TestFixture]
-public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
+public class when_getting_manage_other_users_watchdogs_as_superadmin : BaseDatabaseTest
 {
     private LoginToken _loginToken = null!;
     private User _superAdminUser = null!;
@@ -28,18 +27,9 @@ public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
     }
 
     [Test]
-    public async Task super_admin_user_is_allowed_making_watchdog_public()
+    public async Task super_admin_user_can_view_manage_other_users_watchdogs()
     {
-        var response = await _webApplicationClient.GetAsync(
-            WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        var pageHtml = await response.Content.ReadAsStringAsync();
-
-        response = await _webApplicationClient.PostAsync(
-            WatchdogUrlConstants.WatchdogDetailActionsMakePublicUrlTemplate.WithWatchdogId(_watchdog.Id),
-            content: E2ETestHelper.GetFormUrlEncodedContentWithRequestVerificationToken(E2ETestHelper.ExtractRequestVerificationToken(pageHtml))
-        );
-
+        var response = await _webApplicationClient.GetAsync(WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -53,7 +43,6 @@ public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
         newUnitOfWork.BeginTransaction();
 
         await E2ETestHelper.DeleteMarkLoginTokenAsUsedCommandJob(_loginToken.Guid, newUnitOfWork);
-        await E2ETestHelper.DeleteWatchdogCommandJob<MakeWatchdogPublicCommand>(_watchdog.Id, newUnitOfWork);
         
         await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
         await newUnitOfWork.DeleteUserCascade(_superAdminUser);

@@ -6,34 +6,34 @@
     Layout = null;
 }
 <!turbo-frame id="publicWatchdogs">
-<h1 class="display-4">Public watchdogs</h1>    
-<p class="text-muted">
-    Here you can browse public watchdogs created by other users. Choose a watchdog to set up an alert with email notification about new results.
-</p>
+    <h1 class="display-4">Public watchdogs</h1>    
+    <p class="text-muted">
+        Here you can browse public watchdogs created by you and other users. Choose a watchdog to set up an alert with email notification about new results.
+    </p>
 
-@foreach (var watchdog in Model.PublicWatchdogs)
-{
-    <div>
-        <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
-           asp-route-watchdogId="@watchdog.WatchdogId"
-           data-turbo-frame="_top">
-            @watchdog.WatchdogName</a>
+    @foreach (var watchdog in Model.PublicWatchdogs)
+    {
+        <div>
+            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
+               asp-route-watchdogId="@watchdog.WatchdogId"
+               data-turbo-frame="_top">
+                @watchdog.WatchdogName</a>
 
-        @if (watchdog.UserId == User.GetUserId())
-        {
-            <span class="badge text-bg-primary"
-                  title="You created this watchdog"
-                  >
-                My watchdog
-            </span>
-        }
-    </div>
-}
-    
-@if (Model.PublicWatchdogs.IsEmpty())
-{
-    <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-    @:There are no public watchdogs. You can create a watchdog 
-    <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@: and later make it public.
-}
+            @if (watchdog.UserId == User.GetUserId())
+            {
+                <span class="badge text-bg-primary"
+                      title="You created this watchdog"
+                      >
+                    My watchdog
+                </span>
+            }
+        </div>
+    }
+        
+    @if (Model.PublicWatchdogs.IsEmpty())
+    {
+        <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
+        @:There are no public watchdogs. You can create a watchdog 
+        <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@: and later make it public.
+    }
 </!turbo-frame>

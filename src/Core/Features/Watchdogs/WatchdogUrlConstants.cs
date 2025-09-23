@@ -18,10 +18,10 @@ public static class WatchdogUrlConstants
     public const string WatchdogsUrl = "/Watchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string PublicWatchdogsUrl = "/Watchdogs/PublicWatchdogs";
+    public const string WachdogsPublicWatchdogsUrl = "/Watchdogs/PublicWatchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string UserWatchdogsUrl = "/Watchdogs/UserWatchdogs";
+    public const string WatchdogsUserWatchdogsUrl = "/Watchdogs/UserWatchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogScrapingResultsUrlTemplate = $"/Watchdogs/ScrapingResults/{WatchdogIdVariable}";
@@ -67,8 +67,14 @@ public static class WatchdogUrlConstants
     public const string WatchdogAlertOverviewUrlTemplate = $"/Watchdogs/Alert/Overview/{WatchdogAlertIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ManageWatchdogsUrl = "/Watchdogs/Manage";
+    public const string WatchdogsManageUrl = "/Watchdogs/Manage";
     
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsManageUserWatchdogsUrl = "/Watchdogs/Manage/UserWatchdogs";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsManageOtherUsersWatchdogsUrl = "/Watchdogs/Manage/OtherUsersWatchdogs";
+
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsAlertsUrl = "/Watchdogs/Alerts";
 

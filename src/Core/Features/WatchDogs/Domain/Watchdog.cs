@@ -47,7 +47,9 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
             Name = Name,
-            PublicStatus = PublicStatus
+            PublicStatus = PublicStatus,
+            UserId = User.Id,
+            UserEmail = User.Email
         };
     }
     
@@ -85,42 +87,48 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs(long watchdogWebPageId)
     {
-        var webPage = GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageId);
         return webPage.GetWatchdogWebPageArgs();
     }
 
-    public virtual WatchdogWebPage GetWebPage(long watchdogWebPageId)
+    public virtual WatchdogWebPageDisabledWarningDto GetWatchdogWebPageDisabledWarningDto(long watchdogWebPageId)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        return webPage.GetWatchdogWebPageDisabledWarningArgs();
+    }
+
+    private WatchdogWebPage _GetWebPage(long watchdogWebPageId)
     {
         return _webPages.Single(x => x.Id == watchdogWebPageId);
     }
 
     public virtual void UpdateWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
     {
-        var webPage = GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
         webPage.Update(watchdogWebPageArgs);
     }
 
     public virtual void RemoveWebPage(long watchdogWebPageId)
     {
-        var webPage = GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageId);
         _webPages.Remove(webPage);
     }
 
     public virtual void SetScrapingResults(long watchdogWebPageId, ICollection<string> scrapingResults)
     {
-        var webPage = GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageId);
         webPage.SetScrapingResults(scrapingResults, canRaiseScrapingFailedDomainEvent: false);
     }
     
     public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
     {
-        var webPage = GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageId);
         webPage.SetScrapingErrorMessage(scrapingErrorMessage, canRaiseScrapingFailedDomainEvent: false);
     }    
     
     public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto(long watchdogWebPageId)
     {
-        var webPage = GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(watchdogWebPageId);
         return webPage.GetWatchdogWebPageScrapingResultsDto();
     }
     
@@ -131,6 +139,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id,
             WatchdogName = Name,
             WebPages = _webPages
+                .Where(x => x.IsEnabled)
                 .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
                 .WhereNotNull()
                 .ToList(),
@@ -180,13 +189,13 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         bool canRaiseScrapingFailedDomainEvent
     )
     {
-        var webPage = GetWebPage(watchdogWebPageId);
-        await webPage.ScrapeWebPage(httpClientFactory, canRaiseScrapingFailedDomainEvent);
+        var webPage = _GetWebPage(watchdogWebPageId);
+        await webPage.Scrape(httpClientFactory, canRaiseScrapingFailedDomainEvent);
     }
 
     public virtual void RequestToMakePublic()
     {
-        Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public."); // todo: make this UserException shown to the user
+        Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public.");
 
         PublicStatus = PublicStatus.MakePublicRequested;
     }
@@ -208,5 +217,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id, 
             PublicStatus = PublicStatus
         };
+    }
+
+    public virtual void EnableWebPage(long watchdogWebPageId)
+    {
+        var webPage = _GetWebPage(watchdogWebPageId);
+        webPage.Enable();
     }
 }

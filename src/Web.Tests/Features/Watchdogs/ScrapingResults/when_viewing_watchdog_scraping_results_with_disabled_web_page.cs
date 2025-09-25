@@ -7,7 +7,7 @@ using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
+public class when_viewing_watchdog_scraping_results_with_disabled_web_page : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -25,17 +25,9 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
     }
 
     [Test]
-    public void model_is_correct()
+    public void no_watchdog_web_page_is_available()
     {
-        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
-        
-        var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
-        webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
-        webPageArgs.Url.ShouldBe("http://url.com/page");
-        
-        _model.WatchdogScrapingResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
     }
 
     private void _BuildEntities()
@@ -54,7 +46,6 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
         
         UnitOfWork.Flush();
     }    

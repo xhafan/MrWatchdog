@@ -58,5 +58,6 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
     }
 }

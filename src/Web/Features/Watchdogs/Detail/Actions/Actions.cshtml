@@ -10,59 +10,59 @@
     Layout = null;
 }
 <!turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
-<div @Stimulus.Controller(StimulusControllers.WatchdogsDetailActions)
-     >
-    <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
-       class="btn btn-outline-primary text-decoration-none"
-       data-turbo-frame="_top">
-        @Resource.ViewScrapingResults
-    </a>
+    <div @Stimulus.Controller(StimulusControllers.WatchdogsDetailActions)
+         >
+        <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
+           class="btn btn-outline-primary text-decoration-none"
+           data-turbo-frame="_top">
+            @Resource.ViewScrapingResults
+        </a>
+            @{
+                var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
+                                                       && Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
+        }
+        <form asp-page-handler="RequestToMakePublic"
+              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+              method="post"
+              data-watchdogs--detail-actions-target="requestToMakePublicForm"
+              style="display:@(!isRequestToMakePublicFormVisible ? "none" : "inline")"
+        >
+            <button class="btn btn-outline-primary"
+                    type="submit"
+            >
+                @Resource.RequestToMakePublic
+            </button>
+        </form>
         @{
-            var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
-                                                   && Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
-    }
-    <form asp-page-handler="RequestToMakePublic"
-          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
-          method="post"
-          data-watchdogs--detail-actions-target="requestToMakePublicForm"
-          style="display:@(!isRequestToMakePublicFormVisible ? "none" : "inline")"
-    >
-        <button class="btn btn-outline-primary"
-                type="submit"
+            var isMakePublicFormVisible = User.IsSuperAdmin()
+                                          && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
+        }
+        <form asp-controller="Actions"
+              asp-action="MakePublic"
+              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+              data-watchdogs--detail-actions-target="makePublicForm"
+              style="display:@(!isMakePublicFormVisible ? "none" : "inline")"
         >
-            @Resource.RequestToMakePublic
-        </button>
-    </form>
-    @{
-        var isMakePublicFormVisible = User.IsSuperAdmin()
-                                      && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
-    }
-    <form asp-controller="Actions"
-          asp-action="MakePublic"
-          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
-          data-watchdogs--detail-actions-target="makePublicForm"
-          style="display:@(!isMakePublicFormVisible ? "none" : "inline")"
-    >
-        <button class="btn btn-outline-primary"
-                type="submit"
+            <button class="btn btn-outline-primary"
+                    type="submit"
+            >
+                @Resource.MakePublic
+            </button>
+        </form>
+        @{
+            var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Public;
+        }
+        <form asp-page-handler="MakePrivate"
+              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+              method="post"
+              data-watchdogs--detail-actions-target="makePrivateForm"
+              style="display:@(!isMakePrivateFormVisible ? "none" : "inline")"
         >
-            @Resource.MakePublic
-        </button>
-    </form>
-    @{
-        var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Public;
-    }
-    <form asp-page-handler="MakePrivate"
-          asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
-          method="post"
-          data-watchdogs--detail-actions-target="makePrivateForm"
-          style="display:@(!isMakePrivateFormVisible ? "none" : "inline")"
-    >
-        <button class="btn btn-outline-primary"
-                type="submit"
-                >
-            Make private
-        </button>
-    </form>
-</div>
+            <button class="btn btn-outline-primary"
+                    type="submit"
+                    >
+                Make private
+            </button>
+        </form>
+    </div>
 </!turbo-frame>

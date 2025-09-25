@@ -47,6 +47,7 @@ public class when_refreshing_watchdog_alert_with_new_repeated_scraping_result_al
             .Build();
         
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1"]);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
         _watchdogAlert.Refresh();
         
         await _simulateAlertingUserAboutTheSameScrapingResultLongTimeAgo();

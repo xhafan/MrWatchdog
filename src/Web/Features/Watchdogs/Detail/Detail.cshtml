@@ -4,6 +4,7 @@
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
+@using MrWatchdog.Web.Infrastructure.Authorizations
 @model DetailModel
 
 @{
@@ -85,6 +86,15 @@
             <turbo-frame id="watchdog_detail_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
                          src="@WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)">
             </turbo-frame>
+        </div>
+        <div class="col-md-6">
+            @if (User.GetUserId() != Model.WatchdogDetailArgs.UserId)
+            {
+                <div class="mb-3">
+                    <label asp-for="WatchdogDetailArgs.UserEmail" class="form-label fw-bold">Created by</label>
+                    <div>@Model.WatchdogDetailArgs.UserEmail</div>
+                </div>
+            }
         </div>
     </div>
     <h2>Watched web pages</h2>

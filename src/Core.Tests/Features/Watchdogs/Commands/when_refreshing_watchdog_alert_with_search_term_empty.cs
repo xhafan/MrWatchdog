@@ -49,6 +49,7 @@ public class when_refreshing_watchdog_alert_with_search_term_empty : BaseDatabas
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Another World", "Doom 1"]);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
 
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)

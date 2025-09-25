@@ -42,6 +42,7 @@ public class when_alerting_user_about_new_scraping_results : BaseTest
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Another World"]);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
 
         _watchdogAlert = new WatchdogAlertBuilder()
             .WithWatchdog(_watchdog)

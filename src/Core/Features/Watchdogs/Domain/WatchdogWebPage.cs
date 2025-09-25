@@ -10,6 +10,7 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
 using System.Web;
+using CoreUtils;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -39,6 +40,7 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? Name { get; protected set; }
     public virtual DateTime? ScrapedOn { get; protected set; }
     public virtual string? ScrapingErrorMessage { get; protected set; }
+    public virtual bool IsEnabled { get; protected set; }
 
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
     {
@@ -50,6 +52,15 @@ public class WatchdogWebPage : VersionedEntity
             Selector = Selector,
             SelectText = SelectText,
             Name = Name
+        };
+    }
+
+    public virtual WatchdogWebPageDisabledWarningDto GetWatchdogWebPageDisabledWarningArgs()
+    {
+        return new WatchdogWebPageDisabledWarningDto
+        {
+            IsEnabled = IsEnabled,
+            HasBeenScrapedSuccessfully = ScrapedOn.HasValue
         };
     }
 
@@ -68,7 +79,8 @@ public class WatchdogWebPage : VersionedEntity
         if (!hasScrapingDataUpdated) return;
         
         _ResetScrapingData();
-
+        _Disable();
+        
         DomainEvents.RaiseEvent(new WatchdogWebPageScrapingDataUpdatedDomainEvent(Watchdog.Id, Id));
     }
 
@@ -178,7 +190,7 @@ public class WatchdogWebPage : VersionedEntity
             : null;
     }
     
-    public virtual async Task ScrapeWebPage(
+    public virtual async Task Scrape(
         IHttpClientFactory httpClientFactory,
         bool canRaiseScrapingFailedDomainEvent
         )
@@ -240,5 +252,18 @@ public class WatchdogWebPage : VersionedEntity
             selectedHtmlNodes.Select(x => x.OuterHtml).ToList(),
             canRaiseScrapingFailedDomainEvent
         );
-    }    
+    }
+
+    public virtual void Enable()
+    {
+        Guard.Hope(ScrapedOn.HasValue, "Watchdog web page can be enabled only after successful scraping.");
+
+        IsEnabled = true;
+    }
+
+    private void _Disable()
+    {
+        IsEnabled = false;
+    }
+
 }

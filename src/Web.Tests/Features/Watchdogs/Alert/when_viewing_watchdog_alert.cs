@@ -1,7 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Watchdogs.Alert;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Alert;
@@ -54,11 +53,13 @@ public class when_viewing_watchdog_alert : BaseDatabaseTest
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>"]);
-        UnitOfWork.Save(_watchdog);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
         
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)
             .WithSearchTerm("text")
             .Build();
+
+        UnitOfWork.Flush();
     }
 }

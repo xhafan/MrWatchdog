@@ -50,6 +50,13 @@ public class when_updating_existing_watchdog_web_page : BaseTest
         watchdogWebPage.ScrapedOn.ShouldBe(null);
     }
 
+    [Test]
+    public void watchdog_web_page_is_disabled()
+    {
+        var watchdogWebPage = _watchdog.WebPages.Single();
+        watchdogWebPage.IsEnabled.ShouldBe(false);
+    }
+
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder()
@@ -61,6 +68,7 @@ public class when_updating_existing_watchdog_web_page : BaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingResults(_watchdogWebPageId, ["<div></div>"]);
+        _watchdog.SetScrapingResults(_watchdogWebPageId, ["<div>x</div>"]);
+        _watchdog.EnableWebPage(_watchdogWebPageId);
     }
 }

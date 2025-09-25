@@ -10,42 +10,42 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class WebPageDisabledWarningModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private long _watchdogId;
     private long _watchdogWebPageId;
 
-    public WebPageScrapingResultsModelBuilder WithBus(ICoreBus bus)
+    public WebPageDisabledWarningModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }
     
-    public WebPageScrapingResultsModelBuilder WithWatchdogId(long watchdogId)
+    public WebPageDisabledWarningModelBuilder WithWatchdogId(long watchdogId)
     {
         _watchdogId = watchdogId;
         return this;
     }       
     
-    public WebPageScrapingResultsModelBuilder WithWatchdogWebPageId(long watchdogWebPageId)
+    public WebPageDisabledWarningModelBuilder WithWatchdogWebPageId(long watchdogWebPageId)
     {
         _watchdogWebPageId = watchdogWebPageId;
         return this;
-    } 
-
-    public WebPageScrapingResultsModel Build()
+    }  
+    
+    public WebPageDisabledWarningModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
-
+        
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageScrapingResultsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageDisabledWarningQueryHandler(
             unitOfWork,
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
-
-        var model = new WebPageScrapingResultsModel(
+        
+        var model = new WebPageDisabledWarningModel(
             new QueryExecutor(queryHandlerFactory),
             _bus
         )

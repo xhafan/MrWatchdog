@@ -6,6 +6,7 @@ import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { JobDto } from "../../../Shared/Generated/JobDto";
 import { watchdogWebPageNameModifiedEventName } from "./WebPageOverviewController";
 import { logError } from "../../../Shared/logging";
+import { watchdogWebPageScrapedEvent } from "./WebPageScrapingResultsController";
 
 export const watchdogWebPageRemovedEvent = "watchdogWebPageRemoved";
 
@@ -14,13 +15,15 @@ export default class WebPageController extends Controller {
         "removeWebPageForm",
         "webPageOverview",
         "webPageScrapingResults",
-        "webPageName"
+        "webPageName",
+        "webPageDisabledWarning"
     ];
    
     declare removeWebPageFormTarget: HTMLFormElement;
     declare webPageOverviewTarget: FrameElement;
     declare webPageScrapingResultsTarget: FrameElement;
     declare webPageNameTarget: HTMLSpanElement;
+    declare webPageDisabledWarningTarget: FrameElement;
 
     connect() {
         formSubmitWithWaitForJobCompletion(
@@ -33,6 +36,7 @@ export default class WebPageController extends Controller {
 
         this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateWatchdogWebPageJobCompleted.bind(this), {});
         this.webPageOverviewTarget.addEventListener(watchdogWebPageNameModifiedEventName, this.onWatchdogWebPageNameModified.bind(this), {});
+        this.element.addEventListener(watchdogWebPageScrapedEvent, this.onWatchdogWebPageScraped.bind(this), {});
     }
 
     private async onUpdateWatchdogWebPageJobCompleted(event: CustomEventInit<JobDto>) {
@@ -49,15 +53,20 @@ export default class WebPageController extends Controller {
             var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
 
             this.webPageScrapingResultsTarget.reload();
+            this.webPageDisabledWarningTarget.reload();
         }
         catch (error) {
             await logError(error, {}, true, true);
         }
     }
 
-    private async onWatchdogWebPageNameModified(event: CustomEventInit<string>) {
+    private onWatchdogWebPageNameModified(event: CustomEventInit<string>) {
         let watchdogWebPageName = event.detail;
         if (!watchdogWebPageName) throw new Error("Watchdog web page name is missing.");
         this.webPageNameTarget.textContent = watchdogWebPageName;
+    }
+
+    private onWatchdogWebPageScraped(event: CustomEventInit<string>) {
+        this.webPageDisabledWarningTarget.reload();
     }
 }

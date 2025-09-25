@@ -30,6 +30,12 @@ public static class StimulusControllers
     public const string WatchdogsDetailWebPageOverview = "watchdogs--detail-web-page-overview";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsDetailWebPageDisabledWarning = "watchdogs--detail-web-page-disabled-warning";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogsDetailWebPageScrapingResults = "watchdogs--detail-web-page-scraping-results";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsScrapingResults = "watchdogs--scraping-results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

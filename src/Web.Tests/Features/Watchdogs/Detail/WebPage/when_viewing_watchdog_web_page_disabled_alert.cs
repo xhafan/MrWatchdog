@@ -6,9 +6,9 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_scraped : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_disabled_alert : BaseDatabaseTest
 {
-    private WebPageScrapingResultsModel _model = null!;
+    private WebPageDisabledWarningModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
 
@@ -19,7 +19,7 @@ public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_s
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+        _model = new WebPageDisabledWarningModelBuilder(UnitOfWork)
             .WithWatchdogId(_watchdog.Id)
             .WithWatchdogWebPageId(_watchdogWebPageId)
             .Build();
@@ -30,11 +30,8 @@ public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_s
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageScrapingResults.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageScrapingResults.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageScrapingResults.ScrapingResults.ShouldBeEmpty();
-        _model.WatchdogWebPageScrapingResults.ScrapedOn.ShouldBe(null);
-        _model.WatchdogWebPageScrapingResults.ScrapingErrorMessage.ShouldBe(null);
+        _model.WatchdogWebPageDisabledWarningDto.IsEnabled.ShouldBe(true);
+        _model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully.ShouldBe(true);
     }  
 
     private void _BuildEntities()
@@ -44,9 +41,12 @@ public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_s
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
+                SelectText = true,
                 Name = "url.com/page"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-    }
+        _watchdog.SetScrapingResults(_watchdogWebPageId, ["Another World", "Doom 1"]);
+        _watchdog.EnableWebPage(_watchdogWebPageId);
+    }    
 }

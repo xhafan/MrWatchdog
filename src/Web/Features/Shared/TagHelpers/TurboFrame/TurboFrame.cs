@@ -17,5 +17,6 @@ public class TurboFrame : TagHelper
         {
             output.Attributes.SetAttribute($"data-{StimulusControllers.TurboFrame}-reload-on-event-value", ReloadOnEvent);
         }
+        output.TagMode = TagMode.StartTagAndEndTag;
     }
 }

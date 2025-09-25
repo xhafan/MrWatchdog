@@ -19,19 +19,22 @@ public class when_viewing_watchdog_web_page_scraping_results_with_error_during_s
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork).Build();
+        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+            .WithWatchdogId(_watchdog.Id)
+            .WithWatchdogWebPageId(_watchdogWebPageId)
+            .Build();
 
-        await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
+        await _model.OnGet();
     }
 
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageScrapingResultsDto.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageScrapingResultsDto.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageScrapingResultsDto.ScrapingResults.ShouldBeEmpty();
-        _model.WatchdogWebPageScrapingResultsDto.ScrapedOn.ShouldBe(null);
-        _model.WatchdogWebPageScrapingResultsDto.ScrapingErrorMessage.ShouldBe("Network error");
+        _model.WatchdogWebPageScrapingResults.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogWebPageScrapingResults.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
+        _model.WatchdogWebPageScrapingResults.ScrapingResults.ShouldBeEmpty();
+        _model.WatchdogWebPageScrapingResults.ScrapedOn.ShouldBe(null);
+        _model.WatchdogWebPageScrapingResults.ScrapingErrorMessage.ShouldBe("Network error");
     }  
 
     private void _BuildEntities()

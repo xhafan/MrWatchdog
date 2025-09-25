@@ -14,13 +14,20 @@
             <form asp-page-handler="RemoveWatchdogWebPage"
                   asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
-                  method="post"
                   data-watchdogs--detail-web-page-target="removeWebPageForm"
                   >
                 <button type="submit" class="border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
             </form>
         </div>
         <div class="card-body">
+            <turbo-frame id="watchdog_web_page_disabled_warning_@(Model.WatchdogWebPageId)" 
+                         src="@Url.Page("WebPageDisabledWarning", new
+                              {
+                                  watchdogId = Model.WatchdogId,
+                                  watchdogWebPageId = Model.WatchdogWebPageId
+                              })"
+                         data-watchdogs--detail-web-page-target="webPageDisabledWarning"
+            />
             <div class="row">
                 <div class="col-md-6">
                     <turbo-frame id="watchdog_web_page_overview_@(Model.WatchdogWebPageId)" 

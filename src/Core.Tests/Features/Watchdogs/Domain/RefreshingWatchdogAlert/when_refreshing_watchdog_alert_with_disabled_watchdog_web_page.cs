@@ -5,7 +5,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdogAlert;
 
 [TestFixture]
-public class when_refreshing_watchdog_alert_with_new_scraping_results_already_in_scraping_results_to_alert_about : BaseTest
+public class when_refreshing_watchdog_alert_with_disabled_watchdog_web_page : BaseTest
 {
     private Watchdog _watchdog = null!;
     private WatchdogAlert _watchdogAlert = null!;
@@ -19,11 +19,12 @@ public class when_refreshing_watchdog_alert_with_new_scraping_results_already_in
     }
 
     [Test]
-    public void watchdog_alert_scraping_results_to_alert_about_does_not_contain_duplicates()
+    public void watchdog_alert_is_refreshed()
     {
-        _watchdogAlert.ScrapingResultsToAlertAbout.ShouldBe(["Doom 2"]);
+        _watchdogAlert.CurrentScrapingResults.ShouldBe([]);
+        _watchdogAlert.ScrapingResultsToAlertAbout.ShouldBe([]);
     }
-
+    
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder()
@@ -35,18 +36,26 @@ public class when_refreshing_watchdog_alert_with_new_scraping_results_already_in
             })
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Another World"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        _updateWatchdogWebPageInOrderToDisableIt();
 
         _watchdogAlert = new WatchdogAlertBuilder()
             .WithWatchdog(_watchdog)
             .WithSearchTerm(null)
             .Build();
         
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Doom 2", "Another World"]);
-        _watchdogAlert.Refresh();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, []);
-        _watchdogAlert.Refresh();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 2"]);
+        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Another World"]);
+        return;
+
+        void _updateWatchdogWebPageInOrderToDisableIt()
+        {
+            _watchdog.UpdateWebPage(new WatchdogWebPageArgs
+            {
+                WatchdogWebPageId = watchdogWebPage.Id,
+                Url = "http://url.com/page",
+                Selector = ".invalid_selector",
+                Name = "url.com/page"
+            });
+        }
+
     }
 }

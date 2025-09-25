@@ -103,7 +103,8 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
             if (jobDto.completedOn) {
                 return jobDto;
             }
-            else if (jobDto.numberOfHandlingAttempts >= RebusConstants.maxDeliveryAttempts) {
+            else if (jobDto.numberOfHandlingAttempts >= RebusConstants.maxDeliveryAttempts 
+                     || (getJobLastException(jobDto)?.includes(RebusConstants.rebusMessageCouldNotBeDispatchedToAnyHandlersException))) {
                 throw new Error(`Job ${jobDto.guid} failed.`);
             }
         }
@@ -113,6 +114,11 @@ export async function waitForJobCompletion(jobGuid: string) : Promise<JobDto> {
     const jobDto = await pollJob();
     
     return jobDto;
+}
+
+function getJobLastException(jobDto: JobDto) : string | undefined {
+    let lastJobHandlingAttempt = Enumerable.from(jobDto.handlingAttempts).orderByDescending(x => x.endedOn).firstOrDefault();
+    return lastJobHandlingAttempt?.exception;
 }
 
 export async function getRelatedDomainEventJobGuid(commandJobGuid: string, domainEventType: string): Promise<string | null> {

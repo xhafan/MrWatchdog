@@ -83,7 +83,8 @@ public class when_alerting_user_about_new_watchdog_alert_scraping_results_with_s
             "<a href=\"https://store.epicgames.com/en-US/p/machinarium-5e6c71\" target=\"_blank\">Machinarium</a>",
             "<a href=\"https://store.epicgames.com/en-US/p/make-way-bddf5f\" target=\"_blank\">Make Way</a>"
         ]);        
-        
+        _watchdog.EnableWebPage(_watchdogWebPageId);
+
         _watchdogAlert.Refresh();
     }
 }

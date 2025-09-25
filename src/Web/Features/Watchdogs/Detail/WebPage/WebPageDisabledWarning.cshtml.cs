@@ -8,8 +8,8 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageScrapingResultsModel(
-    IQueryExecutor queryExecutor,
+public class WebPageDisabledWarningModel(
+    IQueryExecutor queryExecutor, 
     ICoreBus bus
 ) : BasePageModel
 {
@@ -19,18 +19,18 @@ public class WebPageScrapingResultsModel(
     [BindProperty(SupportsGet = true)]
     public long WatchdogWebPageId { get; set; }
 
-    public WatchdogWebPageScrapingResultsDto WatchdogWebPageScrapingResults { get; private set; } = null!;
-    
+    public WatchdogWebPageDisabledWarningDto WatchdogWebPageDisabledWarningDto { get; private set; } = null!;
+
     public async Task OnGet()
     {
-        WatchdogWebPageScrapingResults =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageScrapingResultsQuery, WatchdogWebPageScrapingResultsDto>(
-                new GetWatchdogWebPageScrapingResultsQuery(WatchdogId, WatchdogWebPageId));
+        WatchdogWebPageDisabledWarningDto =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageDisabledWarningQuery, WatchdogWebPageDisabledWarningDto>(
+                new GetWatchdogWebPageDisabledWarningQuery(WatchdogId, WatchdogWebPageId));
     }
-
-    public async Task<IActionResult> OnPostScrapeWatchdogWebPage()
+    
+    public async Task<IActionResult> OnPostEnableWatchdogWebPage()
     {
-        var command = new ScrapeWatchdogWebPageCommand(WatchdogId, WatchdogWebPageId);
+        var command = new EnableWatchdogWebPageCommand(WatchdogId, WatchdogWebPageId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

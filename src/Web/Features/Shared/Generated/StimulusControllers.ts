@@ -12,6 +12,8 @@ export abstract class StimulusControllers
 	public static watchdogsDetailActions: string = `watchdogs--detail-actions`;
 	public static watchdogsDetailWebPage: string = `watchdogs--detail-web-page`;
 	public static watchdogsDetailWebPageOverview: string = `watchdogs--detail-web-page-overview`;
+	public static watchdogsDetailWebPageDisabledWarning: string = `watchdogs--detail-web-page-disabled-warning`;
+	public static watchdogsDetailWebPageScrapingResults: string = `watchdogs--detail-web-page-scraping-results`;
 	public static watchdogsScrapingResults: string = `watchdogs--scraping-results`;
 	public static watchdogsScrapingResultsWebPages: string = `watchdogs--scraping-results-web-pages`;
 	public static watchdogAlert: string = `watchdogs--alert`;

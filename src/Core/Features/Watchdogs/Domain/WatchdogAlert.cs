@@ -45,7 +45,9 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
 
     private IEnumerable<string> _GetWatchdogScrapingResults()
     {
-        return Watchdog.WebPages.SelectMany(x => x.ScrapingResults)
+        return Watchdog.WebPages
+            .Where(x => x.IsEnabled)
+            .SelectMany(x => x.ScrapingResults)
             .Where(x => string.IsNullOrWhiteSpace(SearchTerm) || x.ContainsIgnoringDiacritics(SearchTerm));
     }
     

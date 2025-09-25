@@ -25,8 +25,10 @@ public class when_persisting_watchdog_alert : BaseDatabaseTest
                 Name = "url.com/page"
             })
             .Build();
-        _watchdog.SetScrapingResults(_watchdog.WebPages.Single().Id, ["<div>text</div>", "<div>hello</div>"]);
-        
+        var watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _watchdog.SetScrapingResults(watchdogWebPageId, ["<div>text</div>", "<div>hello</div>"]);
+        _watchdog.EnableWebPage(watchdogWebPageId);
+
         _user = new UserBuilder(UnitOfWork).Build();
         
         _newWatchdogAlert = new WatchdogAlertBuilder(UnitOfWork)

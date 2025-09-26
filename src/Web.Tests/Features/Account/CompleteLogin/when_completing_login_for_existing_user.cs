@@ -12,7 +12,6 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 using System.Security.Claims;
-using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
 
@@ -80,7 +79,6 @@ public class when_completing_login_for_existing_user : BaseDatabaseTest
 
         claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value.ShouldBe(_user.Id.ToString());
         claimsPrincipal.Claims.Single(x => x.Type == ClaimTypes.Name).Value.ShouldBe(_user.Email);
-        claimsPrincipal.Claims.Single(x => x.Type == CustomClaimTypes.SuperAdmin).Value.ShouldBe("false");
         return true;
     }
 

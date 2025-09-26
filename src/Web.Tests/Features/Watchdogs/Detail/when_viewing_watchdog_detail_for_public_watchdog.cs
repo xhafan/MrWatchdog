@@ -34,5 +34,7 @@ public class when_viewing_watchdog_detail_for_public_watchdog : BaseDatabaseTest
             .WithName("watchdog name")
             .Build();
         _watchdog.MakePublic();
+
+        UnitOfWork.Flush();
     }    
 }

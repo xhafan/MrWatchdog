@@ -1,8 +1,10 @@
 ﻿@page
 @using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @model ManageModel
+@inject IUserRepository UserRepository
 
 @{
     var title = Resource.ManageWatchdogs;
@@ -28,7 +30,7 @@
                      src="@WatchdogUrlConstants.WatchdogsManageUserWatchdogsUrl" />
     </div>
     <div class="col-md-6">
-        @if (User.IsSuperAdmin())
+        @if (await User.IsSuperAdmin(UserRepository))
         {
             <turbo-frame id="otherUsersWatchdogs"
                          src="@WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl" />

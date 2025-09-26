@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
-using CoreUtils;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+﻿using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 
@@ -8,21 +7,6 @@ public class HttpContextActingUserAccessor(IHttpContextAccessor httpContextAcces
 {
     public long GetActingUserId()
     {
-        if (httpContextAccessor.HttpContext == null)
-        {
-            return 0;
-        }
-        
-        var claimsPrincipal = httpContextAccessor.HttpContext.User;
-
-        if (claimsPrincipal.Identity?.IsAuthenticated == false)
-        {
-            return 0;
-        }
-        
-        var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-        Guard.Hope(userId != null, "Cannot retrieve userId");
-        
-        return long.Parse(userId);
+        return httpContextAccessor.HttpContext?.User.GetUserId() ?? 0;
     }
 }

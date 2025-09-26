@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.RazorPages
+@using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @using MrWatchdog.Web.Infrastructure.Authorizations
+@inject IUserRepository UserRepository
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,11 +67,13 @@
                     </ul>
                     @if (User.Identity?.IsAuthenticated == true)
                     {
+                        var isSuperAdmin = await User.IsSuperAdmin(UserRepository);
+
                         <form asp-controller="Login"
                               asp-action="Logout"
                               class="d-flex align-items-center">
-                            <span @(User.IsSuperAdmin() ? "title=superadmin" : "")>
-                                <i class="fas @(User.IsSuperAdmin() ? "fa-user-ninja" : "fa-user")"></i> @User.Identity?.Name
+                            <span @(isSuperAdmin ? "title=superadmin" : "")>
+                                <i class="fas @(isSuperAdmin ? "fa-user-ninja" : "fa-user")"></i> @User.Identity?.Name
                             </span>
                             <button class="btn btn-link" type="submit">
                                 <span><i class="fas fa-sign-out"></i> Logout</span>

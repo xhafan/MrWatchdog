@@ -1,10 +1,12 @@
 ﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Features.Watchdogs.Domain
+@using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.ReinforcedTypings
 @using MrWatchdog.Web.Infrastructure.Authorizations
+@inject IUserRepository UserRepository
 @model ActionsModel
 @{
     Layout = null;
@@ -18,7 +20,7 @@
             @Resource.ViewScrapingResults
         </a>
             @{
-                var isRequestToMakePublicFormVisible = !User.IsSuperAdmin()
+                var isRequestToMakePublicFormVisible = !await User.IsSuperAdmin(UserRepository)
                                                        && Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
         }
         <form asp-page-handler="RequestToMakePublic"
@@ -34,7 +36,7 @@
             </button>
         </form>
         @{
-            var isMakePublicFormVisible = User.IsSuperAdmin()
+            var isMakePublicFormVisible = await User.IsSuperAdmin(UserRepository)
                                           && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
         }
         <form asp-controller="Actions"

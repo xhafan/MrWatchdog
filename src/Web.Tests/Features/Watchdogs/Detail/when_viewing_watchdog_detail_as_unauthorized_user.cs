@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,7 +10,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_detail : BaseDatabaseTest
+public class when_viewing_watchdog_detail_as_unauthorized_user : BaseDatabaseTest
 {
     private DetailModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -19,7 +21,13 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new DetailModelBuilder(UnitOfWork).Build();
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+            .Returns(AuthorizationResult.Failed());
+        
+        _model = new DetailModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
+            .Build();
         
         _actionResult = await _model.OnGet(_watchdog.Id);
     }
@@ -27,18 +35,7 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
-    }
-
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailArgs.WebPageIds.ShouldBeEmpty();
-        _model.WatchdogDetailArgs.Name.ShouldBe("watchdog name");
-        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
-        _model.WatchdogDetailArgs.UserId.ShouldBe(_watchdog.User.Id);
-        _model.WatchdogDetailArgs.UserEmail.ShouldBe(_watchdog.User.Email);
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
     private void _BuildEntities()
@@ -47,5 +44,5 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
             .WithName("watchdog name")
             .Build();
         _watchdog.RequestToMakePublic();
-    }    
+    }
 }

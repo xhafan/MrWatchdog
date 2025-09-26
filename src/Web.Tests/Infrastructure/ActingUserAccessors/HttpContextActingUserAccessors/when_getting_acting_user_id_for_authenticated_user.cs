@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.ActingUserAccessors.HttpContextActingUserAccessors;
 

@@ -1,39 +1,47 @@
 ﻿using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Security.Claims;
-using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.TestsShared;
+using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ClaimsPrincipalExtensions;
 
 [TestFixture]
-public class when_checking_user_is_superadmin
+public class when_checking_user_is_superadmin : BaseDatabaseTest
 {
     [Test]
-    public void non_superadmin_user()
+    public async Task non_superadmin_user()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "23")], authenticationType: "Test"));
+        var user = new UserBuilder(UnitOfWork)
+            .WithSuperAdmin(false)
+            .Build();
 
-        user.IsSuperAdmin().ShouldBe(false);
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], authenticationType: "Test"));
+
+        (await claimsPrincipal.IsSuperAdmin(new UserRepository(UnitOfWork))).ShouldBe(false);
     }
     
     [Test]
-    public void superadmin_user()
+    public async Task superadmin_user()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity([
-            new Claim(ClaimTypes.NameIdentifier, "23"),
-            new Claim(CustomClaimTypes.SuperAdmin, "true")
-        ], authenticationType: "Test"));
+        var superAdminUser = new UserBuilder(UnitOfWork)
+            .WithSuperAdmin(true)
+            .Build();
 
-        user.IsSuperAdmin().ShouldBe(true);
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([
+                new Claim(ClaimTypes.NameIdentifier, $"{superAdminUser.Id}")
+            ],
+            authenticationType: "Test")
+        );
+
+        (await claimsPrincipal.IsSuperAdmin(new UserRepository(UnitOfWork))).ShouldBe(true);
     }
     
     [Test]
-    public void unauthenticated_superadmin_user()
+    public async Task unauthenticated_user()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity([
-            new Claim(ClaimTypes.NameIdentifier, "23"),
-            new Claim(CustomClaimTypes.SuperAdmin, "true")
-        ], authenticationType: null));
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([], authenticationType: null));
 
-        user.IsSuperAdmin().ShouldBe(false);
+        (await claimsPrincipal.IsSuperAdmin(new UserRepository(UnitOfWork))).ShouldBe(false);
     }
 }

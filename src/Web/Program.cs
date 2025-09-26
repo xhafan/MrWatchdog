@@ -230,7 +230,7 @@ public class Program
 
         builder.Services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireClaim(CustomClaimTypes.SuperAdmin, true.ToString().ToLowerInvariant()));
+            options.AddPolicy(Policies.SuperAdmin, policy => policy.Requirements.Add(new SuperAdminRequirement()));
         });
 
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
@@ -251,6 +251,15 @@ public class Program
         builder.Services.AddReCaptcha(reCaptchaConfigurationSection);        
         builder.Services.Configure<ReCaptchaOptions>(reCaptchaConfigurationSection);
         
+        // register authorization handlers
+        builder.Services.Scan(scan => scan
+
+            .FromAssemblyOf<Program>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IAuthorizationHandler)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+        );
+
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 

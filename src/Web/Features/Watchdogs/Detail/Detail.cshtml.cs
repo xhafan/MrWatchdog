@@ -1,23 +1,36 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 
 public class DetailModel(
     IQueryExecutor queryExecutor,
-    ICoreBus bus
+    ICoreBus bus,
+    IAuthorizationService authorizationService
+
 ) : BasePageModel
 {
     public WatchdogDetailArgs WatchdogDetailArgs { get; private set; } = null!;
     
-    public async Task OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long watchdogId)
     {
-        WatchdogDetailArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(new GetWatchdogDetailArgsQuery(watchdogId));
+        WatchdogDetailArgs = await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(
+            new GetWatchdogDetailArgsQuery(watchdogId)
+        );
+
+        if (!(await authorizationService.AuthorizeAsync(User, WatchdogDetailArgs.UserId, new ResourceOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }
+
+        return Page();
     }
     
     public async Task<IActionResult> OnPostCreateWatchdogWebPage(long watchdogId)

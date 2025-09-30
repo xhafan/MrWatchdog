@@ -38,6 +38,11 @@ public class DetailModel(
     
     public async Task<IActionResult> OnPostCreateWatchdogWebPage(long watchdogId)
     {
+        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }
+
         var command = new CreateWatchdogWebPageCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
@@ -45,6 +50,11 @@ public class DetailModel(
     
     public async Task<IActionResult> OnPostDeleteWatchdog(long watchdogId)
     {
+        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }
+
         var command = new DeleteWatchdogCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());

@@ -44,6 +44,11 @@ public class WebPageModel(
     
     public async Task<IActionResult> OnPostRemoveWatchdogWebPage(long watchdogId, long watchdogWebPageId)
     {
+        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }  
+
         var command = new RemoveWatchdogWebPageCommand(watchdogId, watchdogWebPageId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,7 +10,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_overview_as_unauthorized_user : BaseDatabaseTest
 {
     private WebPageOverviewModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -19,10 +21,13 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
     public async Task Context()
     {
         _BuildEntities();
-        await UnitOfWork.FlushAsync();
-        UnitOfWork.Clear();
-        
+
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+            .Returns(AuthorizationResult.Failed());
+
         _model = new WebPageOverviewModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
             .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
             {
                 WatchdogId = _watchdog.Id,
@@ -36,21 +41,8 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
-
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogWebPageArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageArgs.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageArgs.Url.ShouldBe("http://url.com/page");
-        _model.WatchdogWebPageArgs.Selector.ShouldBe(".selector");
-        _model.WatchdogWebPageArgs.SelectText.ShouldBe(true);
-        _model.WatchdogWebPageArgs.Name.ShouldBe("url.com/page");
-        
-        _model.IsEmptyWebPage.ShouldBe(false);
-    }  
 
     private void _BuildEntities()
     {
@@ -64,5 +56,7 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+
+        UnitOfWork.Flush();
     }    
 }

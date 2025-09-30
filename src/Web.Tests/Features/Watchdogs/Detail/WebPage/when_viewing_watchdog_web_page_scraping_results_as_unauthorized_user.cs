@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,9 +10,9 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_disabled_alert : BaseDatabaseTest
+public class when_viewing_watchdog_web_page_scraping_results_as_unauthorized_user : BaseDatabaseTest
 {
-    private WebPageDisabledWarningModel _model = null!;
+    private WebPageScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
     private IActionResult _actionResult = null!;
@@ -19,10 +21,13 @@ public class when_viewing_watchdog_web_page_disabled_alert : BaseDatabaseTest
     public async Task Context()
     {
         _BuildEntities();
-        await UnitOfWork.FlushAsync();
-        UnitOfWork.Clear();
         
-        _model = new WebPageDisabledWarningModelBuilder(UnitOfWork)
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+            .Returns(AuthorizationResult.Failed());
+
+        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
             .WithWatchdogId(_watchdog.Id)
             .WithWatchdogWebPageId(_watchdogWebPageId)
             .Build();
@@ -33,16 +38,9 @@ public class when_viewing_watchdog_web_page_disabled_alert : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
-    }
+        _actionResult.ShouldBeOfType<ForbidResult>();
+    } 
 
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogWebPageDisabledWarningDto.IsEnabled.ShouldBe(true);
-        _model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully.ShouldBe(true);
-    }  
-    
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork)
@@ -50,12 +48,12 @@ public class when_viewing_watchdog_web_page_disabled_alert : BaseDatabaseTest
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
-                SelectText = true,
                 Name = "url.com/page"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingResults(_watchdogWebPageId, ["Another World", "Doom 1"]);
-        _watchdog.EnableWebPage(_watchdogWebPageId);
+        _watchdog.SetScrapingResults(_watchdogWebPageId, ["<div>text</div>"]);
+
+        UnitOfWork.Flush();
     }    
 }

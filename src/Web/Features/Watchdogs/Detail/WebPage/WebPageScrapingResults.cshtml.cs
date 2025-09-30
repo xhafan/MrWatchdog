@@ -1,16 +1,19 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
 public class WebPageScrapingResultsModel(
     IQueryExecutor queryExecutor,
-    ICoreBus bus
+    ICoreBus bus,
+    IAuthorizationService authorizationService
 ) : BasePageModel
 {
     [BindProperty(SupportsGet = true)]
@@ -21,15 +24,27 @@ public class WebPageScrapingResultsModel(
 
     public WatchdogWebPageScrapingResultsDto WatchdogWebPageScrapingResults { get; private set; } = null!;
     
-    public async Task OnGet()
+    public async Task<IActionResult> OnGet()
     {
+        if (!(await authorizationService.AuthorizeAsync(User, WatchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }
+
         WatchdogWebPageScrapingResults =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageScrapingResultsQuery, WatchdogWebPageScrapingResultsDto>(
                 new GetWatchdogWebPageScrapingResultsQuery(WatchdogId, WatchdogWebPageId));
+        
+        return Page();
     }
 
     public async Task<IActionResult> OnPostScrapeWatchdogWebPage()
     {
+        if (!(await authorizationService.AuthorizeAsync(User, WatchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        {
+            return Forbid();
+        }
+
         var command = new ScrapeWatchdogWebPageCommand(WatchdogId, WatchdogWebPageId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());

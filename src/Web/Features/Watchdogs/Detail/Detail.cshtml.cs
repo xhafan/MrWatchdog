@@ -1,6 +1,7 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
@@ -25,9 +26,11 @@ public class DetailModel(
             new GetWatchdogDetailArgsQuery(watchdogId)
         );
 
-        if (!(await authorizationService.AuthorizeAsync(User, WatchdogDetailArgs.UserId, new ResourceOwnerOrSuperAdminRequirement())).Succeeded)
+        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
         {
-            return Forbid();
+            return WatchdogDetailArgs.PublicStatus == PublicStatus.Public 
+                ? Redirect(WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(watchdogId))
+                : Forbid();
         }
 
         return Page();

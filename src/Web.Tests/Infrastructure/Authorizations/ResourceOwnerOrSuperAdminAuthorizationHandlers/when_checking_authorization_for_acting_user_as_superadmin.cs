@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -23,12 +24,19 @@ public class when_checking_authorization_for_acting_user_as_superadmin : BaseDat
             .WithSuperAdmin(false)
             .Build();
 
-        var handler = new ResourceOwnerOrSuperAdminAuthorizationHandler(new UserRepository(UnitOfWork));
+        var watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithUser(anotherUser)
+            .Build();
+
+        var handler = new WatchdogOwnerOrSuperAdminAuthorizationHandler(
+            new UserRepository(UnitOfWork),
+            new NhibernateRepository<Watchdog>(UnitOfWork)
+        );
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
-            [new ResourceOwnerOrSuperAdminRequirement()],
+            [new WatchdogOwnerOrSuperAdminRequirement()],
             new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{superAdminUser.Id}")], authenticationType: "Test")),
-            resource: anotherUser.Id
+            resource: watchdog.Id
         );
 
         await handler.HandleAsync(

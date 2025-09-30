@@ -15,20 +15,19 @@ namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
-
     private IAuthorizationService? _authorizationService;
 
-    public DetailModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
-    {
-        _authorizationService = authorizationService;
-        return this;
-    }
-    
     public DetailModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }    
+    
+    public DetailModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
+    {
+        _authorizationService = authorizationService;
+        return this;
+    }
     
     public DetailModel Build()
     {

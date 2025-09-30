@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;
 
-public class ResourceOwnerOrSuperAdminRequirement : IAuthorizationRequirement;
+public class WatchdogOwnerOrSuperAdminRequirement : IAuthorizationRequirement;

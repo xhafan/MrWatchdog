@@ -8,6 +8,7 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
 using System.Security.Claims;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
 
@@ -27,7 +28,11 @@ public class when_making_watchdog_private_as_unauthorized_user : BaseDatabaseTes
         _bus = A.Fake<ICoreBus>();
 
         var authorizationService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
             .Returns(AuthorizationResult.Failed());
         
         _model = new ActionsModelBuilder(UnitOfWork)

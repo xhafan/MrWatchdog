@@ -57,7 +57,8 @@ public class WatchdogAlert : VersionedEntity, IAggregateRoot
         {
             WatchdogAlertId = Id,
             WatchdogId = Watchdog.Id,
-            SearchTerm = SearchTerm
+            SearchTerm = SearchTerm,
+            WatchdogPublicStatus = Watchdog.PublicStatus
         };
     }
 

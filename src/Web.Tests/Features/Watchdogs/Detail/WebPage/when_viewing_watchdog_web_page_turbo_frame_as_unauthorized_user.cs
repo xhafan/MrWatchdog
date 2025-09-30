@@ -1,11 +1,12 @@
-﻿using System.Security.Claims;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
 
@@ -23,7 +24,11 @@ public class when_viewing_watchdog_web_page_turbo_frame_as_unauthorized_user : B
         _BuildEntities();
 
         var authorizationService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
             .Returns(AuthorizationResult.Failed());
 
         _model = new WebPageTurboFrameModelBuilder()

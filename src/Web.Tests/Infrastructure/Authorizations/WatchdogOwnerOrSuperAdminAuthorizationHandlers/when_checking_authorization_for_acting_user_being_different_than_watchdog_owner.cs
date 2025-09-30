@@ -6,18 +6,18 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ResourceOwnerOrSuperAdminAuthorizationHandlers;
+namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogOwnerOrSuperAdminAuthorizationHandlers;
 
 [TestFixture]
-public class when_checking_authorization_for_acting_user_as_superadmin : BaseDatabaseTest
+public class when_checking_authorization_for_acting_user_being_different_than_watchdog_owner : BaseDatabaseTest
 {
     private AuthorizationHandlerContext _authorizationHandlerContext = null!;
 
     [SetUp]
     public async Task Context()
     {
-        var superAdminUser = new UserBuilder(UnitOfWork)
-            .WithSuperAdmin(true)
+        var user = new UserBuilder(UnitOfWork)
+            .WithSuperAdmin(false)
             .Build();
 
         var anotherUser = new UserBuilder(UnitOfWork)
@@ -35,7 +35,7 @@ public class when_checking_authorization_for_acting_user_as_superadmin : BaseDat
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
             [new WatchdogOwnerOrSuperAdminRequirement()],
-            new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{superAdminUser.Id}")], authenticationType: "Test")),
+            new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], authenticationType: "Test")),
             resource: watchdog.Id
         );
 
@@ -45,8 +45,8 @@ public class when_checking_authorization_for_acting_user_as_superadmin : BaseDat
     }
 
     [Test]
-    public void authorization_succeeds()
+    public void authorization_fails()
     {
-        _authorizationHandlerContext.HasSucceeded.ShouldBe(true);
+        _authorizationHandlerContext.HasSucceeded.ShouldBe(false);
     }
 }

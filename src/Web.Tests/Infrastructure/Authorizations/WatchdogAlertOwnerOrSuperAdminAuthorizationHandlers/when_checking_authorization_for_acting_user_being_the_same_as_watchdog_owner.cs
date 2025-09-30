@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ResourceOwnerOrSuperAdminAuthorizationHandlers;
+namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogAlertOwnerOrSuperAdminAuthorizationHandlers;
 
 [TestFixture]
 public class when_checking_authorization_for_acting_user_being_the_same_as_watchdog_owner : BaseDatabaseTest
@@ -20,19 +20,19 @@ public class when_checking_authorization_for_acting_user_being_the_same_as_watch
             .WithSuperAdmin(false)
             .Build();
 
-        var watchdog = new WatchdogBuilder(UnitOfWork)
+        var watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)
             .WithUser(user)
             .Build();
 
-        var handler = new WatchdogOwnerOrSuperAdminAuthorizationHandler(
+        var handler = new WatchdogAlertOwnerOrSuperAdminAuthorizationHandler(
             new UserRepository(UnitOfWork),
-            new NhibernateRepository<Watchdog>(UnitOfWork)
+            new NhibernateRepository<WatchdogAlert>(UnitOfWork)
         );
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
-            [new WatchdogOwnerOrSuperAdminRequirement()],
+            [new WatchdogAlertOwnerOrSuperAdminRequirement()],
             new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], authenticationType: "Test")),
-            resource: watchdog.Id
+            resource: watchdogAlert.Id
         );
 
         await handler.HandleAsync(

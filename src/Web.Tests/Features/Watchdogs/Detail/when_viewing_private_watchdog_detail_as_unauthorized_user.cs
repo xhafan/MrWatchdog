@@ -1,11 +1,12 @@
-﻿using System.Security.Claims;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
@@ -22,7 +23,11 @@ public class when_viewing_private_watchdog_detail_as_unauthorized_user : BaseDat
         _BuildEntities();
         
         var authorizationService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
             .Returns(AuthorizationResult.Failed());
         
         _model = new DetailModelBuilder(UnitOfWork)

@@ -7,6 +7,7 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
@@ -27,7 +28,11 @@ public class when_deleting_watchdog_as_unauthorized_user : BaseDatabaseTest
         _bus = A.Fake<ICoreBus>();
 
         var authorizationService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
             .Returns(AuthorizationResult.Failed());
 
         _model = new DetailModelBuilder(UnitOfWork)

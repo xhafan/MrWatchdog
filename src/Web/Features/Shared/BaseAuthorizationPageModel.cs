@@ -14,4 +14,14 @@ public abstract class BaseAuthorizationPageModel(IAuthorizationService authoriza
         );
         return result.Succeeded;
     }
+
+    protected async Task<bool> IsAuthorizedAsWatchdogAlertOwnerOrSuperAdmin(long watchdogAlertId)
+    {
+        var result = await authorizationService.AuthorizeAsync(
+            User, 
+            watchdogAlertId, 
+            new WatchdogAlertOwnerOrSuperAdminRequirement()
+        );
+        return result.Succeeded;
+    }
 }

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ResourceOwnerOrSuperAdminAuthorizationHandlers;
+namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogOwnerOrSuperAdminAuthorizationHandlers;
 
 [TestFixture]
-public class when_checking_authorization_for_acting_user_being_different_than_watchdog_owner : BaseDatabaseTest
+public class when_checking_authorization_for_acting_user_being_the_same_as_watchdog_owner : BaseDatabaseTest
 {
     private AuthorizationHandlerContext _authorizationHandlerContext = null!;
 
@@ -20,12 +20,8 @@ public class when_checking_authorization_for_acting_user_being_different_than_wa
             .WithSuperAdmin(false)
             .Build();
 
-        var anotherUser = new UserBuilder(UnitOfWork)
-            .WithSuperAdmin(false)
-            .Build();
-
         var watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithUser(anotherUser)
+            .WithUser(user)
             .Build();
 
         var handler = new WatchdogOwnerOrSuperAdminAuthorizationHandler(
@@ -45,8 +41,8 @@ public class when_checking_authorization_for_acting_user_being_different_than_wa
     }
 
     [Test]
-    public void authorization_fails()
+    public void authorization_succeeds()
     {
-        _authorizationHandlerContext.HasSucceeded.ShouldBe(false);
+        _authorizationHandlerContext.HasSucceeded.ShouldBe(true);
     }
 }

@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Alert;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Alert;
 
 [TestFixture]
-public class when_viewing_watchdog_alert : BaseDatabaseTest
+public class when_viewing_watchdog_alert_for_private_watchdog_as_unauthorized_user : BaseDatabaseTest
 {
     private AlertModel _model = null!;
     private WatchdogAlert _watchdogAlert = null!;
@@ -19,8 +22,18 @@ public class when_viewing_watchdog_alert : BaseDatabaseTest
     public async Task Context()
     {
         _BuildEntities();
+
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdogAlert.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogAlertOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Failed());
         
-        _model = new AlertModelBuilder(UnitOfWork).Build();
+        _model = new AlertModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
+            .Build();
         
         _actionResult = await _model.OnGet(_watchdogAlert.Id);
     }
@@ -28,25 +41,7 @@ public class when_viewing_watchdog_alert : BaseDatabaseTest
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
-    }
-
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogAlertArgs.WatchdogAlertId.ShouldBe(_watchdogAlert.Id);
-        _model.WatchdogAlertArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogAlertArgs.SearchTerm.ShouldBe("text");
-        
-        _model.SearchTerm.ShouldBe("text");
-        
-        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
-        
-        var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
-        webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>"]);
-        webPageArgs.Url.ShouldBe("http://url.com/page");        
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
     private void _BuildEntities()

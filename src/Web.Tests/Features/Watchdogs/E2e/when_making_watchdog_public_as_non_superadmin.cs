@@ -81,8 +81,8 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
         await newUnitOfWork.DeleteJobCascade(makeWatchdogPublicCommandJob, waitForJobCompletion: true); 
         
         await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
-        await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
         await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+        await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
     }
 
     private void _BuildEntitiesInSeparateTransaction()
@@ -99,6 +99,8 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
             .Build();
         _loginToken.Confirm();
 
-        _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
+        _watchdog = new WatchdogBuilder(newUnitOfWork)
+            .WithUser(_nonSuperAdminUser)
+            .Build();
     }
 }

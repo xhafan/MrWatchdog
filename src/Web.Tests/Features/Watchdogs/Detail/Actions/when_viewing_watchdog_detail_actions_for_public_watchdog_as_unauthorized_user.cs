@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,7 +10,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_actions_for_public_watchdog : BaseDatabaseTest
+public class when_viewing_watchdog_detail_actions_for_public_watchdog_as_unauthorized_user : BaseDatabaseTest
 {
     private ActionsModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -19,7 +21,13 @@ public class when_viewing_watchdog_detail_actions_for_public_watchdog : BaseData
     {
         _BuildEntities();
         
-        _model = new ActionsModelBuilder(UnitOfWork).Build();
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+            .Returns(AuthorizationResult.Failed());
+
+        _model = new ActionsModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
+            .Build();
         
         _actionResult = await _model.OnGet(_watchdog.Id);
     }
@@ -27,14 +35,7 @@ public class when_viewing_watchdog_detail_actions_for_public_watchdog : BaseData
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
-    }
-
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
     private void _BuildEntities()

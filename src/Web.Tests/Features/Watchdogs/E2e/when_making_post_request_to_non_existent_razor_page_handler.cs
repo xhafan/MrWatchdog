@@ -68,8 +68,8 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
         await newUnitOfWork.DeleteJobCascade(markLoginTokenAsUsedCommandJob, waitForJobCompletion: true);
         
         await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
-        await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
         await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+        await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
     }
 
     private void _BuildEntitiesInSeparateTransaction()
@@ -86,6 +86,8 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
             .Build();
         _loginToken.Confirm();
 
-        _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
+        _watchdog = new WatchdogBuilder(newUnitOfWork)
+            .WithUser(_nonSuperAdminUser)
+            .Build();
     }
 }

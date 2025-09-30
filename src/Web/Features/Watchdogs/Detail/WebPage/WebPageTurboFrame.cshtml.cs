@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Web.Features.Shared;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
-public class WebPageTurboFrameModel(IAuthorizationService authorizationService) : BasePageModel
+public class WebPageTurboFrameModel(IAuthorizationService authorizationService) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty(SupportsGet = true)]
     public long WatchdogId { get; set; }
@@ -15,11 +14,8 @@ public class WebPageTurboFrameModel(IAuthorizationService authorizationService) 
 
     public async Task<IActionResult> OnGet()
     {
-        if (!(await authorizationService.AuthorizeAsync(User, WatchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
-        {
-            return Forbid();
-        }
-        
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogId)) return Forbid();
+       
         return Page();
     }
 }

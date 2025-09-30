@@ -1,4 +1,5 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -10,21 +11,28 @@ namespace MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
 
 public class ActionsModel(
     IQueryExecutor queryExecutor, 
-    ICoreBus bus
-) : BasePageModel
+    ICoreBus bus,
+    IAuthorizationService authorizationService
+) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
     public WatchdogDetailPublicStatusArgs WatchdogDetailPublicStatusArgs { get; set; } = null!;
     
-    public async Task OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long watchdogId)
     {
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+
         WatchdogDetailPublicStatusArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
                 new GetWatchdogDetailPublicStatusArgsQuery(watchdogId));
+
+        return Page();
     }
     
     public async Task<IActionResult> OnPostRequestToMakePublic(long watchdogId)
     {
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+
         var command = new RequestToMakeWatchdogPublicCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
@@ -32,6 +40,8 @@ public class ActionsModel(
     
     public async Task<IActionResult> OnPostMakePrivate(long watchdogId)
     {
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+
         var command = new MakeWatchdogPrivateCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());

@@ -7,7 +7,6 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 
@@ -15,8 +14,7 @@ public class DetailModel(
     IQueryExecutor queryExecutor,
     ICoreBus bus,
     IAuthorizationService authorizationService
-
-) : BasePageModel
+) : BaseAuthorizationPageModel(authorizationService)
 {
     public WatchdogDetailArgs WatchdogDetailArgs { get; private set; } = null!;
     
@@ -26,7 +24,7 @@ public class DetailModel(
             new GetWatchdogDetailArgsQuery(watchdogId)
         );
 
-        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId))
         {
             return WatchdogDetailArgs.PublicStatus == PublicStatus.Public 
                 ? Redirect(WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(watchdogId))
@@ -38,10 +36,7 @@ public class DetailModel(
     
     public async Task<IActionResult> OnPostCreateWatchdogWebPage(long watchdogId)
     {
-        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
-        {
-            return Forbid();
-        }
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
 
         var command = new CreateWatchdogWebPageCommand(watchdogId);
         await bus.Send(command);
@@ -50,10 +45,7 @@ public class DetailModel(
     
     public async Task<IActionResult> OnPostDeleteWatchdog(long watchdogId)
     {
-        if (!(await authorizationService.AuthorizeAsync(User, watchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
-        {
-            return Forbid();
-        }
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
 
         var command = new DeleteWatchdogCommand(watchdogId);
         await bus.Send(command);

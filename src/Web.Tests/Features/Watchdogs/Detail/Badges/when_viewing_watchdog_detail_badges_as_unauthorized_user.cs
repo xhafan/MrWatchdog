@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,7 +10,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Badges;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatabaseTest
+public class when_viewing_watchdog_detail_badges_as_unauthorized_user : BaseDatabaseTest
 {
     private BadgesModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -18,8 +20,14 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
     public async Task Context()
     {
         _BuildEntities();
-        
-        _model = new BadgesModelBuilder(UnitOfWork).Build();
+
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(A<ClaimsPrincipal>._, A<long>._, A<IAuthorizationRequirement[]>._))
+            .Returns(AuthorizationResult.Failed());
+
+        _model = new BadgesModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
+            .Build();
         
         _actionResult = await _model.OnGet(_watchdog.Id);
     }
@@ -27,19 +35,11 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<PageResult>();
-    }
-
-    [Test]
-    public void model_is_correct()
-    {
-        _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _watchdog.MakePublic();
     }    
 }

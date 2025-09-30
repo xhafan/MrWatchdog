@@ -6,7 +6,6 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
 
@@ -14,7 +13,7 @@ public class WebPageDisabledWarningModel(
     IQueryExecutor queryExecutor, 
     ICoreBus bus,
     IAuthorizationService authorizationService
-) : BasePageModel
+) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty(SupportsGet = true)]
     public long WatchdogId { get; set; }
@@ -26,10 +25,7 @@ public class WebPageDisabledWarningModel(
 
     public async Task<IActionResult> OnGet()
     {
-        if (!(await authorizationService.AuthorizeAsync(User, WatchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
-        {
-            return Forbid();
-        }  
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogId)) return Forbid();
 
         WatchdogWebPageDisabledWarningDto =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageDisabledWarningQuery, WatchdogWebPageDisabledWarningDto>(
@@ -40,10 +36,7 @@ public class WebPageDisabledWarningModel(
     
     public async Task<IActionResult> OnPostEnableWatchdogWebPage()
     {
-        if (!(await authorizationService.AuthorizeAsync(User, WatchdogId, new WatchdogOwnerOrSuperAdminRequirement())).Succeeded)
-        {
-            return Forbid();
-        }  
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogId)) return Forbid();
 
         var command = new EnableWatchdogWebPageCommand(WatchdogId, WatchdogWebPageId);
         await bus.Send(command);

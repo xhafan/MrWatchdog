@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Shared.ReinforcedTypings;
+namespace MrWatchdog.Web.Features.Shared;
 
 [TsClass(IncludeNamespace = false)]
 public static class StimulusControllers

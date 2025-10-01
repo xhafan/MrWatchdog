@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
+using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Features.Shared.TagHelpers;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Shared.ScrapingResultsWebPages;

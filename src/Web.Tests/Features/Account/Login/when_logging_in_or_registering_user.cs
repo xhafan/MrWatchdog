@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
@@ -10,7 +11,7 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Account.Login;
-using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
+using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 

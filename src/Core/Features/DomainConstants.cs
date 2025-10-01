@@ -3,7 +3,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
 using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Shared.ReinforcedTypings;
+namespace MrWatchdog.Core.Features;
 
 [TsClass(IncludeNamespace = false)]
 public static class DomainConstants

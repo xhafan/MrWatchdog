@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using MrWatchdog.Web.Features.Shared.ReinforcedTypings;
 
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.TurboFrame;
 

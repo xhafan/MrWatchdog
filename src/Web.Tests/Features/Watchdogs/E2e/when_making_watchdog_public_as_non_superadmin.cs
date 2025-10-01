@@ -32,7 +32,7 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
     }
 
     [Test]
-    public async Task non_super_admin_user_is_denied_making_watchdog_public()
+    public async Task non_superadmin_user_is_denied_making_watchdog_public()
     {
         var response = await _webApplicationClient.GetAsync(
             WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));

@@ -28,7 +28,7 @@ public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
     }
 
     [Test]
-    public async Task super_admin_user_is_allowed_making_watchdog_public()
+    public async Task superadmin_user_is_allowed_making_watchdog_public()
     {
         var response = await _webApplicationClient.GetAsync(
             WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));

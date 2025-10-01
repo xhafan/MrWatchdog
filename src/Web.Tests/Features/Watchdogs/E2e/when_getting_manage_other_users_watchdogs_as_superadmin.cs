@@ -27,7 +27,7 @@ public class when_getting_manage_other_users_watchdogs_as_superadmin : BaseDatab
     }
 
     [Test]
-    public async Task super_admin_user_can_view_manage_other_users_watchdogs()
+    public async Task superadmin_user_can_view_manage_other_users_watchdogs()
     {
         var response = await _webApplicationClient.GetAsync(WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

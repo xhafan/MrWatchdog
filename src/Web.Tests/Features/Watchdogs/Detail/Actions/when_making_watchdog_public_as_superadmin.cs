@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -6,13 +7,15 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
 
 [TestFixture]
-public class when_making_watchdog_public : BaseDatabaseTest
+public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
 {
-    private ActionsController _controller = null!;
+    private ActionsModel _model = null!;
     private Watchdog _watchdog = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
@@ -24,11 +27,20 @@ public class when_making_watchdog_public : BaseDatabaseTest
 
         _bus = A.Fake<ICoreBus>();
         
-        _controller = new ActionsControllerBuilder()
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                null,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<SuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Success());
+
+        _model = new ActionsModelBuilder(UnitOfWork)
             .WithBus(_bus)
+            .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _controller.MakePublic(_watchdog.Id);
+        _actionResult = await _model.OnPostMakePublic(_watchdog.Id);
     }
 
     [Test]

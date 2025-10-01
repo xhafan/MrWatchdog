@@ -24,4 +24,14 @@ public abstract class BaseAuthorizationPageModel(IAuthorizationService authoriza
         );
         return result.Succeeded;
     }
+
+    protected async Task<bool> IsAuthorizedAsSuperAdmin()
+    {
+        var result = await authorizationService.AuthorizeAsync(
+            User, 
+            null, 
+            new SuperAdminRequirement()
+        );
+        return result.Succeeded;
+    }
 }

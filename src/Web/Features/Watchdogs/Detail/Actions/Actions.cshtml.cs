@@ -45,5 +45,14 @@ public class ActionsModel(
         var command = new MakeWatchdogPrivateCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
-    }    
+    }
+    
+    public async Task<IActionResult> OnPostMakePublic(long watchdogId)
+    {
+        if (!await IsAuthorizedAsSuperAdmin()) return Forbid();
+
+        var command = new MakeWatchdogPublicCommand(watchdogId);
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
+    }
 }

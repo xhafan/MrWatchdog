@@ -27,7 +27,7 @@ public class when_getting_manage_other_users_watchdogs_as_non_superadmin : BaseD
     }
 
     [Test]
-    public async Task non_super_admin_user_cannot_view_manage_other_users_watchdogs()
+    public async Task non_superadmin_user_cannot_view_manage_other_users_watchdogs()
     {
         var response = await _webApplicationClient.GetAsync(WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);

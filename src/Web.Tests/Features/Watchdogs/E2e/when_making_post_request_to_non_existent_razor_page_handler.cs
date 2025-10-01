@@ -39,7 +39,7 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
         var pageHtml = await response.Content.ReadAsStringAsync();
 
         response = await _webApplicationClient.PostAsync(
-            $"/Watchdogs/Detail/Actions/{_watchdog.Id}?handler=MakePublic",
+            $"/Watchdogs/Detail/Actions/{_watchdog.Id}?handler=NonExistentAction",
             content: E2ETestHelper.GetFormUrlEncodedContentWithRequestVerificationToken(E2ETestHelper.ExtractRequestVerificationToken(pageHtml))
         );
 

@@ -11,7 +11,6 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Account.Login;
-using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 

@@ -1,4 +1,6 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
@@ -10,6 +12,7 @@ public class when_viewing_watchdog_scraping_results_with_web_page_not_scraped_ye
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
+    private IActionResult _actionResult = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,7 +22,13 @@ public class when_viewing_watchdog_scraping_results_with_web_page_not_scraped_ye
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
-        await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
+    }
+
+    [Test]
+    public void action_result_is_correct()
+    {
+        _actionResult.ShouldBeOfType<PageResult>();
     }
 
     [Test]
@@ -39,5 +48,8 @@ public class when_viewing_watchdog_scraping_results_with_web_page_not_scraped_ye
                 Name = "url.com/page"
             })
             .Build();
+        _watchdog.MakePublic();
+
+        UnitOfWork.Flush();
     }    
 }

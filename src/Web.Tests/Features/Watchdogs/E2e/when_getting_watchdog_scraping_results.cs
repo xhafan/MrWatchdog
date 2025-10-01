@@ -41,5 +41,6 @@ public class when_getting_watchdog_scraping_results : BaseDatabaseTest
         newUnitOfWork.BeginTransaction();
 
         _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
+        _watchdog.MakePublic();
     }
 }

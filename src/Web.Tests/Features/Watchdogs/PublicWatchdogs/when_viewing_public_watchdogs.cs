@@ -11,6 +11,7 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
 {
     private Watchdog _publicWatchdog = null!;
     private PublicWatchdogsModel _model = null!;
+    private Watchdog _anotherPrivateWatchdog = null!;
 
     [SetUp]
     public async Task Context()
@@ -26,7 +27,6 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
     [Test]
     public void public_watchdogs_are_fetched()
     {
-        _model.PublicWatchdogs.Count().ShouldBe(1);
         _model.PublicWatchdogs.ShouldContain(
             new GetPublicWatchdogsQueryResult
             {
@@ -34,7 +34,8 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
                 WatchdogName = "public watchdog",
                 UserId = _publicWatchdog.User.Id
             }
-        );      
+        );
+        _model.PublicWatchdogs.Select(x => x.WatchdogId).ShouldNotContain(_anotherPrivateWatchdog.Id);
     }
     
     [Test]
@@ -50,8 +51,7 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
             .Build();
         _publicWatchdog.MakePublic();
         
-        // ReSharper disable once UnusedVariable
-        var anotherPrivateWatchdog = new WatchdogBuilder(UnitOfWork)
+        _anotherPrivateWatchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("another user private watchdog")
             .Build();
         

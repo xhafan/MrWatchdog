@@ -9,7 +9,7 @@ using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results_with_disabled_web_page : BaseDatabaseTest
+public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_authenticated_owner : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -22,6 +22,7 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
         _BuildEntities();
         
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
+            .WithActingUser(_user)
             .Build();
         
         _actionResult = await _model.OnGet(_watchdog.Id);
@@ -34,9 +35,18 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
     }
 
     [Test]
-    public void no_watchdog_web_page_is_available()
+    public void model_is_correct()
     {
-        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
+        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
+        
+        var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        webPageArgs.Name.ShouldBe("url.com/page");
+        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.Url.ShouldBe("http://url.com/page");
+        
+        _model.WatchdogScrapingResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.WatchdogScrapingResultsArgs.PublicStatus.ShouldBe(PublicStatus.Private);
     }
 
     private void _BuildEntities()
@@ -55,8 +65,8 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
-        _watchdog.MakePublic();
-
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        
         UnitOfWork.Flush();
     }    
 }

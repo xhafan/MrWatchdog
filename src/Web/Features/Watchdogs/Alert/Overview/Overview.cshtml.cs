@@ -1,4 +1,5 @@
 using CoreDdd.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -10,22 +11,28 @@ namespace MrWatchdog.Web.Features.Watchdogs.Alert.Overview;
 
 public class OverviewModel(
     IQueryExecutor queryExecutor, 
-    ICoreBus bus
-) 
-    : BasePageModel
+    ICoreBus bus,
+    IAuthorizationService authorizationService
+) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
     public WatchdogAlertOverviewArgs WatchdogAlertOverviewArgs { get; set; } = null!;
 
-    public async Task OnGet(long watchdogAlertId)
+    public async Task<IActionResult> OnGet(long watchdogAlertId)
     {
+        if (!await IsAuthorizedAsWatchdogAlertOwnerOrSuperAdmin(watchdogAlertId)) return Forbid();
+
         WatchdogAlertOverviewArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogAlertOverviewArgsQuery, WatchdogAlertOverviewArgs>(
                 new GetWatchdogAlertOverviewArgsQuery(watchdogAlertId));
+
+        return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
+        if (!await IsAuthorizedAsWatchdogAlertOwnerOrSuperAdmin(WatchdogAlertOverviewArgs.WatchdogAlertId)) return Forbid();
+
         if (!ModelState.IsValid)
         {
             return PageWithUnprocessableEntityStatus422();

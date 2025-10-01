@@ -1,4 +1,6 @@
-﻿using MrWatchdog.Core.Features.Account.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -12,6 +14,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
     private User _user = null!;
+    private IActionResult _actionResult = null!;
 
     [SetUp]
     public async Task Context()
@@ -21,7 +24,13 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
-        await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
+    }
+
+    [Test]
+    public void action_result_is_correct()
+    {
+        _actionResult.ShouldBeOfType<PageResult>();
     }
 
     [Test]
@@ -36,6 +45,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         webPageArgs.Url.ShouldBe("http://url.com/page");
         
         _model.WatchdogScrapingResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.WatchdogScrapingResultsArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
@@ -55,6 +65,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         _watchdog.EnableWebPage(watchdogWebPage.Id);
+        _watchdog.MakePublic();
         
         UnitOfWork.Flush();
     }    

@@ -143,7 +143,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                 .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
                 .WhereNotNull()
                 .ToList(),
-            UserId = User.Id
+            UserId = User.Id,
+            PublicStatus = PublicStatus
         };
     }
 

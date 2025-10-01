@@ -1,27 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results_with_disabled_web_page : BaseDatabaseTest
+public class when_viewing_watchdog_scraping_results_for_public_watchdog_as_authenticated_non_owner_user : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
+    private User _anotherUser = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Failed());
+
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
+            .WithActingUser(_anotherUser)
+            .WithAuthorizationService(authorizationService)
             .Build();
         
         _actionResult = await _model.OnGet(_watchdog.Id);
@@ -34,15 +49,26 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
     }
 
     [Test]
-    public void no_watchdog_web_page_is_available()
+    public void model_is_correct()
     {
-        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
+        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
+        
+        var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        webPageArgs.Name.ShouldBe("url.com/page");
+        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.Url.ShouldBe("http://url.com/page");
+        
+        _model.WatchdogScrapingResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.WatchdogScrapingResultsArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
+        _anotherUser = new UserBuilder(UnitOfWork).Build();
+
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
             .WithWebPage(new WatchdogWebPageArgs
@@ -55,6 +81,7 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
             .Build();
         var watchdogWebPage = _watchdog.WebPages.Single();
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _watchdog.EnableWebPage(watchdogWebPage.Id);
         _watchdog.MakePublic();
 
         UnitOfWork.Flush();

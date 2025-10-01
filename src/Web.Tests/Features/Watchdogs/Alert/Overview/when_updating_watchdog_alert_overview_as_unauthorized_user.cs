@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -6,11 +7,13 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Alert.Overview;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Alert.Overview;
 
 [TestFixture]
-public class when_updating_watchdog_alert_overview : BaseDatabaseTest
+public class when_updating_watchdog_alert_overview_as_unauthorized_user : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private OverviewModel _model = null!;
@@ -23,8 +26,17 @@ public class when_updating_watchdog_alert_overview : BaseDatabaseTest
         _BuildEntities();
         _bus = A.Fake<ICoreBus>();
 
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdogAlert.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogAlertOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Failed());
+
         _model = new OverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
+            .WithAuthorizationService(authorizationService)
             .WithWatchdogAlertOverviewArgs(
                 new WatchdogAlertOverviewArgs
                 {
@@ -38,28 +50,17 @@ public class when_updating_watchdog_alert_overview : BaseDatabaseTest
     }
 
     [Test]
-    public void command_is_sent_over_message_bus()
+    public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new UpdateWatchdogAlertOverviewCommand(_model.WatchdogAlertOverviewArgs))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new UpdateWatchdogAlertOverviewCommand(_model.WatchdogAlertOverviewArgs))).MustNotHaveHappened();
     }
     
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<OkObjectResult>();
-        var okObjectResult = (OkObjectResult) _actionResult;
-        var value = okObjectResult.Value;
-        value.ShouldBeOfType<string>();
-        var jobGuid = (string) value;
-        jobGuid.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
-    [Test]
-    public void model_is_valid()
-    {
-        _model.ModelState.IsValid.ShouldBe(true);
-    }
-    
     private void _BuildEntities()
     {
         _watchdogAlert = new WatchdogAlertBuilder(UnitOfWork)

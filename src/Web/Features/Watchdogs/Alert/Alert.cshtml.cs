@@ -32,6 +32,8 @@ public class AlertModel(
         
         if (!await IsAuthorizedAsWatchdogAlertOwnerOrSuperAdmin(watchdogAlertId))
         {
+            if (WatchdogAlertArgs.WatchdogPublicStatus != PublicStatus.Public) return Forbid();
+
             var redirectUrl = QueryHelpers.AddQueryString(
                 WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(WatchdogAlertArgs.WatchdogId),
                 new Dictionary<string, string?>
@@ -39,9 +41,7 @@ public class AlertModel(
                     {"searchTerm", WatchdogAlertArgs.SearchTerm}
                 }
             );
-            return WatchdogAlertArgs.WatchdogPublicStatus == PublicStatus.Public
-                ? Redirect(redirectUrl)
-                : Forbid();
+            return Redirect(redirectUrl);
         }
 
         SearchTerm = WatchdogAlertArgs.SearchTerm;
@@ -56,6 +56,8 @@ public class AlertModel(
     
     public async Task<IActionResult> OnPostDeleteWatchdogAlert(long watchdogAlertId)
     {
+        if (!await IsAuthorizedAsWatchdogAlertOwnerOrSuperAdmin(watchdogAlertId)) return Forbid();
+
         var command = new DeleteWatchdogAlertCommand(watchdogAlertId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());

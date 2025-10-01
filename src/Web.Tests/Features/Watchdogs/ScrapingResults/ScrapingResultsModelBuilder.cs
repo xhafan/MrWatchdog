@@ -2,27 +2,30 @@
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
-    private User? _actingUser;
+    private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
+    private User? _actingUser;
 
-    public ScrapingResultsModelBuilder WithActingUser(User actingUser)
+    public ScrapingResultsModelBuilder WithBus(ICoreBus bus)
     {
-        _actingUser = actingUser;
+        _bus = bus;
         return this;
-    }
+    }   
 
     public ScrapingResultsModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
     {
@@ -30,9 +33,16 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
 
+    public ScrapingResultsModelBuilder WithActingUser(User actingUser)
+    {
+        _actingUser = actingUser;
+        return this;
+    }
 
     public ScrapingResultsModel Build()
     {
+        _bus ??= A.Fake<ICoreBus>();
+
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
         queryHandlerFactory.RegisterQueryHandler(new GetWatchdogScrapingResultsArgsQueryHandler(
@@ -40,12 +50,11 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
 
-        var actingUserAccessor = A.Fake<IActingUserAccessor>();
-        if (_actingUser != null)
-        {
-            A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(_actingUser.Id);
-        }
-        
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailPublicStatusArgsQueryHandler(
+            unitOfWork,
+            new NhibernateRepository<Watchdog>(unitOfWork)
+        ));
+
         if (_authorizationService == null)
         {
             _authorizationService = A.Fake<IAuthorizationService>();
@@ -55,10 +64,29 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 
         var model = new ScrapingResultsModel(
             new QueryExecutor(queryHandlerFactory),
-            actingUserAccessor,
+            _bus,
             _authorizationService
         );
+
         ModelValidator.ValidateModel(model);
+
+        _setupModelUser();
+
         return model;
+
+        void _setupModelUser()
+        {
+            IEnumerable<Claim> claims = _actingUser != null 
+                ? [new Claim(ClaimTypes.NameIdentifier, $"{_actingUser.Id}")] 
+                : [];
+
+            model.PageContext = new PageContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType: _actingUser != null ? "Test" : null))
+                }
+            };
+        }
     }
 }

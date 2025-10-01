@@ -34,8 +34,7 @@
 </p>
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogsScrapingResults)>
-    <form asp-controller="ScrapingResults"
-          asp-action="CreateWatchdogAlert"
+    <form asp-page-handler="CreateWatchdogAlert"
           asp-route-watchdogId="@Model.WatchdogScrapingResultsArgs.WatchdogId"
           data-watchdogs--scraping-results-target="createWatchdogAlertForm"
     >

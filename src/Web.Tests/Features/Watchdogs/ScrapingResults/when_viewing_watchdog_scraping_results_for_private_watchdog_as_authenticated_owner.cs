@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
@@ -21,7 +25,16 @@ public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_auth
     {
         _BuildEntities();
         
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Success());
+
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
+            .WithAuthorizationService(authorizationService)
             .WithActingUser(_user)
             .Build();
         

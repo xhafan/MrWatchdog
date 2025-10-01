@@ -19,7 +19,7 @@ public class when_viewing_watchdog_scraping_results_for_public_watchdog_as_authe
     private Watchdog _watchdog = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
-    private User _anotherUser = null!;
+    private User _actingUser = null!;
 
     [SetUp]
     public async Task Context()
@@ -35,7 +35,7 @@ public class when_viewing_watchdog_scraping_results_for_public_watchdog_as_authe
             .Returns(AuthorizationResult.Failed());
 
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
-            .WithActingUser(_anotherUser)
+            .WithActingUser(_actingUser)
             .WithAuthorizationService(authorizationService)
             .Build();
         
@@ -67,8 +67,6 @@ public class when_viewing_watchdog_scraping_results_for_public_watchdog_as_authe
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _anotherUser = new UserBuilder(UnitOfWork).Build();
-
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
             .WithWebPage(new WatchdogWebPageArgs
@@ -83,6 +81,8 @@ public class when_viewing_watchdog_scraping_results_for_public_watchdog_as_authe
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         _watchdog.EnableWebPage(watchdogWebPage.Id);
         _watchdog.MakePublic();
+
+        _actingUser = new UserBuilder(UnitOfWork).Build();
 
         UnitOfWork.Flush();
     }    

@@ -1,4 +1,6 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
@@ -7,11 +9,12 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
 
 [TestFixture]
-public class when_creating_watchdog_alert : BaseDatabaseTest
+public class when_creating_watchdog_alert_for_public_watchdog_with_user_different_from_watchdog_owner : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -26,8 +29,17 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
         
         _bus = A.Fake<ICoreBus>();
         
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Failed());
+
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
+            .WithAuthorizationService(authorizationService)
             .WithActingUser(_actingUser)
             .Build();
         
@@ -53,8 +65,15 @@ public class when_creating_watchdog_alert : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        var user = new UserBuilder(UnitOfWork).Build();
+
+        _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithUser(user)
+            .Build();
+        _watchdog.MakePublic();
 
         _actingUser = new UserBuilder(UnitOfWork).Build();
+
+        UnitOfWork.Flush();
     }    
 }

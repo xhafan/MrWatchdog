@@ -22,6 +22,7 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
                     {
                         var appSettingsTestPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Test.json");
                         config.AddJsonFile(appSettingsTestPath);
+                        config.AddUserSecrets<Program>();
                     });
                 });
         });

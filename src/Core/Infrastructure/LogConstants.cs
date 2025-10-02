@@ -12,4 +12,9 @@ public static class LogConstants
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const int MaxLogMessageLength = 2000;
+
+    public const string LoggingConfigurationSectionName = "Logging";
+    
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string LogErrorApiSecretHeaderName = "X-Log-Error-Secret";
 }

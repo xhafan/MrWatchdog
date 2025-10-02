@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RootNamespace>MrWatchdog.Web.Tests</RootNamespace>
     <AssemblyName>MrWatchdog.Web.Tests</AssemblyName>
+    <UserSecretsId>9415da77-0c91-4852-a86c-51b447fef23b</UserSecretsId>
   </PropertyGroup>
 
   <Import Project="..\SharedAssemblyInfo.props" />

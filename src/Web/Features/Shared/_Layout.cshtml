@@ -1,9 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.RazorPages
+@using Microsoft.Extensions.Options
 @using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Logs
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @inject IUserRepository UserRepository
+@inject IOptions<LoggingOptions> LoggingOptions
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +33,10 @@
 @{
     var disableTurboOnPage = (bool)(ViewData[ViewDataConstants.DisableTurboOnPage] ?? false);
 }
-<body data-controller="@StimulusControllers.Body" data-turbo="@((!disableTurboOnPage).ToString().ToLower())">
+<body data-controller="@StimulusControllers.Body" 
+      data-turbo="@((!disableTurboOnPage).ToString().ToLower())"
+      data-log-error-api-secret="@LoggingOptions.Value.LogErrorApiSecret"
+      >
     <header>
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">

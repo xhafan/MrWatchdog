@@ -43,6 +43,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using MrWatchdog.Web.Features.Logs;
 
 namespace MrWatchdog.Web;
 
@@ -305,6 +306,9 @@ public class Program
                     });
             }
         });
+
+        builder.Services.Configure<LoggingOptions>(builder.Configuration.GetSection(LogConstants.LoggingConfigurationSectionName));
+
 
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();

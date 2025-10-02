@@ -43,11 +43,17 @@ export async function logError(
         ? errorMessage.slice(0, LogConstants.maxLogMessageLength) + "…[truncated]"
         : errorMessage;
 
+    let logErrorApiSecret = document.body.dataset.logErrorApiSecret;
+    if (!logErrorApiSecret) {
+        throw new Error("LogError API secret is not configured.");
+    }
+
     try {
         await fetch("/api/Logs/LogError", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                [LogConstants.logErrorApiSecretHeaderName]: logErrorApiSecret
             },
             body: JSON.stringify(safeMessage)
         });

@@ -1,22 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CoreUtils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
 
 namespace MrWatchdog.Web.Features.Logs;
 
-// todo: prevent abuse - make it harder to log error - see recommendations: https://chatgpt.com/share/68c16f0c-9bf8-8000-8846-80ef03c7b267
 [ApiController]
 [EnableRateLimiting(RateLimitingConstants.LogErrorsRequestsPerSecondPerUserPolicy)]
 [Route("api/[controller]/[action]")]
-public class LogsController(ILogger<LogsController> logger) : ControllerBase
+public class LogsController(
+    ILogger<LogsController> logger,
+    IOptions<LoggingOptions> iLoggingOptions
+) : ControllerBase
 {
     [HttpPost]
     [AllowAnonymous]
     [RequestSizeLimit(LogConstants.MaxLogMessageLength + 500)] // 500 bytes buffer
     public IActionResult LogError([FromBody] string message)
     {
+        Guard.Hope(!string.IsNullOrWhiteSpace(iLoggingOptions.Value.LogErrorApiSecret), 
+            $"{LogConstants.LoggingConfigurationSectionName}:{nameof(LoggingOptions.LogErrorApiSecret)} is not set.");
+
+        var headers = HttpContext.Request.Headers;
+        if (!headers.ContainsKey(LogConstants.LogErrorApiSecretHeaderName)
+            || headers[LogConstants.LogErrorApiSecretHeaderName].ToString() != iLoggingOptions.Value.LogErrorApiSecret)
+        {
+            return Forbid();
+        }
+
         if (string.IsNullOrWhiteSpace(message))
         {
             return BadRequest("Message cannot be empty.");

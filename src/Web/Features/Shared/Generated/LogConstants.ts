@@ -5,4 +5,5 @@
 export abstract class LogConstants
 {
 	public static maxLogMessageLength: number = 2000;
+	public static logErrorApiSecretHeaderName: string = `X-Log-Error-Secret`;
 }

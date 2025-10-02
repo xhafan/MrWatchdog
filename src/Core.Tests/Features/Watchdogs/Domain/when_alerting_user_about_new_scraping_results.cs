@@ -18,7 +18,7 @@ public class when_alerting_user_about_new_scraping_results : BaseTest
     {
         _BuildEntities();
         
-        await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsRetriever.Retrieve<RuntimeOptions>().Value);
+        await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
     }
 
     [Test]

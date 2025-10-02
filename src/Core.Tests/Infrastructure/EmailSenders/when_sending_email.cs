@@ -22,7 +22,7 @@ public class when_sending_email
         var password = config["EmailSender:Password"];
         Guard.Hope(password != null, nameof(password) + " is null");
         
-        var emailSenderOptions = OptionsRetriever.Retrieve<EmailSenderOptions>();
+        var emailSenderOptions = OptionsTestRetriever.Retrieve<EmailSenderOptions>();
         emailSenderOptions.Value.Username = username;
         emailSenderOptions.Value.Password = password;
         

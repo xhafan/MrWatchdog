@@ -55,7 +55,7 @@ public class when_refreshing_watchdog_alert_with_new_repeated_scraping_result_al
         async Task _simulateAlertingUserAboutTheSameScrapingResultLongTimeAgo()
         {
             Clock.CurrentDateTimeProvider.Value = () => DateTime.Now.AddDays(-31);
-            await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsRetriever.Retrieve<RuntimeOptions>().Value);
+            await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
             Clock.CurrentDateTimeProvider.Value = null;
         }
 

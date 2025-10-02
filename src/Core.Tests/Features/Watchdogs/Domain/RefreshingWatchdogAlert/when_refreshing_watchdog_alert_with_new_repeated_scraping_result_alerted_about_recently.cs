@@ -47,7 +47,7 @@ public class when_refreshing_watchdog_alert_with_new_repeated_scraping_result_al
         
         _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1"]);
         _watchdogAlert.Refresh();
-        await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsRetriever.Retrieve<RuntimeOptions>().Value);
+        await _watchdogAlert.AlertUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
 
         _watchdog.SetScrapingResults(watchdogWebPage.Id, []);
         _watchdogAlert.Refresh();

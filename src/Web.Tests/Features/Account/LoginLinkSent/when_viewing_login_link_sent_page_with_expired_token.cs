@@ -32,7 +32,7 @@ public class when_viewing_login_link_sent_page_with_expired_token : BaseDatabase
     
     private void _BuildEntities()
     {
-        var jwtOptions = OptionsRetriever.Retrieve<JwtOptions>().Value;
+        var jwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>().Value;
         
         var loginTokenGuid = Guid.NewGuid();
         _loginToken = new LoginTokenBuilder(UnitOfWork)

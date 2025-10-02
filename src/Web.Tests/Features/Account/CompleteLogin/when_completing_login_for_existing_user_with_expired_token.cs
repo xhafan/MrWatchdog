@@ -59,7 +59,7 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
     {
         _user = new UserBuilder(UnitOfWork).Build();
 
-        var jwtOptions = OptionsRetriever.Retrieve<JwtOptions>().Value;
+        var jwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>().Value;
 
         var loginTokenGuid = Guid.NewGuid();
         _loginToken = new LoginTokenBuilder(UnitOfWork)

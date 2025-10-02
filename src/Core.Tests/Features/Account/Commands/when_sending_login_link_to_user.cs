@@ -22,7 +22,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
     [SetUp]
     public async Task Context()
     {
-        _iJwtOptions = OptionsRetriever.Retrieve<JwtOptions>();
+        _iJwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>();
         
         _emailSender = A.Fake<IEmailSender>();
         
@@ -30,7 +30,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
             new LoginTokenRepository(UnitOfWork),
             _emailSender,
             _iJwtOptions,
-            OptionsRetriever.Retrieve<RuntimeOptions>()
+            OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
         await handler.Handle(new SendLoginLinkToUserCommand(_email, ReturnUrl: "/Watchdogs/Alerts"));

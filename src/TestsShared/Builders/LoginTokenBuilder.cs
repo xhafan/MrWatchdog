@@ -51,7 +51,7 @@ public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
                 _guid, 
                 _email, 
                 _tokenReturnUrl, 
-                OptionsRetriever.Retrieve<JwtOptions>().Value
+                OptionsTestRetriever.Retrieve<JwtOptions>().Value
             );
         }
         

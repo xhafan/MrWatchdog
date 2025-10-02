@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Web.Infrastructure.RateLimiting;
 
 namespace MrWatchdog.Web.Features.Logs;
 
 // todo: prevent abuse - make it harder to log error - see recommendations: https://chatgpt.com/share/68c16f0c-9bf8-8000-8846-80ef03c7b267
 [ApiController]
+[EnableRateLimiting(RateLimitingConstants.LogErrorsRequestsPerSecondPerUserPolicy)]
 [Route("api/[controller]/[action]")]
 public class LogsController(ILogger<LogsController> logger) : ControllerBase
 {

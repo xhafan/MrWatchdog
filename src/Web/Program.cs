@@ -27,6 +27,7 @@ using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using MrWatchdog.Web.Infrastructure.PageFilters;
+using MrWatchdog.Web.Infrastructure.RateLimiting;
 using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
 using Polly;
 using Polly.Extensions.Http;
@@ -41,6 +42,7 @@ using System.Data;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.RateLimiting;
 
 namespace MrWatchdog.Web;
 
@@ -260,14 +262,58 @@ public class Program
             .WithScopedLifetime()
         );
 
+        var rateLimitingOptions = OptionsRetriever.Retrieve<RateLimitingOptions>(builder.Configuration, builder.Services);
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext => _getSlidingWindowLimiter(
+                httpContext,
+                rateLimitingOptions.GlobalRequestsPerSecondPerUserPermitLimit,
+                rateLimitingOptions.GlobalRequestsPerSecondPerUserQueueLimit,
+                TimeSpan.FromSeconds(1)
+            ));
+
+            options.AddPolicy(RateLimitingConstants.LogErrorsRequestsPerSecondPerUserPolicy, httpContext => _getSlidingWindowLimiter(
+                httpContext,
+                rateLimitingOptions.LogErrorRequestsPerSecondPerUserPermitLimit,
+                rateLimitingOptions.LogErrorRequestsPerSecondPerUserQueueLimit,
+                TimeSpan.FromSeconds(1)
+            ));
+
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.OnRejected = async (context, cancellationToken) =>
+            {
+                await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", cancellationToken);
+            };
+            return;
+
+            RateLimitPartition<string> _getSlidingWindowLimiter(
+                HttpContext httpContext,
+                int permitLimit,
+                int queueLimit,
+                TimeSpan window
+                )
+            {
+                var userEmailOrClientIpAddress = HttpContextUserEmailOrClientIpAddressGetter.GetUserEmailOrClientIpAddress(httpContext);
+
+                return RateLimitPartition.GetSlidingWindowLimiter(userEmailOrClientIpAddress, _ =>
+                    new SlidingWindowRateLimiterOptions
+                    {
+                        PermitLimit = permitLimit,
+                        QueueLimit = queueLimit,
+                        SegmentsPerWindow = 20, // ChatGPT: For most cases, SegmentsPerWindow = 10-20 offers a good balance between performance and accuracy. (https://chatgpt.com/share/67351dd5-0f88-8000-b49d-ea315ce2ab3c)
+                        Window = window
+                    });
+            }
+        });
+
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
         _buildDatabase();
 
+        // Configure the HTTP request pipeline.
         app.UseResponseCompression();
         
-        // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler(errorApp =>
@@ -300,6 +346,7 @@ public class Program
         app.UseMiddleware<SerilogUserEnricherMiddleware>();
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseAuthorization();
+        app.UseRateLimiter();
 
         app.MapStaticAssets();
         app.MapRazorPages()

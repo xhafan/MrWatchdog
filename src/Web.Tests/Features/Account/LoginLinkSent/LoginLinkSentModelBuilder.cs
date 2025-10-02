@@ -27,7 +27,7 @@ public class LoginLinkSentModelBuilder(NhibernateUnitOfWork unitOfWork)
             new LoginTokenRepository(unitOfWork)
         ));
 
-        var iJwtOptions = OptionsRetriever.Retrieve<JwtOptions>();
+        var iJwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>();
 
         var model = new LoginLinkSentModel(
             new QueryExecutor(queryHandlerFactory),

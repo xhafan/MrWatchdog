@@ -49,7 +49,7 @@ public class CompleteLoginControllerBuilder(NhibernateUnitOfWork unitOfWork)
             _bus,
             _jobCompletionAwaiter,
             new QueryExecutor(queryHandlerFactory),
-            OptionsRetriever.Retrieve<JwtOptions>()
+            OptionsTestRetriever.Retrieve<JwtOptions>()
         );
         
         return controller;

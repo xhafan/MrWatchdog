@@ -5,7 +5,7 @@ using MrWatchdog.Core.Infrastructure.Configurations;
 
 namespace MrWatchdog.TestsShared;
 
-public static class OptionsRetriever
+public static class OptionsTestRetriever
 {
     public static IOptions<TOptions> Retrieve<TOptions>(string? configurationSectionKey = null)
         where TOptions : class, new()

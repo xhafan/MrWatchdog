@@ -28,7 +28,7 @@ public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTe
         var handler = new NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             _emailSender,
-            OptionsRetriever.Retrieve<RuntimeOptions>()
+            OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
         await handler.Handle(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));

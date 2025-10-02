@@ -49,7 +49,7 @@ public class ConfirmLoginModelBuilder(NhibernateUnitOfWork unitOfWork)
         
         var model = new ConfirmLoginModel(
             _bus,
-            OptionsRetriever.Retrieve<JwtOptions>(),
+            OptionsTestRetriever.Retrieve<JwtOptions>(),
             new QueryExecutor(queryHandlerFactory),
             _jobCompletionAwaiter
         )

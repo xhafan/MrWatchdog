@@ -29,7 +29,7 @@ public class when_alerting_user_about_new_watchdog_alert_scraping_results_with_s
         var handler = new AlertUserAboutNewWatchdogAlertScrapingResultsDomainEventMessageHandler(
             new NhibernateRepository<WatchdogAlert>(UnitOfWork),
             _emailSender,
-            OptionsRetriever.Retrieve<RuntimeOptions>()
+            OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
         await handler.Handle(new WatchdogAlertScrapingResultsUpdatedDomainEvent(_watchdogAlert.Id));

@@ -19,22 +19,24 @@ using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
-using MrWatchdog.Core.Messages;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Account.Login;
+using MrWatchdog.Web.Features.Logs;
 using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using MrWatchdog.Web.Infrastructure.PageFilters;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
+using MrWatchdog.Web.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 using Rebus.Config;
 using Rebus.Retry.Simple;
-using Rebus.Routing.TypeBased;
 using Rebus.Transport.InMem;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
@@ -43,7 +45,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using MrWatchdog.Web.Features.Logs;
 
 namespace MrWatchdog.Web;
 
@@ -57,7 +58,8 @@ public class Program
 
         _configureLogging();
 
-        if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "LocalStaging")
+        var environmentName = builder.Environment.EnvironmentName;
+        if (builder.Environment.IsDevelopment() || environmentName == "LocalStaging")
         {
             builder.Configuration.AddUserSecrets<Program>();
         }
@@ -101,8 +103,6 @@ public class Program
         builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
         builder.Services.AddSingleton<ICoreBus, CoreBus>();
         
-        var webEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Web";
-        var mainRebusHostedServiceEnvironmentInputQueueName = $"{builder.Environment.EnvironmentName}Main";
 
         InMemNetwork? rebusInMemoryNetwork = null;
         if (builder.Configuration["Rebus:Transport"] == "InMemory")
@@ -111,54 +111,38 @@ public class Program
             builder.Services.AddSingleton(rebusInMemoryNetwork);
         }
         
-        builder.Services.AddRebus((configure, serviceProvider) =>
+        _addRebusForSendingOnly();
+
+        foreach (var queue in RebusQueues.AllQueues.Value)
         {
-            var rebusConfigurer = configure
-                .Logging(x => x.MicrosoftExtensionsLogging(serviceProvider.GetRequiredService<ILoggerFactory>()));
+            var inputQueueName = $"{queue}";
 
-            switch (builder.Configuration["Rebus:Transport"])
-            {
-                case "RabbitMq":
-                    rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", webEnvironmentInputQueueName));
-                    break;
-                
-                case "PostgreSql":
-                    rebusConfigurer
-                        .Transport(x => x.UsePostgreSql(
-                            builder.Configuration.GetConnectionString("Database"),
-                            "RebusQueue",
-                            webEnvironmentInputQueueName
-                        ));
-                    break;
-                
-                case "InMemory":
-                    rebusConfigurer.Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, webEnvironmentInputQueueName, registerSubscriptionStorage: false));
-                    break;
-                
-                default:
-                    throw new InvalidOperationException("Rebus transport is not configured. Set Rebus:Transport to RabbitMq, PostgreSql, or InMemory in appsettings.json.");
-            }
+            builder.Services.AddSingleton<IHostedService>(serviceProvider =>
+                new RebusHostedService(
+                    inputQueueName,
+                    environmentName,
+                    serviceProvider.GetRequiredService<INhibernateConfigurator>(),
+                    serviceProvider.GetRequiredService<IWindsorContainer>(),
+                    serviceProvider.GetRequiredService<IConfiguration>()
+                )
+            );
 
-            return rebusConfigurer
-                .Routing(x => x.TypeBased().MapAssemblyDerivedFrom<Command>(mainRebusHostedServiceEnvironmentInputQueueName))
-                .Options(x =>
-                {
-                    x.RetryStrategy(errorQueueName: $"{webEnvironmentInputQueueName}Error");
-                    x.SetNumberOfWorkers(0); // no worker for unused Web queue
-                    x.SetMaxParallelism(1); // must be 1 to make Rebus happy
-                });
-        });
+            var inputQueueNameForSending = $"{inputQueueName}{RebusConstants.RebusSendQueueSuffix}";
 
-        builder.Services.AddSingleton<IHostedService>(serviceProvider =>
-            new RebusHostedService(
-                mainRebusHostedServiceEnvironmentInputQueueName,
-                serviceProvider.GetRequiredService<INhibernateConfigurator>(),
-                serviceProvider.GetRequiredService<IWindsorContainer>(),
-                serviceProvider.GetRequiredService<IConfiguration>()
-            )
+            builder.Services.AddSingleton<IHostedService>(serviceProvider =>
+                new RebusHostedService(
+                    inputQueueNameForSending,
+                    environmentName,
+                    serviceProvider.GetRequiredService<INhibernateConfigurator>(),
+                    serviceProvider.GetRequiredService<IWindsorContainer>(),
+                    serviceProvider.GetRequiredService<IConfiguration>()
+                )
+            );
+        }
+
+        builder.Services.Configure<KickOffDueWatchdogsScrapingHostedServiceOptions>(
+            builder.Configuration.GetSection(nameof(KickOffDueWatchdogsScrapingHostedService))
         );
-        
-        builder.Services.Configure<KickOffDueWatchdogsScrapingHostedServiceOptions>(builder.Configuration.GetSection(nameof(KickOffDueWatchdogsScrapingHostedService)));
         builder.Services.AddHostedService<KickOffDueWatchdogsScrapingHostedService>();
 
         builder.Services.AddSwaggerGen(options =>
@@ -244,6 +228,7 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<IActingUserAccessor, HttpContextActingUserAccessor>();
         builder.Services.AddSingleton<IRequestIdAccessor, HttpContextRequestIdAccessor>();
+        builder.Services.AddSingleton<IRebusQueueRedirector, HttpContextRebusQueueRedirector>();
         
         builder.Services.AddResponseCompression(options =>
         {
@@ -378,6 +363,49 @@ public class Program
             await Log.CloseAndFlushAsync();
         }
         return;
+
+        void _addRebusForSendingOnly()
+        {
+            var webEnvironmentInputQueueName = $"{environmentName}Web";
+
+            builder.Services.AddRebus((configure, serviceProvider) =>
+            {
+                var rebusConfigurer = configure
+                    .Logging(x => x.MicrosoftExtensionsLogging(serviceProvider.GetRequiredService<ILoggerFactory>()));
+
+                switch (builder.Configuration["Rebus:Transport"])
+                {
+                    case "RabbitMq":
+                        rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", webEnvironmentInputQueueName));
+                        break;
+                
+                    case "PostgreSql":
+                        rebusConfigurer
+                            .Transport(x => x.UsePostgreSql(
+                                builder.Configuration.GetConnectionString("Database"),
+                                "RebusQueue",
+                                webEnvironmentInputQueueName
+                            ));
+                        break;
+                
+                    case "InMemory":
+                        rebusConfigurer.Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, webEnvironmentInputQueueName, registerSubscriptionStorage: false));
+                        break;
+                
+                    default:
+                        throw new InvalidOperationException("Rebus transport is not configured. Set Rebus:Transport to RabbitMq, PostgreSql, or InMemory in appsettings.json.");
+                }
+
+                return rebusConfigurer
+                    .Routing(configurer => MessageRoutingConfigurator.ConfigureMessageRouting(configurer, environmentName))
+                    .Options(x =>
+                    {
+                        x.RetryStrategy(errorQueueName: $"{webEnvironmentInputQueueName}Error");
+                        x.SetNumberOfWorkers(0); // no worker for unused Web queue
+                        x.SetMaxParallelism(1); // must be 1 to make Rebus happy
+                    });
+            });
+        }
 
         void _buildDatabase()
         {

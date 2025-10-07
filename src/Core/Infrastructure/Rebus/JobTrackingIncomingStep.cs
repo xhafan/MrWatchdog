@@ -14,7 +14,8 @@ public class JobTrackingIncomingStep(
     INhibernateConfigurator nhibernateConfigurator,
     ILogger<JobTrackingIncomingStep> logger,
     IWindsorContainer windsorContainer,
-    IJobCreator jobCreator
+    IJobCreator jobCreator,
+    IRebusHandlingQueueGetter rebusHandlingQueueGetter
 ) : IIncomingStep
 {
     public async Task Process(IncomingStepContext context, Func<Task> next)
@@ -31,6 +32,8 @@ public class JobTrackingIncomingStep(
         }
 
         var jobGuid = Guid.Parse(rebusMessage.Headers[Headers.MessageId]);
+
+        JobContext.RebusHandlingQueue.Value = rebusHandlingQueueGetter.GetHandlingQueue();
 
         switch (baseMessage)
         {
@@ -79,7 +82,7 @@ public class JobTrackingIncomingStep(
 
     private async Task<Job> _CreateOrFetchJobInSeparateTransaction(Guid jobGuid, BaseMessage baseMessage)
     {
-        return await jobCreator.CreateJob(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted: true);
+        return await jobCreator.CreateJob(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted: true, JobContext.RebusHandlingQueue.Value);
     }
     
     private async Task _MarkJobAsFailedInSeparateTransaction(long jobId, Exception ex)
@@ -90,5 +93,6 @@ public class JobTrackingIncomingStep(
         var job = await new JobRepository(newUnitOfWork).LoadByIdAsync(jobId);
 
         job.Fail(ex);
-    } 
+    }
+
 }

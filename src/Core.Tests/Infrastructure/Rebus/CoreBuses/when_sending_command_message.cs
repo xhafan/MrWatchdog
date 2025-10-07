@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.TestsShared;
@@ -28,11 +29,15 @@ public class when_sending_command_message : BaseDatabaseTest
         var requestIdAccessor = A.Fake<IRequestIdAccessor>();
         A.CallTo(() => requestIdAccessor.GetRequestId()).Returns("0HNFBP8T98MQS:00000045");
 
+        var rebusQueueRedirector = A.Fake<IRebusQueueRedirector>();
+        A.CallTo(() => rebusQueueRedirector.GetQueueForRedirection()).Returns(null);
+
         _coreBus = new CoreBus(
             _bus,
             new ExistingTransactionJobCreator(UnitOfWork),
             actingUserAccessor,
-            requestIdAccessor
+            requestIdAccessor,
+            rebusQueueRedirector
         );
         _command = new CreateWatchdogCommand(UserId: 23, "watchdog name");
         
@@ -48,7 +53,10 @@ public class when_sending_command_message : BaseDatabaseTest
                                                            && p.ActingUserId == 23
                                                            && p.RequestId == "0HNFBP8T98MQS:00000045"
                                                            ),
-                A<IDictionary<string, string>>.That.Matches(p => p.ContainsKey(Headers.MessageId) && p[Headers.MessageId] == _command.Guid.ToString())
+                A<IDictionary<string, string>>.That.Matches(p => p.ContainsKey(Headers.MessageId) 
+                                                                 && p[Headers.MessageId] == _command.Guid.ToString()
+                                                                 
+                                                                 && !p.ContainsKey(CustomHeaders.QueueForRedirection))
             )
         ).MustHaveHappenedOnceExactly();
     }

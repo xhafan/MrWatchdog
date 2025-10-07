@@ -1,4 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -19,7 +20,7 @@ public class when_persisting_job_handling_attempt : BaseDatabaseTest
         _newJob = new JobBuilder(UnitOfWork)
             .WithGuid(_jobGuid)
             .Build();
-        _newJob.HandlingStarted();
+        _newJob.HandlingStarted(RebusQueues.Main);
         _newJob.Fail(new Exception("Test exception"));
         UnitOfWork.Save(_newJob);
         

@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.TestsShared;
 using Rebus.Bus;
@@ -23,7 +24,8 @@ public class when_sending_command_message_with_guid_already_set : BaseDatabaseTe
             _bus, 
             new ExistingTransactionJobCreator(UnitOfWork),
             A.Fake<IActingUserAccessor>(),
-            A.Fake<IRequestIdAccessor>()
+            A.Fake<IRequestIdAccessor>(),
+            A.Fake<IRebusQueueRedirector>()
         );
         _command = new CreateWatchdogCommand(UserId: 23, "watchdog name")
         {

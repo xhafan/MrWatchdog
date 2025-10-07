@@ -11,4 +11,7 @@ public static class RebusConstants
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string RebusMessageCouldNotBeDispatchedToAnyHandlersException = nameof(MessageCouldNotBeDispatchedToAnyHandlersException);
+
+    public const string RebusSendQueueSuffix = "Send";
+
 }

@@ -28,10 +28,26 @@ public static partial class E2ETestHelper
         });
     }
 
-    public static async Task LogUserIn(HttpClient webApplicationClient, Guid loginTokenGuid)
+    public static async Task LogUserIn(
+        HttpClient webApplicationClient, 
+        Guid loginTokenGuid,
+        Dictionary<string, string>? httpHeaders = null
+    )
     {
-        var response = await webApplicationClient.PostAsync(
-            AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(loginTokenGuid), content: null);
+        var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(loginTokenGuid)
+        );
+
+        if (httpHeaders != null)
+        {
+            foreach (var httpHeader in httpHeaders)
+            {
+                request.Headers.Add(httpHeader.Key, httpHeader.Value);
+            }
+        }
+        
+        var response = await webApplicationClient.SendAsync(request);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 

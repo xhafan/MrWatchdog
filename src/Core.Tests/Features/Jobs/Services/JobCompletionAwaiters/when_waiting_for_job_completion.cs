@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Services;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -40,7 +41,7 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
                 var jobRepository = new JobRepository(newUnitOfWork);
                 _job = await jobRepository.LoadByIdAsync(_job.Id);
 
-                _job.HandlingStarted();
+                _job.HandlingStarted(RebusQueues.Main);
                 _job.Complete();
                 await Task.Delay(200);
             }

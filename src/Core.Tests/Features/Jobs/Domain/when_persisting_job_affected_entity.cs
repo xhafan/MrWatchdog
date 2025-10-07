@@ -1,5 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -20,7 +21,7 @@ public class when_persisting_job_affected_entity : BaseDatabaseTest
         _newJob = new JobBuilder(UnitOfWork)
             .WithGuid(_jobGuid)
             .Build();
-        _newJob.HandlingStarted();
+        _newJob.HandlingStarted(RebusQueues.Main);
         _newJob.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
         UnitOfWork.Save(_newJob);
         

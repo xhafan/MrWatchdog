@@ -32,6 +32,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
     private long _jobContentActingUserId;
     private string? _jobContextRequestId;
+    private string? _jobContextRebusHandlingQueue;
 
     [SetUp]
     public async Task Context()
@@ -52,8 +53,12 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
 
+        var rebusHandlingQueueGetter = A.Fake<IRebusHandlingQueueGetter>();
+        A.CallTo(() => rebusHandlingQueueGetter.GetHandlingQueue()).Returns($"Test{RebusQueues.AdminBulk}");
+
         var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
             .WithWindsorContainer(_windsorContainer)
+            .WithRebusHandlingQueueGetter(rebusHandlingQueueGetter)
             .Build();
 
         var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
@@ -68,12 +73,18 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             ActingUserId = ActingUserId,
             RequestId = "0HNFBP8T98MQS:00000045"
         };
-        incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
+        incomingStepContext.Save(new Message(new Dictionary<string, string>
+            {
+                {Headers.MessageId, _command.Guid.ToString()}
+            },
+            _command)
+        );
 
         await jobTrackingIncomingStep.Process(incomingStepContext, async () =>
         {
             _jobContentActingUserId = JobContext.ActingUserId.Value;
             _jobContextRequestId = JobContext.RequestId.Value;
+            _jobContextRebusHandlingQueue = JobContext.RebusHandlingQueue.Value;
             
             await jobCompletionIncomingStep.Process(incomingStepContext, _next);
         });
@@ -162,6 +173,12 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     public void request_id_is_set_on_job_context()
     {
         _jobContextRequestId.ShouldBe("0HNFBP8T98MQS:00000045");
+    }
+
+    [Test]
+    public void rebus_handing_queue_is_set_on_job_context()
+    {
+        _jobContextRebusHandlingQueue.ShouldBe($"Test{RebusQueues.AdminBulk}");
     }
 
     [TearDown]

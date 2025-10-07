@@ -80,7 +80,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             .WithInputData(_command)
             .WithKind(JobKind.Command)
             .Build();
-        _job.HandlingStarted();
+        _job.HandlingStarted(RebusQueues.Main);
         _job.Complete();
         newUnitOfWork.Save(_job);
     }

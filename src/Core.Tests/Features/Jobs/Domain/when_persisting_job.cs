@@ -1,6 +1,7 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -24,7 +25,7 @@ public class when_persisting_job : BaseDatabaseTest
         _newJob = new JobBuilder(UnitOfWork)
             .WithGuid(_jobGuid)
             .Build();
-        _newJob.HandlingStarted();
+        _newJob.HandlingStarted(RebusQueues.Main);
         _newJob.Complete();
         _newJob.SetRelatedCommandJob(_relatedCommandJob);
         UnitOfWork.Save(_newJob);
@@ -54,5 +55,6 @@ public class when_persisting_job : BaseDatabaseTest
         _persistedJob.HandlingAttempts.Count().ShouldBe(1);
         _persistedJob.RelatedCommandJob.ShouldBe(_relatedCommandJob);
         _persistedJob.RequestId.ShouldBe(JobBuilder.RequestId);
+        _persistedJob.Queue.ShouldBe(RebusQueues.Main);
     }
 }

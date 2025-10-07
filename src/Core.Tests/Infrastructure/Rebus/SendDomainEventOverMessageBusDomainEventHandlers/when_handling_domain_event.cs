@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -28,10 +29,16 @@ public class when_handling_domain_event : BaseDatabaseTest
         JobContext.CommandGuid.Value = _commandGuid;
         JobContext.ActingUserId.Value = 23;
         JobContext.RequestId.Value = "0HNFBP8T98MQS:00000045";
+        JobContext.RebusHandlingQueue.Value = $"Test{RebusQueues.Scraping}";
+
         _testDomainEvent = new TestDomainEvent {RelatedCommandGuid = _commandGuid};
 
         _bus = A.Fake<ISyncBus>();
-        var handler = new SendDomainEventOverMessageBusDomainEventHandler<TestDomainEvent>(_bus, new ExistingTransactionJobCreator(UnitOfWork));
+        var handler = new SendDomainEventOverMessageBusDomainEventHandler<TestDomainEvent>(
+            _bus, 
+            new ExistingTransactionJobCreator(UnitOfWork),
+            new JobContextRebusQueueRedirector()
+            );
 
         handler.Handle(_testDomainEvent);
     }
@@ -59,8 +66,12 @@ public class when_handling_domain_event : BaseDatabaseTest
     private bool _MatchingDomainEventMessageHeaders(Dictionary<string, string> domainEventMessageHeaders)
     {
         domainEventMessageHeaders.ShouldNotBeNull();
+
         domainEventMessageHeaders.ShouldContainKey(Headers.MessageId);
         domainEventMessageHeaders[Headers.MessageId].ShouldMatch("[0-9A-Fa-f\\-]{36}");
+
+        domainEventMessageHeaders.ShouldContainKey(CustomHeaders.QueueForRedirection);
+        domainEventMessageHeaders[CustomHeaders.QueueForRedirection].ShouldBe($"Test{RebusQueues.Scraping}{RebusConstants.RebusSendQueueSuffix}");
 
         return true;
     }    

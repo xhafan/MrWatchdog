@@ -10,12 +10,13 @@ public class NewTransactionJobCreator(INhibernateConfigurator nhibernateConfigur
     public override async Task<Job> CreateJob(
         BaseMessage baseMessage,
         Guid jobGuid, 
-        bool shouldMarkJobAsHandlingStarted
+        bool shouldMarkJobAsHandlingStarted,
+        string? handlingQueue
     )
     {
         using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
         newUnitOfWork.BeginTransaction();
 
-        return await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, newUnitOfWork);
+        return await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, newUnitOfWork, handlingQueue);
     } 
 }

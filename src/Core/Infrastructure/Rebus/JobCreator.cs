@@ -10,14 +10,16 @@ public abstract class BaseJobCreator : IJobCreator
     public abstract Task<Job> CreateJob(
         BaseMessage baseMessage,
         Guid jobGuid,
-        bool shouldMarkJobAsHandlingStarted
+        bool shouldMarkJobAsHandlingStarted,
+        string? handlingQueue
     );
     
     protected async Task<Job> CreateJobWithinUnitOfWork(
         BaseMessage baseMessage,
         Guid jobGuid, 
         bool shouldMarkJobAsHandlingStarted,
-        NhibernateUnitOfWork unitOfWork
+        NhibernateUnitOfWork unitOfWork,
+        string? handlingQueue
     )
     {
         var jobRepository = new JobRepository(unitOfWork);
@@ -50,7 +52,7 @@ public abstract class BaseJobCreator : IJobCreator
 
         if (!job.HasCompleted() && shouldMarkJobAsHandlingStarted)
         {
-            job.HandlingStarted();
+            job.HandlingStarted(handlingQueue);
         }
 
         return job;

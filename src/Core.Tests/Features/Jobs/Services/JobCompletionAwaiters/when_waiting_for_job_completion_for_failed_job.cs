@@ -32,7 +32,7 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
 
             for (var i = 1; i <= RebusConstants.MaxDeliveryAttempts; i++)
             {
-                _job.HandlingStarted();
+                _job.HandlingStarted(RebusQueues.Main);
                 _job.Fail(new Exception($"Error {i}"));
             }
             await Task.Delay(200);

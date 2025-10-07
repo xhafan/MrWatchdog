@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -17,7 +18,7 @@ public class when_getting_job : BaseDatabaseTest
     public async Task Context()
     {
         _job = new JobBuilder(UnitOfWork).Build();
-        _job.HandlingStarted();
+        _job.HandlingStarted(RebusQueues.Main);
         _job.Complete();
         _job.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
         

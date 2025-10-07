@@ -3,6 +3,7 @@ using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -21,7 +22,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
         _commandJob = new JobBuilder(UnitOfWork)
             .WithKind(JobKind.Command)
             .Build();
-        _commandJob.HandlingStarted();
+        _commandJob.HandlingStarted(RebusQueues.Main);
         _commandJob.Complete();
         _commandJob.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
         
@@ -29,7 +30,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
             .WithKind(JobKind.DomainEvent)
             .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
             .Build();
-        _domainEventJob.HandlingStarted();
+        _domainEventJob.HandlingStarted(RebusQueues.Main);
         _domainEventJob.Complete();
         _domainEventJob.SetRelatedCommandJob(_commandJob);
         

@@ -9,9 +9,10 @@ public class ExistingTransactionJobCreator(NhibernateUnitOfWork unitOfWork) : Ba
     public override async Task<Job> CreateJob(
         BaseMessage baseMessage,
         Guid jobGuid, 
-        bool shouldMarkJobAsHandlingStarted
+        bool shouldMarkJobAsHandlingStarted,
+        string? handlingQueue
     )
     {
-        return await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, unitOfWork);
+        return await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, unitOfWork, handlingQueue);
     }
 }

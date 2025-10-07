@@ -38,6 +38,7 @@ public class Job : VersionedEntity, IAggregateRoot
     public virtual int NumberOfHandlingAttempts { get; protected set; }
     public virtual Job? RelatedCommandJob { get; protected set; }
     public virtual string? RequestId { get; protected set; }
+    public virtual string? Queue { get; protected set; }
     public virtual IEnumerable<JobAffectedEntity> AffectedEntities => _affectedEntities;
     public virtual IEnumerable<JobHandlingAttempt> HandlingAttempts => _handlingAttempts;
 
@@ -72,10 +73,13 @@ public class Job : VersionedEntity, IAggregateRoot
         _affectedEntities.Add(new JobAffectedEntity(this, entityName, entityId, isCreated));
     }
 
-    public virtual void HandlingStarted()
+    public virtual void HandlingStarted(string? queue)
     {
         _CheckJobHasNotCompleted();
-        
+
+        Guard.Hope(queue != null, "Job queue is not set.");
+        Queue = queue;
+
         _handlingAttempts.Add(new JobHandlingAttempt(this));
     }
     

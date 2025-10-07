@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -19,14 +20,18 @@ public class when_handling_duplicate_domain_event : BaseDatabaseTest
     {
         var commandJob = new JobBuilder(UnitOfWork).Build();
         JobContext.CommandGuid.Value = commandJob.Guid;
-
         JobContext.RaisedDomainEvents.Value = [];
+        JobContext.RebusHandlingQueue.Value = $"Test{RebusQueues.Main}";
 
         _testDomainEventOne = new TestDomainEvent(23) {RelatedCommandGuid = commandJob.Guid};
         _testDomainEventTwo = new TestDomainEvent(23) {RelatedCommandGuid = commandJob.Guid};;
 
         _bus = A.Fake<ISyncBus>();
-        var handler = new SendDomainEventOverMessageBusDomainEventHandler<TestDomainEvent>(_bus, new ExistingTransactionJobCreator(UnitOfWork));
+        var handler = new SendDomainEventOverMessageBusDomainEventHandler<TestDomainEvent>(
+            _bus, 
+            new ExistingTransactionJobCreator(UnitOfWork),
+            new JobContextRebusQueueRedirector()
+            );
 
         handler.Handle(_testDomainEventOne);
         handler.Handle(_testDomainEventTwo);

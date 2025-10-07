@@ -1,5 +1,6 @@
 ﻿using CoreUtils;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.Core.Messages;
 using Rebus.Bus;
@@ -11,7 +12,8 @@ public class CoreBus(
     IBus bus, 
     IJobCreator jobCreator,
     IActingUserAccessor actingUserAccessor,
-    IRequestIdAccessor requestIdAccessor
+    IRequestIdAccessor requestIdAccessor,
+    IRebusQueueRedirector rebusQueueRedirector
     
 ) : ICoreBus
 {
@@ -24,7 +26,18 @@ public class CoreBus(
 
         await jobCreator.CreateJob(commandMessage, commandMessage.Guid, shouldMarkJobAsHandlingStarted: false);
 
-        
-        await bus.Send(commandMessage, new Dictionary<string, string> {{Headers.MessageId, commandMessage.Guid.ToString()}});
+
+        var headers = new Dictionary<string, string>
+        {
+            {Headers.MessageId, commandMessage.Guid.ToString()}
+        };
+
+        var queueForRedirection = rebusQueueRedirector.GetQueueForRedirection();
+        if (queueForRedirection != null)
+        {
+            headers.Add(CustomHeaders.QueueForRedirection, queueForRedirection);
+        }
+
+        await bus.Send(commandMessage, headers);
     }
 }

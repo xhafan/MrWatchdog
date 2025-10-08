@@ -32,12 +32,13 @@
 </head>
 @{
     var disableTurboOnPage = (bool)(ViewData[ViewDataConstants.DisableTurboOnPage] ?? false);
+    var hideMenu = ViewData["HideMenu"] as bool? ?? false;
 }
 <body data-controller="@StimulusControllers.Body" 
       data-turbo="@((!disableTurboOnPage).ToString().ToLower())"
       data-log-error-api-secret="@LoggingOptions.Value.LogErrorApiSecret"
       >
-    <header>
+    <header style="display:@(hideMenu ? "none" : "")">
         <nav class="navbar navbar-expand-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-page="/Index"><i class="fas fa-dog"></i> @Resource.MrWatchdog</a>

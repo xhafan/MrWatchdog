@@ -2,10 +2,10 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;

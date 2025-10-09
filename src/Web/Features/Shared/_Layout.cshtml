@@ -71,7 +71,7 @@
                             </a>
                         </li>
                     </ul>
-                    @if (User.Identity?.IsAuthenticated == true)
+                    @if (User.IsAuthenticated())
                     {
                         var isSuperAdmin = await User.IsSuperAdmin(UserRepository);
 

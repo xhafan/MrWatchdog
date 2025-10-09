@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
@@ -15,6 +16,7 @@ public class CompleteLoginControllerBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IJobCompletionAwaiter? _jobCompletionAwaiter;
+    private IUrlHelper? _urlHelper;
 
     public CompleteLoginControllerBuilder WithBus(ICoreBus bus)
     {
@@ -25,6 +27,12 @@ public class CompleteLoginControllerBuilder(NhibernateUnitOfWork unitOfWork)
     public CompleteLoginControllerBuilder WitWithJobCompletionAwaiter(IJobCompletionAwaiter jobCompletionAwaiter)
     {
         _jobCompletionAwaiter = jobCompletionAwaiter;
+        return this;
+    }
+
+    public CompleteLoginControllerBuilder WithUrlHelper(IUrlHelper urlHelper)
+    {
+        _urlHelper = urlHelper;
         return this;
     }
 
@@ -51,6 +59,8 @@ public class CompleteLoginControllerBuilder(NhibernateUnitOfWork unitOfWork)
             new QueryExecutor(queryHandlerFactory),
             OptionsTestRetriever.Retrieve<JwtOptions>()
         );
+
+        controller.Url = _urlHelper ?? A.Fake<IUrlHelper>();
         
         return controller;
     }

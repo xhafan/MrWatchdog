@@ -1,6 +1,7 @@
 ﻿using CoreUtils;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MrWatchdog.Core.Infrastructure.Repositories;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;
 
@@ -19,7 +20,8 @@ public static class ClaimsPrincipalExtensions
     
     public static bool IsAuthenticated(this ClaimsPrincipal claimsPrincipal)
     {
-        return claimsPrincipal.Identity?.IsAuthenticated == true;
+        return claimsPrincipal.Identity?.IsAuthenticated == true
+            && claimsPrincipal.Identity?.AuthenticationType == CookieAuthenticationDefaults.AuthenticationScheme;
     }  
     
     public static long GetUserId(this ClaimsPrincipal claimsPrincipal)

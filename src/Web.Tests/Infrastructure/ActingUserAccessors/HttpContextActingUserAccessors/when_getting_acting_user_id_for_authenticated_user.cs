@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using System.Security.Claims;
@@ -17,7 +18,10 @@ public class when_getting_acting_user_id_for_authenticated_user
         A.CallTo(() => httpContextAccessor.HttpContext)
             .Returns(new DefaultHttpContext
             {
-                User = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "23")], authenticationType: "Test"))
+                User = new ClaimsPrincipal(new ClaimsIdentity(
+                    [new Claim(ClaimTypes.NameIdentifier, "23")],
+                    authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
+                )
             });
         var actingUserAccessor = new HttpContextActingUserAccessor(httpContextAccessor);
 

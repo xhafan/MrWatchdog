@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Core.Features.Watchdogs;
+namespace MrWatchdog.Core.Features.Account;
 
 [TsClass(IncludeNamespace = false, AutoExportMethods = false)]
 public static class AccountUrlConstants
@@ -12,10 +12,10 @@ public static class AccountUrlConstants
     public const string LoginTokenGuidVariable = "$loginTokenGuid";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ReturnUrlVariable = "$returnUrl";
+    public const string ReturnUrl = "returnUrl";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountLoginUrlTemplate = $"/Account/Login?ReturnUrl={ReturnUrlVariable}";
+    public const string AccountLoginUrl = "/Account/Login";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountConfirmLoginUrlTemplate = $"/Account/ConfirmLogin?token={TokenVariable}";
@@ -27,7 +27,7 @@ public static class AccountUrlConstants
     public const string ApiGetLoginTokenConfirmationUrlTemplate = $"/api/Login/GetLoginTokenConfirmation?loginTokenGuid={LoginTokenGuidVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ApiCompleteLoginUrlTemplate = $"/api/CompleteLogin?loginTokenGuid={LoginTokenGuidVariable}";
+    public const string ApiCompleteLoginUrlTemplate = $"/api/CompleteLogin/CompleteLogin?loginTokenGuid={LoginTokenGuidVariable}";
 
 
     public static string WithToken(this string urlTemplate, string token)

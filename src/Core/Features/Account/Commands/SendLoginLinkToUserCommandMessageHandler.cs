@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;

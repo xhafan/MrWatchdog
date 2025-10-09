@@ -9,6 +9,7 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Domain;
@@ -84,7 +85,12 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    User = new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType: _actingUser != null ? "Test" : null))
+                    User = new ClaimsPrincipal(new ClaimsIdentity(
+                        claims,
+                        authenticationType: _actingUser != null
+                            ? CookieAuthenticationDefaults.AuthenticationScheme
+                            : null)
+                    )
                 }
             };
         }

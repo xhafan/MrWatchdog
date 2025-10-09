@@ -1,13 +1,13 @@
 ﻿using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 using System.Net;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account.E2e;
 
@@ -44,7 +44,7 @@ public class when_completing_login : BaseDatabaseTest
     [Test]
     public async Task confirm_login_with_missing_login_token_guid_fails()
     {
-        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.PostAsync("/api/CompleteLogin", content: null);
+        var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.PostAsync("/api/CompleteLogin/CompleteLogin", content: null);
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         (await response.Content.ReadAsStringAsync()).ShouldContain("required");
     }  

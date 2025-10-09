@@ -45,6 +45,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using CoreUtils;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace MrWatchdog.Web;
 
@@ -213,6 +215,30 @@ public class Program
                     return redirectContext.Request.Path.StartsWithSegments("/api") 
                            || redirectContext.Request.Method == HttpMethods.Post;
                 }
+            })
+            .AddGoogle(googleOptions =>
+            {
+                var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+                var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+                Guard.Hope(googleClientId != null, nameof(googleClientId) + " is null");
+                Guard.Hope(googleClientSecret != null, nameof(googleClientSecret) + " is null");
+
+                googleOptions.ClientId = googleClientId;
+                googleOptions.ClientSecret = googleClientSecret;
+
+                googleOptions.Events.OnRemoteFailure = context =>
+                {
+                    var redirectUrl = context.Properties?.Items.TryGetValue(AccountUrlConstants.ReturnUrl, out var returnUrl) == true
+                        ? QueryHelpers.AddQueryString(
+                            AccountUrlConstants.AccountLoginUrl,
+                            new Dictionary<string, string?> {{AccountUrlConstants.ReturnUrl, returnUrl}}
+                        )
+                        : AccountUrlConstants.AccountLoginUrl;
+                    context.Response.Redirect(redirectUrl);
+                    context.HandleResponse();
+                    return Task.CompletedTask;
+                };
             });
 
         builder.Services.AddAuthorization(options =>

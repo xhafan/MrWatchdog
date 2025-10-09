@@ -1,9 +1,10 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.SuperAdminAuthorizationHandlers;
 
@@ -23,7 +24,10 @@ public class when_checking_authorization_for_non_superadmin_user : BaseDatabaseT
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
             [new SuperAdminRequirement()],
-            new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], authenticationType: "Test")),
+            new ClaimsPrincipal(new ClaimsIdentity(
+                [new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")],
+                authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
+            ),
             resource: null
         );
 

@@ -1,8 +1,9 @@
-﻿using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ClaimsPrincipalExtensions;
 
@@ -16,7 +17,10 @@ public class when_checking_user_is_superadmin : BaseDatabaseTest
             .WithSuperAdmin(false)
             .Build();
 
-        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], authenticationType: "Test"));
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")],
+            authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
+        );
 
         (await claimsPrincipal.IsSuperAdmin(new UserRepository(UnitOfWork))).ShouldBe(false);
     }
@@ -31,7 +35,7 @@ public class when_checking_user_is_superadmin : BaseDatabaseTest
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([
                 new Claim(ClaimTypes.NameIdentifier, $"{superAdminUser.Id}")
             ],
-            authenticationType: "Test")
+            authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
         );
 
         (await claimsPrincipal.IsSuperAdmin(new UserRepository(UnitOfWork))).ShouldBe(true);

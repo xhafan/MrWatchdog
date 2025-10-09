@@ -60,14 +60,17 @@ export default class ScrapingResultsController extends Controller {
 
     loginToAlertAboutNewResults() {
         let currentUrl = window.location.href;
+        const url = new URL(currentUrl);
         if (this.searchTermTarget.value) {
-            const url = new URL(currentUrl);
             url.searchParams.set("searchTerm", this.searchTermTarget.value);
             currentUrl = url.toString();
         }
-        const currentRelativeUrl = encodeURIComponent(currentUrl.replace(window.location.origin, ""));
+        const currentRelativeUrl = currentUrl.replace(window.location.origin, "");
 
-        Turbo.visit(AccountUrlConstants.accountLoginUrlTemplate.replace(AccountUrlConstants.returnUrlVariable, currentRelativeUrl))
+        let accountLoginUrl = new URL(AccountUrlConstants.accountLoginUrl, window.location.origin);
+        accountLoginUrl.searchParams.set(AccountUrlConstants.returnUrl, currentRelativeUrl);
+
+        Turbo.visit(accountLoginUrl.toString());
     }
 
     private registerWatchdogScrapingResultsWebPagesInitializedEventHandler() {

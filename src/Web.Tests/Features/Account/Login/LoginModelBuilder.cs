@@ -24,6 +24,7 @@ public class LoginModelBuilder(NhibernateUnitOfWork unitOfWork)
 
     private ICoreBus? _bus;
     private IJobCompletionAwaiter? _jobCompletionAwaiter;
+    private IUrlHelper? _urlHelper;
 
     public LoginModelBuilder WithBus(ICoreBus bus)
     {
@@ -46,6 +47,12 @@ public class LoginModelBuilder(NhibernateUnitOfWork unitOfWork)
     public LoginModelBuilder WithReturnUrl(string? returnUrl)
     {
         _returnUrl = returnUrl;
+        return this;
+    }
+
+    public LoginModelBuilder WithUrlHelper(IUrlHelper urlHelper)
+    {
+        _urlHelper = urlHelper;
         return this;
     }
 
@@ -77,6 +84,12 @@ public class LoginModelBuilder(NhibernateUnitOfWork unitOfWork)
             Url = new UrlHelper(new ActionContext {RouteData = new RouteData()})
         };
         ModelValidator.ValidateModel(model);
+
+        _urlHelper ??= A.Fake<IUrlHelper>();
+        A.CallTo(() => _urlHelper.IsLocalUrl(ReturnUrl)).Returns(true);
+
+        model.Url = _urlHelper ?? A.Fake<IUrlHelper>();
+
         return model;
     }
 }

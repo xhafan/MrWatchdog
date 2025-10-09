@@ -1,7 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.TestsShared;
 using NHibernate;
 using NHibernate.Criterion;

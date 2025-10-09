@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Web.Infrastructure.Authorizations;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ClaimsPrincipalExtensions;
@@ -9,7 +10,10 @@ public class when_getting_user_id
     [Test]
     public void authenticated_user()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "23")], authenticationType: "Test"));
+        var user = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, "23")],
+            authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
+        );
 
         user.GetUserId().ShouldBe(23);
     }
@@ -25,7 +29,10 @@ public class when_getting_user_id
     [Test]
     public void authenticated_user_with_invalid_user_id()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "not-a-number")], authenticationType: "Test"));
+        var user = new ClaimsPrincipal(new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, "not-a-number")],
+            authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
+        );
 
         Should.Throw<FormatException>(() => user.GetUserId());
     }    

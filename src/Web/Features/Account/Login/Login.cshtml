@@ -31,8 +31,19 @@
         
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">
-                Send login link
+                Login with email
             </button>
         </div>
     </form>
+    
+    <div class="mt-5 mb-3">
+        <p class="fw-bold">Or</p>
+        <a class="btn btn-primary text-decoration-none" 
+           asp-page-handler="ExternalLogin"
+           asp-route-provider="Google"
+           asp-route-returnUrl="@Model.ReturnUrl"
+           >
+            <i class="fa-brands fa-google"></i> Login with Google
+        </a>
+    </div>
 </div>

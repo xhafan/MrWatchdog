@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [AllowAnonymous]
 public class CompleteLoginController(
     ICoreBus bus,
@@ -41,6 +41,23 @@ public class CompleteLoginController(
         var email = tokenClaimsPrincipal.FindFirstValue(ClaimTypes.Email);
         Guard.Hope(!string.IsNullOrWhiteSpace(email), "Cannot get email from token.");
 
+        var markLoginTokenAsUsedCommand = new MarkLoginTokenAsUsedCommand(loginTokenGuid);
+        await bus.Send(markLoginTokenAsUsedCommand);
+        await jobCompletionAwaiter.WaitForJobCompletion(markLoginTokenAsUsedCommand.Guid);
+
+        var returnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
+
+        await _FetchOrCreateUserAndLogUserIn(email);
+
+        return Ok(
+            !string.IsNullOrWhiteSpace(returnUrl)
+                ? returnUrl
+                : "/"
+        );
+    }
+
+    private async Task _FetchOrCreateUserAndLogUserIn(string email)
+    {
         var users = await queryExecutor.ExecuteAsync<GetUserByEmailQuery, UserDto>(new GetUserByEmailQuery(email));
         if (users.IsEmpty())
         {
@@ -53,10 +70,6 @@ public class CompleteLoginController(
             await queryExecutor.ExecuteAsync<GetUserByEmailQuery, UserDto>(new GetUserByEmailQuery(email))
         ).Single();
 
-        var markLoginTokenAsUsedCommand = new MarkLoginTokenAsUsedCommand(loginTokenGuid);
-        await bus.Send(markLoginTokenAsUsedCommand);
-        await jobCompletionAwaiter.WaitForJobCompletion(markLoginTokenAsUsedCommand.Guid);
-        
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -70,13 +83,29 @@ public class CompleteLoginController(
             cookieClaimsPrincipal,
             new AuthenticationProperties {IsPersistent = true}
         );
+    }
 
-        var returnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
+    [HttpGet]
+    public async Task<IActionResult> CompleteExternalLoginCallback(string? returnUrl = null)
+    {
+        var provider = User.Identity?.AuthenticationType;
+        var isAuthenticatedByExternalProvider = User.Identity?.IsAuthenticated == true
+                                                && provider != null
+                                                && provider != CookieAuthenticationDefaults.AuthenticationScheme;
+        if (!isAuthenticatedByExternalProvider)
+        {
+            return Unauthorized();
+        }
 
-        return Ok(
-            !string.IsNullOrWhiteSpace(returnUrl)
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        Guard.Hope(!string.IsNullOrWhiteSpace(email), $"Cannot get email from the external provider {provider}.");
+
+        await _FetchOrCreateUserAndLogUserIn(email);
+
+        return Redirect(
+            !string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
                 : "/"
         );
-    }    
+    }
 }

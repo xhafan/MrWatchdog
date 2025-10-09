@@ -1,14 +1,16 @@
 using AspNetCore.ReCaptcha;
 using CoreDdd.Queries;
+using CoreUtils;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Validations;
 using MrWatchdog.Web.Features.Shared;
@@ -27,7 +29,7 @@ public class LoginModel(
     [EmailAddressRegex(acceptSpacesAroundEmail: true)]
     public string Email { get; set; } = null!;
     
-    [BindProperty]
+    [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
     
     // this field is here just to see ReCaptcha validation error
@@ -53,5 +55,19 @@ public class LoginModel(
         var loginTokenDto = await queryExecutor.ExecuteSingleAsync<GetLoginTokenByIdQuery, LoginTokenDto>(new GetLoginTokenByIdQuery(loginTokenId));
         
         return Redirect(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(loginTokenDto.Guid));
+    }
+
+    public IActionResult OnGetExternalLogin(string provider, string? returnUrl = null)
+    {
+        var redirectUrl = Url.Action("CompleteExternalLoginCallback", "CompleteLogin", values: new {returnUrl});
+        Guard.Hope(redirectUrl != null, nameof(redirectUrl) + " is null");
+
+        var properties = new AuthenticationProperties {RedirectUri = redirectUrl};
+        if (!string.IsNullOrWhiteSpace(returnUrl))
+        {
+            properties.Items.Add(AccountUrlConstants.ReturnUrl, returnUrl);
+        }
+
+        return new ChallengeResult(provider, properties);
     }
 }

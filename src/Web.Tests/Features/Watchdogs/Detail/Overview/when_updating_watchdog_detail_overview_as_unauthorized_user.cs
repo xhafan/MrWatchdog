@@ -44,7 +44,7 @@ public class when_updating_watchdog_detail_overview_as_unauthorized_user : BaseD
             WatchdogId = _watchdog.Id,
             Name = "watchdog updated name",
             ScrapingIntervalInSeconds = 60,
-            IntervalBetweenSameResultAlertsInDays = 30
+            IntervalBetweenSameResultNotificationsInDays = 30
         };
 
         _actionResult = await _model.OnPost();

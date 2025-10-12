@@ -1,0 +1,78 @@
+﻿@page "{watchdogSearchId}"
+@using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Shared
+@model SearchModel
+
+@{
+    var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogSearchArgs.SearchTerm) ? $" - {Model.WatchdogSearchArgs.SearchTerm}" : "")}";
+    var title = $"{Model.WatchdogScrapingResultsArgs.WatchdogName}{searchTermSuffix}";
+    ViewData["Title"] = title;
+}
+
+@section Navigation {
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-page="/Watchdogs/Searches/Searches">@Resource.MySearches</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
+        </ol>
+    </nav>
+}
+
+<div @Stimulus.Controller(StimulusControllers.WatchdogSearch)>
+    
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1 class="display-4">
+                <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@Model.WatchdogSearchArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
+                <span data-watchdogs--search-target="searchTermSuffix">@searchTermSuffix</span>
+            </h1>
+        </div>
+        <div>
+            <div class="dropdown">
+                <button
+                    class="btn btn-sm"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    >
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <form asp-page-handler="DeleteWatchdogSearch"
+                              asp-route-watchdogSearchId="@Model.WatchdogSearchArgs.WatchdogSearchId"
+                              method="post"
+                              data-watchdogs--search-target="deleteWatchdogSearchForm"
+                              >
+                            <button class="dropdown-item text-danger" 
+                                    type="submit"
+                                    >
+                                Delete watchdog search
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <p class="text-muted">
+        This watchdog search can send you an email notification about new watchdog results. You can enter a search term to filter the results.
+        When no results - or no results matching the search term - are currently available, you will receive an email notification as soon as they are available.
+    </p>
+
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <turbo-frame id="watchdog_search_overview_@(Model.WatchdogSearchArgs.WatchdogSearchId)"
+                             src="@Url.Page("Overview/Overview", new {Model.WatchdogSearchArgs.WatchdogSearchId})">
+                </turbo-frame>
+            </div>
+        </div>
+
+        <scraping-results-web-pages watchdog-scraping-results-args="Model.WatchdogScrapingResultsArgs" />
+    </div>
+</div>

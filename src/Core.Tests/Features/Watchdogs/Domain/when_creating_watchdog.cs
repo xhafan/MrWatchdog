@@ -20,6 +20,6 @@ public class when_creating_watchdog : BaseDatabaseTest
     public void default_values_are_set_correctly()
     {
         _watchdog.ScrapingIntervalInSeconds.ShouldBe(Watchdog.DefaultScrapingIntervalOneDayInSeconds);
-        _watchdog.IntervalBetweenSameResultAlertsInDays.ShouldBe(Watchdog.DefaultIntervalBetweenSameResultAlertsInDays);
+        _watchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(Watchdog.DefaultIntervalBetweenSameResultNotificationsInDays);
     }
 }

@@ -13,31 +13,31 @@ export const watchdogScrapingResultsWebPagesInitializedEventName = "watchdogScra
 export default class ScrapingResultsController extends Controller {
     static targets = [
         "searchTerm",
-        "createWatchdogAlert",
-        "loginToCreateWatchdogAlert",
-        "createWatchdogAlertForm",
+        "createWatchdogSearch",
+        "loginToCreateWatchdogSearch",
+        "createWatchdogSearchForm",
     ];
    
     declare searchTermTarget: HTMLInputElement;
-    declare createWatchdogAlertTarget: HTMLButtonElement;
-    declare loginToCreateWatchdogAlertTarget: HTMLButtonElement;
-    declare createWatchdogAlertFormTarget: HTMLFormElement;
+    declare createWatchdogSearchTarget: HTMLButtonElement;
+    declare loginToCreateWatchdogSearchTarget: HTMLButtonElement;
+    declare createWatchdogSearchFormTarget: HTMLFormElement;
 
     connect() {
         this.registerWatchdogScrapingResultsWebPagesInitializedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
-            this.createWatchdogAlertFormTarget, 
+            this.createWatchdogSearchFormTarget, 
             async jobDto => {
-                const watchdogAlertEntity = Enumerable.from(jobDto.affectedEntities)
-                    .firstOrDefault(x => x.entityName === DomainConstants.watchdogAlertEntityName);
-                if (!watchdogAlertEntity) {
-                    throw new Error("Error getting WatchdogAlert.");
+                const watchdogSearchEntity = Enumerable.from(jobDto.affectedEntities)
+                    .firstOrDefault(x => x.entityName === DomainConstants.watchdogSearchEntityName);
+                if (!watchdogSearchEntity) {
+                    throw new Error(`Error getting ${DomainConstants.watchdogSearchEntityName}.`);
                 }
                 
-                const watchdogAlertUrl = WatchdogUrlConstants.watchdogAlertUrlTemplate
-                    .replace(WatchdogUrlConstants.watchdogAlertIdVariable, String(watchdogAlertEntity.entityId));
-                Turbo.visit(watchdogAlertUrl);
+                const watchdogSearchUrl = WatchdogUrlConstants.watchdogSearchUrlTemplate
+                    .replace(WatchdogUrlConstants.watchdogSearchIdVariable, String(watchdogSearchEntity.entityId));
+                Turbo.visit(watchdogSearchUrl);
             }
         );
     }
@@ -47,18 +47,18 @@ export default class ScrapingResultsController extends Controller {
 
         this.dispatch(searchTermModifiedEventName, { detail: searchTerm, prefix: "" });
         
-        this.createWatchdogAlertTarget.innerHTML = searchTerm 
-            ? ScrapingResultsConstants.createAlertButtonNewMatchingResultsLabelTemplate
+        this.createWatchdogSearchTarget.innerHTML = searchTerm 
+            ? ScrapingResultsConstants.saveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate
                 .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
-            : ScrapingResultsConstants.createAlertButtonNewResultsLabel;
+            : ScrapingResultsConstants.saveSearchAndNotifyMeAboutNewResultsButtonLabel;
 
-        this.loginToCreateWatchdogAlertTarget.innerHTML = searchTerm 
-            ? ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewMatchingResultsLabelTemplate
+        this.loginToCreateWatchdogSearchTarget.innerHTML = searchTerm 
+            ? ScrapingResultsConstants.loginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate
                 .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
-            : ScrapingResultsConstants.loginOrRegisterToCreateAlertButtonNewResultsLabel;
+            : ScrapingResultsConstants.loginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel;
     }
 
-    loginToAlertAboutNewResults() {
+    loginToNotifyAboutNewResults() {
         let currentUrl = window.location.href;
         const url = new URL(currentUrl);
         if (this.searchTermTarget.value) {

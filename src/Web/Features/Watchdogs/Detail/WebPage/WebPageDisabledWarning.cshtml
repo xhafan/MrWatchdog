@@ -11,7 +11,7 @@
         >
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> The web page has been automatically disabled by the last update.
         <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "" : "none")">
-            Please enable it once your edits are complete so that user alerts can continue watching it.
+            Please enable it once your edits are complete so that watchdog searches can continue watching it.
             <form asp-page-handler="EnableWatchdogWebPage"
                   asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"

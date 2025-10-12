@@ -42,7 +42,7 @@ public class ScrapingResultsModel(
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreateWatchdogAlert(
+    public async Task<IActionResult> OnPostCreateWatchdogSearch(
         long watchdogId, 
         [FromForm] string? searchTerm
     )
@@ -60,7 +60,7 @@ public class ScrapingResultsModel(
             return Forbid();
         }
 
-        var command = new CreateWatchdogAlertCommand(watchdogId, searchTerm?.Trim());
+        var command = new CreateWatchdogSearchCommand(watchdogId, searchTerm?.Trim());
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

@@ -12,7 +12,7 @@ public static class WatchdogUrlConstants
     public const string WatchdogWebPageIdVariable = "$watchdogWebPageId";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlertIdVariable = "$watchdogAlertId";
+    public const string WatchdogSearchIdVariable = "$watchdogSearchId";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsUrl = "/Watchdogs";
@@ -61,10 +61,10 @@ public static class WatchdogUrlConstants
     public const string WatchdogDetailActionsMakePublicUrlTemplate = $"/Watchdogs/Detail/Actions/{WatchdogIdVariable}?handler=MakePublic";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlertUrlTemplate = $"/Watchdogs/Alert/{WatchdogAlertIdVariable}";
+    public const string WatchdogSearchUrlTemplate = $"/Watchdogs/Search/{WatchdogSearchIdVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlertOverviewUrlTemplate = $"/Watchdogs/Alert/Overview/{WatchdogAlertIdVariable}";
+    public const string WatchdogSearchOverviewUrlTemplate = $"/Watchdogs/Search/Overview/{WatchdogSearchIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogsManageUrl = "/Watchdogs/Manage";
@@ -76,7 +76,7 @@ public static class WatchdogUrlConstants
     public const string WatchdogsManageOtherUsersWatchdogsUrl = "/Watchdogs/Manage/OtherUsersWatchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsAlertsUrl = "/Watchdogs/Alerts";
+    public const string WatchdogsSearchesUrl = "/Watchdogs/Searches";
 
     
     public static string WithWatchdogId(this string urlTemplate, long watchdogId)
@@ -89,8 +89,8 @@ public static class WatchdogUrlConstants
         return urlTemplate.WithVariable(WatchdogWebPageIdVariable, watchdogWebPageId.ToString());
     }
 
-    public static string WithWatchdogAlertId(this string urlTemplate, long watchdogAlertId)
+    public static string WithWatchdogSearchId(this string urlTemplate, long watchdogSearchId)
     {
-        return urlTemplate.WithVariable(WatchdogAlertIdVariable, watchdogAlertId.ToString());
+        return urlTemplate.WithVariable(WatchdogSearchIdVariable, watchdogSearchId.ToString());
     }
 }

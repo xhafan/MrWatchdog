@@ -12,7 +12,7 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 public class Watchdog : VersionedEntity, IAggregateRoot
 {
     public const int DefaultScrapingIntervalOneDayInSeconds = 86400; // 1 day
-    public const int DefaultIntervalBetweenSameResultAlertsInDays = 30;
+    public const int DefaultIntervalBetweenSameResultNotificationsInDays = 30;
     
     private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
 
@@ -26,7 +26,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         User = user;
         Name = name;
         ScrapingIntervalInSeconds = DefaultScrapingIntervalOneDayInSeconds;
-        IntervalBetweenSameResultAlertsInDays = DefaultIntervalBetweenSameResultAlertsInDays;
+        IntervalBetweenSameResultNotificationsInDays = DefaultIntervalBetweenSameResultNotificationsInDays;
         PublicStatus = PublicStatus.Private;
     }
     
@@ -36,7 +36,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual DateTime? NextScrapingOn { get; protected set; }
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
     public virtual PublicStatus PublicStatus { get; protected set; }
-    public virtual double IntervalBetweenSameResultAlertsInDays { get; protected set; }
+    public virtual double IntervalBetweenSameResultNotificationsInDays { get; protected set; }
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
     
     
@@ -60,7 +60,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id, 
             Name = Name,
             ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
-            IntervalBetweenSameResultAlertsInDays = IntervalBetweenSameResultAlertsInDays
+            IntervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays
         };
     }
 
@@ -74,7 +74,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             .AddSeconds(-ScrapingIntervalInSeconds + watchdogOverviewArgs.ScrapingIntervalInSeconds);
 
         ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
-        IntervalBetweenSameResultAlertsInDays = watchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays;
+        IntervalBetweenSameResultNotificationsInDays = watchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays;
     }
 
     public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)

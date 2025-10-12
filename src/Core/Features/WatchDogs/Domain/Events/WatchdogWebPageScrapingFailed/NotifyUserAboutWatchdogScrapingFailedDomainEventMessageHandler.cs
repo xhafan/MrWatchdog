@@ -1,14 +1,12 @@
 ﻿using CoreUtils.Extensions;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.WatchDogs.Domain.Events.WatchdogWebPageScrapingFailed;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
 
 public class NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,

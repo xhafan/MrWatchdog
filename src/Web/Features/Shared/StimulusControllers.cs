@@ -42,10 +42,10 @@ public static class StimulusControllers
     public const string WatchdogsScrapingResultsWebPages = "watchdogs--scraping-results-web-pages";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlert = "watchdogs--alert";
+    public const string WatchdogSearch = "watchdogs--search";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogAlertOverview = "watchdogs--alert-overview";
+    public const string WatchdogSearchOverview = "watchdogs--search-overview";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountLogin = "account--login";

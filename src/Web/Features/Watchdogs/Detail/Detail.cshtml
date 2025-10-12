@@ -39,11 +39,11 @@
     </div>
     <p class="text-muted">
         This watchdog will scrape web page(s) and will select results based on the CSS path selector.
-        Choose <i>@Resource.ViewScrapingResults</i> to be able to set up an alert with email notification about new scraping results.
+        Choose <i>@Resource.ViewScrapingResults</i> to be able to save Search with notifications about new scraping results.
         @if (Model.WatchdogDetailArgs.PublicStatus == PublicStatus.Private)
         {
-            @:Choose <i>@Resource.RequestToMakePublic</i> to request to make the watchdog public and discoverable by other users 
-            @:who will then be able to set up alerts on it.
+            @:Choose <i>@Resource.RequestToMakePublic</i> to request to make the watchdog public and discoverable by other users
+            @:who will then be able to set up notifications about new scraping results on it.
         }
     </p>    
 

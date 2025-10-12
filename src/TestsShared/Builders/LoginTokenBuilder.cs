@@ -7,7 +7,7 @@ namespace MrWatchdog.TestsShared.Builders;
 
 public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
-    public const string? TokenReturnUrl = "/Watchdogs/Alerts";
+    public const string? TokenReturnUrl = "/Watchdogs/Searches";
     
     private Guid _guid;
     private string _email = $"user+{Guid.NewGuid()}@email.com";

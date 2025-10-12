@@ -51,19 +51,19 @@ public static class DeleteHelper
         await unitOfWork.DeleteUserCascade(watchdog.User);
     }
 
-    public static async Task DeleteWatchdogAlertCascade(this NhibernateUnitOfWork unitOfWork, WatchdogAlert? watchdogAlert)
+    public static async Task DeleteWatchdogSearchCascade(this NhibernateUnitOfWork unitOfWork, WatchdogSearch? watchdogSearch)
     {
-        if (watchdogAlert == null) return;
+        if (watchdogSearch == null) return;
 
-        var watchdogAlertRepository = new NhibernateRepository<WatchdogAlert>(unitOfWork);
-        watchdogAlert = await watchdogAlertRepository.GetAsync(watchdogAlert.Id);
-        if (watchdogAlert == null) return;
+        var watchdogSearchRepository = new NhibernateRepository<WatchdogSearch>(unitOfWork);
+        watchdogSearch = await watchdogSearchRepository.GetAsync(watchdogSearch.Id);
+        if (watchdogSearch == null) return;
 
-        await watchdogAlertRepository.DeleteAsync(watchdogAlert);
+        await watchdogSearchRepository.DeleteAsync(watchdogSearch);
         await unitOfWork.FlushAsync();
         
-        await unitOfWork.DeleteWatchdogCascade(watchdogAlert.Watchdog);
-        await unitOfWork.DeleteUserCascade(watchdogAlert.User);
+        await unitOfWork.DeleteWatchdogCascade(watchdogSearch.Watchdog);
+        await unitOfWork.DeleteUserCascade(watchdogSearch.User);
     }
 
     public static async Task DeleteUserCascade(this NhibernateUnitOfWork unitOfWork, User? user)

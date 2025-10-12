@@ -19,7 +19,7 @@ public static class NotDeletedRecordsChecker
             unitOfWork.BeginTransaction();
         
             if (unitOfWork.Session.QueryOver<Watchdog>().List().Any()
-                || unitOfWork.Session.QueryOver<WatchdogAlert>().List().Any()
+                || unitOfWork.Session.QueryOver<WatchdogSearch>().List().Any()
                 || unitOfWork.Session.QueryOver<User>().List().Any()
                 || unitOfWork.Session.QueryOver<Job>().List().Any()
                )

@@ -17,7 +17,7 @@ namespace MrWatchdog.Web.Tests.Features.Account.Login;
 public class LoginModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     public const string Email = "user@email.com";
-    public const string ReturnUrl = "/Watchdogs/Alerts";
+    public const string ReturnUrl = "/Watchdogs/Searches";
     
     private string _email = Email;
     private string? _returnUrl = ReturnUrl;

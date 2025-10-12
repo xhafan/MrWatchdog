@@ -4,9 +4,9 @@
 
 export abstract class ScrapingResultsConstants
 {
-	public static createAlertButtonNewResultsLabel: string = `Alert about new results`;
+	public static saveSearchAndNotifyMeAboutNewResultsButtonLabel: string = `Save Search with notification about new results`;
 	public static searchTermVariable: string = `$searchTerm`;
-	public static createAlertButtonNewMatchingResultsLabelTemplate: string = `Alert about new results matching search term <i>$searchTerm</i>`;
-	public static loginOrRegisterToCreateAlertButtonNewResultsLabel: string = `Log in or register to alert about new results`;
-	public static loginOrRegisterToCreateAlertButtonNewMatchingResultsLabelTemplate: string = `Log in or register to alert about new results matching search term <i>$searchTerm</i>`;
+	public static saveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Save Search with notification about new results matching the search term <i>$searchTerm</i>`;
+	public static loginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel: string = `Log in or register to save Search with notification about new results`;
+	public static loginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Log in or register to save Search with notification about new results matching the search term <i>$searchTerm</i>`;
 }

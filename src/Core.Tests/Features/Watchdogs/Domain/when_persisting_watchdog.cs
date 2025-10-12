@@ -32,7 +32,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.Name.ShouldBe(WatchdogBuilder.Name);
         _persistedWatchdog.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
         _persistedWatchdog.PublicStatus.ShouldBe(PublicStatus.Private);
-        _persistedWatchdog.IntervalBetweenSameResultAlertsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultAlertsInDays);
+        _persistedWatchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultNotificationsInDays);
         _persistedWatchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
     }
 }

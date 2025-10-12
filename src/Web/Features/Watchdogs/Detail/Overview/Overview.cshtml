@@ -18,8 +18,8 @@
                         <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-label fw-bold"></label>
-                    <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays</div>
+                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
+                    <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
                     </div>
                 </view-mode-item>
                 
@@ -39,9 +39,9 @@
                         <span asp-validation-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-label fw-bold"></label>
-                        <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="form-control" />
-                        <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultAlertsInDays" class="text-danger"></span>
+                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-control" />
+                        <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="text-danger"></span>
                     </div>
                 </edit-mode-item>
 

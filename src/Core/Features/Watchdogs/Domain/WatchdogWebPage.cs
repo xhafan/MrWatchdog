@@ -5,7 +5,7 @@ using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Features.WatchDogs.Domain.Events.WatchdogWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
@@ -236,7 +236,7 @@ public class WatchdogWebPage : VersionedEntity
         {
             SetScrapingErrorMessage(ex.Message, canRaiseScrapingFailedDomainEvent);
             
-            Log.Error(ex, "Watchdog {WatchDogId} web page {WebPageId} scraping error, selector: {Selector}, html: {responseContent}",
+            Log.Error(ex, "Watchdog {WatchdogId} web page {WebPageId} scraping error, selector: {Selector}, html: {responseContent}",
                 Watchdog.Id, Id, Selector, responseContent);
 
             return;

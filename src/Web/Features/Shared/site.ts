@@ -19,8 +19,8 @@ import WatchdogsDetailWebPageDisabledWarningController from "../Watchdogs/Detail
 import WatchdogsDetailWebPageScrapingResultsController from "../Watchdogs/Detail/WebPage/WebPageScrapingResultsController";
 import WatchdogsScrapingResultsController from "../Watchdogs/ScrapingResults/ScrapingResultsController";
 import WatchdogsScrapingResultsWebPagesController from "../Watchdogs/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
-import WatchdogsAlertController from "../Watchdogs/Alert/AlertController";
-import WatchdogsAlertOverviewController from "../Watchdogs/Alert/Overview/OverviewController";
+import WatchdogsSearchController from "../Watchdogs/Search/SearchController";
+import WatchdogsSearchOverviewController from "../Watchdogs/Search/Overview/OverviewController";
 
 import AccountLoginController from "../Account/Login/LoginController";
 import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSentController";
@@ -40,8 +40,8 @@ application.register(StimulusControllers.watchdogsDetailWebPageDisabledWarning, 
 application.register(StimulusControllers.watchdogsDetailWebPageScrapingResults, WatchdogsDetailWebPageScrapingResultsController);
 application.register(StimulusControllers.watchdogsScrapingResults, WatchdogsScrapingResultsController);
 application.register(StimulusControllers.watchdogsScrapingResultsWebPages, WatchdogsScrapingResultsWebPagesController);
-application.register(StimulusControllers.watchdogAlert, WatchdogsAlertController);
-application.register(StimulusControllers.watchdogAlertOverview, WatchdogsAlertOverviewController);
+application.register(StimulusControllers.watchdogSearch, WatchdogsSearchController);
+application.register(StimulusControllers.watchdogSearchOverview, WatchdogsSearchOverviewController);
 
 application.register(StimulusControllers.accountLogin, AccountLoginController);
 application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);

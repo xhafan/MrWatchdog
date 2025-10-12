@@ -1,0 +1,50 @@
+﻿@page "{watchdogSearchId}"
+@using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Shared
+@model OverviewModel
+@{
+   Layout = null;
+}
+<!turbo-frame id="watchdog_search_overview_@(Model.WatchdogSearchOverviewArgs.WatchdogSearchId)">
+    <div @Stimulus.Controller(StimulusControllers.WatchdogSearchOverview)>
+        <view-or-edit-form action="@Url.Page("Overview")">
+        
+            <view-mode-item>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
+                               class="form-control" 
+                               placeholder="@Resource.FilterResults"
+                               disabled
+                        />
+                    </div>
+                </div>
+            </view-mode-item>
+        
+            <edit-mode-item>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="WatchdogSearchOverviewArgs.WatchdogSearchId" type="hidden" />
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
+                               class="form-control"
+                               data-watchdogs--search-overview-target="searchTerm"
+                               data-action="input->@StimulusControllers.WatchdogSearchOverview#onSearchTermModified"
+                               placeholder="@Resource.FilterResults"
+                               />
+                    </div>
+                    <span asp-validation-for="WatchdogSearchOverviewArgs.SearchTerm" class="text-danger"></span>
+                </div>
+            </edit-mode-item>
+
+        </view-or-edit-form>
+    </div>
+</!turbo-frame>
+

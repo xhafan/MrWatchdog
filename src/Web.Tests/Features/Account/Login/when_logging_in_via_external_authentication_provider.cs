@@ -17,7 +17,7 @@ public class when_logging_in_via_external_authentication_provider : BaseDatabase
     [SetUp]
     public void Context()
     {
-        const string returnUrl = "/Watchdogs/Alerts";
+        const string returnUrl = "/Watchdogs/Searches";
         _callbackUrl = $"/api/CompleteLogin/CompleteExternalLoginCallback?returnUrl={Uri.EscapeDataString(returnUrl)}";
 
         var urlHelper = A.Fake<IUrlHelper>();
@@ -38,6 +38,6 @@ public class when_logging_in_via_external_authentication_provider : BaseDatabase
         challengeResult.AuthenticationSchemes.ShouldBe(["Google"]);
         challengeResult.Properties.ShouldNotBeNull();
         challengeResult.Properties.RedirectUri.ShouldBe(_callbackUrl);
-        challengeResult.Properties.Items.ShouldContainKeyAndValue(AccountUrlConstants.ReturnUrl, "/Watchdogs/Alerts");
+        challengeResult.Properties.Items.ShouldContainKeyAndValue(AccountUrlConstants.ReturnUrl, "/Watchdogs/Searches");
     }
 }

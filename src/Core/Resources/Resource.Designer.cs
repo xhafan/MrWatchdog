@@ -61,15 +61,6 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alert.
-        /// </summary>
-        public static string Alert {
-            get {
-                return ResourceManager.GetString("Alert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create watchdog.
         /// </summary>
         public static string CreateWatchdog {
@@ -124,11 +115,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alerts.
+        ///   Looks up a localized string similar to My Searches.
         /// </summary>
-        public static string MyAlerts {
+        public static string MySearches {
             get {
-                return ResourceManager.GetString("MyAlerts", resourceCulture);
+                return ResourceManager.GetString("MySearches", resourceCulture);
             }
         }
         
@@ -138,6 +129,15 @@ namespace MrWatchdog.Core.Resources {
         public static string RequestToMakePublic {
             get {
                 return ResourceManager.GetString("RequestToMakePublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Alert" xml:space="preserve">
-    <value>Alert</value>
-  </data>
   <data name="CreateWatchdog" xml:space="preserve">
     <value>Create watchdog</value>
   </data>
@@ -138,13 +135,16 @@
   <data name="MrWatchdog" xml:space="preserve">
     <value>Mr Watchdog</value>
   </data>
-  <data name="MyAlerts" xml:space="preserve">
-    <value>Alerts</value>
-  </data>
   <data name="RequestToMakePublic" xml:space="preserve">
     <value>Request to make public</value>
   </data>
   <data name="ViewScrapingResults" xml:space="preserve">
     <value>View scraping results</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MySearches" xml:space="preserve">
+    <value>My Searches</value>
   </data>
 </root>

@@ -10,6 +10,11 @@
         <view-or-edit-form action="@Url.Page("Overview")">
         
             <view-mode-item>
+                <div class="mb-1">
+                    <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
+                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold"></label>
+                </div>
+                <partial name="ReceiveNotificationInfoPartial" />
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text">
@@ -27,7 +32,17 @@
             <edit-mode-item>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="WatchdogSearchOverviewArgs.WatchdogSearchId" type="hidden" />
-
+                
+                <div class="mb-1">
+                    <input asp-for="WatchdogSearchOverviewArgs.ReceiveNotification"
+                           type="checkbox" 
+                           checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" 
+                    />
+                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" 
+                           class="form-check-label fw-bold">
+                    </label>
+                </div>
+                <partial name="ReceiveNotificationInfoPartial" />
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text">

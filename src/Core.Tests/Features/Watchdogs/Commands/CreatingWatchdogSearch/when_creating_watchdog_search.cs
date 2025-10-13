@@ -40,6 +40,7 @@ public class when_creating_watchdog_search : BaseDatabaseTest
     {
         _watchdogSearch.ShouldNotBeNull();
         _watchdogSearch.User.ShouldBe(_user);
+        _watchdogSearch.ReceiveNotification.ShouldBe(true);
         _watchdogSearch.SearchTerm.ShouldBe("text");
         _watchdogSearch.CurrentScrapingResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
     }

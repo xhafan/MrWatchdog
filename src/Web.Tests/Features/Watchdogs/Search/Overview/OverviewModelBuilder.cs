@@ -64,6 +64,7 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
             WatchdogSearchOverviewArgs = _watchdogSearchOverviewArgs ?? new WatchdogSearchOverviewArgs
             {
                 WatchdogSearchId = 0,
+                ReceiveNotification = true,
                 SearchTerm = null
             }
         };

@@ -41,6 +41,7 @@ public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseD
                 new WatchdogSearchOverviewArgs
                 {
                     WatchdogSearchId = _watchdogSearch.Id,
+                    ReceiveNotification = true,
                     SearchTerm = "new search term",
                 }
             )

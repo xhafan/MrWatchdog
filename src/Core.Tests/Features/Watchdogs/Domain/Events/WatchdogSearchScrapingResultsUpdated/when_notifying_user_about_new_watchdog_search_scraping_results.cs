@@ -40,8 +40,8 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for the watchdog search") && p.Contains("Epic Games store free game")),
-                A<string>.That.Matches(p => p.Contains("New results have been found for your search")
+                A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game")),
+                A<string>.That.Matches(p => p.Contains("New results have been found for")
                                             && p.Contains($"""
                                                           <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">Epic Games store free game</a>
                                                           """)

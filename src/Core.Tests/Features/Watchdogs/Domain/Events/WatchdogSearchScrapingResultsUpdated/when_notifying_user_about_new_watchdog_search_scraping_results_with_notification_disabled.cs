@@ -11,7 +11,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogSearchScrapingResultsUpdated;
 
 [TestFixture]
-public class when_notifying_user_about_new_watchdog_search_scraping_results_with_search_term : BaseDatabaseTest
+public class when_notifying_user_about_new_watchdog_search_scraping_results_with_notification_disabled : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private long _watchdogWebPageId;
@@ -36,24 +36,26 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results_with
     }
 
     [Test]
-    public void email_notification_about_new_scraping_results_is_sent_to_user()
+    public void email_notification_about_new_scraping_results_is_not_sent_to_user()
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game - M")),
-                A<string>.That.Matches(p => p.Contains("New results have been found for")
-                                            && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">Epic Games store free game - M</a>
-                                                           """)
-                                            && p.Contains("""
-                                                          <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
-                                                          """)
-                                            && p.Contains("""
-                                                          <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
-                                                          """)
-                )
+                A<string>._,
+                A<string>._
             ))
-            .MustHaveHappenedOnceExactly();
+            .MustNotHaveHappened();
+    }
+
+    [Test]
+    public void watchdog_search_scraping_results_to_notify_about_are_cleared()
+    {
+        _watchdogSearch.ScrapingResultsToNotifyAbout.ShouldBeEmpty();
+    }
+
+    [Test]
+    public void watchdog_search_scraping_results_history_is_empty()
+    {
+        _watchdogSearch.ScrapingResultsHistory.ShouldBeEmpty();
     }
     
     private void _BuildEntities()
@@ -76,7 +78,8 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results_with
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)
             .WithUser(_user)
-            .WithSearchTerm("M")
+            .WithReceiveNotification(false)
+            .WithSearchTerm(null)
             .Build();
         
         _watchdog.SetScrapingResults(_watchdogWebPageId, [

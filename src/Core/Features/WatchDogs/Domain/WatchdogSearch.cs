@@ -29,6 +29,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
     {
         Watchdog = watchdog;
         User = user;
+        ReceiveNotification = true;
         SearchTerm = searchTerm;
 
         var scrapingResults = _GetWatchdogScrapingResults();
@@ -38,6 +39,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
 
     public virtual Watchdog Watchdog { get; } = null!;
     public virtual User User { get; } = null!;
+    public virtual bool ReceiveNotification { get; protected set; }
     public virtual string? SearchTerm { get; protected set; }
     public virtual IEnumerable<string> CurrentScrapingResults => _currentScrapingResults;
     public virtual IEnumerable<string> ScrapingResultsToNotifyAbout => _scrapingResultsToNotifyAbout;
@@ -67,12 +69,14 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         return new WatchdogSearchOverviewArgs
         {
             WatchdogSearchId = Id,
+            ReceiveNotification = ReceiveNotification,
             SearchTerm = SearchTerm
         };
     }
 
     public virtual void UpdateOverview(WatchdogSearchOverviewArgs args)
     {
+        ReceiveNotification = args.ReceiveNotification;
         SearchTerm = args.SearchTerm;
     }
 
@@ -137,32 +141,35 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
 
         var mrWatchdogResource = Resource.MrWatchdog;
         var watchdogSearchName = $"{Watchdog.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
-        
-        await emailSender.SendEmail(
-            User.Email,
-            $"{mrWatchdogResource}: new results for the watchdog search {watchdogSearchName}",
-            $"""
-             <p>
-                 Hello,
-             </p>
-             <p>
-                 New results have been found for your search <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogSearchUrlTemplate.WithWatchdogSearchId(Id)}">{watchdogSearchName}</a>:
-             </p>
-             <ul>
-                 {string.Join("\n    ", _scrapingResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
-             </ul>
-             <p>
-                 Kind regards,<br>
-                 {mrWatchdogResource}
-             </p>
-             """
-        );
 
-        foreach (var scrapingResult in _scrapingResultsToNotifyAbout)
+        if (ReceiveNotification)
         {
-            _scrapingResultsHistory.Add(new ScrapingResultHistory(scrapingResult, Clock.UtcNow));
+            await emailSender.SendEmail(
+                User.Email,
+                $"{mrWatchdogResource}: new results for {watchdogSearchName}",
+                $"""
+                 <p>
+                     Hello,
+                 </p>
+                 <p>
+                     New results have been found for <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogSearchUrlTemplate.WithWatchdogSearchId(Id)}">{watchdogSearchName}</a>:
+                 </p>
+                 <ul>
+                     {string.Join("\n    ", _scrapingResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
+                 </ul>
+                 <p>
+                     Kind regards,<br>
+                     {mrWatchdogResource}
+                 </p>
+                 """
+            );
+
+            foreach (var scrapingResult in _scrapingResultsToNotifyAbout)
+            {
+                _scrapingResultsHistory.Add(new ScrapingResultHistory(scrapingResult, Clock.UtcNow));
+            }
         }
-        
+
         _scrapingResultsToNotifyAbout.Clear();
     }
 }

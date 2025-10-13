@@ -7,10 +7,12 @@ namespace MrWatchdog.TestsShared.Builders;
 
 public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
+    public const bool ReceiveNotification = true;
     public const string SearchTerm = "search term";
 
     private Watchdog? _watchdog;
     private User? _user;
+    private bool _receiveNotification = ReceiveNotification;
     private string? _searchTerm = SearchTerm;
 
     public WatchdogSearchBuilder WithWatchdog(Watchdog watchdog)
@@ -22,6 +24,12 @@ public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public WatchdogSearchBuilder WithUser(User user)
     {
         _user = user;
+        return this;
+    } 
+
+    public WatchdogSearchBuilder WithReceiveNotification(bool receiveNotification)
+    {
+        _receiveNotification = receiveNotification;
         return this;
     } 
 
@@ -37,6 +45,12 @@ public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
         _user ??= new UserBuilder(unitOfWork).Build();
 
         var watchdogSearch = new WatchdogSearch(_watchdog, _user, _searchTerm);
+        watchdogSearch.UpdateOverview(new WatchdogSearchOverviewArgs
+        {
+            WatchdogSearchId = 0,
+            ReceiveNotification = _receiveNotification,
+            SearchTerm = _searchTerm
+        });
 
         if (unitOfWork == null)
         {

@@ -29,6 +29,7 @@ public class when_updating_watchdog_search_overview : BaseDatabaseTest
                 new WatchdogSearchOverviewArgs
                 {
                     WatchdogSearchId = _watchdogSearch.Id,
+                    ReceiveNotification = true,
                     SearchTerm = "new search term",
                 }
             )

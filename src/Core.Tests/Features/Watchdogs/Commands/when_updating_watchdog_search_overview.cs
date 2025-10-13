@@ -24,6 +24,7 @@ public class when_updating_watchdog_search_overview : BaseDatabaseTest
         await handler.Handle(new UpdateWatchdogSearchOverviewCommand(new WatchdogSearchOverviewArgs
         {
             WatchdogSearchId = _watchdogSearch.Id,
+            ReceiveNotification = false,
             SearchTerm = "updated search term"
         }));
         
@@ -36,12 +37,14 @@ public class when_updating_watchdog_search_overview : BaseDatabaseTest
     [Test]
     public void watchdog_search_overview_is_updated()
     {
+        _watchdogSearch.ReceiveNotification.ShouldBe(false);
         _watchdogSearch.SearchTerm.ShouldBe("updated search term");
     }
 
     private void _BuildEntities()
     {
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+            .WithReceiveNotification(true)
             .WithSearchTerm("search term")
             .Build();
     }

@@ -34,11 +34,14 @@ public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
     public void model_is_correct()
     {
         _model.WatchdogSearchOverviewArgs.WatchdogSearchId.ShouldBe(_watchdogSearch.Id);
+        _model.WatchdogSearchOverviewArgs.ReceiveNotification.ShouldBe(true);
         _model.WatchdogSearchOverviewArgs.SearchTerm.ShouldBe(WatchdogSearchBuilder.SearchTerm);
     }
 
     private void _BuildEntities()
     {
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork).Build();
+        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+            .WithReceiveNotification(true)
+            .Build();
     }    
 }

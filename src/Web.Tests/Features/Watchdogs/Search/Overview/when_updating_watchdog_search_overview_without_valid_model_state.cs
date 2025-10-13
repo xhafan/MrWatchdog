@@ -28,6 +28,7 @@ public class when_updating_watchdog_search_overview_without_valid_model_state : 
                 new WatchdogSearchOverviewArgs
                 {
                     WatchdogSearchId = 0,
+                    ReceiveNotification = true,
                     SearchTerm = null
                 }
             )

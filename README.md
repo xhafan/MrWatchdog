@@ -1,6 +1,8 @@
 A watchdog platform for any publicly accessible web page on the internet.
 
-Use it to monitor any publicly accessible web page for changes and get notified when it changes or
-your search term is found on it.
+Use it to watch any publicly accessible web page for changes and get notified by email when it changes or your search term is found.
 
-Setup alerts on existing public watchdogs or create your own watchdog.
+View existing watchdogs and set up notifications about new results.
+
+----
+To run the solution, you need to setup user secrets first. See src/user_secrets_init.bat.example .

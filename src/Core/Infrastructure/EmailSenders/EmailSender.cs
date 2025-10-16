@@ -4,16 +4,19 @@ using Microsoft.Extensions.Options;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
-public class EmailSender(IOptions<EmailSenderOptions> options) : IEmailSender
+public class EmailSender(
+    IOptions<EmailSenderOptions> iEmailSenderOptions,
+    IOptions<EmailAddressesOptions> iEmailAddressesOptions
+) : IEmailSender
 {
     public async Task SendEmail(string recipientEmail, string subject, string htmlMessage)
     {
-        var emailSenderOptions = options.Value;
+        var emailSenderOptions = iEmailSenderOptions.Value;
         using var client = new SmtpClient(emailSenderOptions.SmtpServer, emailSenderOptions.Port);
         client.Credentials = new NetworkCredential(emailSenderOptions.Username, emailSenderOptions.Password);
         client.EnableSsl = true;
         
-        var message = new MailMessage(emailSenderOptions.FromAddress, recipientEmail, subject, htmlMessage)
+        var message = new MailMessage(iEmailAddressesOptions.Value.NoReply, recipientEmail, subject, htmlMessage)
         {
             IsBodyHtml = true
         };

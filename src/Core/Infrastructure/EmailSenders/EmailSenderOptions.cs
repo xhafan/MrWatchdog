@@ -2,7 +2,6 @@
 
 public class EmailSenderOptions
 {
-    public string FromAddress { get; set; } = null!;
     public string SmtpServer { get; set; } = null!;
     public int Port { get; set; }
     public string Username { get; set; } = null!;

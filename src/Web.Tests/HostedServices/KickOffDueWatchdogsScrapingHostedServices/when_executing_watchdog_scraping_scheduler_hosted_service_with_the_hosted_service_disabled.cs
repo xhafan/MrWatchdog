@@ -53,17 +53,23 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
     [TearDown]
     public async Task TearDown()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
+            }
+        );
     }    
     
     private void _BuildEntitiesInSeparateTransaction()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork).Build();
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
+                _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork).Build();
+            }
+        );
     }
 }

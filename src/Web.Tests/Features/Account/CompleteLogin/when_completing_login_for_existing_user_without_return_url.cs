@@ -61,23 +61,30 @@ public class when_completing_login_for_existing_user_without_return_url : BaseDa
     [TearDown]
     public async Task TearDown()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteUserCascade(_user);
-        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteUserCascade(_user);
+                await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+            }
+        );
     }
     
     private void _BuildEntitiesInSeparateTransaction()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
+                _user = new UserBuilder(newUnitOfWork).Build();
 
-        _user = new UserBuilder(newUnitOfWork).Build();
-
-        _loginToken = new LoginTokenBuilder(newUnitOfWork)
-            .WithEmail(_user.Email)
-            .WithTokenReturnUrl(null)
-            .Build();
-        _loginToken.Confirm();
+                _loginToken = new LoginTokenBuilder(newUnitOfWork)
+                    .WithEmail(_user.Email)
+                    .WithTokenReturnUrl(null)
+                    .Build();
+                _loginToken.Confirm();
+            }
+        );
     }    
 }

@@ -1,5 +1,4 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -9,7 +8,6 @@ namespace MrWatchdog.Core.Tests.Features.Jobs.Services.JobCompletionAwaiters;
 [TestFixture]
 public class when_waiting_for_job_completion_with_job_completing_after_timeout : BaseDatabaseTest
 {
-    private Job? _job;
     private Guid _jobGuid;
     private Task _createJobTask = null!;
     private JobCompletionAwaiter _jobCompletionAwaiter = null!;
@@ -22,12 +20,16 @@ public class when_waiting_for_job_completion_with_job_completing_after_timeout :
         _createJobTask = Task.Run(() =>
         {
             // simulate command handler in a separate transaction
-            using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-            newUnitOfWork.BeginTransaction();
-
-            _job = new JobBuilder(newUnitOfWork)
-                .WithGuid(_jobGuid)
-                .Build();
+            NhibernateUnitOfWorkRunner.Run(
+                () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                newUnitOfWork =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    var job = new JobBuilder(newUnitOfWork)
+                        .WithGuid(_jobGuid)
+                        .Build();
+                }
+            );
         });
         
         _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
@@ -45,9 +47,13 @@ public class when_waiting_for_job_completion_with_job_completing_after_timeout :
     public async Task TearDown()
     {
         await _createJobTask;
-        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_jobGuid);
+
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_jobGuid);
+            }
+        );
     }
 }

@@ -50,7 +50,7 @@
             </button>
         </form>
         @{
-            var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Public;
+            var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Private;
         }
         <form asp-page-handler="MakePrivate"
               asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"

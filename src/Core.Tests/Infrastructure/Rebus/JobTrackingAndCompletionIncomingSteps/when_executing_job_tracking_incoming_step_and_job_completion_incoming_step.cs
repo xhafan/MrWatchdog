@@ -187,10 +187,14 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         await UnitOfWork.FlushAsync();
         await UnitOfWork.RollbackAsync();
         UnitOfWork.BeginTransaction();
-        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_command.Guid);
+
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_command.Guid);
+            }
+        );
     }
 
     private record TestDomainEvent : DomainEvent;

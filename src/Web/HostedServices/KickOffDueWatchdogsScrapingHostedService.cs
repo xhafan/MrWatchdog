@@ -17,6 +17,8 @@ public class KickOffDueWatchdogsScrapingHostedService(
 {
     private const int ScrapingIntervalInSeconds = ScrapingConstants.ScrapingIntervalInSeconds;
 
+    private IEnumerable<long>? _watchdogIdsToScrape; // If null, all watchdogs are considered for scraping
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         if (options.Value.IsDisabled)
@@ -39,28 +41,48 @@ public class KickOffDueWatchdogsScrapingHostedService(
     
     private async Task _KickOffDueWatchdogsScraping()
     {
-        using var unitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        unitOfWork.BeginTransaction();
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(nhibernateConfigurator),
+            async unitOfWork =>
+            {
+                var sqlQuery = unitOfWork.Session!
+                    .CreateSQLQuery(
+                        $$"""
+                          SELECT
+                              {w.*}
+                          FROM "Watchdog" w
+                          WHERE "NextScrapingOn" <= :utcNow or "NextScrapingOn" is null
+                          {{(_watchdogIdsToScrape == null
+                              ? ""
+                              : """
+                                and w."Id" in (:watchdogIdsToScrape)
+                                """)}}
+                          FOR UPDATE SKIP LOCKED
+                          """
+                    )
+                    .AddEntity("w", typeof(Watchdog))
+                    .SetParameter("utcNow", DateTime.UtcNow, NHibernateUtil.DateTime);
+                
+                if (_watchdogIdsToScrape != null)
+                {
+                    sqlQuery.SetParameterList("watchdogIdsToScrape", _watchdogIdsToScrape ?? [], NHibernateUtil.Int64);
+                }
 
-        var dueWatchdogsToScrape = await unitOfWork.Session
-            .CreateSQLQuery(
-                """
-                SELECT
-                    {w.*}
-                FROM "Watchdog" w
-                WHERE "NextScrapingOn" <= :utcNow or "NextScrapingOn" is null
-                FOR UPDATE SKIP LOCKED
-                """
-            )
-            .AddEntity("w", typeof(Watchdog))
-            .SetParameter("utcNow", DateTime.UtcNow, NHibernateUtil.DateTime)
-            .ListAsync<Watchdog>();
+                var dueWatchdogsToScrape = await sqlQuery.ListAsync<Watchdog>();
 
-        foreach (var watchdogToScrape in dueWatchdogsToScrape)
-        {
-            await bus.Send(new ScrapeWatchdogCommand(watchdogToScrape.Id));
-            
-            watchdogToScrape.ScheduleNextScraping();
-        }
-    }    
+                foreach (var watchdogToScrape in dueWatchdogsToScrape)
+                {
+                    await bus.Send(new ScrapeWatchdogCommand(watchdogToScrape.Id));
+
+                    watchdogToScrape.ScheduleNextScraping();
+                }
+            }
+        );
+    }
+
+    // For testing purposes only
+    public void SetWatchdogIdsToScrape(params IEnumerable<long> watchdogIdsToScrape)
+    {
+        _watchdogIdsToScrape = watchdogIdsToScrape;
+    }
 }

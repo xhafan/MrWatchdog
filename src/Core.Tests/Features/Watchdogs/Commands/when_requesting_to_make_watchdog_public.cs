@@ -1,5 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -18,8 +19,10 @@ public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
         _BuildEntities();
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
-        
-        var handler = new RequestToMakeWatchdogPublicCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+
+        var handler = new RequestToMakeWatchdogPublicCommandMessageHandler(
+            new NhibernateRepository<Watchdog>(UnitOfWork)
+        );
 
         await handler.Handle(new RequestToMakeWatchdogPublicCommand(_watchdog.Id));
         
@@ -33,6 +36,12 @@ public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
     public void watchdog_is_requested_to_make_public()
     {
         _watchdog.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
+    }
+
+    [Test]
+    public void Watchdog_requested_to_be_made_public_domain_event_is_raised()
+    {
+        RaisedDomainEvents.ShouldContain(new WatchdogRequestedToBeMadePublicDomainEvent(_watchdog.Id));
     }
 
     private void _BuildEntities()

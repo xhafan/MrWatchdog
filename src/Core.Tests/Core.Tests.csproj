@@ -22,8 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.10" />
   </ItemGroup>
 
   <ItemGroup>

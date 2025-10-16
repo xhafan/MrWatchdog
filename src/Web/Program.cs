@@ -173,6 +173,7 @@ public class Program
         builder.Services.AddLocalization();
        
         builder.Services.Configure<EmailSenderOptions>(builder.Configuration.GetSection(nameof(EmailSender)));
+        builder.Services.Configure<EmailAddressesOptions>(builder.Configuration.GetSection("EmailAddresses"));
         
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>

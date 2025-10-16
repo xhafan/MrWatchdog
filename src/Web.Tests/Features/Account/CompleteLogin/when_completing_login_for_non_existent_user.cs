@@ -116,10 +116,14 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
     [TearDown]
     public async Task TearDown()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteUserCascade(_user);
-        await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteUserCascade(_user);
+                await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
+            }
+        );
     }
     
     private void _SimulateUserCreationOnCreateUserCommand()
@@ -134,12 +138,15 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
             .Invokes(_ =>
             {
                 // simulate the command handler in a separate transaction
-                using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-                newUnitOfWork.BeginTransaction();
-
-                _user = new UserBuilder(newUnitOfWork)
-                    .WithEmail(_tokenEmail)
-                    .Build();
+                NhibernateUnitOfWorkRunner.Run(
+                    () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                    newUnitOfWork =>
+                    {
+                        _user = new UserBuilder(newUnitOfWork)
+                            .WithEmail(_tokenEmail)
+                            .Build();
+                    }
+                );
             });
     }
     
@@ -155,22 +162,28 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
             .Invokes(_ =>
             {
                 // simulate the command handler in a separate transaction
-                using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-                newUnitOfWork.BeginTransaction();
-
-                var loginToken = newUnitOfWork.LoadById<LoginToken>(_loginToken.Id);
-                loginToken.MarkAsUsed();
+                NhibernateUnitOfWorkRunner.Run(
+                    () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                    newUnitOfWork =>
+                    {
+                        var loginToken = newUnitOfWork.LoadById<LoginToken>(_loginToken.Id);
+                        loginToken.MarkAsUsed();
+                    }
+                );
             });
     }    
     
     private void _BuildEntitiesInSeparateTransaction()
-    {        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        
-        _loginToken = new LoginTokenBuilder(newUnitOfWork)
-            .WithEmail(_tokenEmail)
-            .Build();
-        _loginToken.Confirm();
+    {
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
+                _loginToken = new LoginTokenBuilder(newUnitOfWork)
+                    .WithEmail(_tokenEmail)
+                    .Build();
+                _loginToken.Confirm();
+            }
+        );
     }    
 }

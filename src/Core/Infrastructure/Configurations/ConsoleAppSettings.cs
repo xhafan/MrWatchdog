@@ -14,6 +14,7 @@ public static class ConsoleAppSettings
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
+            .AddUserSecrets(typeof(ConsoleAppSettings).Assembly)
             .AddEnvironmentVariables();
         Configuration = builder.Build();
     }

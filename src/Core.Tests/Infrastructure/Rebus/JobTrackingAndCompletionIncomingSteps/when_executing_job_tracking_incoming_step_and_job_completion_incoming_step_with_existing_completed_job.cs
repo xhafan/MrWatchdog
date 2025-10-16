@@ -63,25 +63,33 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         await UnitOfWork.FlushAsync();
         await UnitOfWork.RollbackAsync();
         UnitOfWork.BeginTransaction();
-        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_job);
+
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_job);
+            }
+        );
     }
 
     private void _BuildEntitiesInSeparateTransaction()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
 
-        _job = new JobBuilder(newUnitOfWork)
-            .WithGuid(_command.Guid)
-            .WithType(nameof(CreateWatchdogCommand))
-            .WithInputData(_command)
-            .WithKind(JobKind.Command)
-            .Build();
-        _job.HandlingStarted(RebusQueues.Main);
-        _job.Complete();
-        newUnitOfWork.Save(_job);
+                _job = new JobBuilder(newUnitOfWork)
+                    .WithGuid(_command.Guid)
+                    .WithType(nameof(CreateWatchdogCommand))
+                    .WithInputData(_command)
+                    .WithKind(JobKind.Command)
+                    .Build();
+                _job.HandlingStarted(RebusQueues.Main);
+                _job.Complete();
+                newUnitOfWork.Save(_job);
+            }
+        );
     }
 }

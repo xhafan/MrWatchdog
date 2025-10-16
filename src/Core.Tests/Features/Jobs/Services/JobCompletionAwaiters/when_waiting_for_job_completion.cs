@@ -24,27 +24,30 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
         _createJobTask = Task.Run(async () =>
         {
             // simulate command handler in a separate transaction
-            using (var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
-            {
-                newUnitOfWork.BeginTransaction();
+            await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                async newUnitOfWork =>
+                {
+                    _job = new JobBuilder(newUnitOfWork)
+                        .WithGuid(_jobGuid)
+                        .Build();
+                    newUnitOfWork.Save(_job);
 
-                _job = new JobBuilder(newUnitOfWork)
-                    .WithGuid(_jobGuid)
-                    .Build();
-                newUnitOfWork.Save(_job);
+                    await Task.Delay(200);
+                }
+            );
+            await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                async newUnitOfWork =>
+                {
+                    var jobRepository = new JobRepository(newUnitOfWork);
+                    _job = await jobRepository.LoadByIdAsync(_job!.Id);
 
-                await Task.Delay(200);
-            }
-            using (var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator))
-            {
-                newUnitOfWork.BeginTransaction();
-                var jobRepository = new JobRepository(newUnitOfWork);
-                _job = await jobRepository.LoadByIdAsync(_job.Id);
-
-                _job.HandlingStarted(RebusQueues.Main);
-                _job.Complete();
-                await Task.Delay(200);
-            }
+                    _job.HandlingStarted(RebusQueues.Main);
+                    _job.Complete();
+                    await Task.Delay(200);
+                }
+            );
         });
         
         var jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
@@ -64,9 +67,13 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
     public async Task TearDown()
     {
         await _createJobTask;
-        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_jobGuid);
+
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_jobGuid);
+            }
+        );
     }
 }

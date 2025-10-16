@@ -3,13 +3,14 @@
   <PropertyGroup>
     <RootNamespace>MrWatchdog.Core</RootNamespace>
     <AssemblyName>MrWatchdog.Core</AssemblyName>
+    <UserSecretsId>9415da77-0c91-4852-a86c-51b447fef23b</UserSecretsId>
   </PropertyGroup>
 
   <Import Project="..\SharedAssemblyInfo.props" />
 
   <ItemGroup>
     <PackageReference Include="CoreDdd" Version="3.3.5" />
-    <PackageReference Include="CoreDdd.Nhibernate" Version="3.3.5" />
+    <PackageReference Include="CoreDdd.Nhibernate" Version="3.3.7" />
     <PackageReference Include="CoreDdd.Register.Castle" Version="3.3.0" />
     <PackageReference Include="CoreUtils" Version="3.3.1" />
     <PackageReference Include="DataAnnotationsValidator" Version="2.3.0" />
@@ -17,11 +18,12 @@
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
     <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.8" />    
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.10" />
     <PackageReference Include="NHibernate" Version="5.6.0" />
     <PackageReference Include="Npgsql" Version="9.0.4" />
     <PackageReference Include="Rebus" Version="8.8.0" />

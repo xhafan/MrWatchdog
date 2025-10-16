@@ -14,9 +14,9 @@ public class NewTransactionJobCreator(INhibernateConfigurator nhibernateConfigur
         string? handlingQueue
     )
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        return await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, newUnitOfWork, handlingQueue);
+        return await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(nhibernateConfigurator),
+            async newUnitOfWork => await CreateJobWithinUnitOfWork(baseMessage, jobGuid, shouldMarkJobAsHandlingStarted, newUnitOfWork, handlingQueue)
+        );
     } 
 }

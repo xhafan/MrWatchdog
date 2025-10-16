@@ -87,12 +87,13 @@ public class JobTrackingIncomingStep(
     
     private async Task _MarkJobAsFailedInSeparateTransaction(long jobId, Exception ex)
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(nhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        
-        var job = await new JobRepository(newUnitOfWork).LoadByIdAsync(jobId);
-
-        job.Fail(ex);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(nhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                var job = await new JobRepository(newUnitOfWork).LoadByIdAsync(jobId);
+                job.Fail(ex);
+            }
+        );
     }
-
 }

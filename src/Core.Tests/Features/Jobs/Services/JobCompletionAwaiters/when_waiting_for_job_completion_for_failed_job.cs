@@ -23,19 +23,23 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
         _createJobTask = Task.Run(async () =>
         {
             // simulate command handler in a separate transaction
-            using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-            newUnitOfWork.BeginTransaction();
+            await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                async newUnitOfWork =>
+                {
+                    _job = new JobBuilder(newUnitOfWork)
+                        .WithGuid(_jobGuid)
+                        .Build();
 
-            _job = new JobBuilder(newUnitOfWork)
-                .WithGuid(_jobGuid)
-                .Build();
+                    for (var i = 1; i <= RebusConstants.MaxDeliveryAttempts; i++)
+                    {
+                        _job.HandlingStarted(RebusQueues.Main);
+                        _job.Fail(new Exception($"Error {i}"));
+                    }
 
-            for (var i = 1; i <= RebusConstants.MaxDeliveryAttempts; i++)
-            {
-                _job.HandlingStarted(RebusQueues.Main);
-                _job.Fail(new Exception($"Error {i}"));
-            }
-            await Task.Delay(200);
+                    await Task.Delay(200);
+                }
+            );
         });
         
         _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
@@ -53,9 +57,13 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
     public async Task TearDown()
     {
         await _createJobTask;
-        
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_jobGuid);
+
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_jobGuid);
+            }
+        );
     }
 }

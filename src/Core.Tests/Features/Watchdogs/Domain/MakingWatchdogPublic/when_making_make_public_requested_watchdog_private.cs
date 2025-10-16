@@ -1,10 +1,11 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.MakingWatchdogPublic;
 
 [TestFixture]
-public class when_making_make_public_requested_watchdog_private
+public class when_making_make_public_requested_watchdog_private : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
 

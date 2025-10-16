@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MrWatchdog.Web.E2E.Tests</RootNamespace>
+    <AssemblyName>MrWatchdog.Web.E2E.Tests</AssemblyName>
+    <UserSecretsId>9415da77-0c91-4852-a86c-51b447fef23b</UserSecretsId>
+  </PropertyGroup>
+
+  <Import Project="..\SharedAssemblyInfo.props" />
+
+  <ItemGroup>
+    <Compile Include="..\TestsShared\GlobalUsings.cs" Link="GlobalUsings.cs" />
+    <Compile Include="..\TestsShared\TestConfig.cs" Link="TestConfig.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Web.Tests\appsettings.Test.json" Link="appsettings.Test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestsShared\TestsShared.csproj" />
+    <ProjectReference Include="..\Web\Web.csproj" />
+  </ItemGroup>
+
+</Project>

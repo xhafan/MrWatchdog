@@ -4,8 +4,12 @@ using CoreUtils;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
+using MrWatchdog.Core.Infrastructure.Configurations;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -199,6 +203,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public.");
 
         PublicStatus = PublicStatus.MakePublicRequested;
+
+        DomainEvents.RaiseEvent(new WatchdogRequestedToBeMadePublicDomainEvent(Id));
     }
 
     public virtual void MakePublic()
@@ -224,5 +230,27 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         var webPage = _GetWebPage(watchdogWebPageId);
         webPage.Enable();
+    }
+
+    public virtual async Task NotifyAdminsAboutWatchdogRequestedToBeMadePublic(
+        IEmailSender emailSender,
+        RuntimeOptions runtimeOptions,
+        EmailAddressesOptions emailAddressesOptions
+    )
+    {
+        var mrWatchdogResource = Resource.MrWatchdog;
+        await emailSender.SendEmail(
+            emailAddressesOptions.Admin,
+            $"{mrWatchdogResource}: watchdog {Name} requested to be made public",
+            $"""
+             <p>
+                 Watchdog <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">{Name}</a> has been requested to be made public by user {User.Email}.
+             </p>
+             <p>
+                 Kind regards,<br>
+                 {mrWatchdogResource}
+             </p>
+             """
+        );
     }
 }

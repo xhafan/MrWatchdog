@@ -13,7 +13,6 @@ using MrWatchdog.Web.HostedServices;
 namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueWatchdogsScrapingHostedServices;
 
 [TestFixture]
-[NonParallelizable] // prevent loading watchdogs created by other tests
 public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDatabaseTest
 {
     private Watchdog _watchdogWithoutNextScrapingOnSet = null!;
@@ -45,6 +44,12 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
             options,
             logger
         );
+        hostedService.SetWatchdogIdsToScrape(
+            _watchdogWithoutNextScrapingOnSet.Id,
+            _watchdogWithNextScrapingOnSetInTheFarPast.Id,
+            _watchdogWithNextScrapingOnSetInTheFuture.Id
+        );
+
         using var cts = new CancellationTokenSource();
 
         await hostedService.StartAsync(cts.Token);
@@ -93,30 +98,36 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
     [TearDown]
     public async Task TearDown()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-
-        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
-        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFarPast);
-        await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFuture);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
+                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFarPast);
+                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFuture);
+            }
+        );
     }    
     
     private void _BuildEntitiesInSeparateTransaction()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
+                _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
+                    .WithScrapingIntervalInSeconds(60)
+                    .Build();
 
-        _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
-            .WithScrapingIntervalInSeconds(60)
-            .Build();
-        
-        _watchdogWithNextScrapingOnSetInTheFarPast = new WatchdogBuilder(newUnitOfWork)
-            .WithScrapingIntervalInSeconds(120)
-            .WithNextScrapingOn(DateTime.UtcNow.AddYears(-1))
-            .Build();
-        
-        _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(newUnitOfWork)
-            .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(120))
-            .Build();  
+                _watchdogWithNextScrapingOnSetInTheFarPast = new WatchdogBuilder(newUnitOfWork)
+                    .WithScrapingIntervalInSeconds(120)
+                    .WithNextScrapingOn(DateTime.UtcNow.AddYears(-1))
+                    .Build();
+
+                _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(newUnitOfWork)
+                    .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(120))
+                    .Build();
+            }
+        );
     }
 }

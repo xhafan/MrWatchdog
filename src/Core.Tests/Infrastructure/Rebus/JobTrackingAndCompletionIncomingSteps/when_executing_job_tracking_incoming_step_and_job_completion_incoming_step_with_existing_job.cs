@@ -76,26 +76,33 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         await UnitOfWork.RollbackAsync();
         UnitOfWork.BeginTransaction();
 
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
-        await newUnitOfWork.DeleteJobCascade(_job);
-        await newUnitOfWork.DeleteUserCascade(_user);
+        await NhibernateUnitOfWorkRunner.RunAsync(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            async newUnitOfWork =>
+            {
+                await newUnitOfWork.DeleteJobCascade(_job);
+                await newUnitOfWork.DeleteUserCascade(_user);
+            }
+        );
     }
 
     private void _BuildEntitiesInSeparateTransaction()
     {
-        using var newUnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        newUnitOfWork.BeginTransaction();
+        NhibernateUnitOfWorkRunner.Run(
+            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+            newUnitOfWork =>
+            {
+                _user = new UserBuilder(newUnitOfWork).Build();
 
-        _user = new UserBuilder(newUnitOfWork).Build();
+                _command = new CreateWatchdogCommand(_user.Id, "watchdog name") {Guid = Guid.NewGuid()};
 
-        _command = new CreateWatchdogCommand(_user.Id, "watchdog name") {Guid = Guid.NewGuid()};
-
-        _job = new JobBuilder(newUnitOfWork)
-            .WithGuid(_command.Guid)
-            .WithType(nameof(CreateWatchdogCommand))
-            .WithInputData(_command)
-            .WithKind(JobKind.Command)
-            .Build();
+                _job = new JobBuilder(newUnitOfWork)
+                    .WithGuid(_command.Guid)
+                    .WithType(nameof(CreateWatchdogCommand))
+                    .WithInputData(_command)
+                    .WithKind(JobKind.Command)
+                    .Build();
+            }
+        );
     }
 }

@@ -5,4 +5,4 @@ Use it to watch any publicly accessible web page for changes and get notified by
 View existing watchdogs and set up notifications about new results.
 
 ----
-To run the solution, you need to setup user secrets first. See src/user_secrets_init.bat.example .
+To run the solution, you need to setup user secrets first. See <a href="src/user_secrets_init.bat.example">user_secrets_init.bat.example</a>.

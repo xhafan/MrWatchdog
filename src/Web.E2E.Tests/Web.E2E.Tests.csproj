@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Web.Tests\appsettings.Test.json" Link="appsettings.Test.json">
+    <None Include="..\Core.Tests\appsettings.Test.json" Link="appsettings.Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

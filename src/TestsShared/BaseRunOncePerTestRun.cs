@@ -16,7 +16,7 @@ public class BaseRunOncePerTestRun
     {
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
         
-        var connectionString = ConsoleAppSettings.Configuration.GetConnectionString("Database");
+        var connectionString = ConsoleAppSettings.Configuration.GetConnectionString("TestDatabase");
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
         _BuildDatabase(connectionString);
 

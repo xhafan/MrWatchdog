@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-	<RootNamespace>MrWatchdog.ToolsApp</RootNamespace>
+    <RootNamespace>MrWatchdog.ToolsApp</RootNamespace>
     <AssemblyName>MrWatchdog.ToolsApp</AssemblyName>
+    <UserSecretsId>9415da77-0c91-4852-a86c-51b447fef23b</UserSecretsId>
   </PropertyGroup>
 
   <Import Project="..\SharedAssemblyInfo.props" />

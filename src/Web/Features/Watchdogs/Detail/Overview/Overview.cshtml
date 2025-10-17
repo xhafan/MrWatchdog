@@ -17,14 +17,6 @@
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
-                        <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
-                        <div>@Model.WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting</div>
-                    </div>
                 </view-mode-item>
                 
                 <edit-mode-item>
@@ -42,17 +34,34 @@
                         <input asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-control" />
                         <span asp-validation-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="text-danger"></span>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
-                        <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-control" />
-                        <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
-                        <input asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-control" />
-                        <span asp-validation-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="text-danger"></span>
-                    </div>
                 </edit-mode-item>
+                
+                <a data-bs-toggle="collapse" href="#collapseAdvanced">Advanced</a>
+                <div class="collapse" id="collapseAdvanced">
+                    <view-mode-item>
+                        <div class="mb-3">
+                            <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
+                            <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
+                            <div>@Model.WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting</div>
+                        </div>
+                    </view-mode-item>
+                    
+                    <edit-mode-item>
+                        <div class="mb-3">
+                            <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
+                            <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-control" />
+                            <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
+                            <input asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-control" />
+                            <span asp-validation-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="text-danger"></span>
+                        </div>
+                    </edit-mode-item>
+                </div>
 
             </view-or-edit-form>
         </div>

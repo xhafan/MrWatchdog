@@ -138,6 +138,7 @@ public class WatchdogWebPage : VersionedEntity
         
         _scrapingResults.AddRange(scrapingResults);
         ScrapedOn = DateTime.UtcNow;
+        ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert();
         return;
 
         string _getTextFromHtml(string html)
@@ -153,7 +154,12 @@ public class WatchdogWebPage : VersionedEntity
             return HttpUtility.HtmlDecode(joinedText);
         }
     }
-    
+
+    private void ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert()
+    {
+        NumberOfFailedScrapingAttemptsBeforeTheNextAlert = 0;
+    }
+
     public virtual void SetScrapingErrorMessage(
         string scrapingErrorMessage, 
         bool canRaiseScrapingFailedDomainEvent
@@ -172,7 +178,7 @@ public class WatchdogWebPage : VersionedEntity
                 DomainEvents.RaiseEvent(new WatchdogWebPageScrapingFailedDomainEvent(Watchdog.Id));
                 
                 Watchdog.DisableNotifyingAboutFailedScraping();
-                NumberOfFailedScrapingAttemptsBeforeTheNextAlert = 0;
+                ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert();
             }
         }
 

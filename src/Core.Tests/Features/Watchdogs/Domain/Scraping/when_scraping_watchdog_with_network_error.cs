@@ -62,7 +62,7 @@ public class when_scraping_watchdog_with_network_error : BaseTest
     }
 
     [Test]
-    public async Task watchdog_number_of_failed_scraping_attempts_is_reset_after_the_second_failed_scraping_attempt()
+    public async Task watchdog_number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_second_failed_scraping_attempt()
     {
         await _watchdog.Scrape(_httpClientFactory);
 
@@ -86,8 +86,37 @@ public class when_scraping_watchdog_with_network_error : BaseTest
         await _watchdog.Scrape(_httpClientFactory);
         
         RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
-    }    
+    }
     
+    [Test]
+    public async Task watchdog_number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_first_failed_scraping_attempt_and_subsequent_successful_scraping_attempt()
+    {
+        var successfulScrapingHttpClientFactory = new HttpClientFactoryBuilder()
+            .WithRequestResponse(new HttpMessageRequestResponse(
+                "https://www.pcgamer.com/epic-games-store-free-games-list/",
+                () => new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(
+                        """
+                        <html>
+                        <body>
+                        <div id="article-body">
+                        <p class="infoUpdate-log">
+                        <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
+                        </p>
+                        </div>
+                        </body>
+                        </html>
+                        """)
+                }))
+            .Build();
+
+        await _watchdog.Scrape(successfulScrapingHttpClientFactory);
+
+        _watchdog.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
+    }
+
     private async Task _BuildEntities()
     {
         _watchdog = new WatchdogBuilder()

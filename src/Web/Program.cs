@@ -59,12 +59,16 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var environmentName = builder.Environment.EnvironmentName;
-        if (builder.Environment.IsDevelopment() || environmentName == "LocalStaging")
+        if (builder.Environment.IsDevelopment() 
+            || environmentName == "LocalStaging"
+            || environmentName == "Test")
         {
             builder.Configuration.AddUserSecrets<Program>();
         }
-        
-        var connectionString = builder.Configuration.GetConnectionString("Database");
+       
+        var connectionStringName = builder.Configuration["DatabaseConnectionStringName"];
+        Guard.Hope(connectionStringName != null, nameof(connectionStringName) + " is null");
+        var connectionString = builder.Configuration.GetConnectionString(connectionStringName);
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
 
         _configureLogging();
@@ -440,7 +444,7 @@ public class Program
             var configuration = mainWindsorContainer.Resolve<IConfiguration>();
             var connectionStringWithTimeout = $"{connectionString}CommandTimeout=120;";
             var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
-            DatabaseBuilderHelper.BuildDatabase(connectionStringWithTimeout, databaseScriptsDirectoryPath, logger);
+            DatabaseBuilderHelper.BuildDatabase(connectionStringWithTimeout, databaseScriptsDirectoryPath, logger, environmentName);
         }
 
         void _configureLogging()

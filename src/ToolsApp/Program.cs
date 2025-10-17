@@ -32,7 +32,9 @@ public class Program
         {
             const string databaseSchemaFileName = "MrWatchdog_generated_database_schema.sql";
 
-            var connectionString = ConsoleAppSettings.Configuration.GetConnectionString("TestDatabase");
+            var connectionStringName = ConsoleAppSettings.Configuration["DatabaseConnectionStringName"];
+            Guard.Hope(connectionStringName != null, nameof(connectionStringName) + " is null");
+            var connectionString = ConsoleAppSettings.Configuration.GetConnectionString(connectionStringName);
             Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
             using var nhibernateConfigurator = new NhibernateConfigurator(connectionString);
             new DatabaseSchemaGenerator(databaseSchemaFileName, nhibernateConfigurator).Generate();

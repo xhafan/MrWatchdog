@@ -41,6 +41,7 @@ public class WatchdogWebPage : VersionedEntity
     public virtual DateTime? ScrapedOn { get; protected set; }
     public virtual string? ScrapingErrorMessage { get; protected set; }
     public virtual bool IsEnabled { get; protected set; }
+    public virtual int NumberOfFailedScrapingAttemptsBeforeTheNextAlert { get; protected set; }
 
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
     {
@@ -164,7 +165,15 @@ public class WatchdogWebPage : VersionedEntity
 
         if (canRaiseScrapingFailedDomainEvent && Watchdog.CanNotifyAboutFailedScraping)
         {
-            DomainEvents.RaiseEvent(new WatchdogWebPageScrapingFailedDomainEvent(Watchdog.Id));
+            NumberOfFailedScrapingAttemptsBeforeTheNextAlert++;
+            
+            if (NumberOfFailedScrapingAttemptsBeforeTheNextAlert >= Watchdog.NumberOfFailedScrapingAttemptsBeforeAlerting)
+            {
+                DomainEvents.RaiseEvent(new WatchdogWebPageScrapingFailedDomainEvent(Watchdog.Id));
+                
+                Watchdog.DisableNotifyingAboutFailedScraping();
+                NumberOfFailedScrapingAttemptsBeforeTheNextAlert = 0;
+            }
         }
 
         Log.Information("Setting watchdog web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);

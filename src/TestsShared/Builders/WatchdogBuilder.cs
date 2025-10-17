@@ -10,6 +10,7 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const string Name = "watchdog name";
     public const int ScrapingIntervalInSeconds = 60;
     public const double IntervalBetweenSameResultNotificationsInDays = 20;
+    public const int NumberOfFailedScrapingAttemptsBeforeAlerting = 5;
 
     private User? _user;
     private string _name = Name;
@@ -18,6 +19,7 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
 
     private WatchdogWebPageArgs[]? _watchdogWebPageArgses;
     private DateTime? _nextScrapingOn;
+    private int _numberOfFailedScrapingAttemptsBeforeAlerting = NumberOfFailedScrapingAttemptsBeforeAlerting;
 
     public WatchdogBuilder WithUser(User user)
     {
@@ -54,6 +56,12 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
         _nextScrapingOn = nextScrapingOn;
         return this;
     }
+
+    public WatchdogBuilder WithNumberOfFailedScrapingAttemptsBeforeAlerting(int numberOfFailedScrapingAttemptsBeforeAlerting)
+    {
+        _numberOfFailedScrapingAttemptsBeforeAlerting = numberOfFailedScrapingAttemptsBeforeAlerting;
+        return this;
+    }
     
     public Watchdog Build()
     {
@@ -85,7 +93,8 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
             WatchdogId = watchdog.Id,
             Name = _name, 
             ScrapingIntervalInSeconds = _scrapingIntervalInSeconds,
-            IntervalBetweenSameResultNotificationsInDays = _intervalBetweenSameResultNotificationsInDays
+            IntervalBetweenSameResultNotificationsInDays = _intervalBetweenSameResultNotificationsInDays,
+            NumberOfFailedScrapingAttemptsBeforeAlerting = _numberOfFailedScrapingAttemptsBeforeAlerting
         });
         
         watchdog.SetNextScrapingOn(_nextScrapingOn);

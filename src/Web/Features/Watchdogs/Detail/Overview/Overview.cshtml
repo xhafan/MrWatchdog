@@ -19,7 +19,11 @@
                     </div>
                     <div class="mb-3">
                         <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
-                    <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
+                        <div>@Model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting</div>
                     </div>
                 </view-mode-item>
                 
@@ -42,6 +46,11 @@
                         <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
                         <input asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-control" />
                         <span asp-validation-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-label fw-bold"></label>
+                        <input asp-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="form-control" />
+                        <span asp-validation-for="WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting" class="text-danger"></span>
                     </div>
                 </edit-mode-item>
 

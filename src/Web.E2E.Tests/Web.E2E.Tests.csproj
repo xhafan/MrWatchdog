@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Core.Tests\appsettings.Test.json" Link="appsettings.Test.json">
+    <Content Include="..\Core.Tests\appsettings.Test.json" Link="appsettings.Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,5 +32,10 @@
     <ProjectReference Include="..\TestsShared\TestsShared.csproj" />
     <ProjectReference Include="..\Web\Web.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyAppSettingsTestJsonToWebProject" AfterTargets="Build">
+    <Message Text="Copying appsettings.Test.json from Core.Tests to Web in order to execute E2E tests over the test database" Importance="High" />
+    <Copy SourceFiles="..\Core.Tests\appsettings.Test.json" DestinationFiles="..\Web\appsettings.Test.json" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

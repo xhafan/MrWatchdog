@@ -17,6 +17,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 {
     public const int DefaultScrapingIntervalOneDayInSeconds = 86400; // 1 day
     public const int DefaultIntervalBetweenSameResultNotificationsInDays = 30;
+    public const int DefaultNumberOfFailedScrapingAttemptsBeforeAlerting = 5;
     
     private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
 
@@ -32,6 +33,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         ScrapingIntervalInSeconds = DefaultScrapingIntervalOneDayInSeconds;
         IntervalBetweenSameResultNotificationsInDays = DefaultIntervalBetweenSameResultNotificationsInDays;
         PublicStatus = PublicStatus.Private;
+        NumberOfFailedScrapingAttemptsBeforeAlerting = DefaultNumberOfFailedScrapingAttemptsBeforeAlerting;
     }
     
     public virtual User User { get; protected set; } = null!;
@@ -42,6 +44,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual PublicStatus PublicStatus { get; protected set; }
     public virtual double IntervalBetweenSameResultNotificationsInDays { get; protected set; }
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
+    public virtual int NumberOfFailedScrapingAttemptsBeforeAlerting { get; protected set; }
     
     
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
@@ -64,7 +67,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WatchdogId = Id, 
             Name = Name,
             ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
-            IntervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays
+            IntervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays,
+            NumberOfFailedScrapingAttemptsBeforeAlerting = NumberOfFailedScrapingAttemptsBeforeAlerting
         };
     }
 
@@ -79,6 +83,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
         ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
         IntervalBetweenSameResultNotificationsInDays = watchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays;
+        NumberOfFailedScrapingAttemptsBeforeAlerting = watchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting;
     }
 
     public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
@@ -167,7 +172,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             );
         }
 
-        CanNotifyAboutFailedScraping = webPagesToScrape.All(x => x.ScrapingErrorMessage == null);
+        if (!CanNotifyAboutFailedScraping)
+        {
+            CanNotifyAboutFailedScraping = webPagesToScrape.All(x => x.ScrapingErrorMessage == null);
+        }
         
         DomainEvents.RaiseEvent(new WatchdogScrapingCompletedDomainEvent(Id));
     }
@@ -252,5 +260,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
              </p>
              """
         );
+    }
+
+    public virtual void DisableNotifyingAboutFailedScraping()
+    {
+        CanNotifyAboutFailedScraping = false;
     }
 }

@@ -11,12 +11,16 @@ namespace MrWatchdog.TestsShared;
 [SetUpFixture]
 public class BaseRunOncePerTestRun
 {
+    private const string EnvironmentName = "Test";
+
     [OneTimeSetUp]
     public void BaseSetUp()
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", EnvironmentName);
         
-        var connectionString = ConsoleAppSettings.Configuration.GetConnectionString("TestDatabase");
+        var connectionStringName = ConsoleAppSettings.Configuration["DatabaseConnectionStringName"];
+        Guard.Hope(connectionStringName != null, nameof(connectionStringName) + " is null");
+        var connectionString = ConsoleAppSettings.Configuration.GetConnectionString(connectionStringName);
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
         _BuildDatabase(connectionString);
 
@@ -38,7 +42,8 @@ public class BaseRunOncePerTestRun
         DatabaseBuilderHelper.BuildDatabase(
             connectionString,
             databaseScriptsDirectoryPath,
-            new ConsoleTestLogger()
+            new ConsoleTestLogger(),
+            EnvironmentName
         );
     }
     

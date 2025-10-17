@@ -46,5 +46,6 @@ public class when_persisting_watchdog_web_page : BaseDatabaseTest
         _persistedWatchdogWebPage.ScrapedOn.ShouldNotBeNull();
         _persistedWatchdogWebPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _persistedWatchdogWebPage.IsEnabled.ShouldBe(false);
+        _persistedWatchdogWebPage.NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
 }

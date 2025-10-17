@@ -18,4 +18,9 @@ public record WatchdogOverviewArgs
     [Range(0, double.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 0.")]
     [Display(Name = "Number of days between notifications for the same result")]
     public required double IntervalBetweenSameResultNotificationsInDays { get; set; }
+
+    [Range(1, int.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 1.")]
+    [Display(Name = "Number of failed scraping attempts before alerting")]
+    public required int NumberOfFailedScrapingAttemptsBeforeAlerting { get; set; }
+
 }

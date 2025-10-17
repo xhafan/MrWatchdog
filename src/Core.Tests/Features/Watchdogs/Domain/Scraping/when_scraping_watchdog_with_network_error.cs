@@ -31,7 +31,7 @@ public class when_scraping_watchdog_with_network_error : BaseTest
     }
 
     [Test]
-    public void watchdog_web_page_scraping_error_message_is_set()
+    public void watchdog_web_page_scraping_error_message_is_set_after_first_failed_scraping()
     {
         var webPage = _watchdog.WebPages.Single();
         
@@ -42,20 +42,45 @@ public class when_scraping_watchdog_with_network_error : BaseTest
     }
     
     [Test]
-    public void watchdog_web_page_scraping_failed_domain_event_is_raised()
+    public void watchdog_web_page_scraping_failed_domain_event_is_not_raised_after_the_first_failed_scraping_attempt()
     {
-        RaisedDomainEvents.ShouldContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
     }  
-    
+
     [Test]
-    public void watchdog_cannot_notify_about_failed_scraping()
+    public void watchdog_can_notify_about_failed_scraping_after_the_first_scraping_attempt()
     {
-        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
+        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(true);
+    }
+
+    [Test]
+    public async Task watchdog_web_page_scraping_failed_domain_event_is_raised_after_the_second_failed_scraping_attempt()
+    {
+        await _watchdog.Scrape(_httpClientFactory);
+
+        RaisedDomainEvents.ShouldContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+    }
+
+    [Test]
+    public async Task watchdog_number_of_failed_scraping_attempts_is_reset_after_the_second_failed_scraping_attempt()
+    {
+        await _watchdog.Scrape(_httpClientFactory);
+
+        _watchdog.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
     
     [Test]
-    public async Task scraping_again_does_not_raise_scraping_failed_domain_event_again()
+    public async Task watchdog_cannot_notify_about_failed_scraping_after_the_second_failed_scraping_attempt()
     {
+        await _watchdog.Scrape(_httpClientFactory);
+
+        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
+    }
+
+    [Test]
+    public async Task scraping_for_the_third_time_does_not_raise_scraping_failed_domain_event_again()
+    {
+        await _watchdog.Scrape(_httpClientFactory);
         RaisedDomainEvents.Clear();
         
         await _watchdog.Scrape(_httpClientFactory);
@@ -74,6 +99,7 @@ public class when_scraping_watchdog_with_network_error : BaseTest
                            """,
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
+            .WithNumberOfFailedScrapingAttemptsBeforeAlerting(2)
             .Build();
         
         await _successfullyScrapeWatchdogSoItCanRaiseFailedScrapingDomainEvent();

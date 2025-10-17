@@ -26,7 +26,8 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
             WatchdogId = _watchdog.Id,
             Name = "updated watchdog Name",
             ScrapingIntervalInSeconds = 30,
-            IntervalBetweenSameResultNotificationsInDays = 2.34
+            IntervalBetweenSameResultNotificationsInDays = 2.34,
+            NumberOfFailedScrapingAttemptsBeforeAlerting = 2
         }));
         
         await UnitOfWork.FlushAsync();
@@ -41,6 +42,7 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
         _watchdog.Name.ShouldBe("updated watchdog Name");
         _watchdog.ScrapingIntervalInSeconds.ShouldBe(30);
         _watchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(2.34);
+        _watchdog.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(2);
     }
 
     private void _BuildEntities()

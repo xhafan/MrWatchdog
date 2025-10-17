@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using CoreDdd.Nhibernate.Configurations;
-using Microsoft.Extensions.Configuration;
 #if DEBUG
 using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
@@ -13,8 +12,8 @@ namespace MrWatchdog.Core.Infrastructure;
 
 public class NhibernateConfigurator : BaseNhibernateConfigurator
 {
-    public NhibernateConfigurator(IConfiguration configuration) 
-        : base(shouldMapDtos: false, connectionString: configuration.GetConnectionString("Database"))
+    public NhibernateConfigurator(string connectionString) 
+        : base(shouldMapDtos: false, connectionString: connectionString)
     {
 #if DEBUG
         NHibernateProfiler.Initialize();

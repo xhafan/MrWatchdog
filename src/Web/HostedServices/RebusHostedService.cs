@@ -30,7 +30,8 @@ public class RebusHostedService(
     string environmentName,
     INhibernateConfigurator nhibernateConfigurator,
     IWindsorContainer mainWindsorContainer,
-    IConfiguration configuration
+    IConfiguration configuration,
+    string connectionString
 ) : IHostedService
 {
     private WindsorContainer? _hostedServiceWindsorContainer;
@@ -93,7 +94,7 @@ public class RebusHostedService(
                 // todo: command handler which sends a domain event over the message bus sends the domain event even when the command handler throws: https://github.com/rebus-org/Rebus.PostgreSql/issues/53
                 rebusConfigurer
                     .Transport(x => x.UsePostgreSql(
-                        configuration.GetConnectionString("Database"),
+                        connectionString,
                         "RebusQueue",
                         environmentInputQueueName
                     ));

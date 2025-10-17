@@ -58,19 +58,17 @@ public class Program
         
         var builder = WebApplication.CreateBuilder(args);
 
-        _configureLogging();
-
         var environmentName = builder.Environment.EnvironmentName;
         if (builder.Environment.IsDevelopment() || environmentName == "LocalStaging")
         {
             builder.Configuration.AddUserSecrets<Program>();
         }
         
-        builder.Logging.AddSimpleConsole(options =>
-        {
-            options.TimestampFormat = "yyyy-MM-dd HH:mm:ss.fff ";
-        });
-        
+        var connectionString = builder.Configuration.GetConnectionString("Database");
+        Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
+
+        _configureLogging();
+
         // Add services to the container.
 
         // Castle Windsor is the root container, not the default .NET DI. Rebus hosted services use Castle Windsor as the container
@@ -101,7 +99,7 @@ public class Program
         }
 
         builder.Services.AddCoreDdd();
-        builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>();
+        builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>(_ => new NhibernateConfigurator(connectionString));
         builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
         builder.Services.AddSingleton<ICoreBus, CoreBus>();
         
@@ -125,7 +123,8 @@ public class Program
                     environmentName,
                     serviceProvider.GetRequiredService<INhibernateConfigurator>(),
                     serviceProvider.GetRequiredService<IWindsorContainer>(),
-                    serviceProvider.GetRequiredService<IConfiguration>()
+                    serviceProvider.GetRequiredService<IConfiguration>(),
+                    connectionString
                 )
             );
 
@@ -137,7 +136,8 @@ public class Program
                     environmentName,
                     serviceProvider.GetRequiredService<INhibernateConfigurator>(),
                     serviceProvider.GetRequiredService<IWindsorContainer>(),
-                    serviceProvider.GetRequiredService<IConfiguration>()
+                    serviceProvider.GetRequiredService<IConfiguration>(),
+                    connectionString
                 )
             );
         }
@@ -409,7 +409,7 @@ public class Program
                     case "PostgreSql":
                         rebusConfigurer
                             .Transport(x => x.UsePostgreSql(
-                                builder.Configuration.GetConnectionString("Database"),
+                                connectionString,
                                 "RebusQueue",
                                 webEnvironmentInputQueueName
                             ));
@@ -438,9 +438,9 @@ public class Program
         {
             var logger = mainWindsorContainer.Resolve<ILogger<BuilderOfDatabase>>();
             var configuration = mainWindsorContainer.Resolve<IConfiguration>();
-            var connectionString = $"{configuration.GetConnectionString("Database")}CommandTimeout=120;";
+            var connectionStringWithTimeout = $"{connectionString}CommandTimeout=120;";
             var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
-            DatabaseBuilderHelper.BuildDatabase(connectionString, databaseScriptsDirectoryPath, logger);
+            DatabaseBuilderHelper.BuildDatabase(connectionStringWithTimeout, databaseScriptsDirectoryPath, logger);
         }
 
         void _configureLogging()
@@ -450,7 +450,7 @@ public class Program
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.PostgreSQL(
-                    connectionString: builder.Configuration.GetConnectionString("Database"),
+                    connectionString: connectionString,
                     tableName: """
                                "Logs"
                                """,

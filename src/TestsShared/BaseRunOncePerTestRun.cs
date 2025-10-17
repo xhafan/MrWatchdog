@@ -20,7 +20,7 @@ public class BaseRunOncePerTestRun
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
         _BuildDatabase(connectionString);
 
-        TestFixtureContext.NhibernateConfigurator = new NhibernateConfigurator(ConsoleAppSettings.Configuration);
+        TestFixtureContext.NhibernateConfigurator = new NhibernateConfigurator(connectionString);
         
         var domainEventHandlerFactory = new FakeDomainEventHandlerFactory(
             domainEvent =>

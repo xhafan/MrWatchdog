@@ -1,4 +1,6 @@
 ﻿using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
+using CoreUtils;
+using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 
@@ -30,7 +32,9 @@ public class Program
         {
             const string databaseSchemaFileName = "MrWatchdog_generated_database_schema.sql";
 
-            using var nhibernateConfigurator = new NhibernateConfigurator(ConsoleAppSettings.Configuration);
+            var connectionString = ConsoleAppSettings.Configuration.GetConnectionString("TestDatabase");
+            Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
+            using var nhibernateConfigurator = new NhibernateConfigurator(connectionString);
             new DatabaseSchemaGenerator(databaseSchemaFileName, nhibernateConfigurator).Generate();
             Console.WriteLine($"Database schema sql file has been generated into {databaseSchemaFileName}");
 

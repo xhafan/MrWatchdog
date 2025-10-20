@@ -1,0 +1,28 @@
+﻿@page "{watchdogId}"
+@using MrWatchdog.Core.Features.Watchdogs.Domain
+@model StatisticsModel
+@{
+   Layout = null;
+}
+<!turbo-frame id="watchdog_detail_statistics_@(Model.WatchdogId)">
+    <div class="card" style="display:@(Model.WatchdogPublicStatus != PublicStatus.Public ? "none": "")">
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="PublicWatchdogStatistics.CalculatedEarningsForThisMonth" class="form-label fw-bold"></label>
+                <div>€@Model.PublicWatchdogStatistics.CalculatedEarningsForThisMonth</div>
+                <div class="alert alert-info mb-3">
+                    <i class="fa-solid fa-circle-info"></i> The watchdog earnings calculation will be based on the number of premium users using this watchdog; 
+                    the premium subscription is not yet implemented
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithNotification" class="form-label fw-bold"></label>
+                <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithNotification</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithoutNotification" class="form-label fw-bold"></label>
+                <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithoutNotification</div>
+            </div>
+        </div>
+    </div>
+</!turbo-frame>

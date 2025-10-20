@@ -36,6 +36,9 @@ public static class WatchdogUrlConstants
     public const string WatchdogDetailOverviewUrlTemplate = $"/Watchdogs/Detail/Overview/{WatchdogIdVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string WatchdogDetailStatisticsUrlTemplate = $"/Watchdogs/Detail/Statistics/{WatchdogIdVariable}";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogDetailWebPageUrlTemplate = 
         $"/Watchdogs/Detail/WebPage?watchdogId={WatchdogIdVariable}&watchdogWebPageId={WatchdogWebPageIdVariable}";
 

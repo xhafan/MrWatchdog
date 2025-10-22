@@ -39,6 +39,8 @@ public class WebPageOverviewModel(
     {
         if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogWebPageArgs.WatchdogId)) return Forbid();
 
+        _validateHttpHeadersFormat();
+
         if (!ModelState.IsValid)
         {
             return PageWithUnprocessableEntityStatus422();
@@ -47,5 +49,26 @@ public class WebPageOverviewModel(
         var command = new UpdateWatchdogWebPageCommand(WatchdogWebPageArgs);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
+
+        void _validateHttpHeadersFormat()
+        {
+            if (string.IsNullOrWhiteSpace(WatchdogWebPageArgs.HttpHeaders)) return;
+
+            var lines = WatchdogWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            foreach (var line in lines)
+            {
+                var parts = line.Split(':', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (parts.Length != 2)
+                {
+                    ModelState.AddModelError(
+                        $"{nameof(WatchdogWebPageArgs)}.{nameof(WatchdogWebPageArgs.HttpHeaders)}",
+                        $"""
+                         Invalid header format: "{line}". Expected format is "Header-Name: Value".
+                         """
+                    );
+                }
+            }
+        }
     }
 }

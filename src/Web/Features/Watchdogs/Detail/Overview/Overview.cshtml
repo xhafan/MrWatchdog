@@ -36,8 +36,11 @@
                     </div>
                 </edit-mode-item>
                 
-                <a data-bs-toggle="collapse" href="#collapseAdvanced">Advanced</a>
-                <div class="collapse" id="collapseAdvanced">
+                @{
+                    var advancedCollapsibleSectionId = "watchdogDetailOverviewAdvanced";
+                }
+                <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">Advanced</a>
+                <div class="collapse" id="@advancedCollapsibleSectionId">
                     <view-mode-item>
                         <div class="mb-3">
                             <label asp-for="WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>

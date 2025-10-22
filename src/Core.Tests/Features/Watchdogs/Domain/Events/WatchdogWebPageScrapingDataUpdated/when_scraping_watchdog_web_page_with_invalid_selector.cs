@@ -70,10 +70,16 @@ public class when_scraping_watchdog_web_page_with_invalid_selector : BaseDatabas
             .WithWebPage(new WatchdogWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
-                Selector = "div ",
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+
+        _simulateLegacyUntrimmedSelector();
+
+        void _simulateLegacyUntrimmedSelector()
+        {
+            _watchdog.WebPages.Single().SetPrivateProperty(x => x.Selector!, "div ");
+        }
     }
 }

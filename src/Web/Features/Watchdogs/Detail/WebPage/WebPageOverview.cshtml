@@ -72,6 +72,28 @@
                     <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
                 </div>
             </edit-mode-item>
+
+            @{
+                var advancedCollapsibleSectionId = $"watchdogWebPageOverviewAdvanced_{Model.WatchdogWebPageArgs.WatchdogWebPageId}";
+            }
+            <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">Advanced</a>
+            <div class="collapse" id="@advancedCollapsibleSectionId">
+                <view-mode-item>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
+                        <textarea asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-control" disabled rows="4"></textarea>
+                    </div>
+                </view-mode-item>
+                
+                <edit-mode-item>
+                    <div class="mb-3">
+                        <label asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
+                        <textarea asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="WatchdogWebPageArgs.HttpHeaders" class="text-danger"></span>
+                    </div>
+                </edit-mode-item>
+            </div>
+
         </view-or-edit-form>
     </div>
 </!turbo-frame>

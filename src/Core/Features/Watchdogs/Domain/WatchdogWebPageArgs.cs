@@ -22,4 +22,9 @@ public record WatchdogWebPageArgs
     
     [Required]
     public string? Name { get; set; }
+
+    [Display(Name = """
+                    HTTP headers (one per line; format: "header name: value")
+                    """)]
+    public string? HttpHeaders { get; set; }
 }

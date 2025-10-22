@@ -22,7 +22,11 @@ public class when_updating_existing_watchdog_web_page_with_the_same_data_except_
             Url = "http://url.com/page",
             Selector = ".selector",
             SelectText = true,
-            Name = "url.com/page2"
+            Name = "url.com/page2",
+            HttpHeaders = """
+                          User-Agent: Mozilla/5.0
+                          Connection: keep-alive
+                          """
         });
     }
 
@@ -40,7 +44,11 @@ public class when_updating_existing_watchdog_web_page_with_the_same_data_except_
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 SelectText = true,
-                Name = "url.com/page"
+                Name = "url.com/page",
+                HttpHeaders = """
+                              Connection: keep-alive
+                              User-Agent: Mozilla/5.0
+                              """
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;

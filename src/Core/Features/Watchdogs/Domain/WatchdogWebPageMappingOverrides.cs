@@ -14,5 +14,17 @@ public class WatchdogWebPageMappingOverrides : IAutoMappingOverride<WatchdogWebP
                 x.Not.Nullable();
                 x.Length(10000);
             });
+
+        mapping.HasMany(x => x.HttpHeaders)
+            .Table($"{nameof(WatchdogWebPage)}{nameof(WatchdogWebPage.HttpHeaders)}")
+            .Component(c =>
+            {
+                c.Map(x => x.Name).Column("Name")
+                    .Not.Nullable()
+                    .Length(10000);
+                c.Map(x => x.Value).Column("Value")
+                    .Not.Nullable()
+                    .Length(10000);
+            });
     }
 }

@@ -48,6 +48,10 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
         _model.WatchdogWebPageArgs.Selector.ShouldBe(".selector");
         _model.WatchdogWebPageArgs.SelectText.ShouldBe(true);
         _model.WatchdogWebPageArgs.Name.ShouldBe("url.com/page");
+        _model.WatchdogWebPageArgs.HttpHeaders.ShouldBe("""
+                                                        User-Agent: Mozilla/5.0
+                                                        Connection: keep-alive
+                                                        """);
         
         _model.IsEmptyWebPage.ShouldBe(false);
     }  
@@ -60,7 +64,11 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 SelectText = true,
-                Name = "url.com/page"
+                Name = "url.com/page",
+                HttpHeaders = """
+                              User-Agent: Mozilla/5.0
+                              Connection: keep-alive
+                              """
             })
             .Build();
         _watchdogWebPageId = _watchdog.WebPages.Single().Id;

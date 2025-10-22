@@ -22,7 +22,11 @@ public class when_updating_existing_watchdog_web_page : BaseTest
             Url = "http://url.com/page_updated",
             Selector = ".selector_updated",
             SelectText = true,
-            Name = "url.com/page_updated"
+            Name = "url.com/page_updated",
+            HttpHeaders = """
+                          User-Agent: Mozilla/5.0
+                          Connection: keep-alive
+                          """
         });
     }
 
@@ -34,6 +38,11 @@ public class when_updating_existing_watchdog_web_page : BaseTest
         watchdogWebPage.Selector.ShouldBe(".selector_updated");
         watchdogWebPage.SelectText.ShouldBe(true);
         watchdogWebPage.Name.ShouldBe("url.com/page_updated");
+
+        watchdogWebPage.HttpHeaders.Count().ShouldBe(2);
+        watchdogWebPage.HttpHeaders.ShouldContain(
+            new WatchdogWebPageHttpHeader("User-Agent", "Mozilla/5.0"));
+        watchdogWebPage.HttpHeaders.ShouldContain(new WatchdogWebPageHttpHeader("Connection", "keep-alive"));
     }
 
     [Test]

@@ -1,4 +1,5 @@
 ﻿using CoreDdd.Domain.Events;
+using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
 using Ganss.Xss;
@@ -10,14 +11,14 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
 using System.Web;
-using CoreUtils;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class WatchdogWebPage : VersionedEntity
 {
     private readonly IList<string> _scrapingResults = new List<string>();
-    
+    private readonly ISet<WatchdogWebPageHttpHeader> _httpHeaders = new HashSet<WatchdogWebPageHttpHeader>();
+
     protected WatchdogWebPage() {}
 
     public WatchdogWebPage(
@@ -26,10 +27,8 @@ public class WatchdogWebPage : VersionedEntity
     )
     {
         Watchdog = watchdog;
-        Url = args.Url;
-        Selector = args.Selector;
-        SelectText = args.SelectText;
-        Name = args.Name;
+
+        Update(args, raiseWatchdogWebPageScrapingDataUpdatedDomainEvent: false);
     }
     
     public virtual Watchdog Watchdog { get; } = null!;
@@ -42,6 +41,7 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? ScrapingErrorMessage { get; protected set; }
     public virtual bool IsEnabled { get; protected set; }
     public virtual int NumberOfFailedScrapingAttemptsBeforeTheNextAlert { get; protected set; }
+    public virtual IEnumerable<WatchdogWebPageHttpHeader> HttpHeaders => _httpHeaders;
 
     public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
     {
@@ -52,7 +52,8 @@ public class WatchdogWebPage : VersionedEntity
             Url = Url, 
             Selector = Selector,
             SelectText = SelectText,
-            Name = Name
+            Name = Name,
+            HttpHeaders = string.Join(Environment.NewLine, _httpHeaders.Select(httpHeader => $"{httpHeader.Name}: {httpHeader.Value}"))
         };
     }
 
@@ -65,17 +66,28 @@ public class WatchdogWebPage : VersionedEntity
         };
     }
 
-    public virtual void Update(WatchdogWebPageArgs watchdogWebPageArgs)
+    public virtual void Update(
+        WatchdogWebPageArgs watchdogWebPageArgs, 
+        bool raiseWatchdogWebPageScrapingDataUpdatedDomainEvent = true
+    )
     {
+        var httpHeaders = _getHttpHeaders().ToList();
+        
         var hasScrapingDataUpdated =
             Url != watchdogWebPageArgs.Url
             || Selector != watchdogWebPageArgs.Selector
-            || SelectText != watchdogWebPageArgs.SelectText;
+            || SelectText != watchdogWebPageArgs.SelectText
+            || !_httpHeaders.AreEquivalent(httpHeaders);
 
         Url = watchdogWebPageArgs.Url?.Trim();
         Selector = watchdogWebPageArgs.Selector?.Trim();
         SelectText = watchdogWebPageArgs.SelectText;
         Name = watchdogWebPageArgs.Name?.Trim();
+        
+        _httpHeaders.Clear();
+        _httpHeaders.UnionWith(httpHeaders);
+
+        if (!raiseWatchdogWebPageScrapingDataUpdatedDomainEvent) return;
 
         if (!hasScrapingDataUpdated) return;
         
@@ -83,6 +95,23 @@ public class WatchdogWebPage : VersionedEntity
         _Disable();
         
         DomainEvents.RaiseEvent(new WatchdogWebPageScrapingDataUpdatedDomainEvent(Watchdog.Id, Id));
+        return;
+
+        IEnumerable<WatchdogWebPageHttpHeader> _getHttpHeaders()
+        {
+            if (string.IsNullOrWhiteSpace(watchdogWebPageArgs.HttpHeaders)) yield break;
+
+            var lines = watchdogWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            foreach (var line in lines)
+            {
+                var parts = line.Split(':', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                Guard.Hope(parts.Length == 2, $"""
+                                               Invalid header format: "{line}". Expected format is "Header-Name: Value".
+                                               """);
+                yield return new WatchdogWebPageHttpHeader(parts[0], parts[1]);
+            }
+        }
     }
 
     private void _ResetScrapingData()
@@ -217,6 +246,10 @@ public class WatchdogWebPage : VersionedEntity
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, Url);
+            foreach (var httpHeader in _httpHeaders)
+            {
+                request.Headers.Add(httpHeader.Name, httpHeader.Value);
+            }
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             if (!response.IsSuccessStatusCode)

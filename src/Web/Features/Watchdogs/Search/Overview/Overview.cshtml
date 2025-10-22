@@ -12,7 +12,9 @@
             <view-mode-item>
                 <div class="mb-1">
                     <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
-                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold"></label>
+                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
+                        @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
+                    </label>
                 </div>
                 <partial name="ReceiveNotificationInfoPartial" />
                 <div class="mb-3">
@@ -40,6 +42,7 @@
                     />
                     <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" 
                            class="form-check-label fw-bold">
+                        @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
                 <partial name="ReceiveNotificationInfoPartial" />

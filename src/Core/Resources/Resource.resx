@@ -147,4 +147,7 @@
   <data name="MySearches" xml:space="preserve">
     <value>My Searches</value>
   </data>
+  <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
+    <value>&lt;i class="fa-solid fa-bell"&gt;&lt;/i&gt; Receive email notification about new results</value>
+  </data>
 </root>

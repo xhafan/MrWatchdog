@@ -157,7 +157,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                 .WhereNotNull()
                 .ToList(),
             UserId = User.Id,
-            PublicStatus = PublicStatus
+            PublicStatus = PublicStatus,
+            IsArchived = IsArchived
         };
     }
 

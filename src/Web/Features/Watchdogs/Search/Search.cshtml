@@ -26,25 +26,30 @@
 <div @Stimulus.Controller(StimulusControllers.WatchdogSearch)>
     
     <div class="d-flex justify-content-between align-items-center">
-        <div>
-            <h1 class="display-4">
-                <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@Model.WatchdogSearchArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
-                <span data-watchdogs--search-target="searchTermSuffix">@searchTermSuffix</span>
-            </h1>
-            @if (Model.WatchdogSearchArgs.IsArchived)
-            {
-                <span class="badge text-bg-warning">
-                    Archived
-                </span>
-            }
-        </div>
+        <h1 class="display-4">
+            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@Model.WatchdogSearchArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
+            <span data-watchdogs--search-target="searchTermSuffix">@searchTermSuffix</span>
+        </h1>
+        @if (Model.WatchdogSearchArgs.IsArchived)
+        {
+            <span class="badge text-bg-warning">
+                Archived
+            </span>
+        }
+    </div>
+    <p class="text-muted">
+        This watchdog search can send you an email notification about new watchdog results. You can enter a search term to filter the results.
+        When no results - or no results matching the search term - are currently available, you will receive an email notification as soon as they are available.
+    </p>
+    <div class="d-flex justify-content-between align-items-center">
+        <div></div>
         <div>
             <div class="dropdown">
                 <button
                     class="btn btn-sm"
                     type="button"
                     data-bs-toggle="dropdown"
-                    >
+                >
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -53,10 +58,10 @@
                               asp-route-watchdogSearchId="@Model.WatchdogSearchArgs.WatchdogSearchId"
                               method="post"
                               data-watchdogs--search-target="archiveWatchdogSearchForm"
-                              >
+                        >
                             <button class="dropdown-item text-danger" 
                                     type="submit"
-                                    >
+                            >
                                 Delete watchdog search
                             </button>
                         </form>
@@ -65,10 +70,6 @@
             </div>
         </div>
     </div>
-    <p class="text-muted">
-        This watchdog search can send you an email notification about new watchdog results. You can enter a search term to filter the results.
-        When no results - or no results matching the search term - are currently available, you will receive an email notification as soon as they are available.
-    </p>
 
     <div>
         <div class="row">

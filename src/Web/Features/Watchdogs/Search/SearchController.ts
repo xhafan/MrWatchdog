@@ -7,21 +7,21 @@ import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstant
 export default class SearchController extends Controller {
     static targets  = [
         "searchTermSuffix",
-        "deleteWatchdogSearchForm"
+        "archiveWatchdogSearchForm"
     ];
 
     declare searchTermSuffixTarget: HTMLSpanElement;
-    declare deleteWatchdogSearchFormTarget: HTMLFormElement;
+    declare archiveWatchdogSearchFormTarget: HTMLFormElement;
 
     connect() {
         this.registerSearchTermModifiedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
-            this.deleteWatchdogSearchFormTarget, 
+            this.archiveWatchdogSearchFormTarget, 
             async jobDto => {
                 Turbo.visit(WatchdogUrlConstants.watchdogsSearchesUrl);
             },
-            "Really delete the watchdog search?"
+            "Really delete this watchdog search?"
         );
     }
 

@@ -54,11 +54,11 @@ public class SearchModel(
         return Page();
     }
     
-    public async Task<IActionResult> OnPostDeleteWatchdogSearch(long watchdogSearchId)
+    public async Task<IActionResult> OnPostArchiveWatchdogSearch(long watchdogSearchId)
     {
         if (!await IsAuthorizedAsWatchdogSearchOwnerOrSuperAdmin(watchdogSearchId)) return Forbid();
 
-        var command = new DeleteWatchdogSearchCommand(watchdogSearchId);
+        var command = new ArchiveWatchdogSearchCommand(watchdogSearchId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }    

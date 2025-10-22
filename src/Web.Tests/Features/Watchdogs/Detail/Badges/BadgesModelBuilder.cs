@@ -25,7 +25,7 @@ public class BadgesModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailPublicStatusArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailArgsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));

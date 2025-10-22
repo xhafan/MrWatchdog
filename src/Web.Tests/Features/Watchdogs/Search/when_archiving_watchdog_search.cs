@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using FakeItEasy;
-using Microsoft.AspNetCore.Authorization;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -8,12 +6,11 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Search;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search;
 
 [TestFixture]
-public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTest
+public class when_archiving_watchdog_search : BaseDatabaseTest
 {
     private SearchModel _model = null!;
     private WatchdogSearch _watchdogSearch = null!;
@@ -27,32 +24,28 @@ public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTe
         
         _bus = A.Fake<ICoreBus>();
         
-        var authorizationService = A.Fake<IAuthorizationService>();
-        A.CallTo(() => authorizationService.AuthorizeAsync(
-                A<ClaimsPrincipal>._,
-                _watchdogSearch.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogSearchOwnerOrSuperAdminRequirement>().Any())
-            ))
-            .Returns(AuthorizationResult.Failed());
-
         _model = new SearchModelBuilder(UnitOfWork)
             .WithBus(_bus)
-            .WithAuthorizationService(authorizationService)
             .Build();
         
         _actionResult = await _model.OnPostArchiveWatchdogSearch(_watchdogSearch.Id);
     }
 
     [Test]
-    public void command_is_not_sent_over_message_bus()
+    public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new ArchiveWatchdogSearchCommand(_watchdogSearch.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ArchiveWatchdogSearchCommand(_watchdogSearch.Id))).MustHaveHappenedOnceExactly();
     }
     
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<ForbidResult>();
+        _actionResult.ShouldBeOfType<OkObjectResult>();
+        var okObjectResult = (OkObjectResult) _actionResult;
+        var value = okObjectResult.Value;
+        value.ShouldBeOfType<string>();
+        var jobGuid = (string) value;
+        jobGuid.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
     }
 
     private void _BuildEntities()

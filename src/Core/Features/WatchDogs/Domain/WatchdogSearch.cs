@@ -3,6 +3,7 @@ using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchArchived;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -44,6 +45,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
     public virtual IEnumerable<string> CurrentScrapingResults => _currentScrapingResults;
     public virtual IEnumerable<string> ScrapingResultsToNotifyAbout => _scrapingResultsToNotifyAbout;
     public virtual IEnumerable<ScrapingResultHistory> ScrapingResultsHistory => _scrapingResultsHistory;
+    public virtual bool IsArchived { get; protected set; }
+
 
     private IEnumerable<string> _GetWatchdogScrapingResults()
     {
@@ -60,7 +63,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
             WatchdogSearchId = Id,
             WatchdogId = Watchdog.Id,
             SearchTerm = SearchTerm,
-            WatchdogPublicStatus = Watchdog.PublicStatus
+            WatchdogPublicStatus = Watchdog.PublicStatus,
+            IsArchived = IsArchived
         };
     }
 
@@ -172,4 +176,40 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
 
         _scrapingResultsToNotifyAbout.Clear();
     }
+
+    public virtual void Archive(User? actingUser = null)
+    {
+        IsArchived = true;
+
+        if (actingUser != User)
+        {
+            DomainEvents.RaiseEvent(new WatchdogSearchArchivedDomainEvent(Id));
+        }
+    }
+
+    public virtual async Task NotifyUserAboutWatchdogSearchArchived(
+        IEmailSender emailSender
+    )
+    {
+        var mrWatchdogResource = Resource.MrWatchdog;
+        var watchdogSearchName = $"{Watchdog.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
+
+        await emailSender.SendEmail(
+            User.Email,
+            $"{mrWatchdogResource}: your watchdog search {watchdogSearchName} has been deleted",
+            $"""
+             <p>
+                 Hello,
+             </p>
+             <p>
+                 Your watchdog search <b>{watchdogSearchName}</b> has been deleted due to watchdog <b>{Watchdog.Name}</b> deletion.
+             </p>
+             <p>
+                 Kind regards,<br>
+                 {mrWatchdogResource}
+             </p>
+             """
+        );
+    }
+
 }

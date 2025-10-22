@@ -13,7 +13,7 @@ public class BadgesModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogDetailPublicStatusArgs WatchdogDetailPublicStatusArgs { get; set; } = null!;
+    public WatchdogDetailArgs WatchdogDetailArgs { get; set; } = null!;
     
     [BindProperty(SupportsGet = true)]
     public bool ShowPrivate { get; set; } = true;
@@ -22,9 +22,9 @@ public class BadgesModel(
     {
         if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
 
-        WatchdogDetailPublicStatusArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
-                new GetWatchdogDetailPublicStatusArgsQuery(watchdogId));
+        WatchdogDetailArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(
+                new GetWatchdogDetailArgsQuery(watchdogId));
 
         return Page();
     }

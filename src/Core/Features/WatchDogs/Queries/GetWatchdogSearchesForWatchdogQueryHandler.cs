@@ -15,7 +15,8 @@ public class GetWatchdogSearchesForWatchdogQueryHandler(
 
         return Session.QueryOver<WatchdogSearch>()
             .JoinAlias(x => x.Watchdog, () => watchdog)
-            .Where(() => watchdog.Id == query.WatchdogId)
+            .Where(x => watchdog.Id == query.WatchdogId
+                        && !x.IsArchived)
             .Select(x => x.Id);
     }
 }

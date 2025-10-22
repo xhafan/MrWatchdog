@@ -12,6 +12,7 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
     private Watchdog _publicWatchdog = null!;
     private PublicWatchdogsModel _model = null!;
     private Watchdog _anotherPrivateWatchdog = null!;
+    private Watchdog _archivedPublicWatchdog = null!;
 
     [SetUp]
     public async Task Context()
@@ -35,7 +36,9 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
                 UserId = _publicWatchdog.User.Id
             }
         );
-        _model.PublicWatchdogs.Select(x => x.WatchdogId).ShouldNotContain(_anotherPrivateWatchdog.Id);
+        var publicWatchdogIds = _model.PublicWatchdogs.Select(x => x.WatchdogId).ToList();
+        publicWatchdogIds.ShouldNotContain(_anotherPrivateWatchdog.Id);
+        publicWatchdogIds.ShouldNotContain(_archivedPublicWatchdog.Id);
     }
     
     [Test]
@@ -55,6 +58,10 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
             .WithName("another user private watchdog")
             .Build();
         
+        _archivedPublicWatchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _archivedPublicWatchdog.MakePublic();
+        _archivedPublicWatchdog.Archive();
+
         UnitOfWork.Flush();
     }
 }

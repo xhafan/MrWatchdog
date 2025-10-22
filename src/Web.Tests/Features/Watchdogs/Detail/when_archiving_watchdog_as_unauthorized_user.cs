@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -6,11 +7,13 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Security.Claims;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_deleting_watchdog : BaseDatabaseTest
+public class when_archiving_watchdog_as_unauthorized_user : BaseDatabaseTest
 {
     private DetailModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -23,29 +26,33 @@ public class when_deleting_watchdog : BaseDatabaseTest
         _BuildEntities();
 
         _bus = A.Fake<ICoreBus>();
-        
+
+        var authorizationService = A.Fake<IAuthorizationService>();
+        A.CallTo(() => authorizationService.AuthorizeAsync(
+                A<ClaimsPrincipal>._,
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+            ))
+            .Returns(AuthorizationResult.Failed());
+
         _model = new DetailModelBuilder(UnitOfWork)
             .WithBus(_bus)
+            .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnPostDeleteWatchdog(_watchdog.Id);
+        _actionResult = await _model.OnPostArchiveWatchdog(_watchdog.Id);
     }
 
     [Test]
-    public void command_is_sent_over_message_bus()
+    public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new DeleteWatchdogCommand(_watchdog.Id))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new ArchiveWatchdogCommand(_watchdog.Id))).MustNotHaveHappened();
     }
     
     [Test]
     public void action_result_is_correct()
     {
-        _actionResult.ShouldBeOfType<OkObjectResult>();
-        var okObjectResult = (OkObjectResult) _actionResult;
-        var value = okObjectResult.Value;
-        value.ShouldBeOfType<string>();
-        var jobGuid = (string) value;
-        jobGuid.ShouldMatch(@"[0-9A-Fa-f\-]{36}");
+        _actionResult.ShouldBeOfType<ForbidResult>();
     }
 
     private void _BuildEntities()

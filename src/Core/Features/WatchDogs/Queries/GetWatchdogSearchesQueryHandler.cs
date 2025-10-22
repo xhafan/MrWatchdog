@@ -2,26 +2,29 @@
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using NHibernate;
 using NHibernate.Transform;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
 public class GetWatchdogSearchesQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetWatchdogSearchesQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetWatchdogSearchesQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogSearchesQuery query)
+    protected override IQueryOver GetQueryOver<TResult>(GetWatchdogSearchesQuery query)
     {
         Watchdog watchdog = null!;
         User user = null!;
         GetWatchdogSearchesQueryResult result = null!;
 
-        var results = await _unitOfWork.Session!.QueryOver<WatchdogSearch>()
+        return _unitOfWork.Session!.QueryOver<WatchdogSearch>()
             .JoinAlias(x => x.Watchdog, () => watchdog)
             .JoinAlias(x => x.User, () => user)
-            .Where(() => user.Id == query.UserId)
+            .Where(x => user.Id == query.UserId
+                        && !x.IsArchived
+                        && !watchdog.IsArchived)
             .SelectList(list => list
                 .Select(x => x.Id).WithAlias(() => result.WatchdogSearchId)
                 .Select(() => watchdog.Name).WithAlias(() => result.WatchdogName)
@@ -29,9 +32,6 @@ public class GetWatchdogSearchesQueryHandler(
             )
             .OrderBy(() => watchdog.Name).Asc
             .ThenBy(x => x.SearchTerm).Asc
-            .TransformUsing(Transformers.AliasToBean<GetWatchdogSearchesQueryResult>())
-            .ListAsync<TResult>();
-        
-        return results;
+            .TransformUsing(Transformers.AliasToBean<GetWatchdogSearchesQueryResult>());
     }
 }

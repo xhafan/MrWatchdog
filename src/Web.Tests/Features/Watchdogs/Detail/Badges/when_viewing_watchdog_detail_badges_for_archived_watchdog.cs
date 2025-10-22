@@ -8,7 +8,7 @@ using MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Badges;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatabaseTest
+public class when_viewing_watchdog_detail_badges_for_archived_watchdog : BaseDatabaseTest
 {
     private BadgesModel _model = null!;
     private Watchdog _watchdog = null!;
@@ -34,12 +34,12 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
     public void model_is_correct()
     {
         _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _model.WatchdogDetailArgs.IsArchived.ShouldBe(true);
     }
 
     private void _BuildEntities()
     {
         _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _watchdog.MakePublic();
+        _watchdog.Archive();
     }    
 }

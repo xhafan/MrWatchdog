@@ -3,8 +3,14 @@
 @{
     Layout = null;
 }
-<!turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
-    <public-status-badge public-status="@Model.WatchdogDetailPublicStatusArgs.PublicStatus" 
+<!turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailArgs.WatchdogId)">
+    <public-status-badge public-status="@Model.WatchdogDetailArgs.PublicStatus" 
                          show-private="@Model.ShowPrivate"
     />
+    @if (Model.WatchdogDetailArgs.IsArchived)
+    {
+        <span class="badge text-bg-warning">
+            Archived
+        </span>
+    }
 </!turbo-frame>

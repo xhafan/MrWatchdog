@@ -24,8 +24,8 @@ public class when_viewing_watchdog_detail_badges_for_watchdog_with_make_public_r
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
+        _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
     }
 
     private void _BuildEntities()

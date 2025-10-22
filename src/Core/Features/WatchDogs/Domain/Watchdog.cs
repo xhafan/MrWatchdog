@@ -4,6 +4,7 @@ using CoreUtils;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -45,6 +46,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual double IntervalBetweenSameResultNotificationsInDays { get; protected set; }
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
     public virtual int NumberOfFailedScrapingAttemptsBeforeAlerting { get; protected set; }
+    public virtual bool IsArchived { get; protected set; }
     
     
     public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
@@ -55,6 +57,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
             Name = Name,
             PublicStatus = PublicStatus,
+            IsArchived = IsArchived,
+
             UserId = User.Id,
             UserEmail = User.Email
         };
@@ -240,7 +244,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         webPage.Enable();
     }
 
-    public virtual async Task NotifyAdminsAboutWatchdogRequestedToBeMadePublic(
+    public virtual async Task NotifyAdminAboutWatchdogRequestedToBeMadePublic(
         IEmailSender emailSender,
         RuntimeOptions runtimeOptions,
         EmailAddressesOptions emailAddressesOptions
@@ -265,5 +269,12 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual void DisableNotifyingAboutFailedScraping()
     {
         CanNotifyAboutFailedScraping = false;
+    }
+
+    public virtual void Archive()
+    {
+        IsArchived = true;
+
+        DomainEvents.RaiseEvent(new WatchdogArchivedDomainEvent(Id));
     }
 }

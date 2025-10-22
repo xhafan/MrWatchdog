@@ -1,5 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -8,9 +9,9 @@ using MrWatchdog.TestsShared.Extensions;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
 
 [TestFixture]
-public class when_deleting_watchdog : BaseDatabaseTest
+public class when_archiving_watchdog : BaseDatabaseTest
 {
-    private Watchdog? _watchdog;
+    private Watchdog _watchdog = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,20 +20,26 @@ public class when_deleting_watchdog : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new DeleteWatchdogCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new ArchiveWatchdogCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
 
-        await handler.Handle(new DeleteWatchdogCommand(_watchdog!.Id));
+        await handler.Handle(new ArchiveWatchdogCommand(_watchdog.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.Get<Watchdog>(_watchdog.Id);
+        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
     }
 
     [Test]
-    public void watchdog_is_deleted()
+    public void watchdog_is_archived()
     {
-        _watchdog.ShouldBeNull();
+        _watchdog.IsArchived.ShouldBe(true);
+    }
+
+    [Test]
+    public void watchdog_archived_domain_event_is_raised()
+    {
+        RaisedDomainEvents.ShouldContain(new WatchdogArchivedDomainEvent(_watchdog.Id));
     }
 
     private void _BuildEntities()

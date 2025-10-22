@@ -35,5 +35,6 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultNotificationsInDays);
         _persistedWatchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
         _persistedWatchdog.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(5);
+        _persistedWatchdog.IsArchived.ShouldBe(false);
     }
 }

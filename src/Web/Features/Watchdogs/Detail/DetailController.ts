@@ -12,13 +12,13 @@ export default class DetailController extends BaseStimulusModelController<Detail
         "webPages",
         "addWebPageForm",
         "webPageTurboFrame",
-        "deleteWatchdogForm"
+        "archiveWatchdogForm"
     ];
    
     declare webPagesTarget: HTMLDivElement;
     declare addWebPageFormTarget: HTMLFormElement;
     declare webPageTurboFrameTargets: HTMLFormElement[];
-    declare deleteWatchdogFormTarget: HTMLFormElement;
+    declare archiveWatchdogFormTarget: HTMLFormElement;
 
     connect() {
         formSubmitWithWaitForJobCompletion(
@@ -43,11 +43,11 @@ export default class DetailController extends BaseStimulusModelController<Detail
         );
 
         formSubmitWithWaitForJobCompletion(
-            this.deleteWatchdogFormTarget, 
+            this.archiveWatchdogFormTarget, 
             async jobDto => {
                 Turbo.visit(WatchdogUrlConstants.watchdogsManageUrl);
             },
-            "Really delete the watchdog with all watched web pages?"
+            "Really delete this watchdog and all of the user's watchdog searches?"
         );
 
         this.element.addEventListener(watchdogWebPageRemovedEvent, this.onWatchdogWebPageRemoved.bind(this));

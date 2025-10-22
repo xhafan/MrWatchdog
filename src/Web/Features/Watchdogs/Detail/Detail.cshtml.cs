@@ -43,11 +43,11 @@ public class DetailModel(
         return Ok(command.Guid.ToString());
     }
     
-    public async Task<IActionResult> OnPostDeleteWatchdog(long watchdogId)
+    public async Task<IActionResult> OnPostArchiveWatchdog(long watchdogId)
     {
         if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
 
-        var command = new DeleteWatchdogCommand(watchdogId);
+        var command = new ArchiveWatchdogCommand(watchdogId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }    

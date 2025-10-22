@@ -6,4 +6,5 @@ public record WatchdogSearchArgs
     public required long WatchdogId { get; set; }
     public required string? SearchTerm { get; set; }
     public required PublicStatus WatchdogPublicStatus { get; set; }
+    public required bool IsArchived { get; set; }
 }

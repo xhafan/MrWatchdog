@@ -4,13 +4,12 @@ using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public class DeleteWatchdogCommandMessageHandler(IRepository<Watchdog> watchdogRepository) 
-    : IHandleMessages<DeleteWatchdogCommand>
+public class ArchiveWatchdogCommandMessageHandler(IRepository<Watchdog> watchdogRepository) 
+    : IHandleMessages<ArchiveWatchdogCommand>
 {
-    public async Task Handle(DeleteWatchdogCommand command)
+    public async Task Handle(ArchiveWatchdogCommand command)
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogId);
-
-        await watchdogRepository.DeleteAsync(watchdog);
+        watchdog.Archive();
     }
 }

@@ -6,7 +6,7 @@ using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
 
-public class NotifyAdminsAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
+public class NotifyAdminAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,
     IEmailSender emailSender,
     IOptions<RuntimeOptions> iRuntimeOptions,
@@ -18,7 +18,7 @@ public class NotifyAdminsAboutWatchdogRequestedToBeMadePublicDomainEventMessageH
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdog.NotifyAdminsAboutWatchdogRequestedToBeMadePublic(
+        await watchdog.NotifyAdminAboutWatchdogRequestedToBeMadePublic(
             emailSender,
             iRuntimeOptions.Value,
             iEmailAddressesOptions.Value

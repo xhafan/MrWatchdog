@@ -18,6 +18,7 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
     private WatchdogSearch _watchdogSearch = null!;
     private ICoreBus _bus = null!;
     private WatchdogSearch _watchdogSearchForAnotherWatchdog = null!;
+    private WatchdogSearch _archivedWatchdogSearch = null!;
 
     [SetUp]
     public async Task Context()
@@ -41,6 +42,12 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
     public void command_is_sent_over_message_bus_for_related_watchdog_search()
     {
         A.CallTo(() => _bus.Send(new RefreshWatchdogSearchCommand(_watchdogSearch.Id))).MustHaveHappenedOnceExactly();
+    }
+
+    [Test]
+    public void command_is_not_sent_over_message_bus_for_archived_watchdog_search()
+    {
+        A.CallTo(() => _bus.Send(new RefreshWatchdogSearchCommand(_archivedWatchdogSearch.Id))).MustNotHaveHappened();
     }
     
     [Test]
@@ -68,6 +75,11 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
             .WithWatchdog(_watchdog)
             .WithSearchTerm(null)
             .Build();
+
+        _archivedWatchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+            .WithWatchdog(_watchdog)
+            .Build();
+        _archivedWatchdogSearch.Archive();
         
         _watchdogSearchForAnotherWatchdog = new WatchdogSearchBuilder(UnitOfWork).Build();        
     }

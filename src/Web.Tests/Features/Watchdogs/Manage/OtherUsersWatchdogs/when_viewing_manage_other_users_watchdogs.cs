@@ -15,6 +15,7 @@ public class when_viewing_manage_other_users_watchdogs : BaseDatabaseTest
     private User _userOne = null!;
     private User _userTwo = null!;
     private Watchdog _watchdogForUserTwo = null!;
+    private Watchdog _archivedWatchdogForUserTwo = null!;
 
     [SetUp]
     public async Task Context()
@@ -41,6 +42,7 @@ public class when_viewing_manage_other_users_watchdogs : BaseDatabaseTest
                 UserEmail = _userTwo.Email
             }
         );
+        _model.OtherUsersWatchdogs.Any(x => x.WatchdogId == _archivedWatchdogForUserTwo.Id).ShouldBe(false);
         _model.OtherUsersWatchdogs.Any(x => x.WatchdogId == _watchdogForUserOne.Id).ShouldBe(false);
     }    
     
@@ -60,6 +62,11 @@ public class when_viewing_manage_other_users_watchdogs : BaseDatabaseTest
             .Build();
         _watchdogForUserTwo.MakePublic();
         
+        _archivedWatchdogForUserTwo = new WatchdogBuilder(UnitOfWork)
+            .WithUser(_userTwo)
+            .Build();
+        _archivedWatchdogForUserTwo.Archive();
+
         UnitOfWork.Flush();
     }
 }

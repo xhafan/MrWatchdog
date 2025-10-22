@@ -15,6 +15,8 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
     private User _userOne = null!;
     private User _userTwo = null!;
     private WatchdogSearch _watchdogSearchForUserTwo = null!;
+    private WatchdogSearch _archivedWatchdogSearchForUserOne = null!;
+    private WatchdogSearch _watchdogSearchForArchivedWatchdogForUserOne = null!;
 
     [SetUp]
     public async Task Context()
@@ -39,14 +41,10 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
                 SearchTerm = "search term",
             }
         );
-        _model.WatchdogSearches.ShouldNotContain(
-            new GetWatchdogSearchesQueryResult
-            {
-                WatchdogSearchId = _watchdogSearchForUserTwo.Id,
-                WatchdogName = "watchdog name",
-                SearchTerm = "search term",
-            }
-        );        
+        var watchdogSearchIds = _model.WatchdogSearches.Select(x => x.WatchdogSearchId).ToList();
+        watchdogSearchIds.ShouldNotContain(_watchdogSearchForUserTwo.Id);
+        watchdogSearchIds.ShouldNotContain(_archivedWatchdogSearchForUserOne.Id);
+        watchdogSearchIds.ShouldNotContain(_watchdogSearchForArchivedWatchdogForUserOne.Id);
     }    
     
     private void _BuildEntities()
@@ -64,10 +62,23 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
             .WithUser(_userOne)
             .Build();
 
+        _archivedWatchdogSearchForUserOne = new WatchdogSearchBuilder(UnitOfWork)
+            .WithWatchdog(watchdog)
+            .WithUser(_userOne)
+            .Build();
+        _archivedWatchdogSearchForUserOne.Archive();
+
         _watchdogSearchForUserTwo = new WatchdogSearchBuilder(UnitOfWork)
             .WithWatchdog(watchdog)
-            .WithSearchTerm("search term")
             .WithUser(_userTwo)
+            .Build();
+
+        var archivedWatchdog = new WatchdogBuilder(UnitOfWork).Build();
+        archivedWatchdog.Archive();
+
+        _watchdogSearchForArchivedWatchdogForUserOne = new WatchdogSearchBuilder(UnitOfWork)
+            .WithWatchdog(archivedWatchdog)
+            .WithUser(_userOne)
             .Build();
     }
 }

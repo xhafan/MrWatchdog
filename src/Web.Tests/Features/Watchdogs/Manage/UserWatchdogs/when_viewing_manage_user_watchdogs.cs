@@ -15,6 +15,7 @@ public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
     private User _userOne = null!;
     private User _userTwo = null!;
     private Watchdog _watchdogForUserTwo = null!;
+    private Watchdog _archivedWatchdogForUserOne = null!;
 
     [SetUp]
     public async Task Context()
@@ -40,6 +41,7 @@ public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
             }
         );
         _model.UserWatchdogs.Any(x => x.WatchdogId == _watchdogForUserTwo.Id).ShouldBe(false);
+        _model.UserWatchdogs.Any(x => x.WatchdogId == _archivedWatchdogForUserOne.Id).ShouldBe(false);
     }    
     
     private void _BuildEntities()
@@ -52,6 +54,11 @@ public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
             .WithName("watchdog user one")
             .Build();
         _watchdogForUserOne.MakePublic();
+
+        _archivedWatchdogForUserOne = new WatchdogBuilder(UnitOfWork)
+            .WithUser(_userOne)
+            .Build();
+        _archivedWatchdogForUserOne.Archive();
 
         _watchdogForUserTwo = new WatchdogBuilder(UnitOfWork)
             .WithUser(_userTwo)

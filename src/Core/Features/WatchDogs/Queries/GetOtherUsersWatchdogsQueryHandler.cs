@@ -2,38 +2,34 @@
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using NHibernate;
 using NHibernate.Transform;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
 public class GetOtherUsersWatchdogsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetOtherUsersWatchdogsQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetOtherUsersWatchdogsQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetOtherUsersWatchdogsQuery query)
+    protected override IQueryOver GetQueryOver<TResult>(GetOtherUsersWatchdogsQuery query)
     {
-        Watchdog watchdogAlias = null!;
+        User userAlias = null!;
         GetOtherUsersWatchdogsQueryResult result = null!;
-        User user = null!;
 
-        var queryOver = _unitOfWork.Session!.QueryOver(() => watchdogAlias)
-            .JoinAlias(x => x.User, () => user)
-            .Where(() => user.Id != query.UserId)
+        return _unitOfWork.Session!.QueryOver<Watchdog>()
+            .JoinAlias(x => x.User, () => userAlias)
+            .Where(x => userAlias.Id != query.UserId
+                        && !x.IsArchived)
             .SelectList(list => list
                 .Select(x => x.Id).WithAlias(() => result.WatchdogId)
                 .Select(x => x.Name).WithAlias(() => result.WatchdogName)
                 .Select(x => x.PublicStatus).WithAlias(() => result.PublicStatus)
-                .Select(() => user.Id).WithAlias(() => result.UserId)
-                .Select(() => user.Email).WithAlias(() => result.UserEmail)
-            );
-        
-        var results = await queryOver
+                .Select(() => userAlias.Id).WithAlias(() => result.UserId)
+                .Select(() => userAlias.Email).WithAlias(() => result.UserEmail)
+            )
             .OrderByAlias(() => result.WatchdogName).Asc
-            .TransformUsing(Transformers.AliasToBean<GetOtherUsersWatchdogsQueryResult>())
-            .ListAsync<TResult>();
-        
-        return results;
+            .TransformUsing(Transformers.AliasToBean<GetOtherUsersWatchdogsQueryResult>());
     }
 }

@@ -53,5 +53,6 @@ public class when_persisting_watchdog_search : BaseDatabaseTest
         _persistedWatchdogSearch.User.ShouldBe(_user);
         _persistedWatchdogSearch.SearchTerm.ShouldBe("text");
         _persistedWatchdogSearch.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
+        _persistedWatchdogSearch.IsArchived.ShouldBe(false);
     }
 }

@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public record DeleteWatchdogSearchCommand(long WatchdogSearchId) : Command;
+public record ArchiveWatchdogCommand(long WatchdogId) : Command;

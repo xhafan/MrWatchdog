@@ -11,7 +11,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
 
 [TestFixture]
-public class when_notifying_admins_about_watchdog_requested_to_be_made_public : BaseDatabaseTest
+public class when_notifying_admin_about_watchdog_requested_to_be_made_public : BaseDatabaseTest
 {
     private Watchdog _watchdog = null!;
     private IEmailSender _emailSender = null!;
@@ -26,7 +26,7 @@ public class when_notifying_admins_about_watchdog_requested_to_be_made_public : 
         
         _emailAddressesOptions = OptionsTestRetriever.Retrieve<EmailAddressesOptions>();
 
-        var handler = new NotifyAdminsAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
+        var handler = new NotifyAdminAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             _emailSender,
             OptionsTestRetriever.Retrieve<RuntimeOptions>(),

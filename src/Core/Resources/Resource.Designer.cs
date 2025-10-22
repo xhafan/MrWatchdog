@@ -124,7 +124,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;i class=&quot;fa-solid fa-bell&quot;&gt;&lt;/i&gt; Receive email notification about new results.
+        ///   Looks up a localized string similar to Receive email notification about new results.
         /// </summary>
         public static string ReceiveEmailNotificationAboutNewResults {
             get {

@@ -152,6 +152,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                 User.Email,
                 $"{mrWatchdogResource}: new results for {watchdogSearchName}",
                 $"""
+                 <html>
+                 <body>
                  <p>
                      Hello,
                  </p>
@@ -165,6 +167,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                      Kind regards,<br>
                      {mrWatchdogResource}
                  </p>
+                 </body>
+                 </html>
                  """
             );
 
@@ -198,6 +202,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
             User.Email,
             $"{mrWatchdogResource}: your watchdog search {watchdogSearchName} has been deleted",
             $"""
+             <html>
+             <body>
              <p>
                  Hello,
              </p>
@@ -208,6 +214,8 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                  Kind regards,<br>
                  {mrWatchdogResource}
              </p>
+             </body>
+             </html>
              """
         );
     }

@@ -176,7 +176,10 @@ public class Program
         builder.Services.AddHttpClient();
         builder.Services.AddLocalization();
        
-        builder.Services.Configure<EmailSenderOptions>(builder.Configuration.GetSection(nameof(EmailSender)));
+        builder.Services.Configure<SmtpServerEmailSenderOptions>(builder.Configuration.GetSection(nameof(SmtpServerEmailSender)));
+        builder.Services.Configure<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(
+            builder.Configuration.GetSection(nameof(SmtpClientDirectlyToRecipientMailServerEmailSender))
+        );
         builder.Services.Configure<EmailAddressesOptions>(builder.Configuration.GetSection("EmailAddresses"));
         
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -1,6 +1,6 @@
 ﻿namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
-public class EmailSenderOptions
+public class SmtpServerEmailSenderOptions
 {
     public string SmtpServer { get; set; } = null!;
     public int Port { get; set; }

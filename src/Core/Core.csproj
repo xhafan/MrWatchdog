@@ -15,9 +15,11 @@
     <PackageReference Include="CoreUtils" Version="3.3.1" />
     <PackageReference Include="DataAnnotationsValidator" Version="2.3.0" />
     <PackageReference Include="DatabaseBuilder" Version="1.2.4" />
+    <PackageReference Include="DnsClient" Version="1.8.0" />
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
     <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
+    <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />

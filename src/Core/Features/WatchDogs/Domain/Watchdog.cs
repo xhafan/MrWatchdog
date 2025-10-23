@@ -256,6 +256,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             emailAddressesOptions.Admin,
             $"{mrWatchdogResource}: watchdog {Name} requested to be made public",
             $"""
+             <html>
+             <body>
              <p>
                  Watchdog <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">{Name}</a> has been requested to be made public by user {User.Email}.
              </p>
@@ -263,6 +265,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                  Kind regards,<br>
                  {mrWatchdogResource}
              </p>
+             </body>
+             </html>
              """
         );
     }

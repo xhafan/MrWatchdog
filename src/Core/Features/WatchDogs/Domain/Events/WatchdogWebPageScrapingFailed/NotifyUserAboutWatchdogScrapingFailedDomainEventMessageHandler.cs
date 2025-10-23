@@ -29,6 +29,8 @@ public class NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
             watchdog.User.Email,
             $"{mrWatchdogResource}: web scraping failed for the watchdog {watchdog.Name}",
             $"""
+             <html>
+             <body>
              <p>
                  Hello,
              </p>
@@ -46,6 +48,8 @@ public class NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
                  Kind regards,<br>
                  {mrWatchdogResource}
              </p>
+             </body>
+             </html>
              """
         );
     }

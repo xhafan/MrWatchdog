@@ -36,13 +36,20 @@ public class SendLoginLinkToUserCommandMessageHandler(
             command.Email,
             $"{mrWatchdogResource} login link",
             $"""
-             <p>
-                If you just requested to log in to {mrWatchdogResource}, click <a href="{accountConfirmLoginUrl}">here</a>. 
-             </p>
-             <p>
-                This link expires in {jwtOptions.ExpireMinutes} minutes.
-             </p>
-             """
+              <html>
+              <body>
+              <p>
+                 If you just requested to log in to <a href="{runtimeOptions.Url}">{mrWatchdogResource}</a>, click the link below:
+              </p>
+              <p>
+                 <a href="{accountConfirmLoginUrl}">{accountConfirmLoginUrl}</a>
+              </p>
+              <p>
+                 This link expires in {jwtOptions.ExpireMinutes} minutes.
+              </p>
+              </body>
+              </html>
+              """
         );
     }
 }

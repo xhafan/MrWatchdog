@@ -27,7 +27,7 @@ public static class WindsorContainerRegistrator
                 .WithService.AllInterfaces()
                 .Configure(x => x.LifestyleTransient()),
             Component.For<IJobRepositoryFactory>().AsFactory(),
-            Component.For<IEmailSender>().ImplementedBy<EmailSender>().LifeStyle.Singleton
+            Component.For<IEmailSender>().ImplementedBy<SmtpClientDirectlyToRecipientMailServerEmailSender>().LifeStyle.Singleton
         );
     }
 

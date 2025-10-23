@@ -4,8 +4,8 @@ using Microsoft.Extensions.Options;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
-public class EmailSender(
-    IOptions<EmailSenderOptions> iEmailSenderOptions,
+public class SmtpServerEmailSender(
+    IOptions<SmtpServerEmailSenderOptions> iEmailSenderOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) : IEmailSender
 {

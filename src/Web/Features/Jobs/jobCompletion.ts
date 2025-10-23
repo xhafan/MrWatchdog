@@ -46,31 +46,55 @@ export function formSubmitWithWaitForJobCompletion(
             
         async function sendRequestAndWaitForJobCompletionCommon() {
             sendRequestAndWaitForJobCompletion(
-                form.action, 
-                new FormData(form), 
-                event.submitter, 
-                onJobCompletion, 
-                form.method
+                form, 
+                event.submitter,
+                onJobCompletion
             );
         }
     });
 }
 
 async function sendRequestAndWaitForJobCompletion(
-    actionUrl: string,
-    formData: FormData | undefined,
+    form: HTMLFormElement,
     submitter: HTMLElement | null = null,
     onJobCompletion: (job: JobDto) => void,
-    method: string = 'POST'
 ) {       
     disableElementAndAddSpinner(submitter);
 
     try {
 
-        const response = await fetch(actionUrl, {
-            method,
-            body: formData
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form)
         });
+
+        if (response.status === 422) {
+            refreshFormValidationErrorsFromReponse();            
+            enableElementAndRemoveSpinner(submitter);
+            return; 
+
+            async function refreshFormValidationErrorsFromReponse() {
+                const html = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+
+                const newValidationSpans = Enumerable.from(doc.querySelectorAll("span[data-valmsg-for]"));
+
+                form.querySelectorAll("span[data-valmsg-for]").forEach(currentSpan => {
+                    const validationMessageFor = currentSpan.getAttribute("data-valmsg-for");
+                    if (!validationMessageFor) return;
+
+                    const newValidationSpan = newValidationSpans.singleOrDefault(x => x.getAttribute("data-valmsg-for") === validationMessageFor);
+
+                    if (newValidationSpan) {
+                        currentSpan.className = newValidationSpan.className;
+                        currentSpan.innerHTML = newValidationSpan.innerHTML;
+                    }
+                });
+
+            }
+        }
 
         if (!response.ok) {
             throw new Error(`Failed to submit form: HTTP ${response.status}`);

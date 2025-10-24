@@ -57,7 +57,7 @@ public class when_updating_watchdog_web_page_with_invalid_http_headers_value : B
         errors.ShouldNotBeNull();
         errors.Select(x => x.ErrorMessage).ShouldBe([
             """
-            Invalid header format: "Connection; keep-alive". Expected format is "Header-Name: Value".
+            Invalid header format: "Connection; keep-alive". Expected format is "header name: value".
             """
         ]);
     }    

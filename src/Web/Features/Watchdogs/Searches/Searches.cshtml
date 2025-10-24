@@ -32,7 +32,8 @@
         <a asp-page="/Watchdogs/Search/Search" 
            asp-route-watchdogSearchId="@watchdogSearch.WatchdogSearchId"
            >
-            @watchdogSearch.WatchdogName@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")
+            <span>@watchdogSearch.WatchdogName</span>
+            <span translate="no">@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")</span>
         </a>
     </div>
 }

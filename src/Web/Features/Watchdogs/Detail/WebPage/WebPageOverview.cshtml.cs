@@ -64,7 +64,7 @@ public class WebPageOverviewModel(
                     ModelState.AddModelError(
                         $"{nameof(WatchdogWebPageArgs)}.{nameof(WatchdogWebPageArgs.HttpHeaders)}",
                         $"""
-                         Invalid header format: "{line}". Expected format is "Header-Name: Value".
+                         Invalid header format: "{line}". Expected format is "header name: value".
                          """
                     );
                 }

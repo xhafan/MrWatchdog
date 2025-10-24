@@ -5,8 +5,7 @@
 
 @{
     var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogSearchArgs.SearchTerm) ? $" - {Model.WatchdogSearchArgs.SearchTerm}" : "")}";
-    var title = $"{Model.WatchdogScrapingResultsArgs.WatchdogName}{searchTermSuffix}";
-    ViewData["Title"] = title;
+    ViewData["Title"] = $"{Model.WatchdogScrapingResultsArgs.WatchdogName}{searchTermSuffix}";
 }
 
 @section Navigation {
@@ -18,7 +17,10 @@
             <li class="breadcrumb-item">
                 <a asp-page="/Watchdogs/Searches/Searches">@Resource.MySearches</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">@title</li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <span>@Model.WatchdogScrapingResultsArgs.WatchdogName</span>
+                <span translate="no">@searchTermSuffix</span>
+            </li>
         </ol>
     </nav>
 }
@@ -27,8 +29,11 @@
     
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4">
-            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" asp-route-watchdogId="@Model.WatchdogSearchArgs.WatchdogId">@Model.WatchdogScrapingResultsArgs.WatchdogName</a>
-            <span data-watchdogs--search-target="searchTermSuffix">@searchTermSuffix</span>
+            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
+               asp-route-watchdogId="@Model.WatchdogSearchArgs.WatchdogId">
+                @Model.WatchdogScrapingResultsArgs.WatchdogName
+            </a>
+            <span data-watchdogs--search-target="searchTermSuffix" translate="no">@searchTermSuffix</span>
         </h1>
         @if (Model.WatchdogSearchArgs.IsArchived)
         {

@@ -107,7 +107,7 @@ public class WatchdogWebPage : VersionedEntity
             {
                 var parts = line.Split(':', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 Guard.Hope(parts.Length == 2, $"""
-                                               Invalid header format: "{line}". Expected format is "Header-Name: Value".
+                                               Invalid header format: "{line}". Expected format is "header name: value".
                                                """);
                 yield return new WatchdogWebPageHttpHeader(parts[0], parts[1]);
             }

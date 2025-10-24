@@ -6,7 +6,7 @@ export abstract class ScrapingResultsConstants
 {
 	public static saveSearchAndNotifyMeAboutNewResultsButtonLabel: string = `Save Search with notification about new results`;
 	public static searchTermVariable: string = `$searchTerm`;
-	public static saveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Save Search with notification about new results matching the search term <i>$searchTerm</i>`;
+	public static saveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Save Search with notification about new results matching the search term <i translate="no">$searchTerm</i>`;
 	public static loginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel: string = `Log in or register to save Search with notification about new results`;
-	public static loginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Log in or register to save Search with notification about new results matching the search term <i>$searchTerm</i>`;
+	public static loginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate: string = `Log in or register to save Search with notification about new results matching the search term <i translate="no">$searchTerm</i>`;
 }

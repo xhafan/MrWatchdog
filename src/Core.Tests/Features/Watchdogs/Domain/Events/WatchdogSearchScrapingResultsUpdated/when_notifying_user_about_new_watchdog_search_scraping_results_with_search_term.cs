@@ -40,11 +40,13 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results_with
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game - M")),
+                A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game - Ma")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for")
                                             && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">Epic Games store free game - M</a>
+                                                           <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">
                                                            """)
+                                            && p.Contains(">Epic Games store free game<")
+                                            && p.Contains("> - Ma<")
                                             && p.Contains("""
                                                           <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
                                                           """)
@@ -76,7 +78,7 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results_with
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
             .WithWatchdog(_watchdog)
             .WithUser(_user)
-            .WithSearchTerm("M")
+            .WithSearchTerm("Ma")
             .Build();
         
         _watchdog.SetScrapingResults(_watchdogWebPageId, [

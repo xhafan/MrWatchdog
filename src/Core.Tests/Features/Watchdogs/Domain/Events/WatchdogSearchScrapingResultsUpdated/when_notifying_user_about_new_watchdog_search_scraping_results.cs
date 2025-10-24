@@ -43,11 +43,12 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
                 A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for")
                                             && p.Contains($"""
-                                                          <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">Epic Games store free game</a>
+                                                          <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">
                                                           """)
+                                            && p.Contains(">Epic Games store free game<")
                                             && p.Contains("""
-                                                           <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
-                                                           """)
+                                                          <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
+                                                          """)
                                             && p.Contains("""
                                                           <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
                                                           """)

@@ -144,13 +144,13 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         if (newScrapingResults.IsEmpty()) return;
 
         var mrWatchdogResource = Resource.MrWatchdog;
-        var watchdogSearchName = $"{Watchdog.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
+        var searchTermSuffix = (!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "");
 
         if (ReceiveNotification)
         {
             await emailSender.SendEmail(
                 User.Email,
-                $"{mrWatchdogResource}: new results for {watchdogSearchName}",
+                $"{mrWatchdogResource}: new results for {Watchdog.Name}{searchTermSuffix}",
                 $"""
                  <html>
                  <body>
@@ -158,7 +158,10 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                      Hello,
                  </p>
                  <p>
-                     New results have been found for <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogSearchUrlTemplate.WithWatchdogSearchId(Id)}">{watchdogSearchName}</a>:
+                     New results have been found for 
+                     <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogSearchUrlTemplate.WithWatchdogSearchId(Id)}">
+                        <span>{Watchdog.Name}</span><span translate="no">{searchTermSuffix}</span>
+                     </a>:
                  </p>
                  <ul>
                      {string.Join("\n    ", _scrapingResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}

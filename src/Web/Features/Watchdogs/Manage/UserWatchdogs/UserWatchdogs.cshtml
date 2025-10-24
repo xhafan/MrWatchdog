@@ -21,7 +21,13 @@
     @foreach (var watchdog in Model.UserWatchdogs)
     {
         <div>
-            <a asp-page="/Watchdogs/Detail/Detail" asp-route-watchdogId="@watchdog.WatchdogId" data-turbo-frame="_top">@watchdog.WatchdogName</a>
+            <a asp-page="/Watchdogs/Detail/Detail" 
+               asp-route-watchdogId="@watchdog.WatchdogId" 
+               data-turbo-frame="_top"
+               class="text-wrap text-break"
+               >
+                @watchdog.WatchdogName
+            </a>
             <public-status-badge public-status="@watchdog.PublicStatus"
                                  show-private="false" />
         </div>

@@ -12,19 +12,23 @@ public record WatchdogWebPageArgs
 
     [Url(ErrorMessage = "The {0} field is not a valid fully-qualified http, or https URL.")]
     [Required]
+    [StringLength(3000)]
     public string? Url { get; set; }
 
     [Display(Name = "CSS path selector")]
+    [StringLength(1500)]
     public string? Selector { get; set; }
     
     [Display(Name = "Select text instead of HTML")]
     public bool SelectText { get; set; }
     
     [Required]
+    [StringLength(ValidationConstants.WatchdogWebPageNameMaxLength)]
     public string? Name { get; set; }
 
     [Display(Name = """
                     HTTP headers (one per line; format: "header name: value")
                     """)]
+    [StringLength(3000)]
     public string? HttpHeaders { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -11,6 +12,7 @@ public class CreateModel(ICoreBus bus, IActingUserAccessor actingUserAccessor) :
 {
     [BindProperty]
     [Required]
+    [StringLength(ValidationConstants.WatchdogNameMaxLength)]
     public string Name { get; set; } = null!;
     
     public async Task<IActionResult> OnPost()

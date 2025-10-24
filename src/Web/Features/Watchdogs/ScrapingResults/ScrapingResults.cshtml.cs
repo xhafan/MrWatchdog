@@ -1,12 +1,14 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 
@@ -20,6 +22,7 @@ public class ScrapingResultsModel(
     public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;
     
     [BindProperty(SupportsGet = true)]
+    [StringLength(ValidationConstants.SearchTermMaxLength)]
     public string? SearchTerm { get; set; }
     
     public async Task<IActionResult> OnGet(long watchdogId)

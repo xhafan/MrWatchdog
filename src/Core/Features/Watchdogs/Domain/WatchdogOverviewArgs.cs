@@ -9,6 +9,7 @@ public record WatchdogOverviewArgs
     public required long WatchdogId { get; set; }
 
     [Required]
+    [StringLength(ValidationConstants.WatchdogNameMaxLength)]
     public required string Name { get; set; } = null!;
 
     [Range(ScrapingConstants.ScrapingIntervalInSeconds, int.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 10.")]

@@ -16,7 +16,9 @@
         <div>
             <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
                asp-route-watchdogId="@watchdog.WatchdogId"
-               data-turbo-frame="_top">
+               data-turbo-frame="_top"
+               class="text-wrap text-break"
+               >
                 @watchdog.WatchdogName</a>
 
             @if (watchdog.UserId == User.GetUserId())

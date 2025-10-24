@@ -20,7 +20,7 @@
             <li class="breadcrumb-item">
                 <a asp-page="/Watchdogs/Manage/Manage">@Resource.ManageWatchdogs</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">@title</li>
+            <li class="breadcrumb-item active text-wrap text-break" aria-current="page">@title</li>
         </ol>
     </nav>
 }
@@ -31,7 +31,7 @@
      )>
 
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="display-4">@title</h1>
+        <h1 class="display-4 text-wrap text-break">@title</h1>
         <turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailArgs.WatchdogId)"
                      src="@WatchdogUrlConstants.WatchdogDetailBadgesUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)"
                      reload-on-event="@StimulusControllers.WatchdogsDetailActions:@DomEvents.WatchdogPublicStatusUpdated">

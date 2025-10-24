@@ -7,6 +7,7 @@ import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/View
 import { JobDto } from "../../../Shared/Generated/JobDto";
 import { JobUrlConstants } from "../../../Shared/Generated/JobUrlConstants";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
+import { ValidationConstants } from "../../../Shared/Generated/ValidationConstants";
 
 export const watchdogWebPageNameModifiedEventName = "watchdogwebPageNameModified";
 
@@ -35,7 +36,7 @@ export default class WebPageOverviewController extends BaseStimulusModelControll
         let urlWithoutHttpPrefix = this.getUrlWithoutHttpPrefix(url);
         let previousUrlWithoutHttpPrefix = this.getUrlWithoutHttpPrefix(this.previousUrlTarget.value);
         if (!this.nameTarget.value || this.nameTarget.value === previousUrlWithoutHttpPrefix) {
-            this.nameTarget.value = urlWithoutHttpPrefix;
+            this.nameTarget.value = urlWithoutHttpPrefix.substring(0, ValidationConstants.watchdogWebPageNameMaxLength).trim();
             this.dispatchWatchdogWebPageNameModifiedEvent();
         }
         

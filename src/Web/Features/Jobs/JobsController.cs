@@ -2,7 +2,6 @@
 using CoreUtils.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Jobs.Queries;
-using System.ComponentModel.DataAnnotations;
 
 namespace MrWatchdog.Web.Features.Jobs;
 
@@ -23,7 +22,7 @@ public class JobsController(IQueryExecutor queryExecutor) : ControllerBase
     }
     
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetRelatedDomainEventJob(Guid commandJobGuid, [StringLength(300)]string type)
+    public async Task<IActionResult> GetRelatedDomainEventJob(Guid commandJobGuid, string type)
     {
         var jobDtos = (
             await queryExecutor.ExecuteAsync<GetRelatedDomainEventJobQuery, JobDto>(new GetRelatedDomainEventJobQuery(commandJobGuid, type))

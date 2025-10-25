@@ -13,7 +13,7 @@ public class StatisticsModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     public long WatchdogId { get; private set; }
-    public PublicWatchdogStatisticsDto PublicWatchdogStatistics { get; set; } = null!;
+    public PublicWatchdogStatisticsDto PublicWatchdogStatistics { get; private set; } = null!;
     public PublicStatus WatchdogPublicStatus { get; private set; }
 
     public async Task<IActionResult> OnGet(long watchdogId)

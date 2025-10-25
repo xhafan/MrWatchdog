@@ -27,6 +27,7 @@ public class LoginModel(
 ) : BasePageModel
 {
     [BindProperty]
+    [Required]
     [EmailAddressRegex(acceptSpacesAroundEmail: true)]
     [StringLength(254)]
     public string Email { get; set; } = null!;
@@ -60,7 +61,7 @@ public class LoginModel(
         return Redirect(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(loginTokenDto.Guid));
     }
 
-    public IActionResult OnGetExternalLogin([StringLength(64)]string provider)
+    public IActionResult OnGetExternalLogin(string provider)
     {
         if (!ModelState.IsValid)
         {

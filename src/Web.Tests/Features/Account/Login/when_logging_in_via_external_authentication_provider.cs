@@ -26,8 +26,9 @@ public class when_logging_in_via_external_authentication_provider : BaseDatabase
         _model = new LoginModelBuilder(UnitOfWork)
             .WithUrlHelper(urlHelper)
             .Build();
+        _model.ReturnUrl = returnUrl;
 
-        _actionResult = _model.OnGetExternalLogin("Google", returnUrl: returnUrl);
+        _actionResult = _model.OnGetExternalLogin("Google");
     }
     
     [Test]

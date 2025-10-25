@@ -7,4 +7,5 @@ export abstract class ValidationConstants
 	public static watchdogNameMaxLength: number = 200;
 	public static watchdogWebPageNameMaxLength: number = 200;
 	public static searchTermMaxLength: number = 400;
+	public static urlMaxLength: number = 3000;
 }

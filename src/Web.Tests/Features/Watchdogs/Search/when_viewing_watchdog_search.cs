@@ -38,8 +38,6 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
         _model.WatchdogSearchArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogSearchArgs.SearchTerm.ShouldBe("text");
         
-        _model.SearchTerm.ShouldBe("text");
-        
         _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
         

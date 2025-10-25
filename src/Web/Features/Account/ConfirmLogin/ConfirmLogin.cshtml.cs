@@ -10,6 +10,7 @@ using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace MrWatchdog.Web.Features.Account.ConfirmLogin;
@@ -23,6 +24,8 @@ public class ConfirmLoginModel(
 ) : BasePageModel
 {
     [BindProperty(SupportsGet = true)]
+    [Required]
+    [StringLength(800)]
     public string Token { get; set; } = null!;    
     
     public async Task<IActionResult> OnGet()

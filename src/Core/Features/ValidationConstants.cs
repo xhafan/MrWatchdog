@@ -14,4 +14,6 @@ public static class ValidationConstants
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const int SearchTermMaxLength = 400;
 
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const int UrlMaxLength = 3000;
 }

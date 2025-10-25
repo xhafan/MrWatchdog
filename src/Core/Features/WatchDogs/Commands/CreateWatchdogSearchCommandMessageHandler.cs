@@ -21,7 +21,9 @@ public class CreateWatchdogSearchCommandMessageHandler(
         var watchdogSearches = await unitOfWork.Session!.QueryOver<WatchdogSearch>()
             .Where(x => x.Watchdog == watchdog 
                         && x.User == user
-                        && x.SearchTerm == command.SearchTerm)
+                        && x.SearchTerm == command.SearchTerm
+                        && !x.IsArchived
+            )
             .ListAsync();
         
         if (watchdogSearches.Any()) return;

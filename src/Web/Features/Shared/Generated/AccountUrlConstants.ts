@@ -8,6 +8,8 @@ export abstract class AccountUrlConstants
 	public static loginTokenGuidVariable: string = `$loginTokenGuid`;
 	public static returnUrl: string = `returnUrl`;
 	public static accountLoginUrl: string = `/Account/Login`;
+	public static providerVariable: string = `$provider`;
+	public static accountExternalLoginUrl: string = `/Account/Login?provider=$provider&handler=ExternalLogin`;
 	public static accountConfirmLoginUrlTemplate: string = `/Account/ConfirmLogin?token=$token`;
 	public static accountLoginLinkSentUrlTemplate: string = `/Account/LoginLinkSent?loginTokenGuid=$loginTokenGuid`;
 	public static apiGetLoginTokenConfirmationUrlTemplate: string = `/api/Login/GetLoginTokenConfirmation?loginTokenGuid=$loginTokenGuid`;

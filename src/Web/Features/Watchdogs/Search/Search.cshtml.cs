@@ -20,9 +20,6 @@ public class SearchModel(
     public WatchdogSearchArgs WatchdogSearchArgs { get; private set; } = null!;
     public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;
 
-    [BindProperty] 
-    public string? SearchTerm { get; set; }
-
     public async Task<IActionResult> OnGet(long watchdogSearchId)
     {
         WatchdogSearchArgs =
@@ -43,8 +40,6 @@ public class SearchModel(
             );
             return Redirect(redirectUrl);
         }
-
-        SearchTerm = WatchdogSearchArgs.SearchTerm;
 
         WatchdogScrapingResultsArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogScrapingResultsArgsQuery, WatchdogScrapingResultsArgs>(

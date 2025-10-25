@@ -11,7 +11,10 @@ using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
@@ -21,6 +24,7 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
     private User? _actingUser;
+    private string? _searchTerm;
 
     public ScrapingResultsModelBuilder WithBus(ICoreBus bus)
     {
@@ -40,6 +44,12 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
 
+    public ScrapingResultsModelBuilder WithSearchTerm(string? searchTerm)
+    {
+        _searchTerm = searchTerm;
+        return this;
+    }
+
     public ScrapingResultsModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
@@ -47,11 +57,6 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
         queryHandlerFactory.RegisterQueryHandler(new GetWatchdogScrapingResultsArgsQueryHandler(
-            unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
-        ));
-
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailPublicStatusArgsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
@@ -67,7 +72,10 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
             new QueryExecutor(queryHandlerFactory),
             _bus,
             _authorizationService
-        );
+        )
+        {
+            SearchTerm = _searchTerm
+        };
 
         ModelValidator.ValidateModel(model);
 
@@ -81,9 +89,7 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
                 ? [new Claim(ClaimTypes.NameIdentifier, $"{_actingUser.Id}")] 
                 : [];
 
-            model.PageContext = new PageContext
-            {
-                HttpContext = new DefaultHttpContext
+            model.PageContext = new PageContext(new ActionContext(new DefaultHttpContext
                 {
                     User = new ClaimsPrincipal(new ClaimsIdentity(
                         claims,
@@ -91,8 +97,11 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
                             ? CookieAuthenticationDefaults.AuthenticationScheme
                             : null)
                     )
-                }
-            };
+                },
+                new RouteData(),
+                new ActionDescriptor(),
+                model.ModelState)
+            );
         }
     }
 }

@@ -26,9 +26,10 @@ public class when_creating_watchdog_search_for_unauthenticated_user : BaseDataba
         
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
+            .WithSearchTerm(" search term ")
             .Build();
-        
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id, " search term ");
+
+        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id);
     }
 
     [Test]

@@ -12,7 +12,7 @@ public record WatchdogWebPageArgs
 
     [Url(ErrorMessage = "The {0} field is not a valid fully-qualified http, or https URL.")]
     [Required]
-    [StringLength(3000)]
+    [StringLength(ValidationConstants.UrlMaxLength)]
     public string? Url { get; set; }
 
     [Display(Name = "CSS path selector")]

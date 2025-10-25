@@ -45,25 +45,27 @@ public class ScrapingResultsModel(
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreateWatchdogSearch(
-        long watchdogId, 
-        [FromForm] string? searchTerm
-    )
+    public async Task<IActionResult> OnPostCreateWatchdogSearch(long watchdogId)
     {
         if (!User.IsAuthenticated()) return Unauthorized();
 
-        var watchdogPublicStatusArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
-                new GetWatchdogDetailPublicStatusArgsQuery(watchdogId)
+        WatchdogScrapingResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogScrapingResultsArgsQuery, WatchdogScrapingResultsArgs>(
+                new GetWatchdogScrapingResultsArgsQuery(watchdogId)
             );
 
-        if (watchdogPublicStatusArgs.PublicStatus != PublicStatus.Public 
+        if (!ModelState.IsValid)
+        {
+            return PageWithUnprocessableEntityStatus422();
+        }
+
+        if (WatchdogScrapingResultsArgs.PublicStatus != PublicStatus.Public 
             && !await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId))
         {
             return Forbid();
         }
 
-        var command = new CreateWatchdogSearchCommand(watchdogId, searchTerm?.Trim());
+        var command = new CreateWatchdogSearchCommand(watchdogId, SearchTerm?.Trim());
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

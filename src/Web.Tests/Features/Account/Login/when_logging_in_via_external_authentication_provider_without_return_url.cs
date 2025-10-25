@@ -15,8 +15,9 @@ public class when_logging_in_via_external_authentication_provider_without_return
     public void Context()
     {
         _model = new LoginModelBuilder(UnitOfWork).Build();
+        _model.ReturnUrl = null;
 
-        _actionResult = _model.OnGetExternalLogin("Google", returnUrl: null);
+        _actionResult = _model.OnGetExternalLogin("Google");
     }
     
     [Test]

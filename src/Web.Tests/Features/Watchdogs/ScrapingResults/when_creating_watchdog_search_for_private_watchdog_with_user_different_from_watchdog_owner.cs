@@ -41,9 +41,10 @@ public class when_creating_watchdog_search_for_private_watchdog_with_user_differ
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
             .WithActingUser(_actingUser)
+            .WithSearchTerm(" search term ")
             .Build();
         
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id, " search term ");
+        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id);
     }
 
     [Test]

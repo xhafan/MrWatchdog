@@ -7,26 +7,27 @@ using CoreDdd.Nhibernate.Register.Castle;
 using CoreDdd.Rebus.UnitOfWork;
 using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
+using CoreUtils;
+using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+using MrWatchdog.Core.Infrastructure.Configurations;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
+using Rebus.Bus;
 using Rebus.CastleWindsor;
 using Rebus.Config;
 using Rebus.Pipeline;
 using Rebus.Pipeline.Receive;
+using Rebus.Retry;
 using Rebus.Retry.Simple;
+using Rebus.Serialization;
 using Rebus.Transport.InMem;
 using System.Data;
-using CoreUtils;
-using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using Rebus.Retry;
-using Rebus.Serialization;
 
 namespace MrWatchdog.Web.HostedServices;
 
@@ -62,10 +63,18 @@ public class RebusHostedService(
         WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer);
         WindsorContainerRegistrator.RegisterServicesFromMainWindsorContainer(_hostedServiceWindsorContainer, mainWindsorContainer);
 
+        var fireAndForgetWebBus = mainWindsorContainer.Resolve<IBus>();
+
         _hostedServiceWindsorContainer.Register(
             Component.For<IJobCreator>().ImplementedBy<ExistingTransactionJobCreator>().LifeStyle.PerRebusMessage(),
             Component.For<IJobCreator>().ImplementedBy<NewTransactionJobCreator>().LifeStyle.Singleton.Named(nameof(NewTransactionJobCreator)),
             Component.For<ICoreBus>().ImplementedBy<CoreBus>().LifeStyle.PerRebusMessage(),
+            
+            Component.For<ICoreBus>().ImplementedBy<CoreBus>().LifeStyle.Singleton
+                .Named(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus)
+                .DependsOn(Dependency.OnComponent(typeof(IJobCreator), nameof(NewTransactionJobCreator)))
+                .DependsOn(Dependency.OnValue(typeof(IBus), fireAndForgetWebBus)),
+            
             Component.For<IActingUserAccessor>().ImplementedBy<JobContextActingUserAccessor>().LifeStyle.Singleton,
             Component.For<IRequestIdAccessor>().ImplementedBy<JobContextRequestIdAccessor>().LifeStyle.Singleton,
             Component.For<IRebusQueueRedirector>().ImplementedBy<JobContextRebusQueueRedirector>().LifeStyle.Singleton,
@@ -170,7 +179,7 @@ public class RebusHostedService(
                         new ReportFailedMessageErrorHandler(
                             resolutionContext.Get<IErrorHandler>(),
                             resolutionContext.Get<ISerializer>(),
-                            _hostedServiceWindsorContainer.Resolve<IEmailSender>(),
+                            _hostedServiceWindsorContainer.Resolve<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
                             _hostedServiceWindsorContainer.Resolve<IOptions<RuntimeOptions>>(),
                             _hostedServiceWindsorContainer.Resolve<IOptions<EmailAddressesOptions>>()
                         )

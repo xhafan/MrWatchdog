@@ -19,7 +19,7 @@ public class when_handling_failed_message
     private ITransactionContext _transactionContext = null!;
     private TransportMessage _transportMessage = null!;
     private ExceptionInfo _exceptionInfo = null!;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private IOptions<EmailAddressesOptions> _iEmailAddressesOptions = null!;
     private Guid _jobGuid;
 
@@ -29,14 +29,14 @@ public class when_handling_failed_message
         _originalErrorHandler = A.Fake<IErrorHandler>();
         
         var serializer = A.Fake<ISerializer>();
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
 
         _iEmailAddressesOptions = OptionsTestRetriever.Retrieve<EmailAddressesOptions>();
 
         var errorHandlerDecorator = new ReportFailedMessageErrorHandler(
             _originalErrorHandler,
             serializer,
-            _emailSender,
+            _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>(),
             _iEmailAddressesOptions
         );
@@ -76,17 +76,25 @@ public class when_handling_failed_message
     }
 
     [Test]
-    public void email_about_failed_message_is_sent()
+    public void send_email_command_is_sent()
     {
-        A.CallTo(() => _emailSender.SendEmail(
-                _iEmailAddressesOptions.Value.BackendErrors,
-                A<string>.That.Matches(p => p.Contains("Job") && p.Contains("failed")),
-                A<string>.That.Matches(p => p.Contains("Job") && p.Contains("failed")
-                                            && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveWatchdogCommand</a>
-                                                           """)
-                )
-            ))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
+    }
+
+    private bool _MatchingCommand(SendEmailCommand command)
+    {
+        command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.BackendErrors);
+        
+        command.Subject.ShouldContain("Job");
+        command.Subject.ShouldContain("failed");
+        
+        command.HtmlMessage.ShouldContain("Job");
+        command.HtmlMessage.ShouldContain("failed");
+        command.HtmlMessage.ShouldContain(
+            $"""
+             <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveWatchdogCommand</a>
+             """
+        );
+        return true;
     }
 }

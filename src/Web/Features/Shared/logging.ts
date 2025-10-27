@@ -1,21 +1,31 @@
 import { LogConstants } from "./Generated/LogConstants";
 import StackTrace from "stacktrace-js";
 
+const disableLoggingErrorToBackendErrorMessageRegexes: RegExp[] = [
+    /Error: Job .* failed\./
+];
+
 export async function logError(
     error: string | Error | unknown,
     extraInfo: Record<string, unknown> = {},
     logErrorToConsole: boolean = false,
     showAlertDialog: boolean = false
 ): Promise<void> {
+    const errorString = `${error}`;
+
     if (logErrorToConsole) {
         console.error(error, extraInfo);
     }
     if (showAlertDialog) {
         bootbox.alert({
             title: '<i class="fa-solid fa-triangle-exclamation text-danger"></i> Error',
-            message: `${error}`,
+            message: errorString,
             centerVertical: true
         });
+    }
+
+    if (disableLoggingErrorToBackendErrorMessageRegexes.some(rx => rx.test(errorString))) {
+        return;
     }
 
     let errorMessage : string;

@@ -1,7 +1,7 @@
 ﻿using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.SmtpServerEmailSenders;
+namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.SmtpClientDirectlyToRecipientMailServerEmailSenders;
 
 [TestFixture]
 [Ignore("Email sending is disabled by default")]
@@ -10,8 +10,8 @@ public class when_sending_email
     [Test]
     public async Task email_is_sent()
     {
-        var emailSender = new SmtpServerEmailSender(
-            OptionsTestRetriever.Retrieve<SmtpServerEmailSenderOptions>(),
+        var emailSender = new SmtpClientDirectlyToRecipientMailServerEmailSender(
+            OptionsTestRetriever.Retrieve<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(),
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>()
         );
 

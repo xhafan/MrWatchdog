@@ -14,4 +14,5 @@ public static class RebusConstants
 
     public const string RebusSendQueueSuffix = "Send";
 
+    public const string CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus = nameof(CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus);
 }

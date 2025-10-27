@@ -13,7 +13,7 @@ namespace MrWatchdog.Core.Infrastructure.Rebus;
 public class ReportFailedMessageErrorHandler(
     IErrorHandler errorHandler,
     ISerializer serializer,
-    IEmailSender emailSender,
+    ICoreBus bus,
     IOptions<RuntimeOptions> iRuntimeOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 )
@@ -34,13 +34,13 @@ public class ReportFailedMessageErrorHandler(
         var jobGuid = Guid.Parse(rebusMessage.Headers[Headers.MessageId]);
         var failedMessageTypeName = message.GetType().Name;
 
-        await emailSender.SendEmail(
+        await bus.Send(new SendEmailCommand(
             iEmailAddressesOptions.Value.BackendErrors,
-            subject: $"Job {failedMessageTypeName} failed on {iRuntimeOptions.Value.Environment}",
-            htmlMessage: $"""
+            Subject: $"Job {failedMessageTypeName} failed on {iRuntimeOptions.Value.Environment}",
+            HtmlMessage: $"""
                           Job <a href="{iRuntimeOptions.Value.Url}{JobUrlConstants.GetJobUrlTemplate.WithJobGuid(jobGuid)}">{failedMessageTypeName}</a> 
                           failed on {iRuntimeOptions.Value.Environment}.
                           """
-        );
+        ));
     }
 }

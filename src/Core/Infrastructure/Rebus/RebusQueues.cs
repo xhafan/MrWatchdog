@@ -7,6 +7,7 @@ public static class RebusQueues
     public const string Main = nameof(Main);
     public const string AdminBulk = nameof(AdminBulk);
     public const string Scraping = nameof(Scraping);
+    public const string Email = nameof(Email);
 
     public static readonly Lazy<IReadOnlyCollection<string>> AllQueues = new(() =>
     {

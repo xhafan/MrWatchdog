@@ -18,6 +18,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
     private Watchdog _watchdogWithoutNextScrapingOnSet = null!;
     private Watchdog _watchdogWithNextScrapingOnSetInTheFarPast = null!;
     private Watchdog _watchdogWithNextScrapingOnSetInTheFuture = null!;
+    private Watchdog _archivedWatchdogWithoutNextScrapingOnSet = null!;
     private ICoreBus _bus = null!;
 
     [SetUp]
@@ -47,7 +48,8 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
         hostedService.SetWatchdogIdsToScrape(
             _watchdogWithoutNextScrapingOnSet.Id,
             _watchdogWithNextScrapingOnSetInTheFarPast.Id,
-            _watchdogWithNextScrapingOnSetInTheFuture.Id
+            _watchdogWithNextScrapingOnSetInTheFuture.Id,
+            _archivedWatchdogWithoutNextScrapingOnSet.Id
         );
 
         using var cts = new CancellationTokenSource();
@@ -62,6 +64,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
         _watchdogWithoutNextScrapingOnSet = UnitOfWork.LoadById<Watchdog>(_watchdogWithoutNextScrapingOnSet.Id);
         _watchdogWithNextScrapingOnSetInTheFarPast = UnitOfWork.LoadById<Watchdog>(_watchdogWithNextScrapingOnSetInTheFarPast.Id);
         _watchdogWithNextScrapingOnSetInTheFuture = UnitOfWork.LoadById<Watchdog>(_watchdogWithNextScrapingOnSetInTheFuture.Id);
+        _archivedWatchdogWithoutNextScrapingOnSet = UnitOfWork.LoadById<Watchdog>(_archivedWatchdogWithoutNextScrapingOnSet.Id);
     }
 
     [Test]
@@ -82,6 +85,12 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
         A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_watchdogWithNextScrapingOnSetInTheFuture.Id))).MustNotHaveHappened();
     }
     
+    [Test]
+    public void archived_watchdog_does_not_have_scraping_scheduled()
+    {
+        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_archivedWatchdogWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
+    }
+
     [Test]
     public void watchdog_without_next_scraping_on_timestamp_has_next_scraping_on_set()
     {
@@ -105,6 +114,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
                 await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
                 await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFarPast);
                 await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFuture);
+                await newUnitOfWork.DeleteWatchdogCascade(_archivedWatchdogWithoutNextScrapingOnSet);
             }
         );
     }    
@@ -127,6 +137,11 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
                 _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(newUnitOfWork)
                     .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(120))
                     .Build();
+
+                _archivedWatchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
+                    .WithScrapingIntervalInSeconds(60)
+                    .Build();
+                _archivedWatchdogWithoutNextScrapingOnSet.Archive();
             }
         );
     }

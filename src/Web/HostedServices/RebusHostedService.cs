@@ -22,6 +22,11 @@ using Rebus.Retry.Simple;
 using Rebus.Transport.InMem;
 using System.Data;
 using CoreUtils;
+using Microsoft.Extensions.Options;
+using MrWatchdog.Core.Infrastructure.Configurations;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
+using Rebus.Retry;
+using Rebus.Serialization;
 
 namespace MrWatchdog.Web.HostedServices;
 
@@ -160,6 +165,18 @@ public class RebusHostedService(
                                 .OnReceive(jobCompletionIncomingStep, PipelineRelativePosition.Before, typeof(ActivateHandlersStep))
                             ;
                     });
+
+                    x.Decorate<IErrorHandler>(resolutionContext =>
+                        new ReportFailedMessageErrorHandler(
+                            resolutionContext.Get<IErrorHandler>(),
+                            resolutionContext.Get<ISerializer>(),
+                            _hostedServiceWindsorContainer.Resolve<IEmailSender>(),
+                            _hostedServiceWindsorContainer.Resolve<IOptions<RuntimeOptions>>(),
+                            _hostedServiceWindsorContainer.Resolve<IOptions<EmailAddressesOptions>>()
+                        )
+                    );
+
+                    //x.LogPipeline(verbose: true); // uncomment to log pipeline steps so one can decide where to insert an incoming step
                 }
             )
             .Start();

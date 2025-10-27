@@ -52,6 +52,7 @@ public class KickOffDueWatchdogsScrapingHostedService(
                               {w.*}
                           FROM "Watchdog" w
                           WHERE "NextScrapingOn" <= :utcNow or "NextScrapingOn" is null
+                          and w."IsArchived" = false
                           {{(_watchdogIdsToScrape == null
                               ? ""
                               : """

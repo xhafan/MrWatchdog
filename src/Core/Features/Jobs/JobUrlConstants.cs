@@ -1,7 +1,6 @@
-﻿using MrWatchdog.Core.Features;
-using Reinforced.Typings.Attributes;
+﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Jobs;
+namespace MrWatchdog.Core.Features.Jobs;
 
 [TsClass(IncludeNamespace = false, AutoExportMethods = false)]
 public static class JobUrlConstants

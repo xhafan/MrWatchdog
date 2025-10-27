@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Jobs;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Jobs;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Jobs;
 

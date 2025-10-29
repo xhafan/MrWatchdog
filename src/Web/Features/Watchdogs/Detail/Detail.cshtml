@@ -38,12 +38,12 @@
         </turbo-frame>
     </div>
     <p class="text-muted">
-        This watchdog will scrape web page(s) and will select results based on the CSS path selector.
-        Choose <i>@Resource.ViewScrapingResults</i> to be able to save Search with notifications about new scraping results.
+        This watchdog will scrape web page(s) and will select search results based on the CSS path selector.
+        Choose <i>@Resource.ViewSearchResults</i> to be able to save Search with notifications about new search results.
         @if (Model.WatchdogDetailArgs.PublicStatus == PublicStatus.Private)
         {
             @:Choose <i>@Resource.RequestToMakePublic</i> to request to make the watchdog public and discoverable by other users
-            @:who will then be able to set up notifications about new scraping results on it.
+            @:who will then be able to set up email notifications about its new search results.
         }
     </p>    
 

@@ -121,7 +121,7 @@
     <value>Create watchdog</value>
   </data>
   <data name="FilterResults" xml:space="preserve">
-    <value>Enter search term to filter results (optional)</value>
+    <value>Enter search term to filter search results (optional)</value>
   </data>
   <data name="ListOfWatchdogs" xml:space="preserve">
     <value>Watchdogs</value>
@@ -138,8 +138,8 @@
   <data name="RequestToMakePublic" xml:space="preserve">
     <value>Request to make public</value>
   </data>
-  <data name="ViewScrapingResults" xml:space="preserve">
-    <value>View scraping results</value>
+  <data name="ViewSearchResults" xml:space="preserve">
+    <value>View search results</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -148,6 +148,6 @@
     <value>My Searches</value>
   </data>
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
-    <value>Receive email notification about new results</value>
+    <value>Receive email notification about new search results</value>
   </data>
 </root>

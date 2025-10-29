@@ -150,7 +150,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         {
             await emailSender.SendEmail(
                 User.Email,
-                $"{mrWatchdogResource}: new results for {Watchdog.Name}{searchTermSuffix}",
+                $"{mrWatchdogResource}: new search results for {Watchdog.Name}{searchTermSuffix}",
                 $"""
                  <html>
                  <body>

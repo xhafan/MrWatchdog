@@ -70,7 +70,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter search term to filter results (optional).
+        ///   Looks up a localized string similar to Enter search term to filter search results (optional).
         /// </summary>
         public static string FilterResults {
             get {
@@ -124,7 +124,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receive email notification about new results.
+        ///   Looks up a localized string similar to Receive email notification about new search results.
         /// </summary>
         public static string ReceiveEmailNotificationAboutNewResults {
             get {
@@ -151,11 +151,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View scraping results.
+        ///   Looks up a localized string similar to View search results.
         /// </summary>
-        public static string ViewScrapingResults {
+        public static string ViewSearchResults {
             get {
-                return ResourceManager.GetString("ViewScrapingResults", resourceCulture);
+                return ResourceManager.GetString("ViewSearchResults", resourceCulture);
             }
         }
     }

@@ -10,13 +10,6 @@
         <view-or-edit-form action="@Url.Page("Overview")">
         
             <view-mode-item>
-                <div class="mb-1">
-                    <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
-                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
-                        <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
-                    </label>
-                </div>
-                <partial name="ReceiveNotificationInfoPartial" />
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text">
@@ -29,12 +22,33 @@
                         />
                     </div>
                 </div>
+                <div class="mb-1">
+                    <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
+                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
+                        <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
+                    </label>
+                </div>
+                <partial name="ReceiveNotificationInfoPartial" />
             </view-mode-item>
         
             <edit-mode-item>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="WatchdogSearchOverviewArgs.WatchdogSearchId" type="hidden" />
                 
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
+                               class="form-control"
+                               data-watchdogs--search-overview-target="searchTerm"
+                               data-action="input->@StimulusControllers.WatchdogSearchOverview#onSearchTermModified"
+                               placeholder="@Resource.FilterResults"
+                        />
+                    </div>
+                    <span asp-validation-for="WatchdogSearchOverviewArgs.SearchTerm" class="text-danger"></span>
+                </div>
                 <div class="mb-1">
                     <input asp-for="WatchdogSearchOverviewArgs.ReceiveNotification"
                            type="checkbox" 
@@ -46,20 +60,6 @@
                     </label>
                 </div>
                 <partial name="ReceiveNotificationInfoPartial" />
-                <div class="mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
-                               class="form-control"
-                               data-watchdogs--search-overview-target="searchTerm"
-                               data-action="input->@StimulusControllers.WatchdogSearchOverview#onSearchTermModified"
-                               placeholder="@Resource.FilterResults"
-                               />
-                    </div>
-                    <span asp-validation-for="WatchdogSearchOverviewArgs.SearchTerm" class="text-danger"></span>
-                </div>
             </edit-mode-item>
 
         </view-or-edit-form>

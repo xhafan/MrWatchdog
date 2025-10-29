@@ -16,7 +16,7 @@
         <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
            class="btn btn-outline-primary text-decoration-none"
            data-turbo-frame="_top">
-            @Resource.ViewScrapingResults
+            @Resource.ViewSearchResults
         </a>
             @{
                 var isRequestToMakePublicFormVisible = !await User.IsSuperAdmin(UserRepository)

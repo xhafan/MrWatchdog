@@ -6,7 +6,7 @@ namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
 public static class ScrapingResultsConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string SaveSearchAndNotifyMeAboutNewResultsButtonLabel = "Save Search with notification about new results";
+    public const string SaveSearchAndNotifyMeAboutNewResultsButtonLabel = "Save Search with email notification about new search results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string SearchTermVariable = "$searchTerm";
@@ -14,15 +14,16 @@ public static class ScrapingResultsConstants
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string SaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate 
         = $"""
-           Save Search with notification about new results matching the search term <i translate="no">{SearchTermVariable}</i>
+           Save Search with email notification about new search results matching the search term <i translate="no">{SearchTermVariable}</i>
            """;
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string LoginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel = "Log in or register to save Search with notification about new results";
+    public const string LoginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel 
+        = "Log in or register to save Search with email notification about new search results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string LoginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate = 
         $"""
-         Log in or register to save Search with notification about new results matching the search term <i translate="no">{SearchTermVariable}</i>
+         Log in or register to save Search with email notification about new search results matching the search term <i translate="no">{SearchTermVariable}</i>
          """;
 }

@@ -12,7 +12,7 @@
          )
          >
         <div class="d-flex justify-content-between">
-            <label class="form-label fw-bold">Scraping results</label>
+            <label class="form-label fw-bold">Search results</label>
             <form asp-page-handler="ScrapeWatchdogWebPage"
                   asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
@@ -21,7 +21,7 @@
             >
                 <button type="submit" 
                         class="btn btn-outline-primary"
-                        title="Scrape web page now">
+                        >
                     Scrape web page
                 </button>
             </form>

@@ -2,7 +2,10 @@ import { LogConstants } from "./Generated/LogConstants";
 import StackTrace from "stacktrace-js";
 
 const disableLoggingErrorToBackendErrorMessageRegexes: RegExp[] = [
-    /Error: Job .* failed\./
+    /Error: Job .* failed\./,
+    /NetworkError when attempting to fetch resource\./, // Firefox network error
+    /TypeError: Failed to fetch/ // Chrome network error
+    // todo: add Safari iOS NetworkError string
 ];
 
 export async function logError(

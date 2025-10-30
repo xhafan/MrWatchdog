@@ -8,13 +8,13 @@ namespace MrWatchdog.Web.Features.Shared.TagHelpers;
 public abstract class BaseStimulusModelViewTagHelper<TStimulusModel>(IHtmlHelper htmlHelper) 
     : BaseViewTagHelper(htmlHelper) where TStimulusModel : BaseStimulusModel
 {
-    protected abstract TStimulusModel GetStimulusModel();
+    protected abstract Task<TStimulusModel> GetStimulusModel();
     
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         await base.ProcessAsync(context, output);
 
-        var stimulusModel = GetStimulusModel();
+        var stimulusModel = await GetStimulusModel();
         
         var stimulusControllerName = GetStimulusControllerName();
         Guard.Hope(stimulusControllerName != null, $"{GetType().Name} Stimulus controller name not provided.");

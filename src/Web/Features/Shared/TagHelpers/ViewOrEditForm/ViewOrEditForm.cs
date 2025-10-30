@@ -16,8 +16,8 @@ public class ViewOrEditForm(IHtmlHelper htmlHelper)
         return StimulusControllers.ViewOrEditForm;
     }
 
-    protected override ViewOrEditFormStimulusModel GetStimulusModel()
+    protected override Task<ViewOrEditFormStimulusModel> GetStimulusModel()
     {
-        return new ViewOrEditFormStimulusModel(StartInEditMode, HideCancelInEditMode);
+        return Task.FromResult(new ViewOrEditFormStimulusModel(StartInEditMode, HideCancelInEditMode));
     }
 }

@@ -20,4 +20,5 @@ export abstract class StimulusControllers
 	public static watchdogSearchOverview: string = `watchdogs--search-overview`;
 	public static accountLogin: string = `account--login`;
 	public static accountLoginLinkSent: string = `account--login-link-sent`;
+	public static onboarding: string = `onboarding`;
 }

@@ -8,6 +8,7 @@ import "./site.css";
 
 import BodyController from "./BodyController";
 import TurboFrameController from "./TagHelpers/TurboFrame/TurboFrameController";
+import OnboardingController from "./TagHelpers/Onboarding/OnboardingController";
 import ViewOrEditFormController from "./TagHelpers/ViewOrEditForm/ViewOrEditFormController";
 
 import WatchdogsCreateController from "../Watchdogs/Create/CreateController";
@@ -29,6 +30,7 @@ import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSe
 const application = Application.start();
 application.register(StimulusControllers.body, BodyController);
 application.register(StimulusControllers.turboFrame, TurboFrameController);
+application.register(StimulusControllers.onboarding, OnboardingController);
 application.register(StimulusControllers.viewOrEditForm, ViewOrEditFormController);
 
 application.register(StimulusControllers.watchdogsCreate, WatchdogsCreateController);

@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import { ScrapingResultsConstants } from "../../Shared/Generated/ScrapingResultsConstants";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
@@ -45,17 +44,7 @@ export default class ScrapingResultsController extends Controller {
     onSearchTermModified() {
         let searchTerm = this.searchTermTarget.value;
 
-        this.dispatch(searchTermModifiedEventName, { detail: searchTerm, prefix: "" });
-        
-        this.createWatchdogSearchTarget.innerHTML = searchTerm 
-            ? ScrapingResultsConstants.saveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate
-                .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
-            : ScrapingResultsConstants.saveSearchAndNotifyMeAboutNewResultsButtonLabel;
-
-        this.loginToCreateWatchdogSearchTarget.innerHTML = searchTerm 
-            ? ScrapingResultsConstants.loginOrRegisterToSaveSearchAndNotifyMeAboutNewMatchingResultsButtonLabelTemplate
-                .replace(ScrapingResultsConstants.searchTermVariable, searchTerm)
-            : ScrapingResultsConstants.loginOrRegisterToSaveSearchAndNotifyMeAboutNewResultsButtonLabel;
+        this.dispatch(searchTermModifiedEventName, { detail: searchTerm, prefix: "" });        
     }
 
     loginToNotifyAboutNewResults() {

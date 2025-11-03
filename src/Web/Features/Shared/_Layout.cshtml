@@ -77,11 +77,15 @@
 
                         <form asp-controller="Login"
                               asp-action="Logout"
-                              class="d-flex align-items-center">
+                              class="d-flex align-items-center"
+                              >
                             <span @(isSuperAdmin ? "title=superadmin" : "")>
                                 <i class="fas @(isSuperAdmin ? "fa-user-ninja" : "fa-user")"></i> @User.Identity?.Name
                             </span>
-                            <button class="btn btn-link" type="submit">
+                            <button class="btn btn-link" 
+                                    type="submit"
+                                    data-action="@StimulusControllers.Body#logout"
+                                    >
                                 <span><i class="fas fa-sign-out"></i> Logout</span>
                             </button>
                         </form>

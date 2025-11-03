@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding;
+﻿namespace MrWatchdog.Core.Features.Account.Domain;
 
 public static class OnboardingIdentifiers
 {

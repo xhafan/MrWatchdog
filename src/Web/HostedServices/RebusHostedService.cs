@@ -60,7 +60,7 @@ public class RebusHostedService(
             FromAssembly.Containing<CoreDddNhibernateInstaller>()
         );
 
-        WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer);
+        WindsorContainerRegistrator.RegisterCommonServices(_hostedServiceWindsorContainer, configuration);
         WindsorContainerRegistrator.RegisterServicesFromMainWindsorContainer(_hostedServiceWindsorContainer, mainWindsorContainer);
 
         var fireAndForgetWebBus = mainWindsorContainer.Resolve<IBus>();

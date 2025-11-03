@@ -85,10 +85,10 @@ public class when_handling_failed_message
     {
         command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.BackendErrors);
         
-        command.Subject.ShouldContain("Job");
+        command.Subject.ShouldContain("Test job");
         command.Subject.ShouldContain("failed");
         
-        command.HtmlMessage.ShouldContain("Job");
+        command.HtmlMessage.ShouldContain("Test job");
         command.HtmlMessage.ShouldContain("failed");
         command.HtmlMessage.ShouldContain(
             $"""

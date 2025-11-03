@@ -10,4 +10,5 @@ export interface OnboardingStimulusModel extends BaseStimulusModel
 	enableOnboarding: boolean;
 	onboardingIdentifier: string;
 	steps: OnboardingStepStimulusModel[];
+	isUserAuthenticated: boolean;
 }

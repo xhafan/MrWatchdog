@@ -1,4 +1,5 @@
 ﻿import { Controller } from "@hotwired/stimulus";
+import { removeOnboardingKeysFromLocalStorage } from "./TagHelpers/Onboarding/OnboardingController";
 
 export const registerGlobalEventHandlerEventName = "body:registerGlobalEventHandler";
 
@@ -14,6 +15,10 @@ export default class BodyController extends Controller {
             eventHandlerRegistration.eventName,
             (event: CustomEventInit) => eventHandlerRegistration.eventHandler(event)
         );
+    }
+
+    logout() {
+        removeOnboardingKeysFromLocalStorage();
     }
 }
 

@@ -7,6 +7,7 @@ public record OnboardingStimulusModel(
     // ReSharper disable NotAccessedPositionalProperty.Global
     bool EnableOnboarding,
     string OnboardingIdentifier,
-    IEnumerable<OnboardingStepStimulusModel> Steps
+    IEnumerable<OnboardingStepStimulusModel> Steps,
+    bool IsUserAuthenticated
     // ReSharper restore NotAccessedPositionalProperty.Global
 ) : BaseStimulusModel;

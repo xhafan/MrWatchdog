@@ -15,6 +15,7 @@ public class when_persisting_user : BaseDatabaseTest
     public void Context()
     {
         _newUser = new UserBuilder(UnitOfWork).Build();
+        _newUser.CompleteOnboarding(OnboardingIdentifiers.WatchdogsScrapingResults);
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
@@ -30,5 +31,7 @@ public class when_persisting_user : BaseDatabaseTest
 
         _persistedUser.Email.ShouldBe(_newUser.Email);
         _persistedUser.SuperAdmin.ShouldBe(false);
+
+        _persistedUser.CompleteOnboardings.ShouldBe([OnboardingIdentifiers.WatchdogsScrapingResults]);
     }
 }

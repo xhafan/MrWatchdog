@@ -4,6 +4,7 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Jobs.Domain;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
 using NHibernate;
 using NHibernate.Criterion;
@@ -79,5 +80,29 @@ public static partial class E2ETestHelper
             )
             .SingleOrDefaultAsync();
         await unitOfWork.DeleteJobCascade(commandJob, waitForJobCompletion: true);
-    }    
+    }
+
+    public static async Task DeleteCommandJob<TCommand>(Guid commandGuid, NhibernateUnitOfWork unitOfWork)
+    {
+        var commandJob = await unitOfWork.Session!.QueryOver<Job>()
+            .Where(x => x.Type == typeof(TCommand).Name
+                        && x.Guid == commandGuid)
+            .SingleOrDefaultAsync();
+        await unitOfWork.DeleteJobCascade(commandJob, waitForJobCompletion: true);
+    }
+
+    public static async Task DeleteSendEmailCommandJob(string substringOfHtmlEmail, NhibernateUnitOfWork unitOfWork)
+    {
+        var commandJob = await unitOfWork.Session!.QueryOver<Job>()
+            .Where(x => x.Type == nameof(SendEmailCommand))
+            .And(Expression.Sql(
+                """
+                ({alias}."InputData" ->> 'htmlMessage') like ?
+                """,
+                $"%{substringOfHtmlEmail}%",
+                NHibernateUtil.String)
+            )
+            .SingleOrDefaultAsync();
+        await unitOfWork.DeleteJobCascade(commandJob, waitForJobCompletion: true);
+    }
 }

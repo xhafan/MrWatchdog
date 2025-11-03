@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreDdd.Queries;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Jobs.Queries;
@@ -13,7 +14,10 @@ namespace MrWatchdog.Core.Infrastructure;
 
 public static class WindsorContainerRegistrator
 {
-    public static void RegisterCommonServices(IWindsorContainer windsorContainer)
+    public static void RegisterCommonServices(
+        IWindsorContainer windsorContainer, 
+        IConfiguration configuration
+    )
     {
         windsorContainer.Register(
             Classes
@@ -26,9 +30,31 @@ public static class WindsorContainerRegistrator
                 .BasedOn(typeof(IQueryHandler<>))
                 .WithService.AllInterfaces()
                 .Configure(x => x.LifestyleTransient()),
-            Component.For<IJobRepositoryFactory>().AsFactory(),
-            Component.For<IEmailSender>().ImplementedBy<SmtpClientDirectlyToRecipientMailServerEmailSender>().LifeStyle.Singleton
+            Component.For<IJobRepositoryFactory>().AsFactory()
         );
+
+        var emailSenderService = configuration["EmailSender:Service"];
+        switch (emailSenderService)
+        {
+            case nameof(SmtpServerEmailSender):
+                windsorContainer.Register(Component.For<IEmailSender>()
+                    .ImplementedBy<SmtpServerEmailSender>().LifeStyle.Singleton
+                );
+                break;
+            case nameof(NullEmailSender):
+                windsorContainer.Register(Component.For<IEmailSender>()
+                    .ImplementedBy<NullEmailSender>().LifeStyle.Singleton
+                );
+                break;
+            case nameof(SmtpClientDirectlyToRecipientMailServerEmailSender):
+            case null:
+                windsorContainer.Register(Component.For<IEmailSender>()
+                    .ImplementedBy<SmtpClientDirectlyToRecipientMailServerEmailSender>().LifeStyle.Singleton
+                );
+                break;
+            default:
+                throw new NotSupportedException($"Email sender service {emailSenderService} not supported.");
+        }
     }
 
     public static void RegisterServicesFromMainWindsorContainer(IWindsorContainer windsorContainer, IWindsorContainer mainWindsorContainer)

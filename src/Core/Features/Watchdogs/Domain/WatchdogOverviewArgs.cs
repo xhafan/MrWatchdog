@@ -12,6 +12,9 @@ public record WatchdogOverviewArgs
     [StringLength(ValidationConstants.WatchdogNameMaxLength)]
     public required string Name { get; set; } = null!;
 
+    [StringLength(ValidationConstants.WatchdogDescriptionMaxLength)]
+    public required string? Description { get; set; }
+
     [Range(ScrapingConstants.ScrapingIntervalInSeconds, int.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 10.")]
     [Display(Name = "Scraping interval in seconds")]
     public required int ScrapingIntervalInSeconds { get; set; }

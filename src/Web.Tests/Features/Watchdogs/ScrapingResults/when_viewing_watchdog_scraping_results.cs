@@ -38,6 +38,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
     {
         _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
+        _model.WatchdogScrapingResultsArgs.WatchdogDescription.ShouldBe("watchdog description");
         
         var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
@@ -54,6 +55,7 @@ public class when_viewing_watchdog_scraping_results : BaseDatabaseTest
         
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithName("watchdog name")
+            .WithDescription("watchdog description")
             .WithWebPage(new WatchdogWebPageArgs
             {
                 Url = "http://url.com/page",

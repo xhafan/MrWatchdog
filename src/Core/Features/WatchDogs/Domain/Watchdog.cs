@@ -39,6 +39,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     
     public virtual User User { get; protected set; } = null!;
     public virtual string Name { get; protected set; } = null!;
+    public virtual string? Description { get; protected set; }
     public virtual int ScrapingIntervalInSeconds { get; protected set; }
     public virtual DateTime? NextScrapingOn { get; protected set; }
     public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
@@ -70,6 +71,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         {
             WatchdogId = Id, 
             Name = Name,
+            Description = Description,
             ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
             IntervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays,
             NumberOfFailedScrapingAttemptsBeforeAlerting = NumberOfFailedScrapingAttemptsBeforeAlerting
@@ -81,6 +83,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         Guard.Hope(Id == watchdogOverviewArgs.WatchdogId, "Invalid watchdog Id.");
         
         Name = watchdogOverviewArgs.Name;
+        Description = watchdogOverviewArgs.Description;
 
         NextScrapingOn = NextScrapingOn?
             .AddSeconds(-ScrapingIntervalInSeconds + watchdogOverviewArgs.ScrapingIntervalInSeconds);
@@ -151,6 +154,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         {
             WatchdogId = Id,
             WatchdogName = Name,
+            WatchdogDescription = Description,
             WebPages = _webPages
                 .Where(x => x.IsEnabled)
                 .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())

@@ -26,7 +26,8 @@
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">@title</li>
         </ol>
     </nav>
-    <onboarding identifier="@OnboardingIdentifiers.WatchdogsScrapingResults"
+    <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
+                identifier="@OnboardingIdentifiers.WatchdogsScrapingResults"
                 steps="@([
                            new OnboardingStepStimulusModel(
                                Title: "Onboarding",
@@ -47,6 +48,10 @@
                            new OnboardingStepStimulusModel(
                                Text: "Log in or register to save Search with email notification about new search results or new search results matching the search term.",
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsLoginToCreateWatchdogSearchId}"
+                           ),
+                           new OnboardingStepStimulusModel(
+                               Text: "You can view this onboarding anytime again.",
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.OnboardingId}"
                            )
                        ])"
     />
@@ -62,9 +67,12 @@
     }
 </div>
 
-<p class="text-muted">
-
-</p>
+@if (!string.IsNullOrWhiteSpace(Model.WatchdogScrapingResultsArgs.WatchdogDescription))
+{
+    <p class="text-muted">
+        @Model.WatchdogScrapingResultsArgs.WatchdogDescription
+    </p>
+}
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogsScrapingResults)>
     <form asp-page-handler="CreateWatchdogSearch"

@@ -8,12 +8,14 @@ namespace MrWatchdog.TestsShared.Builders;
 public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string Name = "watchdog name";
+    public const string Description = "watchdog description";
     public const int ScrapingIntervalInSeconds = 60;
     public const double IntervalBetweenSameResultNotificationsInDays = 20;
     public const int NumberOfFailedScrapingAttemptsBeforeAlerting = 5;
 
     private User? _user;
     private string _name = Name;
+    private string _description = Description;
     private int _scrapingIntervalInSeconds = ScrapingIntervalInSeconds;
     private double _intervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays;
 
@@ -33,6 +35,12 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
         return this;
     }
     
+    public WatchdogBuilder WithDescription(string description)
+    {
+        _description = description;
+        return this;
+    }
+
     public WatchdogBuilder WithScrapingIntervalInSeconds(int scrapingIntervalInSeconds)
     {
         _scrapingIntervalInSeconds = scrapingIntervalInSeconds;
@@ -92,6 +100,7 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
         {
             WatchdogId = watchdog.Id,
             Name = _name, 
+            Description = _description,
             ScrapingIntervalInSeconds = _scrapingIntervalInSeconds,
             IntervalBetweenSameResultNotificationsInDays = _intervalBetweenSameResultNotificationsInDays,
             NumberOfFailedScrapingAttemptsBeforeAlerting = _numberOfFailedScrapingAttemptsBeforeAlerting

@@ -26,6 +26,7 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
         {
             WatchdogId = _watchdog.Id,
             Name = null!,
+            Description = null,
             ScrapingIntervalInSeconds = 0,
             IntervalBetweenSameResultNotificationsInDays = 30,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 5

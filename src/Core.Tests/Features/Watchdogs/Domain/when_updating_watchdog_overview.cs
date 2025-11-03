@@ -18,6 +18,7 @@ public class when_updating_watchdog_overview
         {
             WatchdogId = _watchdog.Id,
             Name = "watchdog name",
+            Description = null,
             ScrapingIntervalInSeconds = 30,
             IntervalBetweenSameResultNotificationsInDays = 2.34,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 5

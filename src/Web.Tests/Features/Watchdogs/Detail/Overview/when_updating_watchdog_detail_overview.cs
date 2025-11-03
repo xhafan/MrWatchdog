@@ -30,6 +30,7 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
         {
             WatchdogId = _watchdog.Id,
             Name = "watchdog updated name",
+            Description = "watchdog updated description",
             ScrapingIntervalInSeconds = 60,
             IntervalBetweenSameResultNotificationsInDays = 30,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 5

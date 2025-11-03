@@ -43,6 +43,7 @@ public class when_updating_watchdog_detail_overview_as_unauthorized_user : BaseD
         {
             WatchdogId = _watchdog.Id,
             Name = "watchdog updated name",
+            Description = null,
             ScrapingIntervalInSeconds = 60,
             IntervalBetweenSameResultNotificationsInDays = 30,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 5

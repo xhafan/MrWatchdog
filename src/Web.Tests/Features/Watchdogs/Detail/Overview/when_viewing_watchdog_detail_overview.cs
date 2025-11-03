@@ -36,6 +36,7 @@ public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
     {
         _model.WatchdogOverviewArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogOverviewArgs.Name.ShouldBe(WatchdogBuilder.Name);
+        _model.WatchdogOverviewArgs.Description.ShouldBe(WatchdogBuilder.Description);
         _model.WatchdogOverviewArgs.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
         _model.WatchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultNotificationsInDays);
         _model.WatchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(WatchdogBuilder.NumberOfFailedScrapingAttemptsBeforeAlerting);

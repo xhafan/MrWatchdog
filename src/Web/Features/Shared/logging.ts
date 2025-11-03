@@ -4,8 +4,8 @@ import StackTrace from "stacktrace-js";
 const disableLoggingErrorToBackendErrorMessageRegexes: RegExp[] = [
     /Error: Job .* failed\./,
     /NetworkError when attempting to fetch resource\./, // Firefox network error
-    /TypeError: Failed to fetch/ // Chrome network error
-    // todo: add Safari iOS NetworkError string
+    /TypeError: Failed to fetch/, // Chrome network error
+    /TypeError: Load failed/ // iOS network error
 ];
 
 export async function logError(

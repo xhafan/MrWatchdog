@@ -14,6 +14,10 @@
                         <div>@Model.WatchdogOverviewArgs.Name</div>
                     </div>
                     <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.Description" class="form-label fw-bold"></label>
+                        <div>@Model.WatchdogOverviewArgs.Description</div>
+                    </div>
+                    <div class="mb-3">
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
                     </div>
@@ -29,6 +33,17 @@
                         <span asp-validation-for="WatchdogOverviewArgs.Name" class="text-danger"></span>
                     </div>
                     
+                    <div class="mb-3">
+                        <label asp-for="WatchdogOverviewArgs.Description" class="form-label fw-bold"></label>
+                        <textarea asp-for="WatchdogOverviewArgs.Description" 
+                              class="form-control"
+                              style="width:100%" 
+                              rows="2"
+                              >
+                        </textarea>
+                        <span asp-validation-for="WatchdogOverviewArgs.Description" class="text-danger"></span>
+                    </div>
+    
                     <div class="mb-3">
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <input asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-control" />

@@ -24,7 +24,8 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
         await handler.Handle(new UpdateWatchdogOverviewCommand(new WatchdogOverviewArgs
         {
             WatchdogId = _watchdog.Id,
-            Name = "updated watchdog Name",
+            Name = "updated watchdog name",
+            Description = "updated watchdog description",
             ScrapingIntervalInSeconds = 30,
             IntervalBetweenSameResultNotificationsInDays = 2.34,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 2
@@ -39,7 +40,8 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
     [Test]
     public void watchdog_overview_is_updated()
     {
-        _watchdog.Name.ShouldBe("updated watchdog Name");
+        _watchdog.Name.ShouldBe("updated watchdog name");
+        _watchdog.Description.ShouldBe("updated watchdog description");
         _watchdog.ScrapingIntervalInSeconds.ShouldBe(30);
         _watchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(2.34);
         _watchdog.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(2);

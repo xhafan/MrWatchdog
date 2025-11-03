@@ -9,6 +9,9 @@ public static class ValidationConstants
     public const int WatchdogNameMaxLength = 200;
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const int WatchdogDescriptionMaxLength = 1000;
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const int WatchdogWebPageNameMaxLength = 200;
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

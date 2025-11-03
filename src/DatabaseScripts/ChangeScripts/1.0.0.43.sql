@@ -1,0 +1,1 @@
+alter table "Watchdog" add "Description" text; 

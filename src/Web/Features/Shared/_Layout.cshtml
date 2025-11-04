@@ -70,6 +70,11 @@
                                 @Resource.ManageWatchdogs
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link @MarkIfActive("/Support")" asp-page="/Support">
+                                Support
+                            </a>
+                        </li>
                     </ul>
                     @if (User.IsAuthenticated())
                     {

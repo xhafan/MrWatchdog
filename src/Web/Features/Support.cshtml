@@ -1,0 +1,19 @@
+﻿@page
+@using Microsoft.Extensions.Options
+@using MrWatchdog.Core.Infrastructure.EmailSenders
+@model SupportModel
+@inject IOptions<EmailAddressesOptions> EmailAddressesOptions
+
+@{
+    var title = "Support";
+    ViewData["Title"] = title;
+}
+
+<h1 class="display-4">@title</h1>
+
+<div>
+    Need help? Contact our support team at
+    <a href="mailto:@(EmailAddressesOptions.Value.Support)" class="fw-semibold text-decoration-none">
+        @(EmailAddressesOptions.Value.Support)
+    </a>
+</div>

@@ -39,6 +39,7 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
                 WatchdogSearchId = _watchdogSearchForUserOne.Id,
                 WatchdogName = "watchdog name",
                 SearchTerm = "search term",
+                ReceiveNotification = true
             }
         );
         var watchdogSearchIds = _model.WatchdogSearches.Select(x => x.WatchdogSearchId).ToList();
@@ -60,6 +61,7 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
             .WithWatchdog(watchdog)
             .WithSearchTerm("search term")
             .WithUser(_userOne)
+            .WithReceiveNotification(true)
             .Build();
 
         _archivedWatchdogSearchForUserOne = new WatchdogSearchBuilder(UnitOfWork)

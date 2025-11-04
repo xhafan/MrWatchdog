@@ -29,6 +29,7 @@ public class GetWatchdogSearchesQueryHandler(
                 .Select(x => x.Id).WithAlias(() => result.WatchdogSearchId)
                 .Select(() => watchdog.Name).WithAlias(() => result.WatchdogName)
                 .Select(x => x.SearchTerm).WithAlias(() => result.SearchTerm)
+                .Select(x => x.ReceiveNotification).WithAlias(() => result.ReceiveNotification)
             )
             .OrderBy(() => watchdog.Name).Asc
             .ThenBy(x => x.SearchTerm).Asc

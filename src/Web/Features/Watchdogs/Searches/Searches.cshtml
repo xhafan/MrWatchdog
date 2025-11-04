@@ -35,6 +35,14 @@
            >
             <span>@watchdogSearch.WatchdogName</span>
             <span translate="no">@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")</span>
+            @if (!watchdogSearch.ReceiveNotification)
+            {
+                <span title="Email notifications disabled" style="position: relative; display: inline-block; color: #bbb;">
+                    <i class="fa-solid fa-envelope"></i>
+                    <i class="fa-solid fa-slash" 
+                       style="position: absolute; top: 4px; left: -2px; width: 100%; height: 100%; color: red; pointer-events: none;"></i>
+                </span>
+            }
         </a>
     </div>
 }

@@ -124,6 +124,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can view this onboarding anytime again..
+        /// </summary>
+        public static string OnboardingViewAgainStep {
+            get {
+                return ResourceManager.GetString("OnboardingViewAgainStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///    You can disable email notification about new search results.
         ///&lt;/p&gt;

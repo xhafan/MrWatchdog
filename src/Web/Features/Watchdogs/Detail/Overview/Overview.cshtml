@@ -1,4 +1,5 @@
 ﻿@page "{watchdogId}"
+@using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @model OverviewModel
 @{
    Layout = null;
@@ -17,7 +18,7 @@
                         <label asp-for="WatchdogOverviewArgs.Description" class="form-label fw-bold"></label>
                         <div>@Model.WatchdogOverviewArgs.Description</div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 @OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass">
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <div>@Model.WatchdogOverviewArgs.ScrapingIntervalInSeconds</div>
                     </div>
@@ -44,7 +45,7 @@
                         <span asp-validation-for="WatchdogOverviewArgs.Description" class="text-danger"></span>
                     </div>
     
-                    <div class="mb-3">
+                    <div class="mb-3 @OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass">
                         <label asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-label fw-bold"></label>
                         <input asp-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="form-control" />
                         <span asp-validation-for="WatchdogOverviewArgs.ScrapingIntervalInSeconds" class="text-danger"></span>

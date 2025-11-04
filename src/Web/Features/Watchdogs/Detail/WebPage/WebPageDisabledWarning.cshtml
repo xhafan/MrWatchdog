@@ -9,7 +9,7 @@
         @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPageDisabledWarning)
         style="display:@(Model.WatchdogWebPageDisabledWarningDto.IsEnabled ? "none" : "")"
         >
-        <i class="fa-solid fa-triangle-exclamation text-warning"></i> The web page has been automatically disabled by the last update.
+        <i class="fa-solid fa-triangle-exclamation text-warning"></i> The web page has been automatically disabled.
         <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "" : "none")">
             Please enable it once your edits are complete so that watchdog searches can continue watching it.
             <form asp-page-handler="EnableWatchdogWebPage"

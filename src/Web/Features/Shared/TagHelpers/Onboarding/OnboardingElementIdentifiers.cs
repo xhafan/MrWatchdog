@@ -12,4 +12,8 @@ public static class OnboardingElementIdentifiers
     public const string WatchdogsSearchSearchTermInputGroupCssClass = "watchdogsSearchSearchTermInputGroup";
     public const string WatchdogsSearchReceiveNotificationCssClass = "watchdogsSearchReceiveNotification";
 
+    public const string WatchdogsDetailAddWebPageToWatchId = "watchdogsDetailAddWebPageToWatch";
+    public const string WatchdogsDetailScrapingIntervalCssClass = "watchdogsDetailScrapingInterval";
+    public const string WatchdogsDetailViewSearchResultsId = "watchdogsDetailViewSearchResults";
+    public const string WatchdogsDetailRequestToMakePublicId = "watchdogsDetailRequestToMakePublic";
 }

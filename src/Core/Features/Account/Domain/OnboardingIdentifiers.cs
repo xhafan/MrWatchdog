@@ -2,6 +2,7 @@
 
 public static class OnboardingIdentifiers
 {
-    public const string WatchdogsScrapingResults = "WatchdogsScrapingResults";
-    public const string WatchdogsSearch = "WatchdogsSearch";
+    public const string WatchdogsScrapingResults = nameof(WatchdogsScrapingResults);
+    public const string WatchdogsSearch = nameof(WatchdogsSearch);
+    public const string WatchdogsDetail = nameof(WatchdogsDetail);
 }

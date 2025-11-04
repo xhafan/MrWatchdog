@@ -150,4 +150,14 @@
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
     <value>Receive email notification about new search results</value>
   </data>
+  <data name="OnboardingWatchdogSearchReceiveNotificationStep" xml:space="preserve">
+    <value>&lt;p&gt;
+    You can disable email notification about new search results.
+&lt;/p&gt;
+&lt;div class="alert alert-info mb-3"&gt;    
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Email notifications about new search results are currently free.
+    In the future, this feature will be available only to premium subscribers.
+    The premium subscription is not yet implemented.
+&lt;/div&gt;</value>
+  </data>
 </root>

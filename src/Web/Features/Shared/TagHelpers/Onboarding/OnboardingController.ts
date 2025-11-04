@@ -3,6 +3,8 @@ import { OnboardingStimulusModel } from "../../Generated/OnboardingStimulusModel
 import "@sjmc11/tourguidejs/dist/css/tour.min.css";
 import {TourGuideClient} from "@sjmc11/tourguidejs";
 import { UserUrlConstants } from "../../Generated/UserUrlConstants";
+import { FrameElement } from "@hotwired/turbo";
+import Enumerable from "linq";
 
 const onboardingLocalStorageKeyPrefix = "onboardingComplete_";
 
@@ -16,22 +18,29 @@ export function removeOnboardingKeysFromLocalStorage() {
 
 export default class OnboardingController extends BaseStimulusModelController<OnboardingStimulusModel>  {
    
-    isDisconnected: boolean = false;
-    
+	isDisconnected: boolean = false;
+
     tourGuide: TourGuideClient | undefined;
     turboBeforeCacheHandler: (() => void) | undefined;
     onboardingLocalStorageKey: string | undefined;
 
-    connect() {
-        this.turboBeforeCacheHandler = this.clearTourGuideDom.bind(this);
+    async connect() {
+        this.turboBeforeCacheHandler = this.clearPreviousInstanceOfTourGuide.bind(this);
         document.addEventListener("turbo:before-cache", this.turboBeforeCacheHandler);
-        
+
         this.onboardingLocalStorageKey = `${onboardingLocalStorageKeyPrefix}${this.modelValue.onboardingIdentifier}`;
 
-        this.initializeOnboarding();
+        if (this.modelValue.enableOnboarding && !this.isOnboardingComplete()) {
+            await this.startOnboarding();
+        }
     }
 
-    initializeOnboarding() {
+    async startOnboarding() {
+        if (this.tourGuide?.isVisible) return;
+
+        this.clearPreviousInstanceOfTourGuide();
+        await this.waitForAllTurboFramesLoaded();
+
         this.tourGuide = new TourGuideClient({
             backdropColor: "rgba(20,20,21,0.5)",
             steps: [], // this is needed for navigation to a Turbo cached page to prevent seeing old steps
@@ -46,49 +55,36 @@ export default class OnboardingController extends BaseStimulusModelController<On
 
         this.modelValue.steps.forEach((step, i) => {
             
+            let visibleElement;
+
             if (step.elementIdentifier) {
-                var element = document.querySelector(step.elementIdentifier);
-                if (!element) return;
+                var elements = Enumerable.from(document.querySelectorAll(step.elementIdentifier));
+                if (elements.count() == 0) return;
     
                 // @ts-ignore
-                var isElementVisible = element.offsetParent !== null; // more info https://stackoverflow.com/a/21696585/379279s
-                if (!isElementVisible) return;
+                visibleElement = elements.firstOrDefault(x => x.offsetParent !== null); // more info https://stackoverflow.com/a/21696585/379279s                
+                if (!visibleElement) return;
             }
 
             this.tourGuide!.addSteps([{
                 title: step.title,
                 content: step.text,
-                target: step.elementIdentifier
+                target: visibleElement
             }]);
         });
 
-        if (this.tourGuide.tourSteps.length === 0 
-            || !this.modelValue.enableOnboarding) return;
-
-        if (!this.isOnboardingComplete()) {
-            this.startTourGuide();
-        }
-    }
-
-    private startTourGuide() {
-        if (this.tourGuide?.isVisible) return;
-
-        this.tourGuide!.start();
+        await this.tourGuide!.start();
     }
 
     async disconnect() {
         document.removeEventListener("turbo:before-cache", this.turboBeforeCacheHandler!);
-        this.tourGuide = undefined; // this prevents previously cached tour guide onAfterExit handlers from being called
         this.isDisconnected = true;
     }
 
-    clearTourGuideDom() { 
+    clearPreviousInstanceOfTourGuide() { 
         // this is needed for navigation to a Turbo cached page to prevent seeing old tour guide onboarding dialog
         document.querySelectorAll(".tg-backdrop, .tg-dialog").forEach(el => el.remove());
-    }
-
-    showOnboarding() {
-        this.startTourGuide();
+        this.tourGuide = undefined;
     }
 
     private async markOnboardingAsComplete() {
@@ -116,5 +112,12 @@ export default class OnboardingController extends BaseStimulusModelController<On
         if (!this.onboardingLocalStorageKey) throw new Error(`${this.onboardingLocalStorageKey} is undefined`);
 
         return localStorage.getItem(this.onboardingLocalStorageKey) === "true";
+    }
+
+    private async waitForAllTurboFramesLoaded() {
+        const frames : FrameElement[] = Array.from(document.querySelectorAll("turbo-frame[src]"));
+        if (frames.length === 0) return;
+
+        await Promise.all(frames.map(frame => frame.loaded));
     }
 }

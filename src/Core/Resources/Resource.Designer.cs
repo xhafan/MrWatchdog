@@ -124,6 +124,22 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    You can disable email notification about new search results.
+        ///&lt;/p&gt;
+        ///&lt;div class=&quot;alert alert-info mb-3&quot;&gt;    
+        ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new search results are currently free.
+        ///    In the future, this feature will be available only to premium subscribers.
+        ///    The premium subscription is not yet implemented.
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string OnboardingWatchdogSearchReceiveNotificationStep {
+            get {
+                return ResourceManager.GetString("OnboardingWatchdogSearchReceiveNotificationStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Receive email notification about new search results.
         /// </summary>
         public static string ReceiveEmailNotificationAboutNewResults {

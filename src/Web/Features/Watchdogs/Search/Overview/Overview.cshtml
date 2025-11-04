@@ -1,6 +1,7 @@
 ﻿@page "{watchdogSearchId}"
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @model OverviewModel
 @{
    Layout = null;
@@ -11,7 +12,7 @@
         
             <view-mode-item>
                 <div class="mb-3">
-                    <div class="input-group">
+                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>
                         </span>
@@ -22,13 +23,12 @@
                         />
                     </div>
                 </div>
-                <div class="mb-1">
+                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass">
                     <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
                     <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
                         <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
-                <partial name="ReceiveNotificationInfoPartial" />
             </view-mode-item>
         
             <edit-mode-item>
@@ -36,7 +36,7 @@
                 <input asp-for="WatchdogSearchOverviewArgs.WatchdogSearchId" type="hidden" />
                 
                 <div class="mb-3">
-                    <div class="input-group">
+                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>
                         </span>
@@ -49,7 +49,7 @@
                     </div>
                     <span asp-validation-for="WatchdogSearchOverviewArgs.SearchTerm" class="text-danger"></span>
                 </div>
-                <div class="mb-1">
+                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass">
                     <input asp-for="WatchdogSearchOverviewArgs.ReceiveNotification"
                            type="checkbox" 
                            checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" 
@@ -59,7 +59,6 @@
                         <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
-                <partial name="ReceiveNotificationInfoPartial" />
             </edit-mode-item>
 
         </view-or-edit-form>

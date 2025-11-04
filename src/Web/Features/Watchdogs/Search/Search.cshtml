@@ -1,6 +1,8 @@
 ﻿@page "{watchdogSearchId}"
+@using MrWatchdog.Core.Features.Account.Domain
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @model SearchModel
 
 @{
@@ -23,6 +25,32 @@
             </li>
         </ol>
     </nav>
+    <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
+                identifier="@OnboardingIdentifiers.WatchdogsSearch"
+                steps="@([
+                           new OnboardingStepStimulusModel(
+                               Title: "Onboarding",
+                               Text: "You navigated to your <b>watchdog search</b>.<br/><br/>This watchdog search emails you notifications about new watchdog search results."
+                           ),
+                           new OnboardingStepStimulusModel(
+                               Text: "It periodically watches web page(s) and selects search results from them.",
+                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId}"
+                           ),
+                           new OnboardingStepStimulusModel(
+                               Text: "You can enter a search term to filter the search results. When no results - or no results matching the search term " +
+                                     "- are currently available, you will receive an email notification as soon as they are available.",
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass}"
+                           ),
+                           new OnboardingStepStimulusModel(
+                               Text: Resource.OnboardingWatchdogSearchReceiveNotificationStep,
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass}"
+                           ),
+                           new OnboardingStepStimulusModel(
+                               Text: "You can view this onboarding anytime again.",
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.OnboardingId}"
+                           )
+                       ])"
+    />
 }
 
 <div @Stimulus.Controller(StimulusControllers.WatchdogSearch)>
@@ -42,10 +70,6 @@
             </span>
         }
     </div>
-    <p class="text-muted">
-        This watchdog search can email you notification about new watchdog search results. You can enter a search term to filter the search results.
-        When no results - or no results matching the search term - are currently available, you will receive an email notification as soon as they are available.
-    </p>
     <div class="d-flex justify-content-between align-items-center">
         <div></div>
         <div>

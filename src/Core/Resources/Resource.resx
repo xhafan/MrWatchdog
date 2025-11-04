@@ -121,7 +121,7 @@
     <value>Create watchdog</value>
   </data>
   <data name="FilterResults" xml:space="preserve">
-    <value>Enter search term to filter search results (optional)</value>
+    <value>Optionally enter a search term to filter the search results</value>
   </data>
   <data name="ListOfWatchdogs" xml:space="preserve">
     <value>Watchdogs</value>

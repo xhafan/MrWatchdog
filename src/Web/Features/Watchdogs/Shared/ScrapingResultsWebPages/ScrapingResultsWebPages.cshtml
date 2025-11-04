@@ -1,10 +1,10 @@
 ﻿@using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @model ScrapingResultsWebPages
 
-<div data-watchdogs--scraping-results-web-pages-target="allResults"
-     id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId"
-     >
-    <label class="form-label fw-bold">Watched web pages</label>
+<div data-watchdogs--scraping-results-web-pages-target="allResults">
+    <label class="form-label fw-bold" id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId">
+        Watched web pages
+    </label>
     @foreach (var watchdogWebPageArgs in Model.WatchdogScrapingResultsArgs.WebPages)
     {
         <div class="card mb-1" 

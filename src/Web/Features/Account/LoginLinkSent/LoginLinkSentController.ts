@@ -5,7 +5,6 @@ import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants"
 import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
 import { LoginLinkSentStimulusModel } from "../../Shared/Generated/LoginLinkSentStimulusModel";
 import { LoginTokenDto } from "../../Shared/Generated/LoginTokenDto";
-import { removeOnboardingKeysFromLocalStorage } from "../../Shared/TagHelpers/Onboarding/OnboardingController";
 
 export default class LoginLinkSentController extends BaseStimulusModelController<LoginLinkSentStimulusModel>  {
     connected = false;
@@ -31,9 +30,6 @@ export default class LoginLinkSentController extends BaseStimulusModelController
                     );
                     if (completeLoginResponse.ok) {
                         if (this.connected) {
-
-                            removeOnboardingKeysFromLocalStorage();
-
                             const returnUrl = await completeLoginResponse.text();
                             Turbo.visit(returnUrl);
                         }

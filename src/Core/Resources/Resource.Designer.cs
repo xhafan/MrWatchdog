@@ -70,7 +70,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter search term to filter search results (optional).
+        ///   Looks up a localized string similar to Optionally enter a search term to filter the search results.
         /// </summary>
         public static string FilterResults {
             get {

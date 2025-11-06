@@ -5,7 +5,7 @@ const esbuild = require("esbuild");
 const options = {
   entryPoints: ["Features/Shared/site.ts"],
   bundle: true,
-  minify: false, // value true breaks debugging in Firefox and Chrome as line numbers don't match
+  minify: false, // value true breaks debugging in Firefox and Chrome as line numbers don't match; published bundle.js.br has 54kb not minified and 41kb minified; so going without minification so debugging js/ts in production is possible
   sourcemap: true,
   sourcesContent: true,  // embed TS content into the map
   outfile: "wwwroot/assets/bundle.js",

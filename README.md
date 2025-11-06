@@ -5,4 +5,13 @@ Use it to watch any publicly accessible web page for changes and get notified by
 View existing public watchdogs and set up email notifications about new watchdog search results.
 
 ----
-To run the solution, you need to setup user secrets first. See <a href="src/user_secrets_init.bat.example">user_secrets_init.bat.example</a>.
+To run the solution locally, you need to setup user secrets first. See <a href="src/user_secrets_init.bat.example">user_secrets_init.bat.example</a>.
+
+Deployment:
+* Install Kamal (https://kamal-deploy.org/docs/installation/); On Windows, install Kamal into WSL Ubuntu:
+	* `sudo apt update`
+	* `sudo apt install -y ruby ruby-dev build-essential git`
+	* `sudo gem install kamal`
+	* `kamal version`
+* Install Ubuntu into your server, setup SSH key for root password-less access.
+

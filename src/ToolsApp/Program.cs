@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
+﻿using System.Text.RegularExpressions;
+using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
@@ -15,7 +16,12 @@ public class Program
         if (args.Length == 0)
         {
             Console.WriteLine("Choose from the following options and press enter:");
-            Console.WriteLine("1 Generate database schema sql file");
+            Console.WriteLine(
+                "1 Generate database schema sql file. Direct usage: MrWatchdog.ToolsApp generateDatabaseSchema"
+            );
+            Console.WriteLine(
+                "2 Convert private key to one line for JSON. Direct usage: MrWatchdog.ToolsApp convertPrivateKeyToOneLineForJson <input file> <output file>"
+            );
 
             selectedOption = Console.ReadLine();
         }
@@ -24,7 +30,8 @@ public class Program
             selectedOption = args[0];
         }
 
-        if (selectedOption == "1") _generateDatabaseSchemaSqlFile();
+        if (selectedOption == "1" || selectedOption == "generateDatabaseSchema") _generateDatabaseSchemaSqlFile();
+        if (selectedOption == "2" || selectedOption == "convertPrivateKeyToOneLineForJson") _convertPrivateKeyToOneLine();
 
         return;
 
@@ -49,6 +56,33 @@ public class Program
                 sqlScript = sqlScript.Replace("\r\n", ";\r\n");
                 File.WriteAllText(databaseSchemaFileName, sqlScript);
             }
+        }
+
+        void _convertPrivateKeyToOneLine()
+        {
+            string? inputFileName;
+            string? outputFileName;
+
+            if (args.Length != 3)
+            {
+                Console.Write("Enter input file name: ");
+                inputFileName = Console.ReadLine();
+                Console.Write("Enter ouput file name: ");
+                outputFileName = Console.ReadLine();
+            }
+            else
+            {
+                inputFileName = args[1];
+                outputFileName = args[2];
+            }
+
+            Guard.Hope(!string.IsNullOrWhiteSpace(inputFileName), $"Invalid input file name: {inputFileName}");
+            Guard.Hope(!string.IsNullOrWhiteSpace(outputFileName), $"Invalid input file name: {outputFileName}");
+
+            var privateKeyContent = File.ReadAllText(inputFileName);
+            var oneLinePrivateKey = Regex.Replace(privateKeyContent, @"\r\n|\n|\r", "\\n");
+            File.WriteAllText(outputFileName, oneLinePrivateKey);
+            Console.WriteLine($"Private key has been converted to one line and saved to {outputFileName}");
         }
     }
 }

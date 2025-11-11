@@ -5,6 +5,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
+using System.Text;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
@@ -22,7 +23,7 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         message.Body = new TextPart("html") { Text = htmlMessage };
 
         var signer = new DkimSigner(
-            iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimPrivateKeyFilePath,
+            new MemoryStream(Encoding.UTF8.GetBytes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimPrivateKey)),
             iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimDomain,
             iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimSelector
         )

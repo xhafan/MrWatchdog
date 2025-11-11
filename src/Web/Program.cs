@@ -105,6 +105,8 @@ public class Program
             options.Filters.Add(new AuthorizeFilter(policy));
         });
 
+        builder.Services.AddHealthChecks();
+
         if (builder.Environment.IsDevelopment())
         {
             mvcBuilder.AddRazorRuntimeCompilation();
@@ -371,6 +373,7 @@ public class Program
         );
 
         app.UseRouting();
+        app.UseHealthChecks("/up");
 
         app.UseAuthentication();
         app.UseMiddleware<SerilogRequestIdEnricherMiddleware>();
@@ -378,7 +381,7 @@ public class Program
         app.UseMiddleware<RequestLoggingMiddleware>();
         app.UseAuthorization();
         app.UseRateLimiter();
-
+        
         app.MapStaticAssets();
         app.MapRazorPages()
             .WithStaticAssets();

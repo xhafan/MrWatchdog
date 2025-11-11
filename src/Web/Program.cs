@@ -73,6 +73,12 @@ public class Program
 
         _configureLogging();
 
+        Log.Information("Starting {MrWatchdog}, environment {ENVIRONMENT}, PID {PID}", 
+            Resource.MrWatchdog,
+            environmentName,
+            Environment.ProcessId
+        );
+
         // Add services to the container.
 
         // Castle Windsor is the root container, not the default .NET DI. Rebus hosted services use Castle Windsor as the container

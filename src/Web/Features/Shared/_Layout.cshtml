@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/5.3.6/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="~/assets/bundle.css" />
+    <link rel="stylesheet" href="~/assets/bundle.css" data-turbo-track="reload" />
 
     <script src="~/lib/bootstrap/5.3.6/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/hotwired/turbo/8.0.18/turbo.es2017-esm.min.js"></script>
@@ -26,7 +26,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootbox.js/6.0.4/bootbox.min.js"></script>
 
-    <script type="module" src="~/assets/bundle.js"></script>
+    <script type="module" src="~/assets/bundle.js" data-turbo-track="reload"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </head>

@@ -382,6 +382,7 @@ public class Program
         app.UseAuthorization();
         app.UseRateLimiter();
         
+        app.UseMiddleware<HandleOldAssetRequestsMiddleware>();
         app.MapStaticAssets();
         app.MapRazorPages()
             .WithStaticAssets();
@@ -392,7 +393,7 @@ public class Program
         {
             options.SwaggerEndpoint("v1/swagger.json", $"{Resource.MrWatchdog} API V1");
         });
-
+        
         DomainEvents.Initialize(new DomainEventHandlerFactory());
 
 

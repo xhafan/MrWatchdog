@@ -1,0 +1,21 @@
+proxy:
+  host: staging.mrwatchdog.com
+
+env:
+  clear:
+    ASPNETCORE_ENVIRONMENT: "Staging"
+
+accessories:
+  db-staging:
+    image: postgres:18.0-alpine
+    host: 192.168.0.190
+    port: "127.0.0.1:5433:5433"
+    volumes:
+      - postgres-data-staging:/var/lib/postgresql/data
+    env:
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - PGPORT
+

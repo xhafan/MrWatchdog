@@ -1,0 +1,37 @@
+service: mrwatchdog
+
+image: xhafan/mrwatchdog
+
+servers:
+  web:
+    - 192.168.0.190
+
+proxy:
+  ssl: true
+
+registry:
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+env:
+  secret:
+    - SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector
+    - SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey
+    - SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain
+    - ReCaptcha__SiteKey
+    - ReCaptcha__SecretKey
+    - Logging__LogErrorApiSecret
+    - EmailAddresses__NoReply
+    - EmailAddresses__Support
+    - EmailAddresses__Admin
+    - EmailAddresses__BackendErrors
+    - EmailAddresses__FrontendErrors
+    - Authentication__Google__ClientSecret
+    - Authentication__Google__ClientId
+    - ConnectionStrings__Database
+

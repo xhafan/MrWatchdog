@@ -13,5 +13,16 @@ Deployment:
 	* `sudo apt install -y ruby ruby-dev build-essential git`
 	* `sudo gem install kamal`
 	* `kamal version`
-* Install Ubuntu into your server, setup SSH key for root password-less access.
+	* `mkdir -p ~/.ssh`
+	* `chmod 700 ~/.ssh`
+	* `cp /mnt/c/Users/<your windows user name>/.ssh/<private SSH key> ~/.ssh/`
+	* `chmod 600 ~/.ssh/<private SSH key>`
+	* `ssh <your user name>@<server name>` - check the connection
+	* `ln -s /mnt/c/Users/<your windows user name>/.kamal ~/.kamal`
+	* `sudo apt install jq -y`
+	* `nano /etc/ssh/sshd_config`
+		* set `PasswordAuthentication no`		
+		* set `AllowTcpForwarding yes`
+	* `rc-service sshd restart`
+* Install Alpine Linux into your server, setup SSH key for root password-less access.
 

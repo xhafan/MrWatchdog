@@ -53,7 +53,7 @@ attachValidationOnTurboLoad();
 scrollToFragmentIdentifierOnTurboLoad();
 handleErrorsGlobally();
 
-console.log("App reloaded");
+console.log("App reloaded 1");
 
 
 function attachValidationOnTurboLoad() {

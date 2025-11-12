@@ -53,6 +53,8 @@ attachValidationOnTurboLoad();
 scrollToFragmentIdentifierOnTurboLoad();
 handleErrorsGlobally();
 
+console.log("App reloaded");
+
 
 function attachValidationOnTurboLoad() {
     document.addEventListener("turbo:load", () => {

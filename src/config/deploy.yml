@@ -33,5 +33,6 @@ env:
     - EmailAddresses__FrontendErrors
     - Authentication__Google__ClientSecret
     - Authentication__Google__ClientId
+    - Jwt__Key
     - ConnectionStrings__Database
 

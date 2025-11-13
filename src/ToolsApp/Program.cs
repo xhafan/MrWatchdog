@@ -80,7 +80,7 @@ public class Program
             Guard.Hope(!string.IsNullOrWhiteSpace(outputFileName), $"Invalid input file name: {outputFileName}");
 
             var privateKeyContent = File.ReadAllText(inputFileName);
-            var oneLinePrivateKey = Regex.Replace(privateKeyContent, @"\r\n|\n|\r", "\\n");
+            var oneLinePrivateKey = Regex.Replace(privateKeyContent, @"\r\n|\n|\r", "");
             File.WriteAllText(outputFileName, oneLinePrivateKey);
             Console.WriteLine($"Private key has been converted to one line and saved to {outputFileName}");
         }

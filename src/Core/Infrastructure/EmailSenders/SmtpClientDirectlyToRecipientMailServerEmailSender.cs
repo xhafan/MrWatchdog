@@ -6,14 +6,12 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Logging;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
 public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     IOptions<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions> iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions,
-    IOptions<EmailAddressesOptions> iEmailAddressesOptions,
-    ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null
+    IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) : IEmailSender
 {
     public async Task SendEmail(string recipientEmail, string subject, string htmlMessage)
@@ -23,8 +21,6 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         message.To.Add(new MailboxAddress(name: null, recipientEmail));
         message.Subject = subject;
         message.Body = new TextPart("html") { Text = htmlMessage };
-
-        logger?.LogInformation("DKIM private key {DkimPrivateKey}", iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimPrivateKey);
 
         var signer = new DkimSigner(
             new MemoryStream(Encoding.UTF8.GetBytes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimPrivateKey)),

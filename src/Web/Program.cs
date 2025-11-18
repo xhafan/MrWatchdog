@@ -46,6 +46,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
 using CoreUtils;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace MrWatchdog.Web;
@@ -373,7 +374,21 @@ public class Program
         );
 
         app.UseRouting();
-        app.UseHealthChecks("/up");
+        app.UseHealthChecks("/up", new HealthCheckOptions
+        {
+            ResponseWriter = async (httpContext, _) =>
+            {
+                httpContext.Response.ContentType = "application/json";
+
+                await httpContext.Response.WriteAsync(JsonHelper.Serialize(new
+                {
+                    Status = "Healthy",
+                    Environment = environmentName,
+                    Host = Environment.GetEnvironmentVariable("KAMAL_HOST"),
+                    Version = Environment.GetEnvironmentVariable("KAMAL_VERSION")
+                }));
+            }
+        });
 
         app.UseAuthentication();
         app.UseMiddleware<SerilogRequestIdEnricherMiddleware>();

@@ -1,21 +1,16 @@
+servers:
+  web:
+    - 192.168.0.200
+
 proxy:
-  host: mrwatchdog.com
+  hosts:
+    - mrwatchdog.com
+    - production.mrwatchdog.com
 
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Production"
 
 accessories:
-  db-production:
-    image: postgres:18.0-alpine
-    host: 192.168.0.190
-    port: "127.0.0.1:5432:5432"
-    volumes:
-      - postgres-data-production:/var/lib/postgresql/data
-    env:
-      secret:
-        - POSTGRES_USER
-        - POSTGRES_PASSWORD
-        - POSTGRES_DB
-        - PGPORT
-
+  db:
+    host: 192.168.0.200

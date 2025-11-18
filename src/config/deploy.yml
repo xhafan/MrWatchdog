@@ -2,10 +2,6 @@ service: mrwatchdog
 
 image: xhafan/mrwatchdog
 
-servers:
-  web:
-    - 192.168.0.190
-
 proxy:
   ssl: true
 
@@ -36,4 +32,17 @@ env:
     - Runtime__Url
     - Jwt__Key
     - ConnectionStrings__Database
+
+accessories:
+  db:
+    image: postgres:18.0-alpine
+    port: "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env:
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - PGPORT
 

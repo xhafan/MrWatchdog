@@ -2,16 +2,19 @@
 using DnsClient;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
+using Serilog.Core;
 using System.Text;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
 public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     IOptions<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions> iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions,
-    IOptions<EmailAddressesOptions> iEmailAddressesOptions
+    IOptions<EmailAddressesOptions> iEmailAddressesOptions,
+    ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null
 ) : IEmailSender
 {
     public async Task SendEmail(string recipientEmail, string subject, string htmlMessage)
@@ -55,6 +58,8 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         
         using var smtp = new SmtpClient();
         
+        logger?.LogInformation("Mail server: {mailServer}", mailServer);
+
         await smtp.ConnectAsync(mailServer, 25, SecureSocketOptions.StartTlsWhenAvailable);
         
         await smtp.SendAsync(message);

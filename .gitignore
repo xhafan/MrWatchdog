@@ -8,3 +8,4 @@ obj
 /src/Web/wwwroot/assets/bundle.js.map
 /src/Web/wwwroot/assets/bundle.css
 /src/Web/wwwroot/assets/bundle.css.map
+/src/build_docker_image_and_run_web.sh

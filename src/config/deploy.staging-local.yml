@@ -4,7 +4,7 @@ servers:
 
 proxy:
   hosts:
-    - staging.mrwatchdog.com
+    - staging-local.mrwatchdog.com
 
 env:
   clear:

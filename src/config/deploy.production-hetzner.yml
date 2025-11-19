@@ -1,0 +1,17 @@
+servers:
+  web:
+    - 46.224.68.58
+
+proxy:
+  hosts:
+    - mrwatchdog.com
+    - production-hetzner.mrwatchdog.com
+
+env:
+  clear:
+    ASPNETCORE_ENVIRONMENT: "Production"
+
+accessories:
+  db:
+    host: 46.224.68.58
+

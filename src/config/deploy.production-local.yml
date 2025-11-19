@@ -5,7 +5,7 @@ servers:
 proxy:
   hosts:
     - mrwatchdog.com
-    - production.mrwatchdog.com
+    - production-local.mrwatchdog.com
 
 env:
   clear:

@@ -1,0 +1,32 @@
+#!/bin/sh
+set -x
+
+# Build the Docker image
+docker build -t xhafan/mrwatchdog:local .
+
+# Run the Docker container interactively with environment variables
+docker run -it --rm -p 80:80 \
+  -e "SmtpServerEmailSender__Username=<user name>" \
+  -e "SmtpServerEmailSender__SmtpServer=<smtp server>" \
+  -e "SmtpServerEmailSender__Port=<smtp server port>" \
+  -e "SmtpServerEmailSender__Password=<password>" \
+  -e "SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector=<DKIM selector>" \
+  -e "SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey=<DKIM private key file path>" \
+  -e "SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain=<DKIM domain>" \
+  -e "ReCaptcha__SiteKey=<ReCaptcha secret key>" \
+  -e "ReCaptcha__SecretKey=<ReCaptcha secret key>" \
+  -e "Logging__LogErrorApiSecret=<log error API secret>" \
+  -e "EmailAddresses__Support=<support email address>" \
+  -e "EmailAddresses__NoReply=<noreply email address>" \
+  -e "EmailAddresses__BackendErrors=<backend errors email address>" \
+  -e "EmailAddresses__Admin=<admin email address>" \
+  -e "ConnectionStrings__TestDatabase=<test database connection string>" \
+  -e "ConnectionStrings__Database=<database connection string>" \
+  -e "Authentication__Google__ClientSecret=<Google client secret>" \
+  -e "Authentication__Google__ClientId=<Google client id>" \
+  -e "EmailAddresses__FrontendErrors=<frontend errors email address>" \
+  -e "Runtime__Url=<runtime url>" \
+  -e "Jwt__Key=<JWT key>" \
+  -e "ASPNETCORE_ENVIRONMENT=<environment name>" \  
+  -e "DatabaseScriptsDirectoryPath=./DatabaseScripts" \
+  xhafan/mrwatchdog:local

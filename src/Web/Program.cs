@@ -349,15 +349,14 @@ public class Program
 
         // Configure the HTTP request pipeline.
             
-        // var forwardedHeadersOptions = new ForwardedHeadersOptions
-        // {
-        //     ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
-        //                        | ForwardedHeaders.XForwardedProto // to make login via Google use https
-        // };
-        // forwardedHeadersOptions.KnownNetworks.Clear();
-        // forwardedHeadersOptions.KnownProxies.Clear();
-        // app.UseForwardedHeaders(forwardedHeadersOptions);
-        // app.UseMiddleware<ForwardedPortMiddleware>();
+        var forwardedHeadersOptions = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
+                               | ForwardedHeaders.XForwardedProto // to make login via Google use https
+        };
+        forwardedHeadersOptions.KnownNetworks.Clear();
+        forwardedHeadersOptions.KnownProxies.Clear();
+        app.UseForwardedHeaders(forwardedHeadersOptions);
 
         app.UseResponseCompression();
         

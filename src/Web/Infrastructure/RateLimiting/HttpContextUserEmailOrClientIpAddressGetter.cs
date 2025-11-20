@@ -8,6 +8,6 @@ public static class HttpContextUserEmailOrClientIpAddressGetter
     {
         return httpContext.User.IsAuthenticated()
             ? $"{httpContext.User.Identity?.Name}"
-            : $"[{httpContext.Connection.RemoteIpAddress}:{httpContext.Connection.RemotePort}]";
+            : $"[{httpContext.Connection.RemoteIpAddress}]";
     }
 }

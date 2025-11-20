@@ -49,6 +49,7 @@ using CoreUtils;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.WebUtilities;
+using MrWatchdog.Web.Infrastructure.Middlewares;
 
 namespace MrWatchdog.Web;
 
@@ -347,7 +348,7 @@ public class Program
         _buildDatabase();
 
         // Configure the HTTP request pipeline.
-
+            
         var forwardedHeadersOptions = new ForwardedHeadersOptions
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
@@ -356,6 +357,7 @@ public class Program
         forwardedHeadersOptions.KnownNetworks.Clear();
         forwardedHeadersOptions.KnownProxies.Clear();
         app.UseForwardedHeaders(forwardedHeadersOptions);
+        app.UseMiddleware<ForwardedPortMiddleware>();
 
         app.UseResponseCompression();
         

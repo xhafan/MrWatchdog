@@ -1,6 +1,6 @@
 ﻿using MrWatchdog.Core.Infrastructure;
 
-namespace MrWatchdog.Web.Infrastructure;
+namespace MrWatchdog.Web.Infrastructure.Middlewares;
 
 public class SerilogRequestIdEnricherMiddleware(RequestDelegate next)
 {

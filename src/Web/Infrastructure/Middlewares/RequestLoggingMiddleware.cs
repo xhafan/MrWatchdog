@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace MrWatchdog.Web.Infrastructure;
+namespace MrWatchdog.Web.Infrastructure.Middlewares;
 
 public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
 {
@@ -10,6 +10,7 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
         "Accept-Language",
         "Referer",
         "X-Forwarded-For",
+        "X-Forwarded-Port",
         "Host",
         "Content-Type",
         "Content-Length"

@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Infrastructure;
+namespace MrWatchdog.Web.Infrastructure.Middlewares;
 
 public class SerilogUserEnricherMiddleware(RequestDelegate next)
 {

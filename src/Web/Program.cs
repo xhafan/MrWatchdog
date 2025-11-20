@@ -326,9 +326,9 @@ public class Program
                 TimeSpan window
                 )
             {
-                var userEmailOrClientIpAddress = HttpContextUserEmailOrClientIpAddressGetter.GetUserEmailOrClientIpAddress(httpContext);
+                var userIdOrFirstPartOfRequestId = HttpContextUserIdOrFirstPartOfRequestIdGetter.GetUserIdOrFirstPartOfRequestId(httpContext);
 
-                return RateLimitPartition.GetSlidingWindowLimiter(userEmailOrClientIpAddress, _ =>
+                return RateLimitPartition.GetSlidingWindowLimiter(userIdOrFirstPartOfRequestId, _ =>
                     new SlidingWindowRateLimiterOptions
                     {
                         PermitLimit = permitLimit,

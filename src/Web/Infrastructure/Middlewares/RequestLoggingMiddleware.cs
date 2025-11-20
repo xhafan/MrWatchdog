@@ -26,7 +26,7 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
             var connection = context.Connection;
 
             var headers = request.Headers
-                .Where(h => HeadersToLog.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
+                //.Where(h => HeadersToLog.Contains(h.Key, StringComparer.OrdinalIgnoreCase))
                 .Select(h => $"{h.Key}={h.Value}")
                 .ToArray();
             

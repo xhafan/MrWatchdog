@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
-using Serilog.Core;
 using System.Text;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;

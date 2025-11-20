@@ -47,6 +47,7 @@ using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
 using CoreUtils;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace MrWatchdog.Web;
@@ -346,6 +347,16 @@ public class Program
         _buildDatabase();
 
         // Configure the HTTP request pipeline.
+
+        var forwardedHeadersOptions = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
+                               | ForwardedHeaders.XForwardedProto // to make login via Google use https
+        };
+        forwardedHeadersOptions.KnownNetworks.Clear();
+        forwardedHeadersOptions.KnownProxies.Clear();
+        app.UseForwardedHeaders(forwardedHeadersOptions);
+
         app.UseResponseCompression();
         
         if (!app.Environment.IsDevelopment())

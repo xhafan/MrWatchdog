@@ -37,13 +37,13 @@ apk update
 apk add --no-cache curl tar bash ca-certificates
 
 # 2. Download latest Traefik (v3) only if missing or checksum mismatch
-TRAEFIK_VERSION=$(curl -s https://api.github.com/repos/traefik/traefik/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+TRAEFIK_VERSION=$(curl -4 -s https://api.github.com/repos/traefik/traefik/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
 TRAEFIK_FILE="/tmp/traefik.tar.gz"
 TRAEFIK_URL="https://github.com/traefik/traefik/releases/download/v$TRAEFIK_VERSION/traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz"
 TRAEFIK_SHA_URL="https://github.com/traefik/traefik/releases/download/v$TRAEFIK_VERSION/traefik_v${TRAEFIK_VERSION}_checksums.txt"
 
 # Download checksum file
-curl -sL "$TRAEFIK_SHA_URL" -o /tmp/traefik_checksums.txt
+curl -4 -sL "$TRAEFIK_SHA_URL" -o /tmp/traefik_checksums.txt
 
 # Extract expected SHA256 for Linux amd64
 EXPECTED_SHA=$(grep "traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz" /tmp/traefik_checksums.txt | awk '{print $1}')

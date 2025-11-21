@@ -74,7 +74,7 @@ touch /etc/traefik/acme.json
 chmod 600 /etc/traefik/acme.json
 
 # 4. Create main Traefik config
-cat > /etc/traefik/traefik.yml <<'EOF'
+cat > /etc/traefik/traefik.yml <<EOF
 entryPoints:
   web:
     address: ":80"
@@ -127,7 +127,7 @@ http:
 EOF
 
 # 7. Create dynamic config to forward to Kamal
-cat > /etc/traefik/dynamic/kamal-forward.yml <<'EOF'
+cat > /etc/traefik/dynamic/kamal-forward.yml <<EOF
 http:
   routers:
     to-kamal:
@@ -147,7 +147,7 @@ http:
 EOF
 
 # 8. Create OpenRC service for Alpine
-cat > /etc/init.d/traefik <<'EOF'
+cat > /etc/init.d/traefik <<EOF
 #!/sbin/openrc-run
 
 description="Traefik reverse proxy"

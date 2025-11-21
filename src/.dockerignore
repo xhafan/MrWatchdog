@@ -3,3 +3,6 @@
 **/*.bak
 Web/node_modules/
 Web/wwwroot/assets
+Install/
+**/*.sh
+**/*.example

@@ -46,6 +46,8 @@
 		* `service docker start`
 	* Deploy the app via Kamal - see [Deployment](Deployment.md)
 	* Install Traefik on the host:
+		* `curl -L "https://github.com/xhafan/MrWatchdog/blob/main/src/Install/install-traefik-to-kamal-proxy.sh" -o ./install-traefik-to-kamal-proxy.sh`
+		* `chmod +x install-traefik-to-kamal-proxy.sh`
 		* `./install-traefik-to-kamal-proxy.sh --domain <domain one> [--domain <domain two>] --email email@for-lets-encrypt-certificate`
 
 

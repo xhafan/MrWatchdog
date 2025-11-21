@@ -109,6 +109,18 @@ for d in $DOMAINS; do
 done
 
 # 6. Create dynamic config to forward to Kamal
+cat > /etc/traefik/dynamic/acme-challenge.yml <<EOF
+http:
+  routers:
+    acme-http:
+      rule: "PathPrefix(`/.well-known/acme-challenge/`)"
+      entryPoints:
+        - web
+      service: noop
+      priority: 10000   # ensure it matches before the main router
+EOF
+
+# 7. Create dynamic config to forward to Kamal
 cat > /etc/traefik/dynamic/kamal-forward.yml <<EOF
 http:
   routers:
@@ -128,7 +140,7 @@ http:
           - url: "http://127.0.0.1:8080"
 EOF
 
-# 7. Create OpenRC service for Alpine
+# 8. Create OpenRC service for Alpine
 cat > /etc/init.d/traefik <<'EOF'
 #!/sbin/openrc-run
 
@@ -147,7 +159,7 @@ EOF
 
 chmod +x /etc/init.d/traefik
 
-# 8. Enable and start Traefik via OpenRC
+# 9. Enable and start Traefik via OpenRC
 rc-service traefik stop || true
 pkill -x traefik || true   # make sure any leftover Traefik is killed
 rc-update add traefik default

@@ -74,7 +74,7 @@ touch /etc/traefik/acme.json
 chmod 600 /etc/traefik/acme.json
 
 # 4. Create main Traefik config
-cat > /etc/traefik/traefik.yml <<EOF
+cat > /etc/traefik/traefik.yml <<'EOF'
 entryPoints:
   web:
     address: ":80"
@@ -109,7 +109,7 @@ for d in $DOMAINS; do
 done
 
 # 6. Create dynamic config to forward to Kamal
-cat > /etc/traefik/dynamic/acme-challenge.yml <<EOF
+cat > /etc/traefik/dynamic/acme-challenge.yml <<'EOF'
 http:
   routers:
     acme-http:
@@ -127,7 +127,7 @@ http:
 EOF
 
 # 7. Create dynamic config to forward to Kamal
-cat > /etc/traefik/dynamic/kamal-forward.yml <<EOF
+cat > /etc/traefik/dynamic/kamal-forward.yml <<'EOF'
 http:
   routers:
     to-kamal:

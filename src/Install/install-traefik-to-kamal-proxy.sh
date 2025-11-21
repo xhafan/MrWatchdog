@@ -36,10 +36,35 @@ fi
 apk update
 apk add --no-cache curl tar bash ca-certificates
 
-# 2. Download latest Traefik (v3)
+# 2. Download latest Traefik (v3) only if missing or checksum mismatch
 TRAEFIK_VERSION=$(curl -s https://api.github.com/repos/traefik/traefik/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-curl -4 -L "https://github.com/traefik/traefik/releases/download/v$TRAEFIK_VERSION/traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz" -o /tmp/traefik.tar.gz
-tar xzf /tmp/traefik.tar.gz -C /tmp
+TRAEFIK_FILE="/tmp/traefik.tar.gz"
+TRAEFIK_URL="https://github.com/traefik/traefik/releases/download/v$TRAEFIK_VERSION/traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz"
+TRAEFIK_SHA_URL="https://github.com/traefik/traefik/releases/download/v$TRAEFIK_VERSION/traefik_v${TRAEFIK_VERSION}_checksums.txt"
+
+# Download checksum file
+curl -sL "$TRAEFIK_SHA_URL" -o /tmp/traefik_checksums.txt
+
+# Extract expected SHA256 for Linux amd64
+EXPECTED_SHA=$(grep "traefik_v${TRAEFIK_VERSION}_linux_amd64.tar.gz" /tmp/traefik_checksums.txt | awk '{print $1}')
+
+DOWNLOAD=1
+if [ -f "$TRAEFIK_FILE" ]; then
+    ACTUAL_SHA=$(sha256sum "$TRAEFIK_FILE" | awk '{print $1}')
+    if [ "$ACTUAL_SHA" = "$EXPECTED_SHA" ]; then
+        echo "Traefik tar.gz already exists and checksum matches, skipping download."
+        DOWNLOAD=0
+    else
+        echo "Checksum mismatch, re-downloading Traefik."
+    fi
+fi
+
+if [ $DOWNLOAD -eq 1 ]; then
+    curl -4 -L "$TRAEFIK_URL" -o "$TRAEFIK_FILE"
+fi
+
+# Extract and move binary
+tar xzf "$TRAEFIK_FILE" -C /tmp
 mv /tmp/traefik /usr/local/bin/
 chmod +x /usr/local/bin/traefik
 
@@ -95,8 +120,6 @@ http:
       service: kamal-service
       tls:
         certResolver: myresolver
-      middlewares:
-        - add-forwarded-headers
 
   services:
     kamal-service:

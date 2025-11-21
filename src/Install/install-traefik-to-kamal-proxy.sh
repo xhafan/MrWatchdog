@@ -118,6 +118,12 @@ http:
         - web
       service: noop
       priority: 10000   # ensure it matches before the main router
+
+  services:
+    noop:
+      loadBalancer:
+        servers:
+          - url: "http://localhost"   # never used; Traefik handles ACME internally
 EOF
 
 # 7. Create dynamic config to forward to Kamal

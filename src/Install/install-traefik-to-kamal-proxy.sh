@@ -103,13 +103,6 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:8080"
-
-  middlewares:
-    add-forwarded-headers:
-      headers:
-        customRequestHeaders:
-          X-Forwarded-For: "{remoteip}"
-          X-Forwarded-Proto: "{scheme}"
 EOF
 
 # 7. Create OpenRC service for Alpine

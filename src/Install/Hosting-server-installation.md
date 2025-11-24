@@ -45,18 +45,9 @@
 		* `rc-update add docker boot`
 		* `service docker start`
 	* Deploy the app via Kamal - see [Deployment](Deployment.md)
-	* Install Traefik on the host:
+	* Install Caddy reverse proxy on the host:
 		* `apk update`
 		* `apk add --no-cache curl`
-		* `curl -L "https://raw.githubusercontent.com/xhafan/MrWatchdog/refs/heads/main/src/Install/install-traefik-to-kamal-proxy.sh" -o ./install-traefik-to-kamal-proxy.sh`
-		* `chmod +x install-traefik-to-kamal-proxy.sh`
-		* `./install-traefik-to-kamal-proxy.sh --domain <domain one> [--domain <domain two>] --email email@for-lets-encrypt-certificate`
-
-	* Update host Traefik domains:
-		* `curl -L "https://raw.githubusercontent.com/xhafan/MrWatchdog/refs/heads/main/src/Install/update-traefik-to-kamal-proxy-domains.sh" -o ./update-traefik-to-kamal-proxy-domains.sh`
-		* `chmod +x update-traefik-to-kamal-proxy-domains.sh`
-		* `./update-traefik-to-kamal-proxy-domains.sh --domain <domain one> [--domain <domain two>]`
-
-
-
-
+		* `curl -L "https://raw.githubusercontent.com/xhafan/MrWatchdog/refs/heads/main/src/Install/install-caddy-to-kamal-proxy.sh" -o ./install-caddy-to-kamal-proxy.sh`
+		* `chmod +x install-caddy-to-kamal-proxy.sh`
+		* `./install-caddy-to-kamal-proxy.sh --domains "<domain one> <domain two>"`

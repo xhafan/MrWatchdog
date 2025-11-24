@@ -52,4 +52,11 @@
 		* `chmod +x install-traefik-to-kamal-proxy.sh`
 		* `./install-traefik-to-kamal-proxy.sh --domain <domain one> [--domain <domain two>] --email email@for-lets-encrypt-certificate`
 
+	* Update host Traefik domains:
+		* `curl -L "https://raw.githubusercontent.com/xhafan/MrWatchdog/refs/heads/main/src/Install/update-traefik-to-kamal-proxy-domains.sh" -o ./update-traefik-to-kamal-proxy-domains.sh`
+		* `chmod +x update-traefik-to-kamal-proxy-domains.sh`
+		* `./update-traefik-to-kamal-proxy-domains.sh --domain <domain one> [--domain <domain two>]`
+
+
+
 

@@ -354,10 +354,9 @@ public class Program
             ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
                                | ForwardedHeaders.XForwardedProto // to make login via Google use https
                                | ForwardedHeaders.XForwardedHost,
-            ForwardLimit = null
         };
         forwardedHeadersOptions.KnownNetworks.Clear();
-        forwardedHeadersOptions.KnownProxies.Clear();
+        forwardedHeadersOptions.KnownProxies.Add(IPAddress.Parse("172.18.0.1"));
 
         app.UseForwardedHeaders(forwardedHeadersOptions);
 

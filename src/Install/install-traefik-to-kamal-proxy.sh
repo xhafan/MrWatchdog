@@ -1,6 +1,6 @@
 #!/bin/sh
-# Alpine Linux Traefik installer which forwards requests to Kamal proxy on port 8080, and adds real client IP address to X-Forwarded-For and X-Forwarded-Proto headers
-# Usage: ./install-traefik.sh --domain domain1.com --domain domain2.com --email user@example.com
+# Alpine Linux Traefik installer which forwards requests to Kamal proxy on port 8080, and adds real client IP address to X-Forwarded-For header
+# Usage: ./install-traefik-to-kamal-proxy.sh --domain domain1.com --domain domain2.com --email user@example.com
 
 set -ex
 

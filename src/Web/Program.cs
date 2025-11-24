@@ -353,7 +353,6 @@ public class Program
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address
                                | ForwardedHeaders.XForwardedProto // to make login via Google use https
-                               | ForwardedHeaders.XForwardedHost
         };
         forwardedHeadersOptions.KnownNetworks.Clear();
         forwardedHeadersOptions.KnownProxies.Clear();

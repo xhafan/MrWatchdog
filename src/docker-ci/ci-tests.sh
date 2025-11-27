@@ -7,9 +7,6 @@ export ReCaptcha__SecretKey=$(jq -r '.ReCaptcha__SecretKey' "$SECRETS_FILE")
 export Authentication__Google__ClientSecret=$(jq -r '.Authentication__Google__ClientSecret' "$SECRETS_FILE")
 export Authentication__Google__ClientId=$(jq -r '.Authentication__Google__ClientId' "$SECRETS_FILE")
 
-# Ensure results dir exists
-mkdir docker-ci/test-results
-
 echo "==> Building test image..."
 docker compose -f docker-ci/docker-compose.tests.yml build
 

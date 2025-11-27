@@ -26,9 +26,11 @@ COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
 # Build front-end assets
 WORKDIR /app/Web
 RUN npx tsc --noEmit && node esbuild.config.js
+WORKDIR /app
+
+# Make sure the above is the same as for ./docker-ci/Dockerfile.tests to be able to benefit from cached layers
 
 # Back to app root to publish .NET
-WORKDIR /app
 RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 

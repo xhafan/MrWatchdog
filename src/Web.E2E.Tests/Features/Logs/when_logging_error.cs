@@ -18,6 +18,7 @@ public class when_logging_error : BaseDatabaseTest
     {
         var config = new ConfigurationBuilder()
             .AddUserSecrets<when_logging_error>()
+            .AddEnvironmentVariables()
             .Build();
 
         var logErrorApiSecret = config["Logging:LogErrorApiSecret"];

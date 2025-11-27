@@ -1,0 +1,61 @@
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+WORKDIR /app
+
+# Install Node.js and npm
+RUN apk add --no-cache nodejs npm
+
+# Copy only project files first for better layer caching
+COPY Core/*.csproj ./Core/
+COPY Web/*.csproj ./Web/
+COPY SharedAssemblyInfo.props .
+RUN dotnet restore Web/Web.csproj
+
+# Install Node packages
+WORKDIR /app/Web
+COPY Web/package*.json ./
+RUN npm ci
+
+# Copy the remaining source code
+WORKDIR /app
+COPY Core/. ./Core/
+COPY Web/. ./Web/
+RUN mkdir -p ./DatabaseScripts/ChangeScripts
+COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
+
+# Build front-end assets
+WORKDIR /app/Web
+RUN npx tsc --noEmit && node esbuild.config.js
+WORKDIR /app
+
+# Make sure the above is the same as for ../Dockerfile to be able to benefit from cached layers
+
+# Copy only csproj files first
+COPY MrWatchdog.sln .
+COPY Core.Tests/*.csproj Core.Tests/
+COPY TestsShared/*.csproj TestsShared/
+COPY ToolsApp/*.csproj ToolsApp/
+COPY Web.E2E.Tests/*.csproj Web.E2E.Tests/
+COPY Web.Tests/*.csproj Web.Tests/
+
+# Restore all projects (creates a cached layer)
+RUN dotnet restore
+
+# Copy test projects files
+COPY Core.Tests/. ./Core.Tests/
+COPY TestsShared/. ./TestsShared/
+COPY ToolsApp/. ./ToolsApp/
+COPY Web.E2E.Tests/. ./Web.E2E.Tests/
+COPY Web.Tests/. ./Web.Tests/
+
+RUN dotnet build
+
+# ---- Runtime container: runs the tests ----
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine
+WORKDIR /app
+COPY --from=build /app .
+
+# Copy NuGet packages cache
+COPY --from=build /root/.nuget/packages /root/.nuget/packages
+
+ENTRYPOINT ["dotnet", "test", "--no-restore", "--no-build", "--logger:trx", "--results-directory=/test-results"]

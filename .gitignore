@@ -10,3 +10,4 @@ obj
 /src/Web/wwwroot/assets/bundle.css.map
 /src/build_docker_image_and_run_web.sh
 /src/Install/*.*.sh
+/src/docker-ci/test-results

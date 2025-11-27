@@ -51,7 +51,7 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
         _model.WatchdogWebPageArgs.HttpHeaders.ShouldBe("""
                                                         User-Agent: Mozilla/5.0
                                                         Connection: keep-alive
-                                                        """);
+                                                        """, ignoreLineEndings: true);
         
         _model.IsEmptyWebPage.ShouldBe(false);
     }  

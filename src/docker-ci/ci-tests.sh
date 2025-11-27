@@ -32,6 +32,9 @@ set -e
 echo "==> Cleaning up..."
 docker compose -f $BUILD_DIR/$CLONED_DIR/src/docker-ci/docker-compose.tests.yml down -v
 
+rm -rf "$BUILD_DIR"
+echo "==> Removed temporary build directory: $BUILD_DIR"
+
 if [ "$STATUS" -eq 0 ]; then
     echo "==> Tests passed"
 else

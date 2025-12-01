@@ -19,7 +19,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Manage/Manage">@Resource.ManageWatchdogs</a>
+                <a asp-page="/Watchdogs/Manage/Manage">@Resource.ManageWebScrapers</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">@title</li>
         </ol>
@@ -28,11 +28,11 @@
                 identifier="@OnboardingIdentifiers.WatchdogsDetail"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: "You navigated to a <b>watchdog detail</b> where you can manage the watchdog.<br/><br/>" +
-                                     "This watchdog will scrape web page(s) and will select search results based on the CSS path selector."
+                               Text: "You navigated to a <b>web scraper</b> management.<br/><br/>" +
+                                     "This web scraper will scrape web page(s) and will select scraped results based on the CSS path selector."
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Add web page(s) this watchdog will watch.",
+                               Text: "Add web page(s) this web scraper will scrape.",
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId}"
                            ),
                            new OnboardingStepStimulusModel(
@@ -40,11 +40,11 @@
                                ElementIdentifier: $".{@OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "View search results to be able to save Search with email notifications about new search results.",
+                               Text: "View scraped results to be able to create Watchdog with email notification about new scraped results.",
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailViewSearchResultsId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Request to make the watchdog public and discoverable by other users who will then be able to set up email notifications about its new search results",
+                               Text: "Request to make the web scraper public and discoverable by other users who will then be able to set up email notification about its new scraped results.",
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailRequestToMakePublicId}"
                            ),
                            new OnboardingStepStimulusModel(
@@ -92,7 +92,7 @@
                              <button class="dropdown-item text-danger" 
                                      type="submit"
                                      >
-                                 Delete watchdog
+                                 Delete web scraper
                              </button>
                          </form>
                      </li>
@@ -146,7 +146,7 @@
         <button type="submit" 
                 class="btn btn-primary"
                 id="@OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId">
-            Add web page to watch
+            Add web page to scrape
         </button>
     </form>
 </div>

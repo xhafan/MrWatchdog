@@ -61,16 +61,16 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create watchdog.
+        ///   Looks up a localized string similar to Create web scraper.
         /// </summary>
-        public static string CreateWatchdog {
+        public static string CreateWebScraper {
             get {
-                return ResourceManager.GetString("CreateWatchdog", resourceCulture);
+                return ResourceManager.GetString("CreateWebScraper", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optionally enter a search term to filter the search results.
+        ///   Looks up a localized string similar to Optionally enter a search term to filter the scraped results.
         /// </summary>
         public static string FilterResults {
             get {
@@ -79,11 +79,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Watchdogs.
+        ///   Looks up a localized string similar to Web scrapers.
         /// </summary>
-        public static string ListOfWatchdogs {
+        public static string ListOfWebScrapers {
             get {
-                return ResourceManager.GetString("ListOfWatchdogs", resourceCulture);
+                return ResourceManager.GetString("ListOfWebScrapers", resourceCulture);
             }
         }
         
@@ -97,11 +97,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage watchdogs.
+        ///   Looks up a localized string similar to Manage web scrapers.
         /// </summary>
-        public static string ManageWatchdogs {
+        public static string ManageWebScrapers {
             get {
-                return ResourceManager.GetString("ManageWatchdogs", resourceCulture);
+                return ResourceManager.GetString("ManageWebScrapers", resourceCulture);
             }
         }
         
@@ -115,11 +115,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My Searches.
+        ///   Looks up a localized string similar to My Watchdogs.
         /// </summary>
-        public static string MySearches {
+        public static string MyWatchdogs {
             get {
-                return ResourceManager.GetString("MySearches", resourceCulture);
+                return ResourceManager.GetString("MyWatchdogs", resourceCulture);
             }
         }
         
@@ -134,22 +134,22 @@ namespace MrWatchdog.Core.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
-        ///    You can disable email notification about new search results.
+        ///    You can disable email notification about new scraped results.
         ///&lt;/p&gt;
         ///&lt;div class=&quot;alert alert-info mb-3&quot;&gt;    
-        ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new search results are currently free.
+        ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new scraped results are currently free.
         ///    In the future, this feature will be available only to premium subscribers.
         ///    The premium subscription is not yet implemented.
         ///&lt;/div&gt;.
         /// </summary>
-        public static string OnboardingWatchdogSearchReceiveNotificationStep {
+        public static string OnboardingWatchdogReceiveNotificationStep {
             get {
-                return ResourceManager.GetString("OnboardingWatchdogSearchReceiveNotificationStep", resourceCulture);
+                return ResourceManager.GetString("OnboardingWatchdogReceiveNotificationStep", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receive email notification about new search results.
+        ///   Looks up a localized string similar to Receive email notification about new scraped results.
         /// </summary>
         public static string ReceiveEmailNotificationAboutNewResults {
             get {
@@ -167,20 +167,11 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search.
+        ///   Looks up a localized string similar to View scraped results.
         /// </summary>
-        public static string Search {
+        public static string ViewScrapedResults {
             get {
-                return ResourceManager.GetString("Search", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View search results.
-        /// </summary>
-        public static string ViewSearchResults {
-            get {
-                return ResourceManager.GetString("ViewSearchResults", resourceCulture);
+                return ResourceManager.GetString("ViewScrapedResults", resourceCulture);
             }
         }
     }

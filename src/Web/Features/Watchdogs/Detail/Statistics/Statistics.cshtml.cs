@@ -30,8 +30,8 @@ public class StatisticsModel(
         PublicWatchdogStatistics = new PublicWatchdogStatisticsDto
         {
             CalculatedEarningsForThisMonth = 0,
-            NumberOfUsersWithWatchdogSearchWithNotification = statisticsResults.SingleOrDefault(x => x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0,
-            NumberOfUsersWithWatchdogSearchWithoutNotification = statisticsResults.SingleOrDefault(x => !x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0
+            NumberOfUsersWithWatchdogWithNotification = statisticsResults.SingleOrDefault(x => x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0,
+            NumberOfUsersWithWatchdogWithoutNotification = statisticsResults.SingleOrDefault(x => !x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0
         };
 
         var watchdogDetailPublicStatusArgs =

@@ -37,8 +37,8 @@ public class when_viewing_watchdog_detail_statistics : BaseDatabaseTest
         _model.WatchdogId.ShouldBe(_watchdog.Id);
 
         _model.PublicWatchdogStatistics.CalculatedEarningsForThisMonth.ShouldBe(0);
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithNotification.ShouldBe(2);
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithoutNotification.ShouldBe(1);
+        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification.ShouldBe(2);
+        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification.ShouldBe(1);
 
         _model.WatchdogPublicStatus.ShouldBe(PublicStatus.Public);
     }

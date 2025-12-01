@@ -6,7 +6,7 @@
 @model SearchesModel
 
 @{
-    var title = Resource.MySearches;
+    var title = Resource.MyWatchdogs;
     ViewData["Title"] = title;
 }
 
@@ -23,7 +23,7 @@
 
 <h1 class="display-4">@title</h1>
 <p class="text-muted">
-    Browse your watchdog searches which can email you notification about new watchdog search results.
+    Browse your watchdogs.
 </p>
 
 @foreach (var watchdogSearch in Model.WatchdogSearches)
@@ -37,7 +37,7 @@
             <span translate="no">@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")</span>
             @if (!watchdogSearch.ReceiveNotification)
             {
-                <span title="Email notifications disabled" style="position: relative; display: inline-block; color: #bbb;">
+                <span title="Email notification disabled" style="position: relative; display: inline-block; color: #bbb;">
                     <i class="fa-solid fa-envelope"></i>
                     <i class="fa-solid fa-slash" 
                        style="position: absolute; top: 4px; left: -2px; width: 100%; height: 100%; color: red; pointer-events: none;"></i>
@@ -51,6 +51,6 @@
 {
     <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
     @:You have no watchdog searches. To add a new watchdog search, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of watchdogs</a>, select one,
-    @:and choose <i>@ScrapingResultsConstants.SaveSearch</i>.
+    @:and choose <i>@ScrapingResultsConstants.CreateWatchdog</i>.
 }
 

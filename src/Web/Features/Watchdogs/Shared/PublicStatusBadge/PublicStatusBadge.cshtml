@@ -5,17 +5,17 @@
 {
     <span class="badge text-bg-primary"
           style="@(Model.PublicStatus == PublicStatus.Private ? "" : "display:none")"
-          title="The watchdog is private and not discoverable by other users.">
+          title="The web scraper is private and not discoverable by other users.">
         Private
     </span>
 }
 <span class="badge text-bg-warning"
       style="@(Model.PublicStatus == PublicStatus.MakePublicRequested ? "" : "display:none")"
-      title="The watchdog has been requested to be made public and discoverable by other users.">
+      title="The web scraper has been requested to be made public and discoverable by other users.">
     Requested to be made public
 </span>
 <span class="badge text-bg-success"
       style="@(Model.PublicStatus == PublicStatus.Public ? "" : "display:none")"
-      title="The watchdog is public and discoverable by other users.">
+      title="The web scraper is public and discoverable by other users.">
     Public
 </span>

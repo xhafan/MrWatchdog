@@ -21,7 +21,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Index">@Resource.ListOfWatchdogs</a>
+                <a asp-page="/Watchdogs/Index">@Resource.ListOfWebScrapers</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">@title</li>
         </ol>
@@ -30,22 +30,22 @@
                 identifier="@OnboardingIdentifiers.WatchdogsScrapingResults"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: "You navigated to a <b>watchdog search results</b>."
+                               Text: "You navigated to a <b>web scraper results</b>."
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "This watchdog periodically watches web page(s) and selects search results from them.",
+                               Text: "This web scraper periodically scrapes web page(s) and selects scraped results from them.",
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "You can enter a search term to filter the search results.",
+                               Text: "You can enter a search term to filter the scraped results.",
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsSearchTermInputGroupId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Save Search with email notification about new search results or new search results matching the search term.",
+                               Text: "Create Watchdog with email notification about new scraped results or new scraped results matching the search term.",
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsCreateWatchdogSearchId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Log in or register to save Search with email notification about new search results or new search results matching the search term.",
+                               Text: "Log in or register to create Watchdog with email notification about new scraped results or new scraped results matching the search term.",
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsLoginToCreateWatchdogSearchId}"
                            ),
                            new OnboardingStepStimulusModel(
@@ -101,7 +101,7 @@
                         style="display:@(User.IsAuthenticated() ? "" : "none")"
                         id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsCreateWatchdogSearchId"
                         >
-                    @ScrapingResultsConstants.SaveSearch
+                    @ScrapingResultsConstants.CreateWatchdog
                 </button> 
                 <button class="btn btn-primary"
                         data-watchdogs--scraping-results-target="loginToCreateWatchdogSearch"
@@ -110,7 +110,7 @@
                         style="display:@(User.IsAuthenticated() ? "none" : "")"
                         id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsLoginToCreateWatchdogSearchId"
                         >
-                    @ScrapingResultsConstants.LoginOrRegisterToSaveSearch
+                    @ScrapingResultsConstants.LoginOrRegisterToCreateWatchdog
                 </button>
                 @if (User.GetUserId() == Model.WatchdogScrapingResultsArgs.UserId || await User.IsSuperAdmin(UserRepository))
                 {

@@ -2,14 +2,14 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public record PublicWatchdogStatisticsDto
+public record PublicWatchdogStatisticsDto // todo: rename to PublicWebScraperStatisticsDto
 {
     [Display(Name = "Calculated earnings for this month")]
     public required decimal CalculatedEarningsForThisMonth { get; set; }
 
-    [Display(Name = "Number of users with a watchdog search with email notification")]
-    public required int NumberOfUsersWithWatchdogSearchWithNotification { get; set; }
+    [Display(Name = "Number of users with a watchdog with email notification")]
+    public required int NumberOfUsersWithWatchdogWithNotification { get; set; }
     
-    [Display(Name = "Number of users with a watchdog search without email notification")]
-    public required int NumberOfUsersWithWatchdogSearchWithoutNotification { get; set; }
+    [Display(Name = "Number of users with a watchdog without email notification")]
+    public required int NumberOfUsersWithWatchdogWithoutNotification { get; set; }
 }

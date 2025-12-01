@@ -117,20 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CreateWatchdog" xml:space="preserve">
-    <value>Create watchdog</value>
+  <data name="CreateWebScraper" xml:space="preserve">
+    <value>Create web scraper</value>
   </data>
   <data name="FilterResults" xml:space="preserve">
-    <value>Optionally enter a search term to filter the search results</value>
+    <value>Optionally enter a search term to filter the scraped results</value>
   </data>
-  <data name="ListOfWatchdogs" xml:space="preserve">
-    <value>Watchdogs</value>
-  </data>
+  <data name="ListOfWebScrapers" xml:space="preserve">
+    <value>Web scrapers</value>
+  </data>  
   <data name="MakePublic" xml:space="preserve">
     <value>Make public</value>
   </data>
-  <data name="ManageWatchdogs" xml:space="preserve">
-    <value>Manage watchdogs</value>
+  <data name="ManageWebScrapers" xml:space="preserve">
+    <value>Manage web scrapers</value>
   </data>
   <data name="MrWatchdog" xml:space="preserve">
     <value>Mr Watchdog</value>
@@ -138,29 +138,26 @@
   <data name="RequestToMakePublic" xml:space="preserve">
     <value>Request to make public</value>
   </data>
-  <data name="ViewSearchResults" xml:space="preserve">
-    <value>View search results</value>
+  <data name="ViewScrapedResults" xml:space="preserve">
+    <value>View scraped results</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="MySearches" xml:space="preserve">
-    <value>My Searches</value>
+  <data name="MyWatchdogs" xml:space="preserve">
+    <value>My Watchdogs</value>
   </data>
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
-    <value>Receive email notification about new search results</value>
-  </data>
-  <data name="OnboardingWatchdogSearchReceiveNotificationStep" xml:space="preserve">
+    <value>Receive email notification about new scraped results</value>
+  </data> 
+  <data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
     <value>&lt;p&gt;
-    You can disable email notification about new search results.
+    You can disable email notification about new scraped results.
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
-    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Email notifications about new search results are currently free.
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Email notifications about new scraped results are currently free.
     In the future, this feature will be available only to premium subscribers.
     The premium subscription is not yet implemented.
 &lt;/div&gt;</value>
   </data>
   <data name="OnboardingViewAgainStep" xml:space="preserve">
     <value>You can view this help anytime again.</value>
-  </data>
+  </data>  
 </root>

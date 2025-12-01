@@ -25,8 +25,8 @@ public class when_viewing_watchdog_detail_statistics_for_watchdog_without_any_se
     [Test]
     public void number_of_watchdog_searches_is_correct()
     {
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithNotification.ShouldBe(0);
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogSearchWithoutNotification.ShouldBe(0);
+        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification.ShouldBe(0);
+        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification.ShouldBe(0);
     }
 
     private void _BuildEntities()

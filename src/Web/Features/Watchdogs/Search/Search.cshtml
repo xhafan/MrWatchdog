@@ -17,7 +17,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Searches/Searches">@Resource.MySearches</a>
+                <a asp-page="/Watchdogs/Searches/Searches">@Resource.MyWatchdogs</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">
                 <span>@Model.WatchdogScrapingResultsArgs.WatchdogName</span>
@@ -29,20 +29,20 @@
                 identifier="@OnboardingIdentifiers.WatchdogsSearch"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Title: "Onboarding",
-                               Text: "You navigated to your <b>watchdog search</b>.<br/><br/>This watchdog search emails you notifications about new watchdog search results."
+                               Text: "You navigated to your <b>watchdog</b>.<br/><br/>This watchdog emails you notification about new scraped results."
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "It periodically watches related watchdog search results.",
+                               Text: "It periodically watches related web scraper scraped results.",
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "You can enter a search term to filter the search results. When no results - or no results matching the search term " +
+                               Text: "You can enter a search term to filter the scraped results. When no results " +
+                                     "- or no results matching the search term " +
                                      "- are currently available, you will receive an email notification as soon as they are available.",
                                ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.OnboardingWatchdogSearchReceiveNotificationStep,
+                               Text: Resource.OnboardingWatchdogReceiveNotificationStep,
                                ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
@@ -91,7 +91,7 @@
                             <button class="dropdown-item text-danger" 
                                     type="submit"
                             >
-                                Delete watchdog search
+                                Delete watchdog
                             </button>
                         </form>
                     </li>

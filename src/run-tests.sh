@@ -17,7 +17,7 @@ done
 
 if [ "$DIRTY_MODE" = false ]; then
     if [ -z "${KAMAL_VERSION:-}" ]; then
-        echo "Error: KAMAL_VERSION is not set. Set it manyally (it's set within Kamal deployment), or add parameter --dirty"
+        echo "Error: KAMAL_VERSION is not set. Set it manually (it's set within Kamal deployment), or add parameter --dirty"
         exit 1
     fi
 fi

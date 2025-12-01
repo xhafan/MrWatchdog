@@ -46,21 +46,18 @@ fi
 echo "No success status found → running tests locally..."
 
 ###############################################################################
-# 2) Run tests from Kamal's temp directory
-###############################################################################
-# The script runs inside the directory where Kamal checked out the commit.
-# So we run: docker-ci/ci-tests.sh with paths relative to this directory.
+# 2) Run tests from a temp directory with a new checkout 
 ###############################################################################
 
-if [ ! -x "./docker-ci/ci-tests.sh" ]; then
-  echo "ERROR: ./docker-ci/ci-tests.sh not found or not executable"
+if [ ! -x "./run-tests.sh" ]; then
+  echo "ERROR: ./run-tests.sh not found or not executable"
   exit 1
 fi
 
-echo "Executing ./docker-ci/ci-tests.sh ..."
+echo "Executing ./run-tests.sh ..."
 
 set +e
-./docker-ci/ci-tests.sh
+./run-tests.sh
 TEST_EXIT=$?
 set -e
 
@@ -80,7 +77,7 @@ fi
 echo "Tests PASSED → setting GitHub status 'tests' = success"
 
 ###############################################################################
-# 3) Mark commit as success
+# 3) Set GitHub commit status "tests" to "success"
 ###############################################################################
 
 curl -s -X POST \

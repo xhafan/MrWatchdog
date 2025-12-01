@@ -3,7 +3,6 @@
 **/*.bak
 Web/node_modules/
 Web/wwwroot/assets
-docker-ci
 Install/
 **/*.sh
 **/*.example

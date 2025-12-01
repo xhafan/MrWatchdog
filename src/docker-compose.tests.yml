@@ -13,8 +13,8 @@ services:
 
   tests:
     build:
-      context: ..
-      dockerfile: ./docker-ci/Dockerfile.tests
+      context: .
+      dockerfile: ./Dockerfile.tests
     environment:
       ReCaptcha__SiteKey: ${ReCaptcha__SiteKey}
       ReCaptcha__SecretKey: ${ReCaptcha__SecretKey}

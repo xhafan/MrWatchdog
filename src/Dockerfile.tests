@@ -58,4 +58,4 @@ COPY --from=build /app .
 # Copy NuGet packages cache
 COPY --from=build /root/.nuget/packages /root/.nuget/packages
 
-ENTRYPOINT ["dotnet", "test", "--no-restore", "--no-build", "--logger:trx", "--results-directory=/test-results"]
+ENTRYPOINT ["dotnet", "test", "--no-restore", "--no-build"]

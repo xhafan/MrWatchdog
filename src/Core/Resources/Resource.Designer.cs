@@ -124,7 +124,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can view this onboarding anytime again..
+        ///   Looks up a localized string similar to You can view this help anytime again..
         /// </summary>
         public static string OnboardingViewAgainStep {
             get {

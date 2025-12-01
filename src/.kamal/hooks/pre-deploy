@@ -74,7 +74,7 @@ if [ "$TEST_EXIT" -ne 0 ]; then
   exit 1
 fi
 
-echo "Tests PASSED → setting GitHub status 'tests' = success"
+echo "Tests PASSED → setting GitHub commit status 'tests' to success"
 
 ###############################################################################
 # 3) Set GitHub commit status "tests" to "success"

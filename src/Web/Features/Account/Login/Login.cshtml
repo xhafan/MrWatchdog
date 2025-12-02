@@ -1,10 +1,11 @@
 @page
 @using Microsoft.Extensions.Options
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model LoginModel
 @inject IOptions<ReCaptchaOptions> ReCaptchaOptions
 @{
-    const string title = "Log in / register";
+    var title = Resource.LoginOrRegister;
     ViewData["Title"] = title;
     ViewData[ViewDataConstants.DisableTurboOnPage] = true;
 }
@@ -31,19 +32,19 @@
         
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">
-                Login with email
+                @Resource.LoginWithEmail
             </button>
         </div>
     </form>
     
     <div class="mt-5 mb-3">
-        <p class="fw-bold">Or</p>
+        <p class="fw-bold">@Resource.LoginOr</p>
         <a class="btn btn-primary text-decoration-none" 
            asp-page-handler="ExternalLogin"
            asp-route-provider="Google"
            asp-route-returnUrl="@Model.ReturnUrl"
            >
-            <i class="fa-brands fa-google"></i> Login with Google
+            <i class="fa-brands fa-google"></i> @Resource.LoginWithGoogle
         </a>
     </div>
 </div>

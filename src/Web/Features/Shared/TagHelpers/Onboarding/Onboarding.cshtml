@@ -1,8 +1,9 @@
-﻿@model Onboarding
+﻿@using MrWatchdog.Core.Resources
+@model Onboarding
 <button class="btn btn-link"
         data-action="@StimulusControllers.Onboarding#startOnboarding">
     <small>
         <i class="fa-solid fa-circle-question"></i>
-        Need help?
+        @Resource.NeedHelp
     </small>
 </button>

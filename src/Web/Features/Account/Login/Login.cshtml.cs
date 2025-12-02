@@ -15,6 +15,7 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Validations;
 using MrWatchdog.Web.Features.Shared;
 using System.ComponentModel.DataAnnotations;
+using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Web.Features.Account.Login;
 
@@ -30,6 +31,7 @@ public class LoginModel(
     [Required]
     [EmailAddressRegex(acceptSpacesAroundEmail: true)]
     [StringLength(254)]
+    [Display(Name = nameof(Resource.Email), ResourceType = typeof(Resource))]
     public string Email { get; set; } = null!;
     
     [BindProperty(SupportsGet = true)]

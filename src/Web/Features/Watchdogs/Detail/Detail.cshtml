@@ -57,7 +57,10 @@
 
 <div @Stimulus.Controller(
          StimulusControllers.WatchdogsDetail,
-         new DetailStimulusModel(Model.WatchdogDetailArgs.WatchdogId)
+         new DetailStimulusModel(
+             Model.WatchdogDetailArgs.WatchdogId,
+             Resource.DeleteWebScraperConfirmationMessage
+         )
      )>
 
     <div class="d-flex justify-content-between align-items-center">

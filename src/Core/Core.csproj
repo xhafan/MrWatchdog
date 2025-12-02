@@ -49,6 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Resource.cs.resx">
+      <DependentUpon>Resource.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Resource.resx">
       <SubType>Designer</SubType>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

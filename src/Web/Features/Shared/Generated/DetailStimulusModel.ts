@@ -5,4 +5,5 @@
 export interface DetailStimulusModel
 {
 	watchdogId: number;
+	deleteWebScraperConfirmationMessage: string;
 }

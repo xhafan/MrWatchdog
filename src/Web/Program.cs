@@ -48,8 +48,12 @@ using System.Threading.RateLimiting;
 using CoreUtils;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using MrWatchdog.Web.Infrastructure.Middlewares;
+using MrWatchdog.Web.Infrastructure.Validations;
 
 namespace MrWatchdog.Web;
 
@@ -100,6 +104,7 @@ public class Program
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.ConfigureFilter(new EnforceHandlerExistsPageFilter());
             });
+
         builder.Services.AddControllers(options =>
         {
             var policy = new AuthorizationPolicyBuilder()
@@ -187,7 +192,21 @@ public class Program
             .AddPolicyHandler(timeoutPolicy); // the timeoutPolicy is inside the retryPolicy, to make it time out each try.
         
         builder.Services.AddHttpClient();
+
+        builder.Services.AddSingleton<IValidationAttributeAdapterProvider, LocalizedValidationAttributeAdapterProvider>();        
         builder.Services.AddLocalization();
+
+        var supportedCultures = new[] { "cs", "en" };
+
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            options.SetDefaultCulture("en");
+            options.AddSupportedCultures(supportedCultures);
+            options.AddSupportedUICultures(supportedCultures);
+
+            // use "Accept-Language" header
+            options.RequestCultureProviders.Insert(0, new AcceptLanguageHeaderRequestCultureProvider());
+        });
        
         builder.Services.Configure<SmtpServerEmailSenderOptions>(builder.Configuration.GetSection(nameof(SmtpServerEmailSender)));
         builder.Services.Configure<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(
@@ -387,6 +406,9 @@ public class Program
             IsolationLevel.ReadCommitted,
             getOrHeadRequestPathsWithoutDefaultDatabaseTransaction
         );
+
+        var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+        app.UseRequestLocalization(localizationOptions);
 
         app.UseRouting();
         app.UseHealthChecks("/up", new HealthCheckOptions

@@ -73,7 +73,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @MarkIfActive("/Support")" asp-page="/Support">
-                                Support
+                                @Resource.Support
                             </a>
                         </li>
                     </ul>
@@ -92,13 +92,13 @@
                                     type="submit"
                                     data-action="@StimulusControllers.Body#logout"
                                     >
-                                <span><i class="fas fa-sign-out"></i> Logout</span>
+                                <span><i class="fas fa-sign-out"></i> @Resource.Logout</span>
                             </button>
                         </form>
                     }
                     else
                     {
-                        <a asp-page="/Account/Login/Login">Log in / register</a>
+                        <a asp-page="/Account/Login/Login">@Resource.LoginOrRegister</a>
                     }
                 </div>
             </div>

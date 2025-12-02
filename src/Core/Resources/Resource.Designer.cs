@@ -61,6 +61,62 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    A watchdog platform for any publicly accessible web page on the internet.
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Use it to watch any publicly accessible web page for changes and get notified by email when it changes or your search term is found.
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    View existing public {0} and create a watchdog with email notification about new scraped results.
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    {1} your own web scraper. {2} your existing web scrapers.
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string AboutCreate {
+            get {
+                return ResourceManager.GetString("AboutCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string AboutManage {
+            get {
+                return ResourceManager.GetString("AboutManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to web scrapers.
+        /// </summary>
+        public static string AboutWebScrapers {
+            get {
+                return ResourceManager.GetString("AboutWebScrapers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need help? Contact our support team at.
+        /// </summary>
+        public static string ContactSupport {
+            get {
+                return ResourceManager.GetString("ContactSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create web scraper.
         /// </summary>
         public static string CreateWebScraper {
@@ -70,7 +126,34 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optionally enter a search term to filter the scraped results.
+        ///   Looks up a localized string similar to Really delete this web scraper and all of the user&apos;s watchdogs?.
+        /// </summary>
+        public static string DeleteWebScraperConfirmationMessage {
+            get {
+                return ResourceManager.GetString("DeleteWebScraperConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} field is not a valid email address.
+        /// </summary>
+        public static string EmailAddressRegexAttribute {
+            get {
+                return ResourceManager.GetString("EmailAddressRegexAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optionally enter a search term to filter the results.
         /// </summary>
         public static string FilterResults {
             get {
@@ -84,6 +167,51 @@ namespace MrWatchdog.Core.Resources {
         public static string ListOfWebScrapers {
             get {
                 return ResourceManager.GetString("ListOfWebScrapers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or.
+        /// </summary>
+        public static string LoginOr {
+            get {
+                return ResourceManager.GetString("LoginOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in / register.
+        /// </summary>
+        public static string LoginOrRegister {
+            get {
+                return ResourceManager.GetString("LoginOrRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login with email.
+        /// </summary>
+        public static string LoginWithEmail {
+            get {
+                return ResourceManager.GetString("LoginWithEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login with Google.
+        /// </summary>
+        public static string LoginWithGoogle {
+            get {
+                return ResourceManager.GetString("LoginWithGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string Logout {
+            get {
+                return ResourceManager.GetString("Logout", resourceCulture);
             }
         }
         
@@ -120,6 +248,15 @@ namespace MrWatchdog.Core.Resources {
         public static string MyWatchdogs {
             get {
                 return ResourceManager.GetString("MyWatchdogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need help?.
+        /// </summary>
+        public static string NeedHelp {
+            get {
+                return ResourceManager.GetString("NeedHelp", resourceCulture);
             }
         }
         
@@ -163,6 +300,24 @@ namespace MrWatchdog.Core.Resources {
         public static string RequestToMakePublic {
             get {
                 return ResourceManager.GetString("RequestToMakePublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} field is required..
+        /// </summary>
+        public static string RequiredAttribute {
+            get {
+                return ResourceManager.GetString("RequiredAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Support.
+        /// </summary>
+        public static string Support {
+            get {
+                return ResourceManager.GetString("Support", resourceCulture);
             }
         }
         

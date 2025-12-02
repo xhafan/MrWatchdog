@@ -1,0 +1,113 @@
+﻿<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="DeleteWebScraperConfirmationMessage" xml:space="preserve">
+		<value>Opravdu chcete smazat tento webový scraper a všechny hlídací psy uživatelů?</value>
+	</data>
+	<data name="CreateWebScraper" xml:space="preserve">
+		<value>Vytvoř webový scraper</value>
+	</data>
+	<data name="FilterResults" xml:space="preserve">
+		<value>Volitelně zadejte hledaný výraz pro filtrování výsledků</value>
+	</data>
+	<data name="ListOfWebScrapers" xml:space="preserve">
+		<value>Weboví scrapeři</value>
+	</data>
+	<data name="MakePublic" xml:space="preserve">
+		<value>Zveřejnit</value>
+	</data>
+	<data name="ManageWebScrapers" xml:space="preserve">
+		<value>Správa webových scraperů</value>
+	</data>
+	<data name="MyWatchdogs" xml:space="preserve">
+		<value>Moji hlídací psi</value>
+	</data>
+	<data name="OnboardingViewAgainStep" xml:space="preserve">
+		<value>Tuto nápovědu si můžete kdykoli znovu zobrazit.</value>
+	</data>
+	<data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
+		<value>&lt;p&gt;
+    Můžete deaktivovat e-mailová oznámení o nových výsledcích scrapingu.
+&lt;/p&gt;
+&lt;div class="alert alert-info mb-3"&gt;    
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; E-mailová oznámení o nových výsledcích scrapingu jsou v současné době zdarma.
+    V budoucnu bude tato funkce k dispozici pouze pro předplatitele prémiového účtu.
+    Prémiové předplatné zatím není implementováno.
+&lt;/div&gt;</value>
+	</data>
+	<data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
+		<value>Dostávejte e-mailová oznámení o nových výsledcích scrapingu</value>
+	</data>
+	<data name="RequestToMakePublic" xml:space="preserve">
+		<value>Žádost o zveřejnění</value>
+	</data>
+	<data name="ViewScrapedResults" xml:space="preserve">
+		<value>Zobrazit výsledky scrapingu</value>
+	</data>
+	<data name="Support" xml:space="preserve">
+		<value>Podpora</value>
+	</data>
+	<data name="Logout" xml:space="preserve">
+		<value>Odhlásit</value>
+	</data>
+	<data name="NeedHelp" xml:space="preserve">
+		<value>Potřebujete poradit?</value>
+	</data>
+	<data name="ContactSupport" xml:space="preserve">
+		<value>Potřebujete poradit? Kontaktujte náš tým podpory na</value>
+	</data>
+	<data name="About" xml:space="preserve">
+		<value>&lt;p&gt;
+    Platforma pro sledování jakékoli veřejně přístupné webové stránky na internetu.
+&lt;/p&gt;
+&lt;p&gt;
+    Použijte ji ke sledování změn na jakékoli veřejně přístupné webové stránce a nechte si zasílat e-mailová oznámení, když dojde ke změně nebo když je nalezen váš vyhledávací výraz.
+&lt;/p&gt;
+&lt;p&gt;
+    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s e-mailovým oznámením o nových výsledcích scrapingu.
+&lt;/p&gt;
+&lt;p&gt;
+    {1} si vlastní webový scraper. {2} své stávající webové scrapery.
+&lt;/p&gt;</value>
+	</data>
+	<data name="AboutWebScrapers" xml:space="preserve">
+		<value>webové scrapery</value>
+	</data>
+	<data name="AboutCreate" xml:space="preserve">
+		<value>Vytvořte</value>
+	</data>
+	<data name="AboutManage" xml:space="preserve">
+		<value>Spravujte</value>
+	</data>
+	<data name="LoginOrRegister" xml:space="preserve">
+		<value>Přihlásit / zaregistrovat</value>
+	</data>
+	<data name="Email" xml:space="preserve">
+		<value>Email</value>
+	</data>
+	<data name="LoginWithEmail" xml:space="preserve">
+		<value>Přihlásit emailem</value>
+	</data>
+	<data name="LoginWithGoogle" xml:space="preserve">
+		<value>Přihlásit přes Google</value>
+	</data>
+	<data name="RequiredAttribute" xml:space="preserve">
+		<value>Pole {0} je povinné.</value>
+	</data>
+	<data name="LoginOr" xml:space="preserve">
+		<value>Nebo</value>
+	</data>
+	<data name="EmailAddressRegexAttribute" xml:space="preserve">
+		<value>Pole {0} neobsahuje platnou emailovou adresu</value>
+	</data>
+</root>

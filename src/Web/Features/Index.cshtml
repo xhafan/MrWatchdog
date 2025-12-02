@@ -1,6 +1,9 @@
 ﻿@page
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @model IndexModel
+@inject IStringLocalizer<Resource> Localizer 
 
 @{
     var title = Resource.MrWatchdog;
@@ -11,17 +14,12 @@
 
 <div class="row">
     <div class="col-md-6">
-        <p>
-            A watchdog platform for any publicly accessible web page on the internet.
-        </p>
-        <p>
-            Use it to watch any publicly accessible web page for changes and get notified by email when it changes or your search term is found.
-        </p>
-        <p>
-            View existing public <a asp-page="/Watchdogs/Index">web scrapers</a> and create a watchdog with email notification about new scraped results.
-        </p>
-        <p>
-            <a asp-page="/Watchdogs/Create/Create">Create</a> your own web scraper. <a asp-page="/Watchdogs/Manage/Manage">Manage</a> your existing web scrapers.
-        </p>
+        @Html.Raw(
+            Localizer[Resource.About,
+                $"<a href=\"/Watchdogs/Index\">{Resource.AboutWebScrapers}</a>",
+                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\">{Resource.AboutCreate}</a>",
+                $"<a href=\"{WatchdogUrlConstants.WatchdogsManageUrl}\">{Resource.AboutManage}</a>"
+            ]
+        )
     </div>
 </div>

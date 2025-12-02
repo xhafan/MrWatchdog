@@ -121,11 +121,11 @@
     <value>Create web scraper</value>
   </data>
   <data name="FilterResults" xml:space="preserve">
-    <value>Optionally enter a search term to filter the scraped results</value>
+	  <value>Optionally enter a search term to filter the results</value>
   </data>
   <data name="ListOfWebScrapers" xml:space="preserve">
     <value>Web scrapers</value>
-  </data>  
+  </data>
   <data name="MakePublic" xml:space="preserve">
     <value>Make public</value>
   </data>
@@ -146,7 +146,7 @@
   </data>
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
     <value>Receive email notification about new scraped results</value>
-  </data> 
+  </data>
   <data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
     <value>&lt;p&gt;
     You can disable email notification about new scraped results.
@@ -159,5 +159,64 @@
   </data>
   <data name="OnboardingViewAgainStep" xml:space="preserve">
     <value>You can view this help anytime again.</value>
-  </data>  
+  </data>
+  <data name="DeleteWebScraperConfirmationMessage" xml:space="preserve">
+    <value>Really delete this web scraper and all of the user's watchdogs?</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+	  <value>Support</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+	  <value>Logout</value>
+  </data>
+  <data name="NeedHelp" xml:space="preserve">
+	  <value>Need help?</value>
+  </data>
+  <data name="ContactSupport" xml:space="preserve">
+	  <value>Need help? Contact our support team at</value>
+  </data>
+  <data name="About" xml:space="preserve">
+	  <value>&lt;p&gt;
+    A watchdog platform for any publicly accessible web page on the internet.
+&lt;/p&gt;
+&lt;p&gt;
+    Use it to watch any publicly accessible web page for changes and get notified by email when it changes or your search term is found.
+&lt;/p&gt;
+&lt;p&gt;
+    View existing public {0} and create a watchdog with email notification about new scraped results.
+&lt;/p&gt;
+&lt;p&gt;
+    {1} your own web scraper. {2} your existing web scrapers.
+&lt;/p&gt;</value>
+  </data>
+  <data name="AboutWebScrapers" xml:space="preserve">
+	  <value>web scrapers</value>
+  </data>
+  <data name="AboutCreate" xml:space="preserve">
+	  <value>Create</value>
+  </data>
+  <data name="AboutManage" xml:space="preserve">
+	  <value>Manage</value>
+  </data>
+  <data name="LoginOrRegister" xml:space="preserve">
+	  <value>Log in / register</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+	  <value>Email</value>
+  </data>
+  <data name="LoginWithEmail" xml:space="preserve">
+	  <value>Login with email</value>
+  </data>
+  <data name="LoginWithGoogle" xml:space="preserve">
+	  <value>Login with Google</value>
+  </data>
+  <data name="RequiredAttribute" xml:space="preserve">
+	  <value>The {0} field is required.</value>
+  </data>
+  <data name="LoginOr" xml:space="preserve">
+	  <value>Or</value>
+  </data>
+  <data name="EmailAddressRegexAttribute" xml:space="preserve">
+	  <value>The {0} field is not a valid email address</value>
+  </data>
 </root>

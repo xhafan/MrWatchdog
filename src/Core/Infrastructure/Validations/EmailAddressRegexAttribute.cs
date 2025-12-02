@@ -10,8 +10,8 @@ public class EmailAddressRegexAttribute : RegularExpressionAttribute
     public EmailAddressRegexAttribute(bool acceptSpacesAroundEmail = false) 
         : base(acceptSpacesAroundEmail 
             ? EmailRegexPatternAcceptingSpacesAround 
-            : EmailRegexPattern) 
+            : EmailRegexPattern)
     {
-        ErrorMessage = "The {0} field is not a valid email address.";
+        ErrorMessage = "The {0} field is not a valid email address";
     }
 }

@@ -113,4 +113,34 @@
 	<data name="StringLengthAttribute" xml:space="preserve">
 		<value>Pole {0} musí být řetězec s maximální délkou {1}.</value>
 	</data>
+	<data name="LoginLinkSent" xml:space="preserve">
+		<value>Odkaz pro přihlášení odeslán</value>
+	</data>
+	<data name="LoginLinkSentDescription" xml:space="preserve">
+		<value>&lt;p&gt;
+    Na vaši emailovou adresu &lt;span class="link-primary"&gt;{0}&lt;/span&gt; byl odeslán odkaz pro přihlášení. Zkontrolujte svou emailovou schránku a potvrďte přihlášení kliknutím na odkaz pro přihlášení.
+&lt;/p&gt;
+&lt;p&gt;
+    Čeká se na potvrzení...
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;small&gt;
+        Pokud email nenajdete, zkontrolujte složku se spamem a označte jej jako &lt;i&gt;Není spam&lt;/i&gt;, abyste měli jistotu, že budete dostávat další emaily od {1}.
+    &lt;/small&gt;
+&lt;/p&gt;</value>
+	</data>
+	<data name="YouHaveBeenLoggedIn" xml:space="preserve">
+		<value>Jste přihlášeni</value>
+	</data>
+	<data name="YouHaveBeenLoggedInDescription" xml:space="preserve">
+		<value>&lt;p&gt;
+    Jste přihlášeni ve své původní relaci. 
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Zavřete tuto stránku&lt;/b&gt; a vraťte se do své původní relace.
+&lt;/p&gt;</value>
+	</data>
+	<data name="Copyright" xml:space="preserve">
+		<value>Autorská práva</value>
+	</data>
 </root>

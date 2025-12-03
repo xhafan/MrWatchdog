@@ -222,4 +222,35 @@
   <data name="StringLengthAttribute" xml:space="preserve">
 	  <value>The field {0} must be a string with a maximum length of {1}.</value>
   </data>
+  <data name="LoginLinkSent" xml:space="preserve">
+	  <value>Login link sent</value>
+  </data>
+  <data name="LoginLinkSentDescription" xml:space="preserve">
+	  <value>&lt;p&gt;
+    A login link has been sent to your email &lt;span class="link-primary"&gt;{0}&lt;/span&gt; . Check your email, and confirm the login by clicking the login link.
+&lt;/p&gt;
+&lt;p&gt;
+    Waiting for the confirmation...
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;small&gt;
+        If you can't find the email, please check your spam folder and mark it as &lt;i&gt;Not Spam&lt;/i&gt; 
+        to ensure you receive future emails from {1}.
+    &lt;/small&gt;
+&lt;/p&gt;</value>
+  </data>
+  <data name="YouHaveBeenLoggedIn" xml:space="preserve">
+	  <value>You've been logged in</value>
+  </data>
+  <data name="YouHaveBeenLoggedInDescription" xml:space="preserve">
+	  <value>&lt;p&gt;
+    You've been logged in on your original session. 
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Close this page&lt;/b&gt; and return to your original session.
+&lt;/p&gt;</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+	  <value>Copyright</value>
+  </data>
 </root>

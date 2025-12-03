@@ -1,25 +1,16 @@
 @page
+@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model LoginLinkSentModel
+@inject IStringLocalizer<Resource> Localizer
 
 @{
-    const string title = "Login link sent";
+    var title = Resource.LoginLinkSent;
     ViewData["Title"] = title;
 }
 <h1 class="display-4">@title</h1>
 
 <div @Stimulus.Controller(StimulusControllers.AccountLoginLinkSent, new LoginLinkSentStimulusModel(Model.LoginTokenGuid))>
-    <p>
-        A login link has been sent to your email <span class="link-primary">@Model.Email</span> . Check your email, and confirm the login by clicking the login link.
-    </p>
-    <p>
-        Waiting for the confirmation...
-    </p>
-    <p>
-        <small>
-            If you can't find the email, please check your spam folder and mark it as <i>Not Spam</i> 
-            to ensure you receive future emails from @Resource.MrWatchdog.
-        </small>
-    </p>
+    @Html.Raw(Localizer[Resource.LoginLinkSentDescription, Model.Email, Resource.MrWatchdog])
 </div>

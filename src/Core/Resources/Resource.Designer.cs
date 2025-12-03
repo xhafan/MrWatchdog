@@ -117,6 +117,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copyright.
+        /// </summary>
+        public static string Copyright {
+            get {
+                return ResourceManager.GetString("Copyright", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create web scraper.
         /// </summary>
         public static string CreateWebScraper {
@@ -167,6 +176,35 @@ namespace MrWatchdog.Core.Resources {
         public static string ListOfWebScrapers {
             get {
                 return ResourceManager.GetString("ListOfWebScrapers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login link sent.
+        /// </summary>
+        public static string LoginLinkSent {
+            get {
+                return ResourceManager.GetString("LoginLinkSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    A login link has been sent to your email &lt;span class=&quot;link-primary&quot;&gt;{0}&lt;/span&gt; . Check your email, and confirm the login by clicking the login link.
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Waiting for the confirmation...
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    &lt;small&gt;
+        ///        If you can&apos;t find the email, please check your spam folder and mark it as &lt;i&gt;Not Spam&lt;/i&gt; 
+        ///        to ensure you receive future emails from {1}.
+        ///    &lt;/small&gt;
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string LoginLinkSentDescription {
+            get {
+                return ResourceManager.GetString("LoginLinkSentDescription", resourceCulture);
             }
         }
         
@@ -336,6 +374,29 @@ namespace MrWatchdog.Core.Resources {
         public static string ViewScrapedResults {
             get {
                 return ResourceManager.GetString("ViewScrapedResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve been logged in.
+        /// </summary>
+        public static string YouHaveBeenLoggedIn {
+            get {
+                return ResourceManager.GetString("YouHaveBeenLoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    You&apos;ve been logged in on your original session. 
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    &lt;b&gt;Close this page&lt;/b&gt; and return to your original session.
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string YouHaveBeenLoggedInDescription {
+            get {
+                return ResourceManager.GetString("YouHaveBeenLoggedInDescription", resourceCulture);
             }
         }
     }

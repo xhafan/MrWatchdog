@@ -1,13 +1,13 @@
 @page
+@using MrWatchdog.Core.Resources
 @model ConfirmLoginModel
 @{
-    var title = "You've been logged in";
+    var title = Resource.YouHaveBeenLoggedIn;
     ViewData["Title"] = title;
     ViewData["HideMenu"] = true;
 }
 
 <h1 class="display-4">@title</h1>
 
-<p>
-    You've been logged in on your original session. Please <b>close this page</b> and return to your original session.
-</p>
+@Html.Raw(Resource.YouHaveBeenLoggedInDescription)
+

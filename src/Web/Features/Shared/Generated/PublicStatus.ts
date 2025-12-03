@@ -4,6 +4,6 @@
 
 export enum PublicStatus {
 	Public = 80,
-	MakePublicRequested = 82,
+	RequestedToBeMadePublic = 82,
 	Private = 84
 }

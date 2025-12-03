@@ -3,6 +3,6 @@
 public enum PublicStatus
 {
     Private = 'T',
-    MakePublicRequested = 'R',
+    RequestedToBeMadePublic = 'R',
     Public = 'P'
 }

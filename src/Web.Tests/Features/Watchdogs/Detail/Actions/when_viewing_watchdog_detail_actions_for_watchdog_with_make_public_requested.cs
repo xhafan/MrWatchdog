@@ -25,7 +25,7 @@ public class when_viewing_watchdog_detail_actions_for_watchdog_with_make_public_
     public void model_is_correct()
     {
         _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
+        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
     }
 
     private void _BuildEntities()

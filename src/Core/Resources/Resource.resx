@@ -142,7 +142,7 @@
     <value>View scraped results</value>
   </data>
   <data name="MyWatchdogs" xml:space="preserve">
-    <value>My Watchdogs</value>
+	  <value>My watchdogs</value>
   </data>
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
     <value>Receive email notification about new scraped results</value>
@@ -252,5 +252,56 @@
   </data>
   <data name="Copyright" xml:space="preserve">
 	  <value>Copyright</value>
+  </data>
+  <data name="PublicWebScrapers" xml:space="preserve">
+	  <value>Public web scrapers</value>
+  </data>
+  <data name="PublicWebScrapersDescription" xml:space="preserve">
+	  <value>Browse public web scrapers created by other users and you.</value>
+  </data>
+  <data name="MyWebScrapers" xml:space="preserve">
+	  <value>My web scrapers</value>
+  </data>
+  <data name="MyWebScrapersDescription" xml:space="preserve">
+	  <value>Browse web scrapers created by you.</value>
+  </data>
+  <data name="MyWebScraper" xml:space="preserve">
+	  <value>My web scraper</value>
+  </data>
+  <data name="MyWebScraperTooltip" xml:space="preserve">
+	  <value>You created this web scraper</value>
+  </data>
+  <data name="PublicStatus" xml:space="preserve">
+	  <value>Public</value>
+  </data>
+  <data name="PublicStatusTooltip" xml:space="preserve">
+	  <value>The web scraper is public and discoverable by other users.</value>
+  </data>
+  <data name="RequestedToBeMadePublicStatus" xml:space="preserve">
+	  <value>Requested to be made public</value>
+  </data>
+  <data name="RequestedToBeMadePublicStatusTooltip" xml:space="preserve">
+	  <value>The web scraper has been requested to be made public and discoverable by other users.</value>
+  </data>
+  <data name="PrivateStatus" xml:space="preserve">
+	  <value>Private</value>
+  </data>
+  <data name="PrivateStatusTooltip" xml:space="preserve">
+	  <value>The web scraper is private and not discoverable by other users.</value>
+  </data>
+  <data name="CreateWatchdog" xml:space="preserve">
+	  <value>Create watchdog</value>
+  </data>
+  <data name="LoginOrRegisterToCreateWatchdog" xml:space="preserve">
+	  <value>Log in or register to create watchdog</value>
+  </data>
+  <data name="ManageWebScraper" xml:space="preserve">
+	  <value>Manage</value>
+  </data>
+  <data name="WatchedWebPages" xml:space="preserve">
+	  <value>Watched web pages</value>
+  </data>
+  <data name="ScrapedResults" xml:space="preserve">
+	  <value>Scraped results</value>
   </data>
 </root>

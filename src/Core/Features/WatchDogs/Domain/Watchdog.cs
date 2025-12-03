@@ -219,7 +219,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public.");
 
-        PublicStatus = PublicStatus.MakePublicRequested;
+        PublicStatus = PublicStatus.RequestedToBeMadePublic;
 
         DomainEvents.RaiseEvent(new WatchdogRequestedToBeMadePublicDomainEvent(Id));
     }

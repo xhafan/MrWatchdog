@@ -35,7 +35,7 @@ public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
     [Test]
     public void watchdog_is_requested_to_make_public()
     {
-        _watchdog.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
     }
 
     [Test]

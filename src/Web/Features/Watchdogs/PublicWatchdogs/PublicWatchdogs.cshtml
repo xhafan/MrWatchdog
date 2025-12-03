@@ -1,14 +1,15 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @model PublicWatchdogsModel
 @{
     Layout = null;
 }
 <!turbo-frame id="publicWatchdogs">
-    <h1 class="display-4">Public web scrapers</h1>    
+    <h1 class="display-4">@Resource.PublicWebScrapers</h1>    
     <p class="text-muted">
-        Browse public web scrapers created by other users and you.
+        @Resource.PublicWebScrapersDescription
     </p>
 
     @foreach (var watchdog in Model.PublicWatchdogs)
@@ -24,9 +25,8 @@
             @if (watchdog.UserId == User.GetUserId())
             {
                 <span class="badge text-bg-primary"
-                      title="You created this watchdog"
-                      >
-                    My web scraper
+                      title="@Resource.MyWebScraperTooltip">
+                    @Resource.MyWebScraper
                 </span>
             }
         </div>

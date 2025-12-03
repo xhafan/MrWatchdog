@@ -101,7 +101,7 @@
                         style="display:@(User.IsAuthenticated() ? "" : "none")"
                         id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsCreateWatchdogSearchId"
                         >
-                    @ScrapingResultsConstants.CreateWatchdog
+                    @Resource.CreateWatchdog
                 </button> 
                 <button class="btn btn-primary"
                         data-watchdogs--scraping-results-target="loginToCreateWatchdogSearch"
@@ -110,13 +110,13 @@
                         style="display:@(User.IsAuthenticated() ? "none" : "")"
                         id="@OnboardingElementIdentifiers.WatchdogsScrapingResultsLoginToCreateWatchdogSearchId"
                         >
-                    @ScrapingResultsConstants.LoginOrRegisterToCreateWatchdog
+                    @Resource.LoginOrRegisterToCreateWatchdog
                 </button>
                 @if (User.GetUserId() == Model.WatchdogScrapingResultsArgs.UserId || await User.IsSuperAdmin(UserRepository))
                 {
                     <a href="@WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Model.WatchdogScrapingResultsArgs.WatchdogId)"
                        class="btn btn-outline-primary text-decoration-none">
-                        Detail
+                        @Resource.ManageWebScraper
                     </a>
                 }
             </div>

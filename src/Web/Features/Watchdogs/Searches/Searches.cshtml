@@ -2,7 +2,6 @@
 @using CoreUtils.Extensions
 @using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
-@using MrWatchdog.Web.Features.Watchdogs.ScrapingResults
 @model SearchesModel
 
 @{
@@ -50,7 +49,7 @@
 @if (Model.WatchdogSearches.IsEmpty())
 {
     <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-    @:You have no watchdog searches. To add a new watchdog search, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of watchdogs</a>, select one,
-    @:and choose <i>@ScrapingResultsConstants.CreateWatchdog</i>.
+    @:You have no watchdogs. To add a new watchdog, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of web scrapers</a>, select one,
+    @:and choose <i>@Resource.CreateWatchdog</i>.
 }
 

@@ -45,7 +45,7 @@ public class when_viewing_user_watchdogs : BaseDatabaseTest
             {
                 WatchdogId = _makePublicRequestedUserWatchdog.Id, 
                 WatchdogName = "make public requested user watchdog",
-                PublicStatus = PublicStatus.MakePublicRequested
+                PublicStatus = PublicStatus.RequestedToBeMadePublic
             }
         );  
     }   

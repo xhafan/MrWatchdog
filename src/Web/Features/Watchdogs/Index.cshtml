@@ -21,12 +21,12 @@
 }
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-7">
         <turbo-frame id="publicWatchdogs"
                      src="@WatchdogUrlConstants.WachdogsPublicWatchdogsUrl"
         />
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         @if (User.IsAuthenticated())
         {
             <turbo-frame id="userWatchdogs"

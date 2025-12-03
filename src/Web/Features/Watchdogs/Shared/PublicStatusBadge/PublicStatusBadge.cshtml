@@ -1,21 +1,22 @@
 ﻿@using MrWatchdog.Core.Features.Watchdogs.Domain
+@using MrWatchdog.Core.Resources
 @model PublicStatusBadge
 
 @if (Model.ShowPrivate)
 {
     <span class="badge text-bg-primary"
           style="@(Model.PublicStatus == PublicStatus.Private ? "" : "display:none")"
-          title="The web scraper is private and not discoverable by other users.">
-        Private
+          title="@Resource.PrivateStatusTooltip">
+        @Resource.PrivateStatus
     </span>
 }
 <span class="badge text-bg-warning"
-      style="@(Model.PublicStatus == PublicStatus.MakePublicRequested ? "" : "display:none")"
-      title="The web scraper has been requested to be made public and discoverable by other users.">
-    Requested to be made public
+      style="@(Model.PublicStatus == PublicStatus.RequestedToBeMadePublic ? "" : "display:none")"
+      title="@Resource.RequestedToBeMadePublicStatusTooltip">
+    @Resource.RequestedToBeMadePublicStatus
 </span>
 <span class="badge text-bg-success"
       style="@(Model.PublicStatus == PublicStatus.Public ? "" : "display:none")"
-      title="The web scraper is public and discoverable by other users.">
-    Public
+      title="@Resource.PublicStatusTooltip">
+    @Resource.PublicStatus
 </span>

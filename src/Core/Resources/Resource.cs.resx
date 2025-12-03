@@ -37,16 +37,16 @@
 	</data>
 	<data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
 		<value>&lt;p&gt;
-    Můžete deaktivovat e-mailová oznámení o nových výsledcích scrapingu.
+    Můžete deaktivovat emailová oznámení o nových výsledcích scrapingu.
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
-    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; E-mailová oznámení o nových výsledcích scrapingu jsou v současné době zdarma.
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích scrapingu jsou v současné době zdarma.
     V budoucnu bude tato funkce k dispozici pouze pro předplatitele prémiového účtu.
     Prémiové předplatné zatím není implementováno.
 &lt;/div&gt;</value>
 	</data>
 	<data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
-		<value>Dostávejte e-mailová oznámení o nových výsledcích scrapingu</value>
+		<value>Dostávejte emailová oznámení o nových výsledcích scrapingu</value>
 	</data>
 	<data name="RequestToMakePublic" xml:space="preserve">
 		<value>Žádost o zveřejnění</value>
@@ -71,10 +71,10 @@
     Platforma pro sledování jakékoli veřejně přístupné webové stránky na internetu.
 &lt;/p&gt;
 &lt;p&gt;
-    Použijte ji ke sledování změn na jakékoli veřejně přístupné webové stránce a nechte si zasílat e-mailová oznámení, když dojde ke změně nebo když je nalezen váš vyhledávací výraz.
+    Použijte ji ke sledování změn na jakékoli veřejně přístupné webové stránce a nechte si zasílat emailová oznámení, když dojde ke změně nebo když je nalezen váš vyhledávací výraz.
 &lt;/p&gt;
 &lt;p&gt;
-    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s e-mailovým oznámením o nových výsledcích scrapingu.
+    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s emailovým oznámením o nových výsledcích scrapingu.
 &lt;/p&gt;
 &lt;p&gt;
     {1} si vlastní webový scraper. {2} své stávající webové scrapery.
@@ -142,5 +142,56 @@
 	</data>
 	<data name="Copyright" xml:space="preserve">
 		<value>Autorská práva</value>
+	</data>
+	<data name="PublicWebScrapers" xml:space="preserve">
+		<value>Veřejní weboví scrapeři</value>
+	</data>
+	<data name="PublicWebScrapersDescription" xml:space="preserve">
+		<value>Procházejte veřejné webové scrapery vytvořené ostatními uživateli a Vámi.</value>
+	</data>
+	<data name="MyWebScrapers" xml:space="preserve">
+		<value>Moji weboví scrapeři</value>
+	</data>
+	<data name="MyWebScrapersDescription" xml:space="preserve">
+		<value>Procházejte webové scrapery, které jste vytvořili Vy.</value>
+	</data>
+	<data name="MyWebScraper" xml:space="preserve">
+		<value>Můj webový scraper</value>
+	</data>
+	<data name="MyWebScraperTooltip" xml:space="preserve">
+		<value>Tento webový scraper jste vytvořili Vy</value>
+	</data>
+	<data name="PublicStatus" xml:space="preserve">
+		<value>Veřejný</value>
+	</data>
+	<data name="PublicStatusTooltip" xml:space="preserve">
+		<value>Webový scraper je veřejný a ostatní uživatelé jej mohou najít.</value>
+	</data>
+	<data name="RequestedToBeMadePublicStatus" xml:space="preserve">
+		<value>Požadováno zveřejnění</value>
+	</data>
+	<data name="RequestedToBeMadePublicStatusTooltip" xml:space="preserve">
+		<value>Bylo požádáno, aby byl webový scraper zveřejněn a byl dostupný pro ostatní uživatele.</value>
+	</data>
+	<data name="PrivateStatus" xml:space="preserve">
+		<value>Soukromý</value>
+	</data>
+	<data name="PrivateStatusTooltip" xml:space="preserve">
+		<value>Webový scraper je soukromý a není viditelný pro ostatní uživatele.</value>
+	</data>
+	<data name="CreateWatchdog" xml:space="preserve">
+		<value>Vytvořit hlídacího psa</value>
+	</data>
+	<data name="LoginOrRegisterToCreateWatchdog" xml:space="preserve">
+		<value>Přihlaste se nebo se zaregistrujte pro vytvoření hlídacího psa</value>
+	</data>
+	<data name="ManageWebScraper" xml:space="preserve">
+		<value>Správa</value>
+	</data>
+	<data name="WatchedWebPages" xml:space="preserve">
+		<value>Sledované webové stránky</value>
+	</data>
+	<data name="ScrapedResults" xml:space="preserve">
+		<value>Výsledky scrapingu</value>
 	</data>
 </root>

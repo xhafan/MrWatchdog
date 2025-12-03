@@ -20,6 +20,6 @@ public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
     [Test]
     public void public_status_is_correct()
     {
-        _watchdog.PublicStatus.ShouldBe(PublicStatus.MakePublicRequested);
+        _watchdog.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
     }
 }

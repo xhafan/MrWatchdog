@@ -1,13 +1,14 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using MrWatchdog.Core.Resources
 @model UserWatchdogsModel
 @{
     Layout = null;
 }
 <!turbo-frame id="userWatchdogs">
-    <h1 class="display-4">My web scrapers</h1>    
+    <h1 class="display-4">@Resource.MyWebScrapers</h1>    
     <p class="text-muted">
-        Browse web scrapers created by you.
+        @Resource.MyWebScrapersDescription
     </p>
 
     @foreach (var watchdog in Model.UserWatchdogs)
@@ -18,8 +19,7 @@
                data-turbo-frame="_top"
                class="text-wrap text-break"
             >
-                @watchdog.WatchdogName
-            </a>
+                @watchdog.WatchdogName</a>
             <public-status-badge public-status="@watchdog.PublicStatus"
                                  show-private="false"
             />

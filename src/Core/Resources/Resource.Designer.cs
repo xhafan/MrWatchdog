@@ -313,6 +313,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The field {0} must be a string with a maximum length of {1}..
+        /// </summary>
+        public static string StringLengthAttribute {
+            get {
+                return ResourceManager.GetString("StringLengthAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Support.
         /// </summary>
         public static string Support {

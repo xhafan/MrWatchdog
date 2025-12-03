@@ -6,11 +6,17 @@ using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Register.DependencyInjection;
+using CoreUtils;
 using DatabaseBuilder;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Jobs.Services;
@@ -28,10 +34,12 @@ using MrWatchdog.Web.Features.Logs;
 using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using MrWatchdog.Web.Infrastructure.Middlewares;
 using MrWatchdog.Web.Infrastructure.PageFilters;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
 using MrWatchdog.Web.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
+using MrWatchdog.Web.Infrastructure.Validations;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
@@ -45,15 +53,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using CoreUtils;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
-using MrWatchdog.Web.Infrastructure.Middlewares;
-using MrWatchdog.Web.Infrastructure.Validations;
 
 namespace MrWatchdog.Web;
 
@@ -103,6 +102,10 @@ public class Program
                 options.Conventions.Add(new PageRouteModelConvention());
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.ConfigureFilter(new EnforceHandlerExistsPageFilter());
+            })
+            .AddMvcOptions(options =>
+            {
+                options.ModelMetadataDetailsProviders.Add(new LocalizedValidationMetadataProvider());
             });
 
         builder.Services.AddControllers(options =>
@@ -193,7 +196,6 @@ public class Program
         
         builder.Services.AddHttpClient();
 
-        builder.Services.AddSingleton<IValidationAttributeAdapterProvider, LocalizedValidationAttributeAdapterProvider>();        
         builder.Services.AddLocalization();
 
         var supportedCultures = new[] { "cs", "en" };

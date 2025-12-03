@@ -110,4 +110,7 @@
 	<data name="EmailAddressRegexAttribute" xml:space="preserve">
 		<value>Pole {0} neobsahuje platnou emailovou adresu</value>
 	</data>
+	<data name="StringLengthAttribute" xml:space="preserve">
+		<value>Pole {0} musí být řetězec s maximální délkou {1}.</value>
+	</data>
 </root>

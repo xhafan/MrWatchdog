@@ -221,4 +221,37 @@
 	<data name="Cancel" xml:space="preserve">
 		<value>Zrušit</value>
 	</data>
+	<data name="Save" xml:space="preserve">
+		<value>Uložit</value>
+	</data>
+	<data name="Edit" xml:space="preserve">
+		<value>Editovat</value>
+	</data>
+	<data name="WebScraperResultsOnboardingIntro" xml:space="preserve">
+		<value>Jste na stránce zobrazující &lt;b&gt;výsledky scrapingu&lt;/b&gt; webového scraperu.</value>
+	</data>
+	<data name="WebScraperResultsOnboardingWatchedWebPages" xml:space="preserve">
+		<value>Tento webový scraper pravidelně prochází webové stránky a vybírá z nich výsledky.</value>
+	</data>
+	<data name="WebScraperResultsOnboardingSearchTerm" xml:space="preserve">
+		<value>Můžete zadat hledaný výraz pro filtrování výsledků scrapingu.</value>
+	</data>
+	<data name="WebScraperResultsOnboardingCreateWatchdog" xml:space="preserve">
+		<value>Vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapingu nebo nové výsledky scrapingu odpovídající vyhledávanému termínu.</value>
+	</data>
+	<data name="Back" xml:space="preserve">
+		<value>Zpět</value>
+	</data>
+	<data name="Next" xml:space="preserve">
+		<value>Další</value>
+	</data>
+	<data name="Finish" xml:space="preserve">
+		<value>Ukončit</value>
+	</data>
+	<data name="WebScraperResultsOnboardingLoginOrRegisterToCreateWatchdog" xml:space="preserve">
+		<value>Přihlaste se nebo se zaregistrujte a vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapingu nebo nové výsledky scrapingu odpovídající vyhledávanému termínu.</value>
+	</data>
+	<data name="Archived" xml:space="preserve">
+		<value>Archivován</value>
+	</data>
 </root>

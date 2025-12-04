@@ -331,4 +331,37 @@
   <data name="Cancel" xml:space="preserve">
 	  <value>Cancel</value>
   </data>
+  <data name="Save" xml:space="preserve">
+	  <value>Save</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+	  <value>Edit</value>
+  </data>
+  <data name="WebScraperResultsOnboardingIntro" xml:space="preserve">
+	  <value>You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a web scraper.</value>
+  </data>
+  <data name="WebScraperResultsOnboardingWatchedWebPages" xml:space="preserve">
+	  <value>This web scraper periodically scrapes web page(s) and selects scraped results from them.</value>
+  </data>
+  <data name="WebScraperResultsOnboardingSearchTerm" xml:space="preserve">
+	  <value>You can enter a search term to filter the scraped results.</value>
+  </data>
+  <data name="WebScraperResultsOnboardingCreateWatchdog" xml:space="preserve">
+	  <value>Create a watchdog with email notification about new scraped results or new scraped results matching the search term.</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+	  <value>Back</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+	  <value>Next</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+	  <value>Finish</value>
+  </data>
+  <data name="WebScraperResultsOnboardingLoginOrRegisterToCreateWatchdog" xml:space="preserve">
+	  <value>Log in or register to create a watchdog with email notification about new scraped results or new scraped results matching the search term.</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+	  <value>Archived</value>
+  </data>
 </root>

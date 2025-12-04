@@ -1,4 +1,5 @@
 ﻿@page "{watchdogId}"
+@using MrWatchdog.Core.Resources
 @model BadgesModel
 @{
     Layout = null;
@@ -10,7 +11,7 @@
     @if (Model.WatchdogDetailArgs.IsArchived)
     {
         <span class="badge text-bg-warning">
-            Archived
+            @Resource.Archived
         </span>
     }
 </!turbo-frame>

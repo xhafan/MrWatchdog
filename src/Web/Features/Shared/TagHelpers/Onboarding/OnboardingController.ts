@@ -5,6 +5,7 @@ import {TourGuideClient} from "@sjmc11/tourguidejs";
 import { UserUrlConstants } from "../../Generated/UserUrlConstants";
 import { FrameElement } from "@hotwired/turbo";
 import Enumerable from "linq";
+import { sharedTranslations } from "../../sharedTranslations";
 
 const onboardingLocalStorageKeyPrefix = "onboardingComplete_";
 
@@ -45,6 +46,12 @@ export default class OnboardingController extends BaseStimulusModelController<On
             backdropColor: "rgba(20,20,21,0.5)",
             steps: [], // this is needed for navigation to a Turbo cached page to prevent seeing old steps
             exitOnClickOutside: false
+        });
+
+        this.tourGuide.setOptions({
+          prevLabel: sharedTranslations.back,
+          nextLabel: sharedTranslations.next,
+          finishLabel: sharedTranslations.finish
         });
 
         this.tourGuide.onAfterExit(async () => {

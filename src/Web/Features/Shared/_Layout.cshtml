@@ -30,15 +30,8 @@
 
     <script type="module" src="~/assets/bundle.js" data-turbo-track="reload"></script>
     
-    @{
-        var sharedTranslations = new SharedTranslations
-        {
-            Ok = Resource.Ok,
-            Cancel = Resource.Cancel
-        };
-    }
     <script>
-        window.sharedTranslations = @Html.Raw(JsonHelper.Serialize(sharedTranslations));
+        window.sharedTranslations = @Html.Raw(JsonHelper.Serialize(SharedTranslationsGetter.GetSharedTranslations()));
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

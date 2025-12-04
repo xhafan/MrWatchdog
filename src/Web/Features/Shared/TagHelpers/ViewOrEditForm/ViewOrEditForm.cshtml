@@ -1,4 +1,5 @@
-﻿@using MrWatchdog.Web.Features.Shared
+﻿@using MrWatchdog.Core.Resources
+@using MrWatchdog.Web.Features.Shared
 @model ViewOrEditForm
 
 <form method="post"
@@ -16,7 +17,7 @@
                     data-action="@StimulusControllers.ViewOrEditForm#edit"
                     class="btn btn-outline-primary"
                     >
-                Edit
+                @Resource.Edit
             </button>
             <button type="button"
                     data-view-or-edit-form-target="cancel"
@@ -24,14 +25,14 @@
                     class="btn btn-outline-primary"
                     style="display: none"
                     >
-                Cancel
+                @Resource.Cancel
             </button>
             <button type="submit"
                     data-view-or-edit-form-target="save"
                     class="btn btn-primary"
                     style="display: none"
                     >
-                Save
+                @Resource.Save
             </button>
         </div>
     </div>

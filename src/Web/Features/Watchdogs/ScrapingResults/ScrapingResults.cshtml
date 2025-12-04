@@ -30,22 +30,22 @@
                 identifier="@OnboardingIdentifiers.WatchdogsScrapingResults"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: "You navigated to a <b>web scraper results</b>."
+                               Text: Resource.WebScraperResultsOnboardingIntro
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "This web scraper periodically scrapes web page(s) and selects scraped results from them.",
+                               Text: Resource.WebScraperResultsOnboardingWatchedWebPages,
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "You can enter a search term to filter the scraped results.",
+                               Text: Resource.WebScraperResultsOnboardingSearchTerm,
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsSearchTermInputGroupId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Create Watchdog with email notification about new scraped results or new scraped results matching the search term.",
+                               Text: Resource.WebScraperResultsOnboardingCreateWatchdog,
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsCreateWatchdogSearchId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Log in or register to create Watchdog with email notification about new scraped results or new scraped results matching the search term.",
+                               Text: Resource.WebScraperResultsOnboardingLoginOrRegisterToCreateWatchdog,
                                ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsScrapingResultsLoginToCreateWatchdogSearchId}"
                            ),
                            new OnboardingStepStimulusModel(
@@ -61,7 +61,7 @@
     @if (Model.WatchdogScrapingResultsArgs.IsArchived)
     {
         <span class="badge text-bg-warning">
-            Archived
+            @Resource.Archived
         </span>
     }
 </div>

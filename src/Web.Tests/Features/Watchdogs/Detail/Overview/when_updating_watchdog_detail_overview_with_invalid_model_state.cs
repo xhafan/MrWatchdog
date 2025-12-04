@@ -59,7 +59,7 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
         _model.ModelState.ShouldContainKey(key);
         var scrapingIntervalInSecondsErrors = _model.ModelState[key]?.Errors;
         scrapingIntervalInSecondsErrors.ShouldNotBeNull();
-        scrapingIntervalInSecondsErrors.ShouldContain(x => x.ErrorMessage.Contains("greater than"));
+        scrapingIntervalInSecondsErrors.ShouldContain(x => x.ErrorMessage.Contains("must be between"));
         
     }   
 

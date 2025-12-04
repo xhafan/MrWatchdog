@@ -304,4 +304,31 @@
   <data name="ScrapedResults" xml:space="preserve">
 	  <value>Scraped results</value>
   </data>
+  <data name="MyWatchdogsDescription" xml:space="preserve">
+	  <value>Browse your watchdogs.</value>
+  </data>
+  <data name="ManageUserWebScrapersDescription" xml:space="preserve">
+	  <value>Manage web scrapers created by you.</value>
+  </data>
+  <data name="ManageOtherUsersWebScrapersDescription" xml:space="preserve">
+	  <value>Manage web scrapers created by other users.</value>
+  </data>
+  <data name="NoScrapedResultsMatchingTheSearchTermAvailable" xml:space="preserve">
+	  <value>No scraped results matching the search term {0} are currently available.</value>
+  </data>
+  <data name="NoScrapedResultsAvailable" xml:space="preserve">
+	  <value>No scraped results are currently available.</value>
+  </data>
+  <data name="DeleteWatchdog" xml:space="preserve">
+	  <value>Delete watchdog</value>
+  </data>
+  <data name="DeleteWatchdogConfirmationMessage" xml:space="preserve">
+	  <value>Really delete this watchdog?</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+	  <value>OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+	  <value>Cancel</value>
+  </data>
 </root>

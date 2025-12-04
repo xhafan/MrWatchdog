@@ -194,4 +194,31 @@
 	<data name="ScrapedResults" xml:space="preserve">
 		<value>Výsledky scrapingu</value>
 	</data>
+	<data name="MyWatchdogsDescription" xml:space="preserve">
+		<value>Procházejte své hlídací psy.</value>
+	</data>
+	<data name="ManageUserWebScrapersDescription" xml:space="preserve">
+		<value>Spravujte webové scrapery vytvořené Vámi.</value>
+	</data>
+	<data name="ManageOtherUsersWebScrapersDescription" xml:space="preserve">
+		<value>Spravujte webové scrapery vytvořené jinými uživateli.</value>
+	</data>
+	<data name="NoScrapedResultsMatchingTheSearchTermAvailable" xml:space="preserve">
+		<value>V současné době nejsou k dispozici žádné výsledky scrapingu odpovídající hledanému výrazu {0}.</value>
+	</data>
+	<data name="NoScrapedResultsAvailable" xml:space="preserve">
+		<value>V současné době nejsou k dispozici žádné výsledky scrapingu.</value>
+	</data>
+	<data name="DeleteWatchdog" xml:space="preserve">
+		<value>Smazat hlídacího psa</value>
+	</data>
+	<data name="DeleteWatchdogConfirmationMessage" xml:space="preserve">
+		<value>Opravdu chcete smazat tohoto hlídacího psa?</value>
+	</data>
+	<data name="Ok" xml:space="preserve">
+		<value>OK</value>
+	</data>
+	<data name="Cancel" xml:space="preserve">
+		<value>Zrušit</value>
+	</data>
 </root>

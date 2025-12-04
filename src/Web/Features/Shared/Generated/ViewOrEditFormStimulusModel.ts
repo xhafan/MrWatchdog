@@ -2,9 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-import { BaseStimulusModel } from './BaseStimulusModel';
-
-export interface ViewOrEditFormStimulusModel extends BaseStimulusModel
+export interface ViewOrEditFormStimulusModel
 {
 	startInEditMode: boolean;
 	hideCancelInEditMode: boolean;

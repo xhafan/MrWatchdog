@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using Microsoft.Extensions.Options
+@using MrWatchdog.Core.Infrastructure
 @using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Logs
@@ -28,6 +29,17 @@
     <script src="~/lib/bootbox.js/6.0.4/bootbox.min.js" data-turbo-track="reload"></script>
 
     <script type="module" src="~/assets/bundle.js" data-turbo-track="reload"></script>
+    
+    @{
+        var sharedTranslations = new SharedTranslations
+        {
+            Ok = Resource.Ok,
+            Cancel = Resource.Cancel
+        };
+    }
+    <script>
+        window.sharedTranslations = @Html.Raw(JsonHelper.Serialize(sharedTranslations));
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </head>

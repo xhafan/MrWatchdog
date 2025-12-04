@@ -6,4 +6,4 @@ namespace MrWatchdog.Web.Features.Shared.TagHelpers.ViewOrEditForm;
 public record ViewOrEditFormStimulusModel(
     bool StartInEditMode,
     bool HideCancelInEditMode
-) : BaseStimulusModel;
+);

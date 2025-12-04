@@ -2,10 +2,9 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-import { BaseStimulusModel } from './BaseStimulusModel';
 import { OnboardingStepStimulusModel } from './OnboardingStepStimulusModel';
 
-export interface OnboardingStimulusModel extends BaseStimulusModel
+export interface OnboardingStimulusModel
 {
 	enableOnboarding: boolean;
 	onboardingIdentifier: string;

@@ -47,7 +47,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
             async jobDto => {
                 Turbo.visit(WatchdogUrlConstants.watchdogsManageUrl);
             },
-            this.modelValue.deleteWebScraperConfirmationMessage
+            this.modelValue.deleteWebScraperConfirmationMessageResource
         );
 
         this.element.addEventListener(watchdogWebPageRemovedEvent, this.onWatchdogWebPageRemoved.bind(this));

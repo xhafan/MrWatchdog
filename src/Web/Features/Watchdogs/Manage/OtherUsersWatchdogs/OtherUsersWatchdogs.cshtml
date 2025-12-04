@@ -1,11 +1,12 @@
 ﻿@page
+@using MrWatchdog.Core.Resources
 @model OtherUsersWatchdogsModel
 @{
     Layout = null;
 }
 <!turbo-frame id="otherUsersWatchdogs">
     <p class="text-muted">
-        Manage web scrapers created by other users.
+        @Resource.ManageOtherUsersWebScrapersDescription
     </p>
     @foreach (var watchdog in Model.OtherUsersWatchdogs)
     {

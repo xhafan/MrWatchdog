@@ -2,8 +2,8 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export interface DetailStimulusModel
+export interface ScrapingResultsWebPagesStimulusModel
 {
-	watchdogId: number;
-	deleteWebScraperConfirmationMessageResource: string;
+	noScrapedResultsAvailableResource: string;
+	noScrapedResultsMatchingTheSearchTermAvailableResource: string;
 }

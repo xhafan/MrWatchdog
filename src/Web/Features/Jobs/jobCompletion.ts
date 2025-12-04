@@ -4,6 +4,7 @@ import { JobUrlConstants } from "../Shared/Generated/JobUrlConstants";
 import { JobDto } from "../Shared/Generated/JobDto";
 import { RebusConstants } from "../Shared/Generated/RebusConstants";
 import { logError } from "../Shared/logging";
+import { sharedTranslations } from "../Shared/sharedTranslations";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
@@ -20,14 +21,22 @@ export function formSubmitWithWaitForJobCompletion(
 
         if (confirmationMessage) {
             if (!confirmationTitle) {
-                bootbox.confirm(
-                    confirmationMessage,
-                    async result => {
+                bootbox.confirm({
+                    message: confirmationMessage,
+                    buttons: {
+                        confirm: {
+                            label: sharedTranslations.ok
+                        },
+                        cancel: {
+                            label: sharedTranslations.cancel
+                        }
+                    },
+                    callback: async result => {
                         if (!result) return;
 
                         await sendRequestAndWaitForJobCompletionCommon();
                     }
-                );
+                });
             } else {
                 bootbox.confirm({                                      
                     title: confirmationTitle,

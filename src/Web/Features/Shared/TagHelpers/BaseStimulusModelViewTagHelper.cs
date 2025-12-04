@@ -6,7 +6,7 @@ using MrWatchdog.Core.Infrastructure;
 namespace MrWatchdog.Web.Features.Shared.TagHelpers;
 
 public abstract class BaseStimulusModelViewTagHelper<TStimulusModel>(IHtmlHelper htmlHelper) 
-    : BaseViewTagHelper(htmlHelper) where TStimulusModel : BaseStimulusModel
+    : BaseViewTagHelper(htmlHelper)
 {
     protected abstract Task<TStimulusModel> GetStimulusModel();
     

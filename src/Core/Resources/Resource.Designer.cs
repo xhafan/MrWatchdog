@@ -108,6 +108,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Need help? Contact our support team at.
         /// </summary>
         public static string ContactSupport {
@@ -140,6 +149,24 @@ namespace MrWatchdog.Core.Resources {
         public static string CreateWebScraper {
             get {
                 return ResourceManager.GetString("CreateWebScraper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete watchdog.
+        /// </summary>
+        public static string DeleteWatchdog {
+            get {
+                return ResourceManager.GetString("DeleteWatchdog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really delete this watchdog?.
+        /// </summary>
+        public static string DeleteWatchdogConfirmationMessage {
+            get {
+                return ResourceManager.GetString("DeleteWatchdogConfirmationMessage", resourceCulture);
             }
         }
         
@@ -281,6 +308,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage web scrapers created by other users..
+        /// </summary>
+        public static string ManageOtherUsersWebScrapersDescription {
+            get {
+                return ResourceManager.GetString("ManageOtherUsersWebScrapersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage web scrapers created by you..
+        /// </summary>
+        public static string ManageUserWebScrapersDescription {
+            get {
+                return ResourceManager.GetString("ManageUserWebScrapersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage.
         /// </summary>
         public static string ManageWebScraper {
@@ -313,6 +358,15 @@ namespace MrWatchdog.Core.Resources {
         public static string MyWatchdogs {
             get {
                 return ResourceManager.GetString("MyWatchdogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse your watchdogs..
+        /// </summary>
+        public static string MyWatchdogsDescription {
+            get {
+                return ResourceManager.GetString("MyWatchdogsDescription", resourceCulture);
             }
         }
         
@@ -358,6 +412,33 @@ namespace MrWatchdog.Core.Resources {
         public static string NeedHelp {
             get {
                 return ResourceManager.GetString("NeedHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No scraped results are currently available..
+        /// </summary>
+        public static string NoScrapedResultsAvailable {
+            get {
+                return ResourceManager.GetString("NoScrapedResultsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No scraped results matching the search term {0} are currently available..
+        /// </summary>
+        public static string NoScrapedResultsMatchingTheSearchTermAvailable {
+            get {
+                return ResourceManager.GetString("NoScrapedResultsMatchingTheSearchTermAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         

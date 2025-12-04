@@ -10,4 +10,4 @@ public record OnboardingStimulusModel(
     IEnumerable<OnboardingStepStimulusModel> Steps,
     bool IsUserAuthenticated
     // ReSharper restore NotAccessedPositionalProperty.Global
-) : BaseStimulusModel;
+);

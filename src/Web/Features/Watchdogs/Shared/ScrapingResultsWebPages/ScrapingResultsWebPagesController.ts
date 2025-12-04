@@ -1,12 +1,13 @@
-import { Controller } from "@hotwired/stimulus";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../Shared/BodyController";
 import { watchdogScrapingResultsWebPagesInitializedEventName } from "../../ScrapingResults/ScrapingResultsController";
 import Enumerable from "linq";
 import { StimulusControllers } from "../../../Shared/Generated/StimulusControllers";
+import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
+import { ScrapingResultsWebPagesStimulusModel } from "../../../Shared/Generated/ScrapingResultsWebPagesStimulusModel";
 
 export const searchTermModifiedEventName = "searchTermModified";
 
-export default class ScrapingResultsWebPagesController extends Controller {
+export default class ScrapingResultsWebPagesController extends BaseStimulusModelController<ScrapingResultsWebPagesStimulusModel> {
     
     static targets = [
         "scrapingResult",
@@ -55,7 +56,9 @@ export default class ScrapingResultsWebPagesController extends Controller {
         this.allResultsTarget.style.display = noResults ? "none" : "";
         this.noResultsTarget.style.display = noResults ? "" : "none";
 
-        this.noResultsMessageTarget.innerHTML = `No scraped results${(searchTerm ? ` matching the search term <i>${searchTerm}</i>` : "")} currently available`;
+        this.noResultsMessageTarget.innerHTML = searchTerm 
+            ? this.modelValue.noScrapedResultsMatchingTheSearchTermAvailableResource.replace("{0}", `<i>${searchTerm}</i>`)
+            : this.modelValue.noScrapedResultsAvailableResource;
 
         this.refreshWebPagesVisibility();
     }

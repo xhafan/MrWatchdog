@@ -3,8 +3,10 @@ import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/S
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
+import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
+import { SearchStimulusModel } from "../../Shared/Generated/SearchStimulusModel";
 
-export default class SearchController extends Controller {
+export default class SearchController extends BaseStimulusModelController<SearchStimulusModel> {
     static targets  = [
         "searchTermSuffix",
         "archiveWatchdogSearchForm"
@@ -21,7 +23,7 @@ export default class SearchController extends Controller {
             async jobDto => {
                 Turbo.visit(WatchdogUrlConstants.watchdogsSearchesUrl);
             },
-            "Really delete this watchdog search?"
+            this.modelValue.deleteWatchdogConfirmationMessageResource
         );
     }
 

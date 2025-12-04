@@ -1,4 +1,5 @@
 ﻿@page "{watchdogId}"
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @model OverviewModel
 @{
@@ -55,7 +56,7 @@
                 @{
                     var advancedCollapsibleSectionId = "watchdogDetailOverviewAdvanced";
                 }
-                <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">Advanced</a>
+                <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">@Resource.Advanced</a>
                 <div class="collapse" id="@advancedCollapsibleSectionId">
                     <view-mode-item>
                         <div class="mb-3">

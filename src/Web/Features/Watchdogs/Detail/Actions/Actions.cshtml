@@ -12,7 +12,14 @@
     Layout = null;
 }
 <!turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
-    <div @Stimulus.Controller(StimulusControllers.WatchdogsDetailActions)
+    <div @Stimulus.Controller(
+             StimulusControllers.WatchdogsDetailActions, 
+             new ActionsStimulusModel(
+                 Resource.RequestToMakeWebScraperPublicConfirmationMessage,
+                 Resource.MakeWebScraperPublicConfirmationMessage,
+                 Resource.MakeWebScraperPrivateConfirmationMessage
+             )
+         )
          >
         <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
            class="btn btn-outline-primary text-decoration-none"
@@ -65,7 +72,7 @@
             <button class="btn btn-outline-primary"
                     type="submit"
                     >
-                Make private
+                @Resource.MakePrivate
             </button>
         </form>
     </div>

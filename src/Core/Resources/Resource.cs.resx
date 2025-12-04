@@ -165,19 +165,19 @@
 		<value>Veřejný</value>
 	</data>
 	<data name="PublicStatusTooltip" xml:space="preserve">
-		<value>Webový scraper je veřejný a ostatní uživatelé jej mohou najít.</value>
+		<value>Webový scraper je veřejný a přístupný pro ostatní uživatele.</value>
 	</data>
 	<data name="RequestedToBeMadePublicStatus" xml:space="preserve">
 		<value>Požadováno zveřejnění</value>
 	</data>
 	<data name="RequestedToBeMadePublicStatusTooltip" xml:space="preserve">
-		<value>Bylo požádáno, aby byl webový scraper zveřejněn a byl dostupný pro ostatní uživatele.</value>
+		<value>Byla odeslána žádost, aby byl webový scraper zveřejněn a byl přístupný pro ostatní uživatele.</value>
 	</data>
 	<data name="PrivateStatus" xml:space="preserve">
 		<value>Soukromý</value>
 	</data>
 	<data name="PrivateStatusTooltip" xml:space="preserve">
-		<value>Webový scraper je soukromý a není viditelný pro ostatní uživatele.</value>
+		<value>Webový scraper je soukromý a není přístupný pro ostatní uživatele.</value>
 	</data>
 	<data name="CreateWatchdog" xml:space="preserve">
 		<value>Vytvořit hlídacího psa</value>
@@ -253,5 +253,62 @@
 	</data>
 	<data name="Archived" xml:space="preserve">
 		<value>Archivován</value>
+	</data>
+	<data name="Name" xml:space="preserve">
+		<value>Jméno</value>
+	</data>
+	<data name="WebScraperCreateOnboardingSetName" xml:space="preserve">
+		<value>Zadejte název webového scraperu. V dalším kroku budete definovat webové stránky, které chcete scrapovat.</value>
+	</data>
+	<data name="Create" xml:space="preserve">
+		<value>Vytvoř</value>
+	</data>
+	<data name="Description" xml:space="preserve">
+		<value>Popis</value>
+	</data>
+	<data name="ScrapingIntervalInSeconds" xml:space="preserve">
+		<value>Interval scrapingu v sekundách</value>
+	</data>
+	<data name="Advanced" xml:space="preserve">
+		<value>Pokročilé</value>
+	</data>
+	<data name="NumberOfDaysBetweenNotificationsForTheSameScrapedResult" xml:space="preserve">
+		<value>Počet dní mezi oznámeními pro stejný výsledek scrapingu</value>
+	</data>
+	<data name="NumberOfFailedScrapingAttemptsBeforeAlerting" xml:space="preserve">
+		<value>Počet neúspěšných pokusů o scraping před zasláním upozornění emailem</value>
+	</data>
+	<data name="RangeAttribute" xml:space="preserve">
+		<value>{0} musí být větší nebo rovno {1}</value>
+	</data>
+	<data name="DeleteWebScraper" xml:space="preserve">
+		<value>Smazat webového scrapera</value>
+	</data>
+	<data name="AddWebPageToScrape" xml:space="preserve">
+		<value>Přidat webovou stránku na scraping</value>
+	</data>
+	<data name="TheWebPageHasBeenAutomaticallyDisabled" xml:space="preserve">
+		<value>Webová stránka byla automaticky deaktivována.</value>
+	</data>
+	<data name="ToEnableItMakeSureTheWebPageIsSuccessfullyScraped" xml:space="preserve">
+		<value>Chcete-li ji povolit, ujistěte se, že webová stránka byla úspěšně scrapována.</value>
+	</data>
+	<data name="EnableWebPage" xml:space="preserve">
+		<value>Povolit webovou stránku</value>
+	</data>
+	<data name="PleaseEnableItOnceYourEditsAreComplete" xml:space="preserve">
+		<value>Po dokončení úprav ji prosím povolte, aby ji mohli hládací psi nadále sledovat.</value>
+	</data>
+	<data name="MakeWebScraperPublicConfirmationMessage" xml:space="preserve">
+		<value>Opravdu zveřejnit webový scraper a zpřístupnit jej ostatním uživatelům?</value>
+	</data>
+	<data name="RequestToMakeWebScraperPublicConfirmationMessage" xml:space="preserve">
+		<value>Opravdu odeslat žádost, aby byl webový scraper veřejný a přístupný pro ostatní uživatele?</value>
+	</data>
+	<data name="MakeWebScraperPrivateConfirmationMessage" xml:space="preserve">
+		<value>Opravdu nastavit webový scraper jako soukromý a nepřístupný pro ostatní uživatele?</value>
+	</data>
+	<data name="MakePrivate" xml:space="preserve">
+		<value>Nastavit jako soukromý</value>
 	</data>
 </root>

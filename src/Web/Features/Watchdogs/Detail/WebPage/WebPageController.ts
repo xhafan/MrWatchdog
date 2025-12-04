@@ -62,8 +62,7 @@ export default class WebPageController extends Controller {
 
     private onWatchdogWebPageNameModified(event: CustomEventInit<string>) {
         let watchdogWebPageName = event.detail;
-        if (!watchdogWebPageName) throw new Error("Watchdog web page name is missing.");
-        this.webPageNameTarget.textContent = watchdogWebPageName;
+        this.webPageNameTarget.textContent = watchdogWebPageName ?? "";
     }
 
     private onWatchdogWebPageScraped(event: CustomEventInit<string>) {

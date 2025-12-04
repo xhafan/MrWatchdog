@@ -1,8 +1,9 @@
-import { Controller } from "@hotwired/stimulus";
 import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion";
 import { DomEvents } from "../../../Shared/Generated/DomEvents";
+import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
+import { ActionsStimulusModel } from "../../../Shared/Generated/ActionsStimulusModel";
 
-export default class ActionsControllers extends Controller {
+export default class ActionsControllers extends BaseStimulusModelController<ActionsStimulusModel> {
     static targets = [
         "requestToMakePublicForm",
         "makePublicForm",
@@ -19,7 +20,7 @@ export default class ActionsControllers extends Controller {
             async jobDto => {
                 this.dispatchWatchdogPublicStatusUpdated();
             },
-            "Really request to make the watchdog public and discoverable by other users?"
+            this.modelValue.requestToMakeWebScraperPublicConfirmationMessageResource
         );
 
         formSubmitWithWaitForJobCompletion(
@@ -27,7 +28,7 @@ export default class ActionsControllers extends Controller {
             async jobDto => {
                 this.dispatchWatchdogPublicStatusUpdated();
             },
-            "Really make the watchdog public and discoverable by other users?"
+            this.modelValue.makeWebScraperPublicConfirmationMessageResource
         );
 
         formSubmitWithWaitForJobCompletion(
@@ -35,7 +36,7 @@ export default class ActionsControllers extends Controller {
             async jobDto => {
                 this.dispatchWatchdogPublicStatusUpdated();
             },
-            '<i class="fa-solid fa-triangle-exclamation text-warning"></i> Really make the watchdog private and non-discoverable by other users?'
+            `<i class="fa-solid fa-triangle-exclamation text-warning"></i> ${this.modelValue.makeWebScraperPrivateConfirmationMessageResource}`
         );
     }
 

@@ -95,7 +95,7 @@
                              <button class="dropdown-item text-danger" 
                                      type="submit"
                                      >
-                                 Delete web scraper
+                                 @Resource.DeleteWebScraper
                              </button>
                          </form>
                      </li>
@@ -134,7 +134,7 @@
             </div>
         </div>
     </div>
-    <h2>Watched web pages</h2>
+    <h2>@Resource.WatchedWebPages</h2>
     <div data-watchdogs--detail-target="webPages">
         @foreach (var watchdogWebPageId in Model.WatchdogDetailArgs.WebPageIds)
         {
@@ -149,7 +149,7 @@
         <button type="submit" 
                 class="btn btn-primary"
                 id="@OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId">
-            Add web page to scrape
+            @Resource.AddWebPageToScrape
         </button>
     </form>
 </div>

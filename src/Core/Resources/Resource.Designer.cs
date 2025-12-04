@@ -108,6 +108,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add web page to scrape.
+        /// </summary>
+        public static string AddWebPageToScrape {
+            get {
+                return ResourceManager.GetString("AddWebPageToScrape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        public static string Advanced {
+            get {
+                return ResourceManager.GetString("Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archived.
         /// </summary>
         public static string Archived {
@@ -153,6 +171,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create watchdog.
         /// </summary>
         public static string CreateWatchdog {
@@ -189,11 +216,29 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete web scraper.
+        /// </summary>
+        public static string DeleteWebScraper {
+            get {
+                return ResourceManager.GetString("DeleteWebScraper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Really delete this web scraper and all of the user&apos;s watchdogs?.
         /// </summary>
         public static string DeleteWebScraperConfirmationMessage {
             get {
                 return ResourceManager.GetString("DeleteWebScraperConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -221,6 +266,15 @@ namespace MrWatchdog.Core.Resources {
         public static string EmailAddressRegexAttribute {
             get {
                 return ResourceManager.GetString("EmailAddressRegexAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable web page.
+        /// </summary>
+        public static string EnableWebPage {
+            get {
+                return ResourceManager.GetString("EnableWebPage", resourceCulture);
             }
         }
         
@@ -335,11 +389,38 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make private.
+        /// </summary>
+        public static string MakePrivate {
+            get {
+                return ResourceManager.GetString("MakePrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Make public.
         /// </summary>
         public static string MakePublic {
             get {
                 return ResourceManager.GetString("MakePublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really make the web scraper private and non-discoverable by other users?.
+        /// </summary>
+        public static string MakeWebScraperPrivateConfirmationMessage {
+            get {
+                return ResourceManager.GetString("MakeWebScraperPrivateConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really make the web scraper public and discoverable by other users?.
+        /// </summary>
+        public static string MakeWebScraperPublicConfirmationMessage {
+            get {
+                return ResourceManager.GetString("MakeWebScraperPublicConfirmationMessage", resourceCulture);
             }
         }
         
@@ -443,6 +524,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Need help?.
         /// </summary>
         public static string NeedHelp {
@@ -479,6 +569,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of days between notifications for the same scraped result.
+        /// </summary>
+        public static string NumberOfDaysBetweenNotificationsForTheSameScrapedResult {
+            get {
+                return ResourceManager.GetString("NumberOfDaysBetweenNotificationsForTheSameScrapedResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of failed scraping attempts before alerting by email.
+        /// </summary>
+        public static string NumberOfFailedScrapingAttemptsBeforeAlerting {
+            get {
+                return ResourceManager.GetString("NumberOfFailedScrapingAttemptsBeforeAlerting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {
@@ -509,6 +617,15 @@ namespace MrWatchdog.Core.Resources {
         public static string OnboardingWatchdogReceiveNotificationStep {
             get {
                 return ResourceManager.GetString("OnboardingWatchdogReceiveNotificationStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enable it once your edits are complete so that watchdogs can continue watching it..
+        /// </summary>
+        public static string PleaseEnableItOnceYourEditsAreComplete {
+            get {
+                return ResourceManager.GetString("PleaseEnableItOnceYourEditsAreComplete", resourceCulture);
             }
         }
         
@@ -567,6 +684,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} must be greater than or equal to {1}.
+        /// </summary>
+        public static string RangeAttribute {
+            get {
+                return ResourceManager.GetString("RangeAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Receive email notification about new scraped results.
         /// </summary>
         public static string ReceiveEmailNotificationAboutNewResults {
@@ -603,6 +729,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Really request to make the web scraper public and discoverable by other users?.
+        /// </summary>
+        public static string RequestToMakeWebScraperPublicConfirmationMessage {
+            get {
+                return ResourceManager.GetString("RequestToMakeWebScraperPublicConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} field is required..
         /// </summary>
         public static string RequiredAttribute {
@@ -630,6 +765,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scraping interval in seconds.
+        /// </summary>
+        public static string ScrapingIntervalInSeconds {
+            get {
+                return ResourceManager.GetString("ScrapingIntervalInSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The field {0} must be a string with a maximum length of {1}..
         /// </summary>
         public static string StringLengthAttribute {
@@ -648,6 +792,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The web page has been automatically disabled..
+        /// </summary>
+        public static string TheWebPageHasBeenAutomaticallyDisabled {
+            get {
+                return ResourceManager.GetString("TheWebPageHasBeenAutomaticallyDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To enable it make sure the web page is successfully scraped..
+        /// </summary>
+        public static string ToEnableItMakeSureTheWebPageIsSuccessfullyScraped {
+            get {
+                return ResourceManager.GetString("ToEnableItMakeSureTheWebPageIsSuccessfullyScraped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View scraped results.
         /// </summary>
         public static string ViewScrapedResults {
@@ -662,6 +824,15 @@ namespace MrWatchdog.Core.Resources {
         public static string WatchedWebPages {
             get {
                 return ResourceManager.GetString("WatchedWebPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the web scraper name. In the next step you will define web pages to scrape..
+        /// </summary>
+        public static string WebScraperCreateOnboardingSetName {
+            get {
+                return ResourceManager.GetString("WebScraperCreateOnboardingSetName", resourceCulture);
             }
         }
         

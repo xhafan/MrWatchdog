@@ -1,4 +1,5 @@
 ﻿@page
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model WebPageDisabledWarningModel
 @{
@@ -9,21 +10,21 @@
         @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPageDisabledWarning)
         style="display:@(Model.WatchdogWebPageDisabledWarningDto.IsEnabled ? "none" : "")"
         >
-        <i class="fa-solid fa-triangle-exclamation text-warning"></i> The web page has been automatically disabled.
+        <i class="fa-solid fa-triangle-exclamation text-warning"></i> @Resource.TheWebPageHasBeenAutomaticallyDisabled
         <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "" : "none")">
-            Please enable it once your edits are complete so that watchdog searches can continue watching it.
+            @Resource.PleaseEnableItOnceYourEditsAreComplete
             <form asp-page-handler="EnableWatchdogWebPage"
                   asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
                   data-watchdogs--detail-web-page-disabled-warning-target="enableWatchdogWebPageForm"
             >
                 <button type="submit" class="btn btn-warning">
-                    Enable web page
+                    @Resource.EnableWebPage
                 </button>
             </form>
         </span>
         <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "none" : "")">
-            To enable it make sure the web page is successfully scraped.
+            @Resource.ToEnableItMakeSureTheWebPageIsSuccessfullyScraped
         </span>
     </div>
 </!turbo-frame>

@@ -364,4 +364,61 @@
   <data name="Archived" xml:space="preserve">
 	  <value>Archived</value>
   </data>
+  <data name="Name" xml:space="preserve">
+	  <value>Name</value>
+  </data>
+  <data name="WebScraperCreateOnboardingSetName" xml:space="preserve">
+	  <value>Enter the web scraper name. In the next step you will define web pages to scrape.</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+	  <value>Create</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+	  <value>Description</value>
+  </data>
+  <data name="ScrapingIntervalInSeconds" xml:space="preserve">
+	  <value>Scraping interval in seconds</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+	  <value>Advanced</value>
+  </data>
+  <data name="NumberOfDaysBetweenNotificationsForTheSameScrapedResult" xml:space="preserve">
+	  <value>Number of days between notifications for the same scraped result</value>
+  </data>
+  <data name="NumberOfFailedScrapingAttemptsBeforeAlerting" xml:space="preserve">
+	  <value>Number of failed scraping attempts before alerting by email</value>
+  </data>
+  <data name="RangeAttribute" xml:space="preserve">
+	  <value>The {0} must be greater than or equal to {1}</value>
+  </data>
+  <data name="DeleteWebScraper" xml:space="preserve">
+	  <value>Delete web scraper</value>
+  </data>
+  <data name="AddWebPageToScrape" xml:space="preserve">
+	  <value>Add web page to scrape</value>
+  </data>
+  <data name="TheWebPageHasBeenAutomaticallyDisabled" xml:space="preserve">
+	  <value>The web page has been automatically disabled.</value>
+  </data>
+  <data name="ToEnableItMakeSureTheWebPageIsSuccessfullyScraped" xml:space="preserve">
+	  <value>To enable it make sure the web page is successfully scraped.</value>
+  </data>
+  <data name="EnableWebPage" xml:space="preserve">
+	  <value>Enable web page</value>
+  </data>
+  <data name="PleaseEnableItOnceYourEditsAreComplete" xml:space="preserve">
+	  <value>Please enable it once your edits are complete so that watchdogs can continue watching it.</value>
+  </data>
+  <data name="MakeWebScraperPublicConfirmationMessage" xml:space="preserve">
+	  <value>Really make the web scraper public and discoverable by other users?</value>
+  </data>
+  <data name="RequestToMakeWebScraperPublicConfirmationMessage" xml:space="preserve">
+	  <value>Really request to make the web scraper public and discoverable by other users?</value>
+  </data>
+  <data name="MakeWebScraperPrivateConfirmationMessage" xml:space="preserve">
+	  <value>Really make the web scraper private and non-discoverable by other users?</value>
+  </data>
+  <data name="MakePrivate" xml:space="preserve">
+	  <value>Make private</value>
+  </data>
 </root>

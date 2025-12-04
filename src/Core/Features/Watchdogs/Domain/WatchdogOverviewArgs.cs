@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MrWatchdog.Core.Infrastructure.Validations;
+﻿using MrWatchdog.Core.Infrastructure.Validations;
+using MrWatchdog.Core.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -10,21 +11,23 @@ public record WatchdogOverviewArgs
 
     [Required]
     [StringLength(ValidationConstants.WatchdogNameMaxLength)]
+    [Display(Name = nameof(Resource.Name), ResourceType = typeof(Resource))]
     public required string Name { get; set; } = null!;
 
     [StringLength(ValidationConstants.WatchdogDescriptionMaxLength)]
+    [Display(Name = nameof(Resource.Description), ResourceType = typeof(Resource))]
     public required string? Description { get; set; }
 
-    [Range(ScrapingConstants.ScrapingIntervalInSeconds, int.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 10.")]
-    [Display(Name = "Scraping interval in seconds")]
+    [Range(ScrapingConstants.ScrapingIntervalInSeconds, int.MaxValue)]
+    [Display(Name = nameof(Resource.ScrapingIntervalInSeconds), ResourceType = typeof(Resource))]
     public required int ScrapingIntervalInSeconds { get; set; }
     
-    [Range(0, double.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 0.")]
-    [Display(Name = "Number of days between notifications for the same search result")]
+    [Range(0, double.MaxValue)]
+    [Display(Name = nameof(Resource.NumberOfDaysBetweenNotificationsForTheSameScrapedResult), ResourceType = typeof(Resource))]
     public required double IntervalBetweenSameResultNotificationsInDays { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "The {0} must be greater than or equal to 1.")]
-    [Display(Name = "Number of failed scraping attempts before alerting by email")]
+    [Range(1, int.MaxValue)]
+    [Display(Name = nameof(Resource.NumberOfFailedScrapingAttemptsBeforeAlerting), ResourceType = typeof(Resource))]
     public required int NumberOfFailedScrapingAttemptsBeforeAlerting { get; set; }
 
 }

@@ -332,4 +332,16 @@
 	<data name="Author" xml:space="preserve">
 		<value>Autor</value>
 	</data>
+	<data name="CalculatedEarningsForThisMonth" xml:space="preserve">
+		<value>Vypočítané výdělky za tento měsíc</value>
+	</data>
+	<data name="WebScraperEarningsCalculationInfo" xml:space="preserve">
+		<value>Výpočet výdělků webového scraperu bude založen na počtu prémiových uživatelů, kteří mají pro tento webový scraper hlídacího psa. Prémiové předplatné zatím není implementováno.</value>
+	</data>
+	<data name="NumberOfUsersWithWatchdogWithEmailNotification" xml:space="preserve">
+		<value>Počet uživatelů s hlídacím psem s emailovým upozorněním</value>
+	</data>
+	<data name="NumberOfUsersWithWatchdogWithoutEmailNotification" xml:space="preserve">
+		<value>Počet uživatelů s hlídacím psem bez emailového upozornění</value>
+	</data>
 </root>

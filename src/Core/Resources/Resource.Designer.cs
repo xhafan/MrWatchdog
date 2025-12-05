@@ -153,6 +153,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculated earnings for this month.
+        /// </summary>
+        public static string CalculatedEarningsForThisMonth {
+            get {
+                return ResourceManager.GetString("CalculatedEarningsForThisMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -614,6 +623,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of users with a watchdog with email notification.
+        /// </summary>
+        public static string NumberOfUsersWithWatchdogWithEmailNotification {
+            get {
+                return ResourceManager.GetString("NumberOfUsersWithWatchdogWithEmailNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of users with a watchdog without email notification.
+        /// </summary>
+        public static string NumberOfUsersWithWatchdogWithoutEmailNotification {
+            get {
+                return ResourceManager.GetString("NumberOfUsersWithWatchdogWithoutEmailNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {
@@ -923,6 +950,15 @@ namespace MrWatchdog.Core.Resources {
         public static string WebScraperCreateOnboardingSetName {
             get {
                 return ResourceManager.GetString("WebScraperCreateOnboardingSetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The web scraper earnings calculation will be based on the number of premium users having a watchdog for this web scraper. The premium subscription is not yet implemented..
+        /// </summary>
+        public static string WebScraperEarningsCalculationInfo {
+            get {
+                return ResourceManager.GetString("WebScraperEarningsCalculationInfo", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 ﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Watchdogs.Domain
+@using MrWatchdog.Core.Resources
 @model StatisticsModel
 @{
    Layout = null;
@@ -11,15 +12,14 @@
                 <label asp-for="PublicWatchdogStatistics.CalculatedEarningsForThisMonth" class="form-label fw-bold"></label>
                 <div>€@Model.PublicWatchdogStatistics.CalculatedEarningsForThisMonth</div>
                 <div class="alert alert-info mb-3">
-                    <i class="fa-solid fa-circle-info"></i> The watchdog earnings calculation will be based on the number of premium users using this watchdog; 
-                    the premium subscription is not yet implemented
+                    <i class="fa-solid fa-circle-info"></i> @Resource.WebScraperEarningsCalculationInfo
                 </div>
             </div>
             <div class="mb-3">
                 <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification" class="form-label fw-bold"></label>
                 <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification</div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 d-none">
                 <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification" class="form-label fw-bold"></label>
                 <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification</div>
             </div>

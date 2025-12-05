@@ -451,4 +451,16 @@
   <data name="Author" xml:space="preserve">
 	  <value>Author</value>
   </data>
+  <data name="CalculatedEarningsForThisMonth" xml:space="preserve">
+	  <value>Calculated earnings for this month</value>
+  </data>
+  <data name="WebScraperEarningsCalculationInfo" xml:space="preserve">
+	  <value>The web scraper earnings calculation will be based on the number of premium users having a watchdog for this web scraper. The premium subscription is not yet implemented.</value>
+  </data>
+  <data name="NumberOfUsersWithWatchdogWithEmailNotification" xml:space="preserve">
+	  <value>Number of users with a watchdog with email notification</value>
+  </data>
+  <data name="NumberOfUsersWithWatchdogWithoutEmailNotification" xml:space="preserve">
+	  <value>Number of users with a watchdog without email notification</value>
+  </data>
 </root>

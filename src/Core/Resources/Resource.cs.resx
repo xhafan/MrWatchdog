@@ -20,8 +20,8 @@
 	<data name="FilterResults" xml:space="preserve">
 		<value>Volitelně zadejte hledaný výraz pro filtrování výsledků</value>
 	</data>
-	<data name="ListOfWebScrapers" xml:space="preserve">
-		<value>Weboví scrapeři</value>
+	<data name="WebScrapers" xml:space="preserve">
+		<value>Webové scrapery</value>
 	</data>
 	<data name="MakePublic" xml:space="preserve">
 		<value>Zveřejnit</value>
@@ -35,12 +35,12 @@
 	<data name="OnboardingViewAgainStep" xml:space="preserve">
 		<value>Tuto nápovědu si můžete kdykoli znovu zobrazit.</value>
 	</data>
-	<data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
+	<data name="WatchdogOnboardingReceiveNotification" xml:space="preserve">
 		<value>&lt;p&gt;
-    Můžete deaktivovat emailová oznámení o nových výsledcích scrapování.
+    Můžete deaktivovat emailová oznámení o nových výsledcích.
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
-    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích scrapování jsou v současné době zdarma.
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích jsou v současné době zdarma.
     V budoucnu bude tato funkce k dispozici pouze pro předplatitele prémiového účtu.
     Prémiové předplatné zatím není implementováno.
 &lt;/div&gt;</value>
@@ -141,13 +141,13 @@
 		<value>Autorská práva</value>
 	</data>
 	<data name="PublicWebScrapers" xml:space="preserve">
-		<value>Veřejní weboví scrapeři</value>
+		<value>Veřejné webové scrapery</value>
 	</data>
 	<data name="PublicWebScrapersDescription" xml:space="preserve">
 		<value>Procházejte veřejné webové scrapery vytvořené ostatními uživateli a Vámi.</value>
 	</data>
 	<data name="MyWebScrapers" xml:space="preserve">
-		<value>Moji weboví scrapeři</value>
+		<value>Moje webové scrapery</value>
 	</data>
 	<data name="MyWebScrapersDescription" xml:space="preserve">
 		<value>Procházejte webové scrapery, které jste vytvořili Vy.</value>
@@ -343,5 +343,75 @@
 	</data>
 	<data name="NumberOfUsersWithWatchdogWithoutEmailNotification" xml:space="preserve">
 		<value>Počet uživatelů s hlídacím psem bez emailového upozornění</value>
+	</data>
+	<data name="Error" xml:space="preserve">
+		<value>Chyba</value>
+	</data>
+	<data name="ErrorDescription" xml:space="preserve">
+		<value>Při zpracování vašeho požadavku došlo k chybě.</value>
+	</data>
+	<data name="RequestId" xml:space="preserve">
+		<value>Id požadavku</value>
+	</data>
+	<data name="NavigateToThe" xml:space="preserve">
+		<value>Přejděte na</value>
+	</data>
+	<data name="HomePage" xml:space="preserve">
+		<value>domovskou stránku</value>
+	</data>
+	<data name="StatusCode" xml:space="preserve">
+		<value>Stavový kód</value>
+	</data>
+	<data name="ErrorMessage" xml:space="preserve">
+		<value>Chybová zpráva</value>
+	</data>
+	<data name="AccessDenied" xml:space="preserve">
+		<value>Přístup odepřen</value>
+	</data>
+	<data name="RemoveWebPageConfirmationMessage" xml:space="preserve">
+		<value>Opravdu odstranit webovou stránku?</value>
+	</data>
+	<data name="InvalidHttpHeaderFormatErrorTemplate" xml:space="preserve">
+		<value>Neplatný HTTP formát hlavičky: "{0}“. Očekávaný formát je "název hlavičky: hodnota“.</value>
+	</data>
+	<data name="WebScraperDetailOnboardingIntro" xml:space="preserve">
+		<value>Jste na stánce pro &lt;b&gt;správu&lt;/b&gt; webového scraperu.&lt;br/&gt;&lt;br/&gt;Tento webový scraper bude procházet webové stránky a vybírat výsledky na základě CSS selektoru.</value>
+	</data>
+	<data name="WebScraperDetailOnboardingAddWebPage" xml:space="preserve">
+		<value>Přidejte webovou stránku pro scrapování.</value>
+	</data>
+	<data name="WebScraperDetailOnboardingScrapingInterval" xml:space="preserve">
+		<value>Můžete změnit interval scrapování.</value>
+	</data>
+	<data name="WebScraperDetailOnboardingViewScrapedResults" xml:space="preserve">
+		<value>Zobrazte výsledky scrapování, abyste si mohli vytvořit hlídacího psa s emailovým upozorněním na nové výsledky scrapování.</value>
+	</data>
+	<data name="WebScraperDetailOnboardingRequestToMakePublic" xml:space="preserve">
+		<value>Pošlete žádost o zveřejnění webového scraperu a jeho zpřístupnění ostatním uživatelům, kteří si pak budou moci vytvořit hlídacího psa s emailovým upozorněním na nové výsledky scrapování.</value>
+	</data>
+	<data name="ThereAreNoPublicWebScrapers" xml:space="preserve">
+		<value>Ještě neexistují žádné veřejné webové scrapery. Můžete vytvořit webový scraper {0} a později jej zveřejnit.</value>
+	</data>
+	<data name="Here" xml:space="preserve">
+		<value>zde</value>
+	</data>
+	<data name="WatchdogOnboardingIntro" xml:space="preserve">
+		<value>Jste na stránce svého &lt;b&gt;hlídacího psa&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky.</value>
+	</data>
+	<data name="WatchdogOnboardingIntroScrapedResults" xml:space="preserve">
+		<value>Pravidelně sleduje výsledky souvisejícího webového scraperu.</value>
+	</data>
+	<data name="WatchdogOnboardingIntroSearchTerm" xml:space="preserve">
+		<value>Můžete zadat hledaný výraz pro filtrovnání výsledků. Pokud v současné době nejsou k dispozici žádné výsledky, nebo žádné výsledky odpovídající hledanému výrazu, obdržíte emailové oznámení jakmile budou k dispozici.
+</value>
+	</data>
+	<data name="YouHaveNoWatchdogs" xml:space="preserve">
+		<value>Nemáte žádné hlídací psy. Chcete-li přidat nového hlídacího psa, přejděte do {0}, vyberte nějaký a zvolte &lt;i&gt;{1}&lt;/i&gt;.</value>
+	</data>
+	<data name="ListOfWebScrapers" xml:space="preserve">
+		<value>seznamu webových scraperů</value>
+	</data>
+	<data name="YouHaveNoWebScrapersCreated" xml:space="preserve">
+		<value>Nemáte vytvořené žádné webové scrapery. Webový scraper můžete vytvořit {0}.</value>
 	</data>
 </root>

@@ -5,6 +5,7 @@ import { JobDto } from "../Shared/Generated/JobDto";
 import { RebusConstants } from "../Shared/Generated/RebusConstants";
 import { logError } from "../Shared/logging";
 import { sharedTranslations } from "../Shared/sharedTranslations";
+import { localizedBootboxConfirm } from "../Shared/bootboxHelper";
 
 export function formSubmitWithWaitForJobCompletion(
     form: HTMLFormElement,
@@ -21,16 +22,8 @@ export function formSubmitWithWaitForJobCompletion(
 
         if (confirmationMessage) {
             if (!confirmationTitle) {
-                bootbox.confirm({
+                localizedBootboxConfirm({
                     message: confirmationMessage,
-                    buttons: {
-                        confirm: {
-                            label: sharedTranslations.ok
-                        },
-                        cancel: {
-                            label: sharedTranslations.cancel
-                        }
-                    },
                     callback: async result => {
                         if (!result) return;
 
@@ -38,7 +31,7 @@ export function formSubmitWithWaitForJobCompletion(
                     }
                 });
             } else {
-                bootbox.confirm({                                      
+                localizedBootboxConfirm({                                      
                     title: confirmationTitle,
                     message: confirmationMessage,
                     callback: async result => {

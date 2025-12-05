@@ -1,7 +1,10 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @model UserWatchdogsModel
+@inject IStringLocalizer<Resource> Localizer
 @{
     Layout = null;
 }
@@ -29,7 +32,11 @@
     @if (Model.UserWatchdogs.IsEmpty())
     {
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-        @:You have no watchdogs created. You can create a watchdog 
-        <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@:.
+        @Html.Raw(
+            Localizer[
+                Resource.YouHaveNoWebScrapersCreated,
+                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
+            ]
+        )
     }
 </!turbo-frame>

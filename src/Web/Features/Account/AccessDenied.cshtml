@@ -1,8 +1,12 @@
 ﻿@page
+@using MrWatchdog.Core.Resources
 @model AccessDeniedModel
 @{
-    var title = "Access Denied";
+    var title = @Resource.AccessDenied;
     ViewData["Title"] = title;
 }
 
 <h1 class="display-4 text-danger">@title</h1>
+<p>
+    @Resource.NavigateToThe <a href="/">@Resource.HomePage</a>.
+</p>

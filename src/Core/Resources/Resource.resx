@@ -123,7 +123,7 @@
   <data name="FilterResults" xml:space="preserve">
 	  <value>Optionally enter a search term to filter the results</value>
   </data>
-  <data name="ListOfWebScrapers" xml:space="preserve">
+  <data name="WebScrapers" xml:space="preserve">
     <value>Web scrapers</value>
   </data>
   <data name="MakePublic" xml:space="preserve">
@@ -147,12 +147,12 @@
   <data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
     <value>Receive email notification about new scraped results</value>
   </data>
-  <data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
-    <value>&lt;p&gt;
-    You can disable email notification about new scraped results.
+  <data name="WatchdogOnboardingReceiveNotification" xml:space="preserve">
+	  <value>&lt;p&gt;
+    You can disable email notification about new results.
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
-    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Email notifications about new scraped results are currently free.
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Email notifications about new results are currently free.
     In the future, this feature will be available only to premium subscribers.
     The premium subscription is not yet implemented.
 &lt;/div&gt;</value>
@@ -462,5 +462,74 @@
   </data>
   <data name="NumberOfUsersWithWatchdogWithoutEmailNotification" xml:space="preserve">
 	  <value>Number of users with a watchdog without email notification</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+	  <value>Error</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+	  <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="RequestId" xml:space="preserve">
+	  <value>Request ID</value>
+  </data>
+  <data name="NavigateToThe" xml:space="preserve">
+	  <value>Navigate to the </value>
+  </data>
+  <data name="HomePage" xml:space="preserve">
+	  <value>home page</value>
+  </data>
+  <data name="StatusCode" xml:space="preserve">
+	  <value>Status code</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+	  <value>Error message</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+	  <value>Access denied</value>
+  </data>
+  <data name="RemoveWebPageConfirmationMessage" xml:space="preserve">
+	  <value>Really remove the web page?</value>
+  </data>
+  <data name="InvalidHttpHeaderFormatErrorTemplate" xml:space="preserve">
+	  <value>Invalid HTTP header format: "{0}". Expected format is "header name: value".</value>
+  </data>
+  <data name="WebScraperDetailOnboardingIntro" xml:space="preserve">
+	  <value>You navigated to a &lt;b&gt;web scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This web scraper will scrape web pages and will select results based on the CSS selector.</value>
+  </data>
+  <data name="WebScraperDetailOnboardingAddWebPage" xml:space="preserve">
+	  <value>Add a web page this web scraper will scrape.</value>
+  </data>
+  <data name="WebScraperDetailOnboardingScrapingInterval" xml:space="preserve">
+	  <value>You can change the scraping interval.</value>
+  </data>
+  <data name="WebScraperDetailOnboardingViewScrapedResults" xml:space="preserve">
+	  <value>View scraped results to be able to create a watchdog with email notification about new scraped results.</value>
+  </data>
+  <data name="WebScraperDetailOnboardingRequestToMakePublic" xml:space="preserve">
+	  <value>Request to make the web scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results.</value>
+  </data>
+  <data name="ThereAreNoPublicWebScrapers" xml:space="preserve">
+	  <value>There are no public web scrapers. You can create a web scraper {0} and later make it public.</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+	  <value>here</value>
+  </data>
+  <data name="WatchdogOnboardingIntro" xml:space="preserve">
+	  <value>You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;This watchdog emails you notification about new results.</value>
+  </data>
+  <data name="WatchdogOnboardingIntroScrapedResults" xml:space="preserve">
+	  <value>It periodically watches related web scraper results.</value>
+  </data>
+  <data name="WatchdogOnboardingIntroSearchTerm" xml:space="preserve">
+	  <value>You can enter a search term to filter the results. When no results, or no results matching the search term are currently available, you will receive an email notification as soon as they are available.</value>
+  </data>
+  <data name="YouHaveNoWatchdogs" xml:space="preserve">
+	  <value>You have no watchdogs. To add a new watchdog, go to the {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
+  </data>
+  <data name="ListOfWebScrapers" xml:space="preserve">
+	  <value>list of web scrapers</value>
+  </data>
+  <data name="YouHaveNoWebScrapersCreated" xml:space="preserve">
+	  <value>You have no web scrapers created. You can create a web scraper {0}.</value>
   </data>
 </root>

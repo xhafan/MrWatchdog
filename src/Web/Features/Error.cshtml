@@ -1,34 +1,35 @@
 ﻿@page
 @using System.Net
+@using MrWatchdog.Core.Resources
 @model ErrorModel
 @inject IWebHostEnvironment Environment
 
 @{
-    var title = "Error";
+    var title = Resource.Error;
     ViewData["Title"] = title;
 }
 
 <h1 class="display-4 text-danger">@title</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h2 class="text-danger">@Resource.ErrorDescription</h2>
 
 @if (Model.ShowRequestId)
 {
     <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        <strong>@Resource.RequestId:</strong> <code>@Model.RequestId</code>
     </p>
 }
 @if (Model.HttpStatusCode.HasValue)
 {
     <p>
-        <strong>Status Code:</strong> <code>@Model.HttpStatusCode @((HttpStatusCode)Model.HttpStatusCode)</code>
+        <strong>@Resource.StatusCode:</strong> <code>@Model.HttpStatusCode @((HttpStatusCode)Model.HttpStatusCode)</code>
     </p>
 }
 @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage) && Environment.IsDevelopment())
 {
     <p>
-        <strong>Error message:</strong> @Model.ErrorMessage
+        <strong>@Resource.ErrorMessage:</strong> @Model.ErrorMessage
     </p>
 }
 <p>
-    Navigate to the <a href="/">home page</a>.
+    @Resource.NavigateToThe <a href="/">@Resource.HomePage</a>.
 </p>

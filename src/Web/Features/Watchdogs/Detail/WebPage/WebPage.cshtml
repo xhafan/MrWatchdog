@@ -6,7 +6,11 @@
    Layout = null;
 }
 <!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageId)">
-    <div class="card mb-3" @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPage)>
+    <div class="card mb-3" @Stimulus.Controller(
+                               StimulusControllers.WatchdogsDetailWebPage, 
+                               new WebPageStimulusModel(Resource.RemoveWebPageConfirmationMessage)
+                           )
+         >
         <div class="card-header d-flex justify-content-between align-items-center">
             <span data-watchdogs--detail-web-page-target="webPageName" class="text-wrap text-break">
                 @Model.WatchdogWebPageName

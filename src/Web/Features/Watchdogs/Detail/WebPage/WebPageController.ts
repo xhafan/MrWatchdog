@@ -1,4 +1,3 @@
-import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
 import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitForJobCompletion } from "../../../Jobs/jobCompletion";
 import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
@@ -7,10 +6,12 @@ import { JobDto } from "../../../Shared/Generated/JobDto";
 import { watchdogWebPageNameModifiedEventName } from "./WebPageOverviewController";
 import { logError } from "../../../Shared/logging";
 import { watchdogWebPageScrapedEvent } from "./WebPageScrapingResultsController";
+import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
+import { WebPageStimulusModel } from "../../../Shared/Generated/WebPageStimulusModel";
 
 export const watchdogWebPageRemovedEvent = "watchdogWebPageRemoved";
 
-export default class WebPageController extends Controller {
+export default class WebPageController extends BaseStimulusModelController<WebPageStimulusModel> {
     static targets = [
         "removeWebPageForm",
         "webPageOverview",
@@ -31,7 +32,7 @@ export default class WebPageController extends Controller {
             async jobDto => {
                 this.element.dispatchEvent(new CustomEvent(watchdogWebPageRemovedEvent, { bubbles: true, detail: this.element }));
             },
-            "Really remove the web page to watch?"
+            this.modelValue.removeWebPageConfirmationMessageResource
         );
 
         this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateWatchdogWebPageJobCompleted.bind(this), {});

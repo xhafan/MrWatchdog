@@ -5,6 +5,7 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
@@ -63,9 +64,7 @@ public class WebPageOverviewModel(
                 {
                     ModelState.AddModelError(
                         $"{nameof(WatchdogWebPageArgs)}.{nameof(WatchdogWebPageArgs.HttpHeaders)}",
-                        $"""
-                         Invalid header format: "{line}". Expected format is "header name: value".
-                         """
+                        string.Format(Resource.InvalidHttpHeaderFormatErrorTemplate, line)
                     );
                 }
             }

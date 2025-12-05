@@ -1,9 +1,10 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @model SearchesModel
-
+@inject IStringLocalizer<Resource> Localizer
 @{
     var title = Resource.MyWatchdogs;
     ViewData["Title"] = title;
@@ -49,7 +50,12 @@
 @if (Model.WatchdogSearches.IsEmpty())
 {
     <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-    @:You have no watchdogs. To add a new watchdog, go to the <a href="@WatchdogUrlConstants.WatchdogsUrl">list of web scrapers</a>, select one,
-    @:and choose <i>@Resource.CreateWatchdog</i>.
+    @Html.Raw(
+        Localizer[
+            Resource.YouHaveNoWatchdogs,
+            $"<a href=\"{WatchdogUrlConstants.WatchdogsUrl}\">{Resource.ListOfWebScrapers}</a>",
+            Resource.CreateWatchdog
+        ]
+    )
 }
 

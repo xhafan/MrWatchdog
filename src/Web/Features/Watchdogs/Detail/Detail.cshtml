@@ -28,24 +28,23 @@
                 identifier="@OnboardingIdentifiers.WatchdogsDetail"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: "You navigated to a <b>web scraper</b> management.<br/><br/>" +
-                                     "This web scraper will scrape web page(s) and will select scraped results based on the CSS path selector."
+                               Text: Resource.WebScraperDetailOnboardingIntro
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Add web page(s) this web scraper will scrape.",
-                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId}"
+                               Text: Resource.WebScraperDetailOnboardingAddWebPage,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "You can change the scraping interval.",
-                               ElementIdentifier: $".{@OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass}"
+                               Text: Resource.WebScraperDetailOnboardingScrapingInterval,
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "View scraped results to be able to create Watchdog with email notification about new scraped results.",
-                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailViewSearchResultsId}"
+                               Text: Resource.WebScraperDetailOnboardingViewScrapedResults,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailViewScrapedResultsId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "Request to make the web scraper public and discoverable by other users who will then be able to set up email notification about its new scraped results.",
-                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsDetailRequestToMakePublicId}"
+                               Text: Resource.WebScraperDetailOnboardingRequestToMakePublic,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailRequestToMakePublicId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.OnboardingViewAgainStep,

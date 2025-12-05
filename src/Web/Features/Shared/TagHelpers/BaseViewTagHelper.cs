@@ -29,7 +29,8 @@ public abstract class BaseViewTagHelper(IHtmlHelper htmlHelper) : TagHelper
         
         var type = GetType();
         Guard.Hope(type.Namespace != null, $"{type.Name} namespace is null.");
-        var viewLocation = $"/{type.Namespace.Replace("MrWatchdog.Web.", "").Replace(".", "/")}/{type.Name}.cshtml";
+        var assemblyName = type.Assembly.GetName().Name;
+        var viewLocation = $"/{type.Namespace.Replace($"{assemblyName}.", "").Replace(".", "/")}/{type.Name}.cshtml";
         
         ChildContent = await output.GetChildContentAsync();
 

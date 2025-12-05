@@ -2,12 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export interface SharedTranslations
+export interface WebPageStimulusModel
 {
-	ok: string;
-	cancel: string;
-	back: string;
-	next: string;
-	finish: string;
-	error: string;
+	removeWebPageConfirmationMessageResource: string;
 }

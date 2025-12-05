@@ -10,7 +10,8 @@ public static class SharedTranslationsGetter
             Cancel = Resource.Cancel,
             Back = Resource.Back,
             Next = Resource.Next,
-            Finish = Resource.Finish
+            Finish = Resource.Finish,
+            Error = Resource.Error
         };
     }
 }

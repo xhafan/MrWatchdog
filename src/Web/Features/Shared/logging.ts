@@ -1,5 +1,8 @@
 import { LogConstants } from "./Generated/LogConstants";
 import StackTrace from "stacktrace-js";
+import { sharedTranslations } from "./sharedTranslations";
+import { localizedBootboxAlert } from "./bootboxHelper";
+import { LogsUrlConstants } from "./Generated/LogsUrlConstants";
 
 const disableLoggingErrorToBackendErrorMessageRegexes: RegExp[] = [
     /Error: Job .* failed\./,
@@ -20,8 +23,8 @@ export async function logError(
         console.error(error, extraInfo);
     }
     if (showAlertDialog) {
-        bootbox.alert({
-            title: '<i class="fa-solid fa-triangle-exclamation text-danger"></i> Error',
+        localizedBootboxAlert({
+            title: `<i class="fa-solid fa-triangle-exclamation text-danger"></i> ${sharedTranslations.error}`,
             message: errorString,
             centerVertical: true
         });
@@ -62,7 +65,7 @@ export async function logError(
     }
 
     try {
-        await fetch("/api/Logs/LogError", {
+        await fetch(LogsUrlConstants.logErrorUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -29,20 +29,18 @@
                 identifier="@OnboardingIdentifiers.WatchdogsSearch"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: "You navigated to your <b>watchdog</b>.<br/><br/>This watchdog emails you notification about new scraped results."
+                               Text: Resource.WatchdogOnboardingIntro
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "It periodically watches related web scraper scraped results.",
+                               Text: Resource.WatchdogOnboardingIntroScrapedResults,
                                ElementIdentifier: $"#{@OnboardingElementIdentifiers.WatchdogsScrapingResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: "You can enter a search term to filter the scraped results. When no results " +
-                                     "- or no results matching the search term " +
-                                     "- are currently available, you will receive an email notification as soon as they are available.",
+                               Text: Resource.WatchdogOnboardingIntroSearchTerm,
                                ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.OnboardingWatchdogReceiveNotificationStep,
+                               Text: Resource.WatchdogOnboardingReceiveNotification,
                                ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass}"
                            ),
                            new OnboardingStepStimulusModel(

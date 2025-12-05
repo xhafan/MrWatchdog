@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Resources;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
@@ -56,9 +57,7 @@ public class when_updating_watchdog_web_page_with_invalid_http_headers_value : B
         var errors = _model.ModelState[key]?.Errors;
         errors.ShouldNotBeNull();
         errors.Select(x => x.ErrorMessage).ShouldBe([
-            """
-            Invalid header format: "Connection; keep-alive". Expected format is "header name: value".
-            """
+            string.Format(Resource.InvalidHttpHeaderFormatErrorTemplate, "Connection; keep-alive")
         ]);
     }    
 

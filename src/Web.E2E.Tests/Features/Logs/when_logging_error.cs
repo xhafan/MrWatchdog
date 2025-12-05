@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Text;
-using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.TestsShared;
+using MrWatchdog.Web.Features.Logs;
+using System.Net;
+using System.Text;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Logs;
 
@@ -24,7 +25,7 @@ public class when_logging_error : BaseDatabaseTest
         var logErrorApiSecret = config["Logging:LogErrorApiSecret"];
         Guard.Hope(logErrorApiSecret != null, nameof(logErrorApiSecret) + " is null");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/api/Logs/LogError");
+        var request = new HttpRequestMessage(HttpMethod.Post, LogsUrlConstants.LogErrorUrl);
         request.Headers.Add(LogConstants.LogErrorApiSecretHeaderName, logErrorApiSecret);
         request.Content = new StringContent(
             JsonHelper.Serialize(_jsErrorMessage),
@@ -39,7 +40,7 @@ public class when_logging_error : BaseDatabaseTest
     [Test]
     public async Task error_message_cannot_be_logged_without_a_secret_in_header()
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "/api/Logs/LogError");
+        var request = new HttpRequestMessage(HttpMethod.Post, LogsUrlConstants.LogErrorUrl);
         request.Content = new StringContent(
             JsonHelper.Serialize(_jsErrorMessage),
             Encoding.UTF8,

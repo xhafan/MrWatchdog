@@ -108,6 +108,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access denied.
+        /// </summary>
+        public static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add web page to scrape.
         /// </summary>
         public static string AddWebPageToScrape {
@@ -306,6 +315,33 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while processing your request..
+        /// </summary>
+        public static string ErrorDescription {
+            get {
+                return ResourceManager.GetString("ErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error message.
+        /// </summary>
+        public static string ErrorMessage {
+            get {
+                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optionally enter a search term to filter the results.
         /// </summary>
         public static string FilterResults {
@@ -324,6 +360,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string Here {
+            get {
+                return ResourceManager.GetString("Here", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to home page.
+        /// </summary>
+        public static string HomePage {
+            get {
+                return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTP headers (one per line; format: &quot;header name: value&quot;).
         /// </summary>
         public static string HttpHeaders {
@@ -333,7 +387,16 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web scrapers.
+        ///   Looks up a localized string similar to Invalid HTTP header format: &quot;{0}&quot;. Expected format is &quot;header name: value&quot;..
+        /// </summary>
+        public static string InvalidHttpHeaderFormatErrorTemplate {
+            get {
+                return ResourceManager.GetString("InvalidHttpHeaderFormatErrorTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to list of web scrapers.
         /// </summary>
         public static string ListOfWebScrapers {
             get {
@@ -569,6 +632,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Navigate to the .
+        /// </summary>
+        public static string NavigateToThe {
+            get {
+                return ResourceManager.GetString("NavigateToThe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Need help?.
         /// </summary>
         public static string NeedHelp {
@@ -659,22 +731,6 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///    You can disable email notification about new scraped results.
-        ///&lt;/p&gt;
-        ///&lt;div class=&quot;alert alert-info mb-3&quot;&gt;    
-        ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new scraped results are currently free.
-        ///    In the future, this feature will be available only to premium subscribers.
-        ///    The premium subscription is not yet implemented.
-        ///&lt;/div&gt;.
-        /// </summary>
-        public static string OnboardingWatchdogReceiveNotificationStep {
-            get {
-                return ResourceManager.GetString("OnboardingWatchdogReceiveNotificationStep", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please enable it once your edits are complete so that watchdogs can continue watching it..
         /// </summary>
         public static string PleaseEnableItOnceYourEditsAreComplete {
@@ -756,6 +812,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Really remove the web page?.
+        /// </summary>
+        public static string RemoveWebPageConfirmationMessage {
+            get {
+                return ResourceManager.GetString("RemoveWebPageConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requested to be made public.
         /// </summary>
         public static string RequestedToBeMadePublicStatus {
@@ -770,6 +835,15 @@ namespace MrWatchdog.Core.Resources {
         public static string RequestedToBeMadePublicStatusTooltip {
             get {
                 return ResourceManager.GetString("RequestedToBeMadePublicStatusTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request ID.
+        /// </summary>
+        public static string RequestId {
+            get {
+                return ResourceManager.GetString("RequestId", resourceCulture);
             }
         }
         
@@ -864,6 +938,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status code.
+        /// </summary>
+        public static string StatusCode {
+            get {
+                return ResourceManager.GetString("StatusCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The field {0} must be a string with a maximum length of {1}..
         /// </summary>
         public static string StringLengthAttribute {
@@ -878,6 +961,15 @@ namespace MrWatchdog.Core.Resources {
         public static string Support {
             get {
                 return ResourceManager.GetString("Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no public web scrapers. You can create a web scraper {0} and later make it public..
+        /// </summary>
+        public static string ThereAreNoPublicWebScrapers {
+            get {
+                return ResourceManager.GetString("ThereAreNoPublicWebScrapers", resourceCulture);
             }
         }
         
@@ -927,6 +1019,49 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;This watchdog emails you notification about new results..
+        /// </summary>
+        public static string WatchdogOnboardingIntro {
+            get {
+                return ResourceManager.GetString("WatchdogOnboardingIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It periodically watches related web scraper results..
+        /// </summary>
+        public static string WatchdogOnboardingIntroScrapedResults {
+            get {
+                return ResourceManager.GetString("WatchdogOnboardingIntroScrapedResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can enter a search term to filter the results. When no results, or no results matching the search term are currently available, you will receive an email notification as soon as they are available..
+        /// </summary>
+        public static string WatchdogOnboardingIntroSearchTerm {
+            get {
+                return ResourceManager.GetString("WatchdogOnboardingIntroSearchTerm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    You can disable email notification about new results.
+        ///&lt;/p&gt;
+        ///&lt;div class=&quot;alert alert-info mb-3&quot;&gt;    
+        ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new results are currently free.
+        ///    In the future, this feature will be available only to premium subscribers.
+        ///    The premium subscription is not yet implemented.
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string WatchdogOnboardingReceiveNotification {
+            get {
+                return ResourceManager.GetString("WatchdogOnboardingReceiveNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Watched web pages.
         /// </summary>
         public static string WatchedWebPages {
@@ -950,6 +1085,51 @@ namespace MrWatchdog.Core.Resources {
         public static string WebScraperCreateOnboardingSetName {
             get {
                 return ResourceManager.GetString("WebScraperCreateOnboardingSetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a web page this web scraper will scrape..
+        /// </summary>
+        public static string WebScraperDetailOnboardingAddWebPage {
+            get {
+                return ResourceManager.GetString("WebScraperDetailOnboardingAddWebPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You navigated to a &lt;b&gt;web scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This web scraper will scrape web pages and will select results based on the CSS selector..
+        /// </summary>
+        public static string WebScraperDetailOnboardingIntro {
+            get {
+                return ResourceManager.GetString("WebScraperDetailOnboardingIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request to make the web scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results..
+        /// </summary>
+        public static string WebScraperDetailOnboardingRequestToMakePublic {
+            get {
+                return ResourceManager.GetString("WebScraperDetailOnboardingRequestToMakePublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change the scraping interval..
+        /// </summary>
+        public static string WebScraperDetailOnboardingScrapingInterval {
+            get {
+                return ResourceManager.GetString("WebScraperDetailOnboardingScrapingInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View scraped results to be able to create a watchdog with email notification about new scraped results..
+        /// </summary>
+        public static string WebScraperDetailOnboardingViewScrapedResults {
+            get {
+                return ResourceManager.GetString("WebScraperDetailOnboardingViewScrapedResults", resourceCulture);
             }
         }
         
@@ -1008,6 +1188,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web scrapers.
+        /// </summary>
+        public static string WebScrapers {
+            get {
+                return ResourceManager.GetString("WebScrapers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You&apos;ve been logged in.
         /// </summary>
         public static string YouHaveBeenLoggedIn {
@@ -1027,6 +1216,24 @@ namespace MrWatchdog.Core.Resources {
         public static string YouHaveBeenLoggedInDescription {
             get {
                 return ResourceManager.GetString("YouHaveBeenLoggedInDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no watchdogs. To add a new watchdog, go to the {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;..
+        /// </summary>
+        public static string YouHaveNoWatchdogs {
+            get {
+                return ResourceManager.GetString("YouHaveNoWatchdogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no web scrapers created. You can create a web scraper {0}..
+        /// </summary>
+        public static string YouHaveNoWebScrapersCreated {
+            get {
+                return ResourceManager.GetString("YouHaveNoWebScrapersCreated", resourceCulture);
             }
         }
     }

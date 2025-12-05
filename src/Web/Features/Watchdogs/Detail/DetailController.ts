@@ -27,7 +27,7 @@ export default class DetailController extends BaseStimulusModelController<Detail
                 const watchdogWebPageEntity = Enumerable.from(jobDto.affectedEntities)
                     .singleOrDefault(x => x.entityName === DomainConstants.watchdogWebPageEntityName && x.isCreated);
                 if (!watchdogWebPageEntity) {
-                    throw new Error("Error getting created WatchdogWebPage.");
+                    throw new Error(`Error getting created ${DomainConstants.watchdogWebPageEntityName}.`);
                 }
 
                 const webPageTurboFrameUrl = WatchdogUrlConstants.watchdogDetailWebPageTurboFrameUrlTemplate

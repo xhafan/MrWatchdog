@@ -2,12 +2,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export interface SharedTranslations
+export abstract class LogsUrlConstants
 {
-	ok: string;
-	cancel: string;
-	back: string;
-	next: string;
-	finish: string;
-	error: string;
+	public static logErrorUrl: string = `/api/Logs/LogError`;
 }

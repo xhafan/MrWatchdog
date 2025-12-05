@@ -14,7 +14,7 @@ public static class OnboardingElementIdentifiers
 
     public const string WatchdogsDetailAddWebPageToWatchId = "watchdogsDetailAddWebPageToWatch";
     public const string WatchdogsDetailScrapingIntervalCssClass = "watchdogsDetailScrapingInterval";
-    public const string WatchdogsDetailViewSearchResultsId = "watchdogsDetailViewSearchResults";
+    public const string WatchdogsDetailViewScrapedResultsId = "watchdogsDetailViewSearchResults";
     public const string WatchdogsDetailRequestToMakePublicId = "watchdogsDetailRequestToMakePublic";
 
     public const string WebScraperCreateSetNameId = "webScraperCreateSetName";

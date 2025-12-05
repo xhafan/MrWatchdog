@@ -1,8 +1,11 @@
 ﻿@page
 @using CoreUtils.Extensions
+@using Microsoft.Extensions.Localization
+@using MrWatchdog.Core.Features.Watchdogs
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @model PublicWatchdogsModel
+@inject IStringLocalizer<Resource> Localizer
 @{
     Layout = null;
 }
@@ -35,7 +38,11 @@
     @if (Model.PublicWatchdogs.IsEmpty())
     {
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-        @:There are no public watchdogs. You can create a watchdog 
-        <a asp-page="/Watchdogs/Create/Create" data-turbo-frame="_top">here</a>@: and later make it public.
+        @Html.Raw(
+            Localizer[
+                Resource.ThereAreNoPublicWebScrapers, 
+                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
+            ]
+        )
     }
 </!turbo-frame>

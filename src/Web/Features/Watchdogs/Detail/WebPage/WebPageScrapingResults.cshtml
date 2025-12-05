@@ -1,4 +1,5 @@
 ﻿@page
+@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model WebPageScrapingResultsModel
 @{
@@ -12,7 +13,7 @@
          )
          >
         <div class="d-flex justify-content-between">
-            <label class="form-label fw-bold">Scraped results</label>
+            <label class="form-label fw-bold">@Resource.ScrapedResults</label>
             <form asp-page-handler="ScrapeWatchdogWebPage"
                   asp-route-watchdogId="@Model.WatchdogId"
                   asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
@@ -22,7 +23,7 @@
                 <button type="submit" 
                         class="btn btn-outline-primary"
                         >
-                    Scrape web page
+                    @Resource.ScrapeWebPage
                 </button>
             </form>
         </div>
@@ -49,7 +50,7 @@
                     }
                     else
                     {
-                        @:Web page not scraped yet
+                        @Resource.WebPageNotScrapedYet
                     }
                 </span>
             }
@@ -57,7 +58,7 @@
         @if (Model.WatchdogWebPageScrapingResults.ScrapedOn != null)
         {
             <div class="mt-3">
-                Scraped on: <span data-watchdogs--detail-web-page-scraping-results-target="scrapedOnInBrowserLocale"></span>
+                @Resource.ScrapedOn: <span data-watchdogs--detail-web-page-scraping-results-target="scrapedOnInBrowserLocale"></span>
             </div>
         }
     </div>

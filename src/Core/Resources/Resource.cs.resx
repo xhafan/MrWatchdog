@@ -37,22 +37,22 @@
 	</data>
 	<data name="OnboardingWatchdogReceiveNotificationStep" xml:space="preserve">
 		<value>&lt;p&gt;
-    Můžete deaktivovat emailová oznámení o nových výsledcích scrapingu.
+    Můžete deaktivovat emailová oznámení o nových výsledcích scrapování.
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
-    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích scrapingu jsou v současné době zdarma.
+    &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích scrapování jsou v současné době zdarma.
     V budoucnu bude tato funkce k dispozici pouze pro předplatitele prémiového účtu.
     Prémiové předplatné zatím není implementováno.
 &lt;/div&gt;</value>
 	</data>
 	<data name="ReceiveEmailNotificationAboutNewResults" xml:space="preserve">
-		<value>Dostávejte emailová oznámení o nových výsledcích scrapingu</value>
+		<value>Dostávejte emailová oznámení o nových výsledcích scrapování</value>
 	</data>
 	<data name="RequestToMakePublic" xml:space="preserve">
 		<value>Žádost o zveřejnění</value>
 	</data>
 	<data name="ViewScrapedResults" xml:space="preserve">
-		<value>Zobrazit výsledky scrapingu</value>
+		<value>Zobrazit výsledky scrapování</value>
 	</data>
 	<data name="Support" xml:space="preserve">
 		<value>Podpora</value>
@@ -74,7 +74,7 @@
     Použijte ji ke sledování změn na jakékoli veřejně přístupné webové stránce a nechte si zasílat emailová oznámení, když dojde ke změně nebo když je nalezen váš vyhledávací výraz.
 &lt;/p&gt;
 &lt;p&gt;
-    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s emailovým oznámením o nových výsledcích scrapingu.
+    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s emailovým oznámením o nových výsledcích scrapování.
 &lt;/p&gt;
 &lt;p&gt;
     {1} si vlastní webový scraper. {2} své stávající webové scrapery.
@@ -91,9 +91,6 @@
 	</data>
 	<data name="LoginOrRegister" xml:space="preserve">
 		<value>Přihlásit / zaregistrovat</value>
-	</data>
-	<data name="Email" xml:space="preserve">
-		<value>Email</value>
 	</data>
 	<data name="LoginWithEmail" xml:space="preserve">
 		<value>Přihlásit emailem</value>
@@ -192,7 +189,7 @@
 		<value>Sledované webové stránky</value>
 	</data>
 	<data name="ScrapedResults" xml:space="preserve">
-		<value>Výsledky scrapingu</value>
+		<value>Výsledky scrapování</value>
 	</data>
 	<data name="MyWatchdogsDescription" xml:space="preserve">
 		<value>Procházejte své hlídací psy.</value>
@@ -204,19 +201,16 @@
 		<value>Spravujte webové scrapery vytvořené jinými uživateli.</value>
 	</data>
 	<data name="NoScrapedResultsMatchingTheSearchTermAvailable" xml:space="preserve">
-		<value>V současné době nejsou k dispozici žádné výsledky scrapingu odpovídající hledanému výrazu {0}.</value>
+		<value>V současné době nejsou k dispozici žádné výsledky scrapování odpovídající hledanému výrazu {0}.</value>
 	</data>
 	<data name="NoScrapedResultsAvailable" xml:space="preserve">
-		<value>V současné době nejsou k dispozici žádné výsledky scrapingu.</value>
+		<value>V současné době nejsou k dispozici žádné výsledky scrapování.</value>
 	</data>
 	<data name="DeleteWatchdog" xml:space="preserve">
 		<value>Smazat hlídacího psa</value>
 	</data>
 	<data name="DeleteWatchdogConfirmationMessage" xml:space="preserve">
 		<value>Opravdu chcete smazat tohoto hlídacího psa?</value>
-	</data>
-	<data name="Ok" xml:space="preserve">
-		<value>OK</value>
 	</data>
 	<data name="Cancel" xml:space="preserve">
 		<value>Zrušit</value>
@@ -228,16 +222,16 @@
 		<value>Editovat</value>
 	</data>
 	<data name="WebScraperResultsOnboardingIntro" xml:space="preserve">
-		<value>Jste na stránce zobrazující &lt;b&gt;výsledky scrapingu&lt;/b&gt; webového scraperu.</value>
+		<value>Jste na stránce zobrazující &lt;b&gt;výsledky scrapování&lt;/b&gt; webového scraperu.</value>
 	</data>
 	<data name="WebScraperResultsOnboardingWatchedWebPages" xml:space="preserve">
 		<value>Tento webový scraper pravidelně prochází webové stránky a vybírá z nich výsledky.</value>
 	</data>
 	<data name="WebScraperResultsOnboardingSearchTerm" xml:space="preserve">
-		<value>Můžete zadat hledaný výraz pro filtrování výsledků scrapingu.</value>
+		<value>Můžete zadat hledaný výraz pro filtrování výsledků scrapování.</value>
 	</data>
 	<data name="WebScraperResultsOnboardingCreateWatchdog" xml:space="preserve">
-		<value>Vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapingu nebo nové výsledky scrapingu odpovídající vyhledávanému termínu.</value>
+		<value>Vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování nebo nové výsledky scrapování odpovídající vyhledávanému termínu.</value>
 	</data>
 	<data name="Back" xml:space="preserve">
 		<value>Zpět</value>
@@ -249,7 +243,7 @@
 		<value>Ukončit</value>
 	</data>
 	<data name="WebScraperResultsOnboardingLoginOrRegisterToCreateWatchdog" xml:space="preserve">
-		<value>Přihlaste se nebo se zaregistrujte a vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapingu nebo nové výsledky scrapingu odpovídající vyhledávanému termínu.</value>
+		<value>Přihlaste se nebo se zaregistrujte a vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování nebo nové výsledky scrapování odpovídající vyhledávanému termínu.</value>
 	</data>
 	<data name="Archived" xml:space="preserve">
 		<value>Archivován</value>
@@ -267,16 +261,16 @@
 		<value>Popis</value>
 	</data>
 	<data name="ScrapingIntervalInSeconds" xml:space="preserve">
-		<value>Interval scrapingu v sekundách</value>
+		<value>Interval scrapování v sekundách</value>
 	</data>
 	<data name="Advanced" xml:space="preserve">
 		<value>Pokročilé</value>
 	</data>
 	<data name="NumberOfDaysBetweenNotificationsForTheSameScrapedResult" xml:space="preserve">
-		<value>Počet dní mezi oznámeními pro stejný výsledek scrapingu</value>
+		<value>Počet dní mezi oznámeními pro stejný výsledek scrapování</value>
 	</data>
 	<data name="NumberOfFailedScrapingAttemptsBeforeAlerting" xml:space="preserve">
-		<value>Počet neúspěšných pokusů o scraping před zasláním upozornění emailem</value>
+		<value>Počet neúspěšných pokusů o scrapování před zasláním upozornění emailem</value>
 	</data>
 	<data name="RangeAttribute" xml:space="preserve">
 		<value>{0} musí být větší nebo rovno {1}</value>
@@ -285,7 +279,7 @@
 		<value>Smazat webového scrapera</value>
 	</data>
 	<data name="AddWebPageToScrape" xml:space="preserve">
-		<value>Přidat webovou stránku na scraping</value>
+		<value>Přidat webovou stránku na scrapování</value>
 	</data>
 	<data name="TheWebPageHasBeenAutomaticallyDisabled" xml:space="preserve">
 		<value>Webová stránka byla automaticky deaktivována.</value>
@@ -310,5 +304,32 @@
 	</data>
 	<data name="MakePrivate" xml:space="preserve">
 		<value>Nastavit jako soukromý</value>
+	</data>
+	<data name="DeleteWebPage" xml:space="preserve">
+		<value>Smazat webovou stránku</value>
+	</data>
+	<data name="UrlAttribute" xml:space="preserve">
+		<value>Pole {0} není platná http nebo https webová adresa.</value>
+	</data>
+	<data name="Selector" xml:space="preserve">
+		<value>CSS selektor</value>
+	</data>
+	<data name="SelectTextInsteadOfHtml" xml:space="preserve">
+		<value>Vyberte text místo HTML</value>
+	</data>
+	<data name="HttpHeaders" xml:space="preserve">
+		<value>HTTP hlavičky (jedna na řádek; formát: "název hlavičky: hodnota")</value>
+	</data>
+	<data name="ScrapeWebPage" xml:space="preserve">
+		<value>Scrapovat webovou stránku</value>
+	</data>
+	<data name="WebPageNotScrapedYet" xml:space="preserve">
+		<value>Webová stránka ještě nebyla scrapována</value>
+	</data>
+	<data name="ScrapedOn" xml:space="preserve">
+		<value>Scrapováno</value>
+	</data>
+	<data name="Author" xml:space="preserve">
+		<value>Autor</value>
 	</data>
 </root>

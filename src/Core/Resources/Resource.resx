@@ -421,4 +421,34 @@
   <data name="MakePrivate" xml:space="preserve">
 	  <value>Make private</value>
   </data>
+  <data name="DeleteWebPage" xml:space="preserve">
+	  <value>Delete web page</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+	  <value>Url</value>
+  </data>
+  <data name="UrlAttribute" xml:space="preserve">
+	  <value>The {0} field is not a valid http or https web address.</value>
+  </data>
+  <data name="Selector" xml:space="preserve">
+	  <value>CSS selector</value>
+  </data>
+  <data name="SelectTextInsteadOfHtml" xml:space="preserve">
+	  <value>Select text instead of HTML</value>
+  </data>
+  <data name="HttpHeaders" xml:space="preserve">
+	  <value>HTTP headers (one per line; format: "header name: value")</value>
+  </data>
+  <data name="ScrapeWebPage" xml:space="preserve">
+	  <value>Scrape web page</value>
+  </data>
+  <data name="WebPageNotScrapedYet" xml:space="preserve">
+	  <value>Web page not scraped yet</value>
+  </data>
+  <data name="ScrapedOn" xml:space="preserve">
+	  <value>Scraped on</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+	  <value>Author</value>
+  </data>
 </root>

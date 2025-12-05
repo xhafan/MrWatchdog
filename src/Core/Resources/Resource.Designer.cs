@@ -135,6 +135,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author.
+        /// </summary>
+        public static string Author {
+            get {
+                return ResourceManager.GetString("Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Back {
@@ -216,6 +225,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete web page.
+        /// </summary>
+        public static string DeleteWebPage {
+            get {
+                return ResourceManager.GetString("DeleteWebPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete web scraper.
         /// </summary>
         public static string DeleteWebScraper {
@@ -293,6 +311,15 @@ namespace MrWatchdog.Core.Resources {
         public static string Finish {
             get {
                 return ResourceManager.GetString("Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP headers (one per line; format: &quot;header name: value&quot;).
+        /// </summary>
+        public static string HttpHeaders {
+            get {
+                return ResourceManager.GetString("HttpHeaders", resourceCulture);
             }
         }
         
@@ -756,6 +783,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scraped on.
+        /// </summary>
+        public static string ScrapedOn {
+            get {
+                return ResourceManager.GetString("ScrapedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scraped results.
         /// </summary>
         public static string ScrapedResults {
@@ -765,11 +801,38 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scrape web page.
+        /// </summary>
+        public static string ScrapeWebPage {
+            get {
+                return ResourceManager.GetString("ScrapeWebPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scraping interval in seconds.
         /// </summary>
         public static string ScrapingIntervalInSeconds {
             get {
                 return ResourceManager.GetString("ScrapingIntervalInSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CSS selector.
+        /// </summary>
+        public static string Selector {
+            get {
+                return ResourceManager.GetString("Selector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select text instead of HTML.
+        /// </summary>
+        public static string SelectTextInsteadOfHtml {
+            get {
+                return ResourceManager.GetString("SelectTextInsteadOfHtml", resourceCulture);
             }
         }
         
@@ -810,6 +873,24 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        public static string Url {
+            get {
+                return ResourceManager.GetString("Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} field is not a valid http or https web address..
+        /// </summary>
+        public static string UrlAttribute {
+            get {
+                return ResourceManager.GetString("UrlAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View scraped results.
         /// </summary>
         public static string ViewScrapedResults {
@@ -824,6 +905,15 @@ namespace MrWatchdog.Core.Resources {
         public static string WatchedWebPages {
             get {
                 return ResourceManager.GetString("WatchedWebPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web page not scraped yet.
+        /// </summary>
+        public static string WebPageNotScrapedYet {
+            get {
+                return ResourceManager.GetString("WebPageNotScrapedYet", resourceCulture);
             }
         }
         

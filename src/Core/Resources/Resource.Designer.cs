@@ -117,6 +117,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To add a new watchdog, go to the list of {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;..
+        /// </summary>
+        public static string AddNewWatchdogRecommendation {
+            get {
+                return ResourceManager.GetString("AddNewWatchdogRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add web page to scrape.
         /// </summary>
         public static string AddWebPageToScrape {
@@ -234,7 +243,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really delete this scraper and all the user&apos;s watchdogs?.
+        ///   Looks up a localized string similar to Really delete this scraper and all related user&apos;s watchdogs?.
         /// </summary>
         public static string DeleteScraperConfirmationMessage {
             get {
@@ -396,7 +405,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to list of scrapers.
+        ///   Looks up a localized string similar to scrapers.
         /// </summary>
         public static string ListOfScrapers {
             get {
@@ -1229,7 +1238,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have no watchdogs. To add a new watchdog, go to the {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;..
+        ///   Looks up a localized string similar to You have no watchdogs..
         /// </summary>
         public static string YouHaveNoWatchdogs {
             get {

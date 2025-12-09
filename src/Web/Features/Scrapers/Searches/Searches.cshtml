@@ -47,15 +47,21 @@
     </div>
 }
 
-@if (Model.WatchdogSearches.IsEmpty())
-{
-    <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
+<p class="pt-3">
+    @if (Model.WatchdogSearches.IsEmpty())
+    {
+        <i class="fa-solid fa-triangle-exclamation text-warning"></i> @Resource.YouHaveNoWatchdogs
+    }
+    else
+    {
+        <i class="fa-solid fa-circle-info text-primary"></i>
+    }
+
     @Html.Raw(
         Localizer[
-            Resource.YouHaveNoWatchdogs,
+            Resource.AddNewWatchdogRecommendation,
             $"<a href=\"{ScraperUrlConstants.ScrapersUrl}\">{Resource.ListOfScrapers}</a>",
             Resource.CreateWatchdog
         ]
     )
-}
-
+</p>

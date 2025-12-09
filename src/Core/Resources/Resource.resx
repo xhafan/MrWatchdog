@@ -524,12 +524,15 @@
 	  <value>You can enter a search term to filter the results. When no results, or no results matching the search term are currently available, you will receive an email notification as soon as they are available.</value>
   </data>
   <data name="YouHaveNoWatchdogs" xml:space="preserve">
-	  <value>You have no watchdogs. To add a new watchdog, go to the {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
+	  <value>You have no watchdogs.</value>
   </data>
   <data name="ListOfScrapers" xml:space="preserve">
-	  <value>list of scrapers</value>
+	  <value>scrapers</value>
   </data>
   <data name="YouHaveNoScrapersCreated" xml:space="preserve">
 	  <value>You have no scrapers created. You can create a scraper {0}.</value>
+  </data>
+  <data name="AddNewWatchdogRecommendation" xml:space="preserve">
+	  <value>To add a new watchdog, go to the list of {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
 </root>

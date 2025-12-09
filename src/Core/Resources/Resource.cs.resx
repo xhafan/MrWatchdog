@@ -406,12 +406,15 @@
 </value>
 	</data>
 	<data name="YouHaveNoWatchdogs" xml:space="preserve">
-		<value>Nemáte žádné hlídací psy. Chcete-li přidat nového hlídacího psa, přejděte do {0}, vyberte nějaký a zvolte &lt;i&gt;{1}&lt;/i&gt;.</value>
+		<value>Nemáte žádné hlídací psy.</value>
 	</data>
 	<data name="ListOfScrapers" xml:space="preserve">
-		<value>seznamu scraperů</value>
+		<value>scraperů</value>
 	</data>
 	<data name="YouHaveNoScrapersCreated" xml:space="preserve">
 		<value>Nemáte vytvořené žádné scrapery. Scraper můžete vytvořit {0}.</value>
+	</data>
+	<data name="AddNewWatchdogRecommendation" xml:space="preserve">
+		<value>Chcete-li přidat nového hlídacího psa, přejděte do seznamu {0}, vyberte nějaký a zvolte &lt;i&gt;{1}&lt;/i&gt;.</value>
 	</data>
 </root>

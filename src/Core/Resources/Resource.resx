@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateScraper" xml:space="preserve">
-    <value>Create web scraper</value>
+    <value>Create scraper</value>
   </data>
   <data name="FilterResults" xml:space="preserve">
 	  <value>Optionally enter a search term to filter the results</value>
   </data>
   <data name="Scrapers" xml:space="preserve">
-    <value>Web scrapers</value>
+    <value>Scrapers</value>
   </data>
   <data name="MakePublic" xml:space="preserve">
     <value>Make public</value>
   </data>
   <data name="ManageScrapers" xml:space="preserve">
-    <value>Manage web scrapers</value>
+    <value>Manage scrapers</value>
   </data>
   <data name="MrWatchdog" xml:space="preserve">
     <value>Mr Watchdog</value>
@@ -161,7 +161,7 @@
     <value>You can view this help anytime again.</value>
   </data>
   <data name="DeleteScraperConfirmationMessage" xml:space="preserve">
-    <value>Really delete this web scraper and all of the user's watchdogs?</value>
+    <value>Really delete this scraper and all related user's watchdogs?</value>
   </data>
   <data name="Support" xml:space="preserve">
 	  <value>Support</value>
@@ -186,11 +186,11 @@
     View existing public {0} and create a watchdog with email notification about new scraped results.
 &lt;/p&gt;
 &lt;p&gt;
-    {1} your own web scraper. {2} your existing web scrapers.
+    {1} your own scraper. {2} your existing scrapers.
 &lt;/p&gt;</value>
   </data>
   <data name="AboutScrapers" xml:space="preserve">
-	  <value>web scrapers</value>
+	  <value>scrapers</value>
   </data>
   <data name="AboutCreate" xml:space="preserve">
 	  <value>Create</value>
@@ -254,40 +254,40 @@
 	  <value>Copyright</value>
   </data>
   <data name="PublicScrapers" xml:space="preserve">
-	  <value>Public web scrapers</value>
+	  <value>Public scrapers</value>
   </data>
   <data name="PublicScrapersDescription" xml:space="preserve">
-	  <value>Browse public web scrapers created by other users and you.</value>
+	  <value>Browse public scrapers created by other users and you.</value>
   </data>
   <data name="MyScrapers" xml:space="preserve">
-	  <value>My web scrapers</value>
+	  <value>My scrapers</value>
   </data>
   <data name="MyScrapersDescription" xml:space="preserve">
-	  <value>Browse web scrapers created by you.</value>
+	  <value>Browse scrapers created by you.</value>
   </data>
   <data name="MyScraper" xml:space="preserve">
-	  <value>My web scraper</value>
+	  <value>My scraper</value>
   </data>
   <data name="MyScraperTooltip" xml:space="preserve">
-	  <value>You created this web scraper</value>
+	  <value>You created this scraper</value>
   </data>
   <data name="PublicStatus" xml:space="preserve">
 	  <value>Public</value>
   </data>
   <data name="PublicStatusTooltip" xml:space="preserve">
-	  <value>The web scraper is public and discoverable by other users.</value>
+	  <value>The scraper is public and discoverable by other users.</value>
   </data>
   <data name="RequestedToBeMadePublicStatus" xml:space="preserve">
 	  <value>Requested to be made public</value>
   </data>
   <data name="RequestedToBeMadePublicStatusTooltip" xml:space="preserve">
-	  <value>The web scraper has been requested to be made public and discoverable by other users.</value>
+	  <value>The scraper has been requested to be made public and discoverable by other users.</value>
   </data>
   <data name="PrivateStatus" xml:space="preserve">
 	  <value>Private</value>
   </data>
   <data name="PrivateStatusTooltip" xml:space="preserve">
-	  <value>The web scraper is private and not discoverable by other users.</value>
+	  <value>The scraper is private and not discoverable by other users.</value>
   </data>
   <data name="CreateWatchdog" xml:space="preserve">
 	  <value>Create watchdog</value>
@@ -308,10 +308,10 @@
 	  <value>Browse your watchdogs.</value>
   </data>
   <data name="ManageUserScrapersDescription" xml:space="preserve">
-	  <value>Manage web scrapers created by you.</value>
+	  <value>Manage scrapers created by you.</value>
   </data>
   <data name="ManageOtherUsersScrapersDescription" xml:space="preserve">
-	  <value>Manage web scrapers created by other users.</value>
+	  <value>Manage scrapers created by other users.</value>
   </data>
   <data name="NoScrapedResultsMatchingTheSearchTermAvailable" xml:space="preserve">
 	  <value>No scraped results matching the search term {0} are currently available.</value>
@@ -338,10 +338,10 @@
 	  <value>Edit</value>
   </data>
   <data name="ScraperResultsOnboardingIntro" xml:space="preserve">
-	  <value>You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a web scraper.</value>
+	  <value>You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a scraper.</value>
   </data>
   <data name="ScraperResultsOnboardingWatchedWebPages" xml:space="preserve">
-	  <value>This web scraper periodically scrapes web page(s) and selects scraped results from them.</value>
+	  <value>This scraper periodically scrapes web page(s) and selects scraped results from them.</value>
   </data>
   <data name="ScraperResultsOnboardingSearchTerm" xml:space="preserve">
 	  <value>You can enter a search term to filter the scraped results.</value>
@@ -368,7 +368,7 @@
 	  <value>Name</value>
   </data>
   <data name="ScraperCreateOnboardingSetName" xml:space="preserve">
-	  <value>Enter the web scraper name. In the next step you will define web pages to scrape.</value>
+	  <value>Enter the scraper name. In the next step you will define web pages to scrape.</value>
   </data>
   <data name="Create" xml:space="preserve">
 	  <value>Create</value>
@@ -392,7 +392,7 @@
 	  <value>The {0} must be greater than or equal to {1}</value>
   </data>
   <data name="DeleteScraper" xml:space="preserve">
-	  <value>Delete web scraper</value>
+	  <value>Delete scraper</value>
   </data>
   <data name="AddWebPageToScrape" xml:space="preserve">
 	  <value>Add web page to scrape</value>
@@ -410,13 +410,13 @@
 	  <value>Please enable it once your edits are complete so that watchdogs can continue watching it.</value>
   </data>
   <data name="MakeScraperPublicConfirmationMessage" xml:space="preserve">
-	  <value>Really make the web scraper public and discoverable by other users?</value>
+	  <value>Really make the scraper public and discoverable by other users?</value>
   </data>
   <data name="RequestToMakeScraperPublicConfirmationMessage" xml:space="preserve">
-	  <value>Really request to make the web scraper public and discoverable by other users?</value>
+	  <value>Really request to make the scraper public and discoverable by other users?</value>
   </data>
   <data name="MakeScraperPrivateConfirmationMessage" xml:space="preserve">
-	  <value>Really make the web scraper private and non-discoverable by other users?</value>
+	  <value>Really make the scraper private and non-discoverable by other users?</value>
   </data>
   <data name="MakePrivate" xml:space="preserve">
 	  <value>Make private</value>
@@ -455,7 +455,7 @@
 	  <value>Calculated earnings for this month</value>
   </data>
   <data name="ScraperEarningsCalculationInfo" xml:space="preserve">
-	  <value>The web scraper earnings calculation will be based on the number of premium users having a watchdog for this web scraper. The premium subscription is not yet implemented.</value>
+	  <value>The scraper earnings calculation will be based on the number of premium users having a watchdog for this scraper. The premium subscription is not yet implemented.</value>
   </data>
   <data name="NumberOfUsersWithWatchdogWithEmailNotification" xml:space="preserve">
 	  <value>Number of users with a watchdog with email notification</value>
@@ -494,10 +494,10 @@
 	  <value>Invalid HTTP header format: "{0}". Expected format is "header name: value".</value>
   </data>
   <data name="ScraperDetailOnboardingIntro" xml:space="preserve">
-	  <value>You navigated to a &lt;b&gt;web scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This web scraper will scrape web pages and will select results based on the CSS selector.</value>
+	  <value>You navigated to a &lt;b&gt;scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This scraper will scrape web pages and will select results based on the CSS selector.</value>
   </data>
   <data name="ScraperDetailOnboardingAddWebPage" xml:space="preserve">
-	  <value>Add a web page this web scraper will scrape.</value>
+	  <value>Add a web page this scraper will scrape.</value>
   </data>
   <data name="ScraperDetailOnboardingScrapingInterval" xml:space="preserve">
 	  <value>You can change the scraping interval.</value>
@@ -506,10 +506,10 @@
 	  <value>View scraped results to be able to create a watchdog with email notification about new scraped results.</value>
   </data>
   <data name="ScraperDetailOnboardingRequestToMakePublic" xml:space="preserve">
-	  <value>Request to make the web scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results.</value>
+	  <value>Request to make the scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results.</value>
   </data>
   <data name="ThereAreNoPublicScrapers" xml:space="preserve">
-	  <value>There are no public web scrapers. You can create a web scraper {0} and later make it public.</value>
+	  <value>There are no public scrapers. You can create a scraper {0} and later make it public.</value>
   </data>
   <data name="Here" xml:space="preserve">
 	  <value>here</value>
@@ -518,7 +518,7 @@
 	  <value>You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;This watchdog emails you notification about new results.</value>
   </data>
   <data name="WatchdogOnboardingIntroScrapedResults" xml:space="preserve">
-	  <value>It periodically watches related web scraper results.</value>
+	  <value>It periodically watches related scraper results.</value>
   </data>
   <data name="WatchdogOnboardingIntroSearchTerm" xml:space="preserve">
 	  <value>You can enter a search term to filter the results. When no results, or no results matching the search term are currently available, you will receive an email notification as soon as they are available.</value>
@@ -527,9 +527,9 @@
 	  <value>You have no watchdogs. To add a new watchdog, go to the {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="ListOfScrapers" xml:space="preserve">
-	  <value>list of web scrapers</value>
+	  <value>list of scrapers</value>
   </data>
   <data name="YouHaveNoScrapersCreated" xml:space="preserve">
-	  <value>You have no web scrapers created. You can create a web scraper {0}.</value>
+	  <value>You have no scrapers created. You can create a scraper {0}.</value>
   </data>
 </root>

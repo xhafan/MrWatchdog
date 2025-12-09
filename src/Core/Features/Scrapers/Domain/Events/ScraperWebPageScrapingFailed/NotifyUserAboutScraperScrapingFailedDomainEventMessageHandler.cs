@@ -36,7 +36,7 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
              </p>
              <p>
                  Web scraping failed for the scraper <a href="{scraperDetailUrl}">{scraper.Name}</a>.<br>
-                 Failed web scraper web pages:
+                 Failed scraper web pages:
                  <ul>
                      {string.Join("\n", scraperWebPagesWithError
                          .Select(webPage =>

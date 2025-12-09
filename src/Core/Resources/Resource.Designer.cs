@@ -71,7 +71,7 @@ namespace MrWatchdog.Core.Resources {
         ///    View existing public {0} and create a watchdog with email notification about new scraped results.
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///    {1} your own web scraper. {2} your existing web scrapers.
+        ///    {1} your own scraper. {2} your existing scrapers.
         ///&lt;/p&gt;.
         /// </summary>
         public static string About {
@@ -99,7 +99,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to web scrapers.
+        ///   Looks up a localized string similar to scrapers.
         /// </summary>
         public static string AboutScrapers {
             get {
@@ -207,7 +207,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create web scraper.
+        ///   Looks up a localized string similar to Create scraper.
         /// </summary>
         public static string CreateScraper {
             get {
@@ -225,7 +225,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete web scraper.
+        ///   Looks up a localized string similar to Delete scraper.
         /// </summary>
         public static string DeleteScraper {
             get {
@@ -234,7 +234,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really delete this web scraper and all of the user&apos;s watchdogs?.
+        ///   Looks up a localized string similar to Really delete this scraper and all the user&apos;s watchdogs?.
         /// </summary>
         public static string DeleteScraperConfirmationMessage {
             get {
@@ -396,7 +396,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to list of web scrapers.
+        ///   Looks up a localized string similar to list of scrapers.
         /// </summary>
         public static string ListOfScrapers {
             get {
@@ -506,7 +506,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really make the web scraper private and non-discoverable by other users?.
+        ///   Looks up a localized string similar to Really make the scraper private and non-discoverable by other users?.
         /// </summary>
         public static string MakeScraperPrivateConfirmationMessage {
             get {
@@ -515,7 +515,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really make the web scraper public and discoverable by other users?.
+        ///   Looks up a localized string similar to Really make the scraper public and discoverable by other users?.
         /// </summary>
         public static string MakeScraperPublicConfirmationMessage {
             get {
@@ -524,7 +524,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage web scrapers created by other users..
+        ///   Looks up a localized string similar to Manage scrapers created by other users..
         /// </summary>
         public static string ManageOtherUsersScrapersDescription {
             get {
@@ -542,7 +542,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage web scrapers.
+        ///   Looks up a localized string similar to Manage scrapers.
         /// </summary>
         public static string ManageScrapers {
             get {
@@ -551,7 +551,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage web scrapers created by you..
+        ///   Looks up a localized string similar to Manage scrapers created by you..
         /// </summary>
         public static string ManageUserScrapersDescription {
             get {
@@ -569,7 +569,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My web scraper.
+        ///   Looks up a localized string similar to My scraper.
         /// </summary>
         public static string MyScraper {
             get {
@@ -578,7 +578,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My web scrapers.
+        ///   Looks up a localized string similar to My scrapers.
         /// </summary>
         public static string MyScrapers {
             get {
@@ -587,7 +587,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse web scrapers created by you..
+        ///   Looks up a localized string similar to Browse scrapers created by you..
         /// </summary>
         public static string MyScrapersDescription {
             get {
@@ -596,7 +596,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You created this web scraper.
+        ///   Looks up a localized string similar to You created this scraper.
         /// </summary>
         public static string MyScraperTooltip {
             get {
@@ -749,7 +749,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The web scraper is private and not discoverable by other users..
+        ///   Looks up a localized string similar to The scraper is private and not discoverable by other users..
         /// </summary>
         public static string PrivateStatusTooltip {
             get {
@@ -758,7 +758,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public web scrapers.
+        ///   Looks up a localized string similar to Public scrapers.
         /// </summary>
         public static string PublicScrapers {
             get {
@@ -767,7 +767,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse public web scrapers created by other users and you..
+        ///   Looks up a localized string similar to Browse public scrapers created by other users and you..
         /// </summary>
         public static string PublicScrapersDescription {
             get {
@@ -785,7 +785,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The web scraper is public and discoverable by other users..
+        ///   Looks up a localized string similar to The scraper is public and discoverable by other users..
         /// </summary>
         public static string PublicStatusTooltip {
             get {
@@ -830,7 +830,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The web scraper has been requested to be made public and discoverable by other users..
+        ///   Looks up a localized string similar to The scraper has been requested to be made public and discoverable by other users..
         /// </summary>
         public static string RequestedToBeMadePublicStatusTooltip {
             get {
@@ -857,7 +857,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Really request to make the web scraper public and discoverable by other users?.
+        ///   Looks up a localized string similar to Really request to make the scraper public and discoverable by other users?.
         /// </summary>
         public static string RequestToMakeScraperPublicConfirmationMessage {
             get {
@@ -902,7 +902,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the web scraper name. In the next step you will define web pages to scrape..
+        ///   Looks up a localized string similar to Enter the scraper name. In the next step you will define web pages to scrape..
         /// </summary>
         public static string ScraperCreateOnboardingSetName {
             get {
@@ -911,7 +911,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a web page this web scraper will scrape..
+        ///   Looks up a localized string similar to Add a web page this scraper will scrape..
         /// </summary>
         public static string ScraperDetailOnboardingAddWebPage {
             get {
@@ -920,7 +920,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You navigated to a &lt;b&gt;web scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This web scraper will scrape web pages and will select results based on the CSS selector..
+        ///   Looks up a localized string similar to You navigated to a &lt;b&gt;scraper&lt;/b&gt; management.&lt;br/&gt;&lt;br/&gt;This scraper will scrape web pages and will select results based on the CSS selector..
         /// </summary>
         public static string ScraperDetailOnboardingIntro {
             get {
@@ -929,7 +929,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request to make the web scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results..
+        ///   Looks up a localized string similar to Request to make the scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results..
         /// </summary>
         public static string ScraperDetailOnboardingRequestToMakePublic {
             get {
@@ -956,7 +956,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The web scraper earnings calculation will be based on the number of premium users having a watchdog for this web scraper. The premium subscription is not yet implemented..
+        ///   Looks up a localized string similar to The scraper earnings calculation will be based on the number of premium users having a watchdog for this scraper. The premium subscription is not yet implemented..
         /// </summary>
         public static string ScraperEarningsCalculationInfo {
             get {
@@ -974,7 +974,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a web scraper..
+        ///   Looks up a localized string similar to You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a scraper..
         /// </summary>
         public static string ScraperResultsOnboardingIntro {
             get {
@@ -1001,7 +1001,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This web scraper periodically scrapes web page(s) and selects scraped results from them..
+        ///   Looks up a localized string similar to This scraper periodically scrapes web page(s) and selects scraped results from them..
         /// </summary>
         public static string ScraperResultsOnboardingWatchedWebPages {
             get {
@@ -1010,7 +1010,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web scrapers.
+        ///   Looks up a localized string similar to Scrapers.
         /// </summary>
         public static string Scrapers {
             get {
@@ -1082,7 +1082,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no public web scrapers. You can create a web scraper {0} and later make it public..
+        ///   Looks up a localized string similar to There are no public scrapers. You can create a scraper {0} and later make it public..
         /// </summary>
         public static string ThereAreNoPublicScrapers {
             get {
@@ -1145,7 +1145,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It periodically watches related web scraper results..
+        ///   Looks up a localized string similar to It periodically watches related scraper results..
         /// </summary>
         public static string WatchdogOnboardingIntroScrapedResults {
             get {
@@ -1220,7 +1220,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have no web scrapers created. You can create a web scraper {0}..
+        ///   Looks up a localized string similar to You have no scrapers created. You can create a scraper {0}..
         /// </summary>
         public static string YouHaveNoScrapersCreated {
             get {

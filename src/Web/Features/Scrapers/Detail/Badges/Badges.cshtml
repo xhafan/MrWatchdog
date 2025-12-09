@@ -1,14 +1,14 @@
-﻿@page "{watchdogId}"
+﻿@page "{scraperId}"
 @using MrWatchdog.Core.Resources
 @model BadgesModel
 @{
     Layout = null;
 }
-<!turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailArgs.WatchdogId)">
-    <public-status-badge public-status="@Model.WatchdogDetailArgs.PublicStatus" 
+<!turbo-frame id="scraper_detail_badges_@(Model.ScraperDetailArgs.ScraperId)">
+    <public-status-badge public-status="@Model.ScraperDetailArgs.PublicStatus" 
                          show-private="@Model.ShowPrivate"
     />
-    @if (Model.WatchdogDetailArgs.IsArchived)
+    @if (Model.ScraperDetailArgs.IsArchived)
     {
         <span class="badge text-bg-warning">
             @Resource.Archived

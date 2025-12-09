@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Web.Features.Watchdogs.Create;
+using MrWatchdog.Web.Features.Scrapers.Create;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Create;
 
 [TestFixture]
-public class when_creating_new_watchdog_without_name
+public class when_creating_new_scraper_without_name
 {
     private IActionResult _actionResult = null!;
     private CreateModel _model = null!;

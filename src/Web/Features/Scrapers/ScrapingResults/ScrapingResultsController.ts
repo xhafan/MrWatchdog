@@ -2,12 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
-import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
+import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 
-export const watchdogScrapingResultsWebPagesInitializedEventName = "watchdogScrapingResultsWebPagesInitializedEventName";
+export const scraperScrapingResultsWebPagesInitializedEventName = "scraperScrapingResultsWebPagesInitialized";
 
 export default class ScrapingResultsController extends Controller {
     static targets = [
@@ -23,7 +23,7 @@ export default class ScrapingResultsController extends Controller {
     declare createWatchdogSearchFormTarget: HTMLFormElement;
 
     connect() {
-        this.registerWatchdogScrapingResultsWebPagesInitializedEventHandler();
+        this.registerScraperScrapingResultsWebPagesInitializedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
             this.createWatchdogSearchFormTarget, 
@@ -34,8 +34,8 @@ export default class ScrapingResultsController extends Controller {
                     throw new Error(`Error getting ${DomainConstants.watchdogSearchEntityName}.`);
                 }
                 
-                const watchdogSearchUrl = WatchdogUrlConstants.watchdogSearchUrlTemplate
-                    .replace(WatchdogUrlConstants.watchdogSearchIdVariable, String(watchdogSearchEntity.entityId));
+                const watchdogSearchUrl = ScraperUrlConstants.watchdogSearchUrlTemplate
+                    .replace(ScraperUrlConstants.watchdogSearchIdVariable, String(watchdogSearchEntity.entityId));
                 Turbo.visit(watchdogSearchUrl);
             }
         );
@@ -62,17 +62,17 @@ export default class ScrapingResultsController extends Controller {
         Turbo.visit(accountLoginUrl.toString());
     }
 
-    private registerWatchdogScrapingResultsWebPagesInitializedEventHandler() {
+    private registerScraperScrapingResultsWebPagesInitializedEventHandler() {
         this.dispatch(registerGlobalEventHandlerEventName, {
             prefix: "",
             detail: new EventHandlerRegistration<string>(
-                watchdogScrapingResultsWebPagesInitializedEventName, 
-                this.handleWatchdogScrapingResultsWebPagesInitializedEvent.bind(this)
+                scraperScrapingResultsWebPagesInitializedEventName, 
+                this.handleScraperScrapingResultsWebPagesInitializedEvent.bind(this)
             )
         });
     }
 
-    private handleWatchdogScrapingResultsWebPagesInitializedEvent(event: CustomEventInit) {
+    private handleScraperScrapingResultsWebPagesInitializedEvent(event: CustomEventInit) {
         this.onSearchTermModified();
     }
 }

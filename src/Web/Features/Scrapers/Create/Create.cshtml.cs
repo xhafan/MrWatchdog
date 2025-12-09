@@ -1,19 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Shared;
-using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Create;
+namespace MrWatchdog.Web.Features.Scrapers.Create;
 
 public class CreateModel(ICoreBus bus, IActingUserAccessor actingUserAccessor) : BasePageModel
 {
     [BindProperty]
     [Required]
-    [StringLength(ValidationConstants.WatchdogNameMaxLength)]
+    [StringLength(ValidationConstants.ScraperNameMaxLength)]
     [Display(Name = nameof(Resource.Name), ResourceType = typeof(Resource))]
     public string Name { get; set; } = null!;
     
@@ -24,7 +24,7 @@ public class CreateModel(ICoreBus bus, IActingUserAccessor actingUserAccessor) :
             return PageWithUnprocessableEntityStatus422();
         }
 
-        var command = new CreateWatchdogCommand(actingUserAccessor.GetActingUserId(), Name);
+        var command = new CreateScraperCommand(actingUserAccessor.GetActingUserId(), Name);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }    

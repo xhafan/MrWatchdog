@@ -3,8 +3,8 @@ using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Messages;
@@ -20,10 +20,10 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionInc
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_for_domain_event : BaseDatabaseTest
 {
-    private WatchdogWebPageScrapingDataUpdatedDomainEvent _domainEvent = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageIdOne;
-    private long _watchdogWebPageIdTwo;
+    private ScraperWebPageScrapingDataUpdatedDomainEvent _domainEvent = null!;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageIdOne;
+    private long _scraperWebPageIdTwo;
     private IWindsorContainer _windsorContainer = null!;
     private IWindsorContainer? _jobContextWindsorContainerInTheNextIncomingStep;
     private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
@@ -40,15 +40,15 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _windsorContainer = A.Fake<IWindsorContainer>();
         JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
 
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageIdOne = _watchdog.WebPages.Single().Id;
+        _scraperWebPageIdOne = _scraper.WebPages.Single().Id;
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -62,7 +62,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _domainEvent = new WatchdogWebPageScrapingDataUpdatedDomainEvent(WatchdogId: _watchdog.Id, WatchdogWebPageId: _watchdogWebPageIdOne)
+        _domainEvent = new ScraperWebPageScrapingDataUpdatedDomainEvent(ScraperId: _scraper.Id, ScraperWebPageId: _scraperWebPageIdOne)
         {
             RelatedCommandGuid = _relatedCommandGuid,
             ActingUserId = 23
@@ -79,8 +79,8 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
 
         async Task _next()
         {
-            _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
-            _watchdog.AddWebPage(new WatchdogWebPageArgs
+            _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
+            _scraper.AddWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page2",
                 Selector = ".selector2",
@@ -88,7 +88,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             });
             await UnitOfWork.FlushAsync();
             
-            _watchdogWebPageIdTwo = _watchdog.WebPages.Single(x => x.Id != _watchdogWebPageIdOne).Id;
+            _scraperWebPageIdTwo = _scraper.WebPages.Single(x => x.Id != _scraperWebPageIdOne).Id;
 
             _jobContextWindsorContainerInTheNextIncomingStep = JobContext.WindsorContainer.Value;
             _jobContextRaisedDomainEventsInTheNextIncomingStep = JobContext.RaisedDomainEvents.Value;
@@ -105,25 +105,25 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         job.CreatedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         job.CompletedOn.ShouldNotBeNull();
         job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
-        job.Type.ShouldBe(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
+        job.Type.ShouldBe(nameof(ScraperWebPageScrapingDataUpdatedDomainEvent));
         job.InputData.ShouldBe(
             $$"""
-            {"requestId": null, "watchdogId": {{_watchdog.Id}}, "actingUserId": 23, "watchdogWebPageId": {{_watchdogWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
+            {"requestId": null, "scraperId": {{_scraper.Id}}, "actingUserId": 23, "scraperWebPageId": {{_scraperWebPageIdOne}}, "relatedCommandGuid": "{{_relatedCommandGuid}}"}
             """);
         job.Kind.ShouldBe(JobKind.DomainEvent);
         job.NumberOfHandlingAttempts.ShouldBe(1);
         job.RelatedCommandJob.ShouldBe(_commandJob);
         
-        var jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(Watchdog));
+        var jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(Scraper));
         jobAffectedEntity.ShouldNotBeNull();
-        jobAffectedEntity.EntityId.ShouldBe(_watchdog.Id);
+        jobAffectedEntity.EntityId.ShouldBe(_scraper.Id);
         
-        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(WatchdogWebPage) && !x.IsCreated);
+        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(ScraperWebPage) && !x.IsCreated);
         jobAffectedEntity.ShouldBeNull();
 
-        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(WatchdogWebPage) && x.IsCreated);
+        jobAffectedEntity = job.AffectedEntities.SingleOrDefault(x => x.EntityName == nameof(ScraperWebPage) && x.IsCreated);
         jobAffectedEntity.ShouldNotBeNull();
-        jobAffectedEntity.EntityId.ShouldBe(_watchdogWebPageIdTwo);
+        jobAffectedEntity.EntityId.ShouldBe(_scraperWebPageIdTwo);
 
         var jobHandlingAttempt = job.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));

@@ -3,21 +3,21 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
-    private long _watchdogId;
-    private long _watchdogWebPageId;
+    private long _scraperId;
+    private long _scraperWebPageId;
 
     public WebPageScrapingResultsModelBuilder WithBus(ICoreBus bus)
     {
@@ -31,15 +31,15 @@ public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
     
-    public WebPageScrapingResultsModelBuilder WithWatchdogId(long watchdogId)
+    public WebPageScrapingResultsModelBuilder WithScraperId(long scraperId)
     {
-        _watchdogId = watchdogId;
+        _scraperId = scraperId;
         return this;
     }       
     
-    public WebPageScrapingResultsModelBuilder WithWatchdogWebPageId(long watchdogWebPageId)
+    public WebPageScrapingResultsModelBuilder WithScraperWebPageId(long scraperWebPageId)
     {
-        _watchdogWebPageId = watchdogWebPageId;
+        _scraperWebPageId = scraperWebPageId;
         return this;
     } 
 
@@ -49,9 +49,9 @@ public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageScrapingResultsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageScrapingResultsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
 
         if (_authorizationService == null)
@@ -67,8 +67,8 @@ public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
             _authorizationService
         )
         {
-            WatchdogId = _watchdogId,
-            WatchdogWebPageId = _watchdogWebPageId
+            ScraperId = _scraperId,
+            ScraperWebPageId = _scraperWebPageId
         };
         ModelValidator.ValidateModel(model);
         return model;

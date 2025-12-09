@@ -1,15 +1,15 @@
 ﻿using System.Security.Claims;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 public class WebPageTurboFrameModelBuilder
 {
     private IAuthorizationService? _authorizationService;
-    private long _watchdogId;
-    private long _watchdogWebPageId;
+    private long _scraperId;
+    private long _scraperWebPageId;
 
     public WebPageTurboFrameModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
     {
@@ -17,15 +17,15 @@ public class WebPageTurboFrameModelBuilder
         return this;
     }
     
-    public WebPageTurboFrameModelBuilder WithWatchdogId(long watchdogId)
+    public WebPageTurboFrameModelBuilder WithScraperId(long scraper)
     {
-        _watchdogId = watchdogId;
+        _scraperId = scraper;
         return this;
     }       
     
-    public WebPageTurboFrameModelBuilder WithWatchdogWebPageId(long watchdogWebPageId)
+    public WebPageTurboFrameModelBuilder WithScraperWebPageId(long scraperWebPageId)
     {
-        _watchdogWebPageId = watchdogWebPageId;
+        _scraperWebPageId = scraperWebPageId;
         return this;
     } 
 
@@ -42,8 +42,8 @@ public class WebPageTurboFrameModelBuilder
             _authorizationService
         )
         {
-            WatchdogId = _watchdogId,
-            WatchdogWebPageId = _watchdogWebPageId
+            ScraperId = _scraperId,
+            ScraperWebPageId = _scraperWebPageId
         };
         ModelValidator.ValidateModel(model);
         return model;

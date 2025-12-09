@@ -1,12 +1,12 @@
-﻿@model (long WatchdogId, long WatchdogWebPageId)
+﻿@model (long ScraperId, long ScraperWebPageId)
 @{
     var webPageParameters = new {
-        watchdogId = Model.WatchdogId,
-        watchdogWebPageId = Model.WatchdogWebPageId
+        scraperId = Model.ScraperId,
+        scraperWebPageId = Model.ScraperWebPageId
     };
 }
-<turbo-frame id="watchdog_web_page_@Model.WatchdogWebPageId"
+<turbo-frame id="scraper_web_page_@Model.ScraperWebPageId"
              src="@(Url.Page("WebPage", webPageParameters) ?? Url.Page("WebPage/WebPage", webPageParameters))"
-             data-watchdogs--detail-target="webPageTurboFrame"
+             data-scrapers--detail-target="webPageTurboFrame"
              >
 </turbo-frame>

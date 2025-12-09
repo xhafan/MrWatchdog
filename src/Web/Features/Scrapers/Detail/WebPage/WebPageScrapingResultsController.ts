@@ -3,7 +3,7 @@ import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion"
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
 import { WebPageScrapingResultsStimulusModel } from "../../../Shared/Generated/WebPageScrapingResultsStimulusModel";
 
-export const watchdogWebPageScrapedEvent = "watchdogWebPageScraped";
+export const scraperWebPageScrapedEvent = "scraperWebPageScraped";
 
 export default class WebPageScrapingResultsController extends BaseStimulusModelController<WebPageScrapingResultsStimulusModel> {
     static targets = [
@@ -23,7 +23,7 @@ export default class WebPageScrapingResultsController extends BaseStimulusModelC
                 const turboFrame = this.element.closest("turbo-frame");
                 turboFrame?.reload();
 
-                this.element.dispatchEvent(new CustomEvent(watchdogWebPageScrapedEvent, { bubbles: true }));
+                this.element.dispatchEvent(new CustomEvent(scraperWebPageScrapedEvent, { bubbles: true }));
             }
         );
         if (this.hasScrapedOnInBrowserLocaleTarget) {

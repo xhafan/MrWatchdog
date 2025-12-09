@@ -1,7 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -15,7 +15,7 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionInc
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_existing_completed_job : BaseDatabaseTest
 {
-    private CreateWatchdogCommand _command = null!;
+    private CreateScraperCommand _command = null!;
     private Job _job = null!;
     private JobTrackingIncomingStep _jobTrackingIncomingStep = null!;
     private JobCompletionIncomingStep _jobCompletionIncomingStep = null!;
@@ -33,7 +33,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name") {Guid = Guid.NewGuid()};
+        _command = new CreateScraperCommand(UserId: 23, "scraper name") {Guid = Guid.NewGuid()};
         _BuildEntitiesInSeparateTransaction();
         _incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
@@ -82,7 +82,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
 
                 _job = new JobBuilder(newUnitOfWork)
                     .WithGuid(_command.Guid)
-                    .WithType(nameof(CreateWatchdogCommand))
+                    .WithType(nameof(CreateScraperCommand))
                     .WithInputData(_command)
                     .WithKind(JobKind.Command)
                     .Build();

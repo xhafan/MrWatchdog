@@ -1,10 +1,10 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public record GetUserWatchdogsQueryResult
+public record GetUserScrapersQueryResult
 {
-    public required long WatchdogId { get; init; }
-    public required string WatchdogName { get; init; } = null!;
+    public required long ScraperId { get; init; }
+    public required string ScraperName { get; init; } = null!;
     public required PublicStatus PublicStatus { get; init; }
 }

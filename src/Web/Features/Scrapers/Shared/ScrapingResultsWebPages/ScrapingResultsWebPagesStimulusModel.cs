@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Shared.ScrapingResultsWebPages;
+namespace MrWatchdog.Web.Features.Scrapers.Shared.ScrapingResultsWebPages;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
 public record ScrapingResultsWebPagesStimulusModel(

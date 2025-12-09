@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
@@ -10,14 +10,14 @@ public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const bool ReceiveNotification = true;
     public const string SearchTerm = "search term";
 
-    private Watchdog? _watchdog;
+    private Scraper? _scraper;
     private User? _user;
     private bool _receiveNotification = ReceiveNotification;
     private string? _searchTerm = SearchTerm;
 
-    public WatchdogSearchBuilder WithWatchdog(Watchdog watchdog)
+    public WatchdogSearchBuilder WithScraper(Scraper scraper)
     {
-        _watchdog = watchdog;
+        _scraper = scraper;
         return this;
     } 
     
@@ -41,10 +41,10 @@ public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
 
     public  WatchdogSearch Build()
     {
-        _watchdog ??= new WatchdogBuilder(unitOfWork).Build();
+        _scraper ??= new ScraperBuilder(unitOfWork).Build();
         _user ??= new UserBuilder(unitOfWork).Build();
 
-        var watchdogSearch = new WatchdogSearch(_watchdog, _user, _searchTerm);
+        var watchdogSearch = new WatchdogSearch(_scraper, _user, _searchTerm);
         watchdogSearch.UpdateOverview(new WatchdogSearchOverviewArgs
         {
             WatchdogSearchId = 0,

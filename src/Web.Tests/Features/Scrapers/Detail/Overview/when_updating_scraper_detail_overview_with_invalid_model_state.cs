@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
+using MrWatchdog.Web.Features.Scrapers.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Overview;
 
 [TestFixture]
-public class when_updating_watchdog_detail_overview_with_invalid_model_state : BaseDatabaseTest
+public class when_updating_scraper_detail_overview_with_invalid_model_state : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private OverviewModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -22,9 +22,9 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
         
         _model = new OverviewModelBuilder(UnitOfWork)
             .Build();
-        _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
+        _model.ScraperOverviewArgs = new ScraperOverviewArgs
         {
-            WatchdogId = _watchdog.Id,
+            ScraperId = _scraper.Id,
             Name = null!,
             Description = null,
             ScrapingIntervalInSeconds = 0,
@@ -49,13 +49,13 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
     {
         _model.ModelState.IsValid.ShouldBe(false);
         
-        var key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.Name)}";
+        var key = $"{nameof(ScraperOverviewArgs)}.{nameof(ScraperOverviewArgs.Name)}";
         _model.ModelState.ShouldContainKey(key);
         var nameErrors = _model.ModelState[key]?.Errors;
         nameErrors.ShouldNotBeNull();
         nameErrors.ShouldContain(x => x.ErrorMessage.Contains("required"));
         
-        key = $"{nameof(WatchdogOverviewArgs)}.{nameof(WatchdogOverviewArgs.ScrapingIntervalInSeconds)}";
+        key = $"{nameof(ScraperOverviewArgs)}.{nameof(ScraperOverviewArgs.ScrapingIntervalInSeconds)}";
         _model.ModelState.ShouldContainKey(key);
         var scrapingIntervalInSecondsErrors = _model.ModelState[key]?.Errors;
         scrapingIntervalInSecondsErrors.ShouldNotBeNull();
@@ -65,6 +65,6 @@ public class when_updating_watchdog_detail_overview_with_invalid_model_state : B
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

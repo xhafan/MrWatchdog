@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
 public class when_refreshing_watchdog_search_with_search_term_empty : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private WatchdogSearch _watchdogSearch = null!;
 
     [SetUp]
@@ -39,23 +39,23 @@ public class when_refreshing_watchdog_search_with_search_term_empty : BaseDataba
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Another World", "Doom 1"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["Another World", "Doom 1"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
 
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();
         
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Prince Of Persia"]);
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Prince Of Persia"]);
     }
 }

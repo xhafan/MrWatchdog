@@ -1,17 +1,17 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.RefreshingWatchdogSearch;
 
 [TestFixture]
 public class when_refreshing_watchdog_search_with_new_repeated_scraping_result_notified_about_long_time_ago : BaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private WatchdogSearch _watchdogSearch = null!;
 
     [SetUp]
@@ -30,8 +30,8 @@ public class when_refreshing_watchdog_search_with_new_repeated_scraping_result_n
 
     private async Task _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder()
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -39,15 +39,15 @@ public class when_refreshing_watchdog_search_with_new_repeated_scraping_result_n
             })
             .WithIntervalBetweenSameResultNotificationsInDays(30)
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
+        var scraperWebPage = _scraper.WebPages.Single();
 
         _watchdogSearch = new WatchdogSearchBuilder()
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();
         
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
         _watchdogSearch.Refresh();
         
         await _simulateNotifyingUserAboutTheSameScrapingResultLongTimeAgo();
@@ -59,10 +59,10 @@ public class when_refreshing_watchdog_search_with_new_repeated_scraping_result_n
             Clock.CurrentDateTimeProvider.Value = null;
         }
 
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, []);
+        _scraper.SetScrapingResults(scraperWebPage.Id, []);
         _watchdogSearch.Refresh();
 
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1"]);
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1"]);
         _watchdogSearch.Refresh();
     }
 }

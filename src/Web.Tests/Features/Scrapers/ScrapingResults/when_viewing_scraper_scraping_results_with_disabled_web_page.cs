@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results_with_disabled_web_page : BaseDatabaseTest
+public class when_viewing_scraper_scraping_results_with_disabled_web_page : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
 
@@ -24,7 +24,7 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -34,18 +34,18 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
     }
 
     [Test]
-    public void no_watchdog_web_page_is_available()
+    public void no_scraper_web_page_is_available()
     {
-        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
+        _model.ScraperScrapingResultsArgs.WebPages.ShouldBeEmpty();
     }
 
     private void _BuildEntities()
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -53,9 +53,9 @@ public class when_viewing_watchdog_scraping_results_with_disabled_web_page : Bas
             })
             .WithUser(_user)
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
-        _watchdog.MakePublic();
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.MakePublic();
 
         UnitOfWork.Flush();
     }    

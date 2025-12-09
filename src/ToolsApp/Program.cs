@@ -1,9 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
+﻿using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
+using System.Text.RegularExpressions;
 
 namespace MrWatchdog.ToolsApp;
 
@@ -22,6 +22,12 @@ public class Program
             Console.WriteLine(
                 "2 Convert private key to one line for JSON. Direct usage: MrWatchdog.ToolsApp convertPrivateKeyToOneLineForJson <input file> <output file>"
             );
+            
+            // git status --find-renames=10% | findstr /R /C:"renamed:" > renamed.txt
+            // git status --find-renames=10% | findstr /R /C:"new file:" /C:"deleted:" > added_deleted.txt
+            Console.WriteLine(
+                "3 Generate \"git mv\" script for renamed files from \"git status --find-renames=10%\" output. Direct usage: MrWatchdog.ToolsApp generateGitMoveScript <input file> <output file>"
+            );
 
             selectedOption = Console.ReadLine();
         }
@@ -32,6 +38,7 @@ public class Program
 
         if (selectedOption == "1" || selectedOption == "generateDatabaseSchema") _generateDatabaseSchemaSqlFile();
         if (selectedOption == "2" || selectedOption == "convertPrivateKeyToOneLineForJson") _convertPrivateKeyToOneLine();
+        if (selectedOption == "3" || selectedOption == "generateGitMoveScript") _generateGitMoveScript();
 
         return;
 
@@ -83,6 +90,68 @@ public class Program
             var oneLinePrivateKey = Regex.Replace(privateKeyContent, @"\r\n|\n|\r", "");
             File.WriteAllText(outputFileName, oneLinePrivateKey);
             Console.WriteLine($"Private key has been converted to one line and saved to {outputFileName}");
+        }
+
+        void _generateGitMoveScript()
+        {
+            string? inputFileName;
+            string? outputFileName;
+
+            if (args.Length != 3)
+            {
+                Console.Write("Enter input file name: ");
+                inputFileName = Console.ReadLine();
+                Console.Write("Enter ouput file name: ");
+                outputFileName = Console.ReadLine();
+            }
+            else
+            {
+                inputFileName = args[1];
+                outputFileName = args[2];
+            }
+
+            Guard.Hope(!string.IsNullOrWhiteSpace(inputFileName), $"Invalid input file name: {inputFileName}");
+            Guard.Hope(!string.IsNullOrWhiteSpace(outputFileName), $"Invalid input file name: {outputFileName}");
+
+            var outputLines = new List<string>();
+            var renameLines = File.ReadAllLines(inputFileName);
+            foreach (var renameLine in renameLines)
+            {
+                var match = Regex.Match(renameLine, @"renamed:\s+(.*?)\s+->\s+(.*)");
+
+                if (match.Success)
+                {
+                    var oldPath = match.Groups[1].Value;
+                    var newPath = match.Groups[2].Value;
+
+                    var targetDir = Path.GetDirectoryName(newPath);
+                    if (targetDir == null) throw new Exception($"Error getting directory from {newPath}");
+                    var windowsDir = targetDir.Replace('/', '\\');
+                    var mkdirCommand = $"if not exist \"{windowsDir}\" mkdir \"{windowsDir}\"";
+                    outputLines.Add(mkdirCommand);
+
+                    var gitCommand = $"git mv \"{oldPath}\" \"{newPath}\"";
+                    outputLines.Add(gitCommand);
+
+                    // Replace "watchdog" with "scraper" in old path (case-insensitive)
+                    var transformedPath = Regex.Replace(oldPath, "watchdog", "scraper", RegexOptions.IgnoreCase);
+
+                    if (!string.Equals(transformedPath, newPath, StringComparison.InvariantCultureIgnoreCase)
+                        && !oldPath.Contains("WatchdogSearch", StringComparison.InvariantCultureIgnoreCase)
+                        && !oldPath.Contains("watchdog_search", StringComparison.InvariantCultureIgnoreCase)
+                        && !oldPath.Contains("watchdogs_search", StringComparison.InvariantCultureIgnoreCase)
+                        )
+                    {
+                        Console.WriteLine(gitCommand);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Line format not recognized.");
+                }
+            }
+
+            File.WriteAllLines(outputFileName, outputLines);
         }
     }
 }

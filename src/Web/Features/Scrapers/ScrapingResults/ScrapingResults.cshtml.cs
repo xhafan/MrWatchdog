@@ -1,16 +1,16 @@
+using System.ComponentModel.DataAnnotations;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
 [AllowAnonymous]
 public class ScrapingResultsModel(
@@ -19,25 +19,25 @@ public class ScrapingResultsModel(
     IAuthorizationService authorizationService
 ) : BaseAuthorizationPageModel(authorizationService)
 {
-    public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;
+    public ScraperScrapingResultsArgs ScraperScrapingResultsArgs { get; private set; } = null!;
     
     [BindProperty(SupportsGet = true)]
     [StringLength(ValidationConstants.SearchTermMaxLength)]
     public string? SearchTerm { get; set; }
     
-    public async Task<IActionResult> OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long scraperId)
     {
-        WatchdogScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogScrapingResultsArgsQuery, WatchdogScrapingResultsArgs>(
-                new GetWatchdogScrapingResultsArgsQuery(watchdogId)
+        ScraperScrapingResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
+                new GetScraperScrapingResultsArgsQuery(scraperId)
             );
 
-        if (WatchdogScrapingResultsArgs.PublicStatus == PublicStatus.Public)
+        if (ScraperScrapingResultsArgs.PublicStatus == PublicStatus.Public)
         {
             return Page();
         }
 
-        if (!User.IsAuthenticated() || !await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId))
+        if (!User.IsAuthenticated() || !await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId))
         {
             return Forbid();
         }
@@ -45,13 +45,13 @@ public class ScrapingResultsModel(
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreateWatchdogSearch(long watchdogId)
+    public async Task<IActionResult> OnPostCreateWatchdogSearch(long scraperId)
     {
         if (!User.IsAuthenticated()) return Unauthorized();
 
-        WatchdogScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogScrapingResultsArgsQuery, WatchdogScrapingResultsArgs>(
-                new GetWatchdogScrapingResultsArgsQuery(watchdogId)
+        ScraperScrapingResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
+                new GetScraperScrapingResultsArgsQuery(scraperId)
             );
 
         if (!ModelState.IsValid)
@@ -59,13 +59,13 @@ public class ScrapingResultsModel(
             return PageWithUnprocessableEntityStatus422();
         }
 
-        if (WatchdogScrapingResultsArgs.PublicStatus != PublicStatus.Public 
-            && !await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId))
+        if (ScraperScrapingResultsArgs.PublicStatus != PublicStatus.Public 
+            && !await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId))
         {
             return Forbid();
         }
 
-        var command = new CreateWatchdogSearchCommand(watchdogId, SearchTerm?.Trim());
+        var command = new CreateWatchdogSearchCommand(scraperId, SearchTerm?.Trim());
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

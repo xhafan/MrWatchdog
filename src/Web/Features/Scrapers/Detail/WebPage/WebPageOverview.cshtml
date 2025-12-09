@@ -5,92 +5,92 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_overview_@(Model.WatchdogWebPageArgs.WatchdogWebPageId)">
-    <div @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPageOverview, new WebPageOverviewStimulusModel(Model.IsEmptyWebPage))>
+<!turbo-frame id="scraper_web_page_overview_@(Model.ScraperWebPageArgs.ScraperWebPageId)">
+    <div @Stimulus.Controller(StimulusControllers.ScrapersDetailWebPageOverview, new WebPageOverviewStimulusModel(Model.IsEmptyWebPage))>
         <view-or-edit-form action="@Url.Page("WebPageOverview")"
                            start-in-edit-mode="Model.IsEmptyWebPage"
                            hide-cancel-in-edit-mode="Model.IsEmptyWebPage"
                            >
             <view-mode-item>
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                    <div><a href="@Model.WatchdogWebPageArgs.Url" target="_blank">@Model.WatchdogWebPageArgs.Url</a></div>
+                    <label asp-for="ScraperWebPageArgs.Url" class="form-label fw-bold"></label>
+                    <div><a href="@Model.ScraperWebPageArgs.Url" target="_blank">@Model.ScraperWebPageArgs.Url</a></div>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                    <div>@Model.WatchdogWebPageArgs.Selector</div>
+                    <label asp-for="ScraperWebPageArgs.Selector" class="form-label fw-bold"></label>
+                    <div>@Model.ScraperWebPageArgs.Selector</div>
                 </div>
                 <div class="mb-3">
-                    <input type="checkbox" checked="@Model.WatchdogWebPageArgs.SelectText" disabled/>
-                    <label asp-for="WatchdogWebPageArgs.SelectText" class="form-check-label fw-bold"></label>
+                    <input type="checkbox" checked="@Model.ScraperWebPageArgs.SelectText" disabled/>
+                    <label asp-for="ScraperWebPageArgs.SelectText" class="form-check-label fw-bold"></label>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
-                    <div>@Model.WatchdogWebPageArgs.Name</div>
+                    <label asp-for="ScraperWebPageArgs.Name" class="form-label fw-bold"></label>
+                    <div>@Model.ScraperWebPageArgs.Name</div>
                 </div>
             </view-mode-item>
             <edit-mode-item>
-                <input asp-for="WatchdogWebPageArgs.WatchdogId" type="hidden" />
-                <input asp-for="WatchdogWebPageArgs.WatchdogWebPageId" type="hidden" />
+                <input asp-for="ScraperWebPageArgs.ScraperId" type="hidden" />
+                <input asp-for="ScraperWebPageArgs.ScraperWebPageId" type="hidden" />
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Url" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Url"
+                    <label asp-for="ScraperWebPageArgs.Url" class="form-label fw-bold"></label>
+                    <input asp-for="ScraperWebPageArgs.Url"
                            class="form-control"
-                           data-watchdogs--detail-web-page-overview-target="url"
-                           data-action="input->@StimulusControllers.WatchdogsDetailWebPageOverview#onUrlModified" 
+                           data-scrapers--detail-web-page-overview-target="url"
+                           data-action="input->@StimulusControllers.ScrapersDetailWebPageOverview#onUrlModified" 
                            />
-                    <span asp-validation-for="WatchdogWebPageArgs.Url" class="text-danger"></span>
-                    <input type="hidden" data-watchdogs--detail-web-page-overview-target="previousUrl" value="@Model.WatchdogWebPageArgs.Url" />
+                    <span asp-validation-for="ScraperWebPageArgs.Url" class="text-danger"></span>
+                    <input type="hidden" data-scrapers--detail-web-page-overview-target="previousUrl" value="@Model.ScraperWebPageArgs.Url" />
                 </div>
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Selector" class="form-label fw-bold"></label>
-                    <textarea asp-for="WatchdogWebPageArgs.Selector" 
+                    <label asp-for="ScraperWebPageArgs.Selector" class="form-label fw-bold"></label>
+                    <textarea asp-for="ScraperWebPageArgs.Selector" 
                               class="form-control"
                               style="width:100%" 
                               rows="2"
                               >
                     </textarea>
-                    <span asp-validation-for="WatchdogWebPageArgs.Selector" class="text-danger"></span>
+                    <span asp-validation-for="ScraperWebPageArgs.Selector" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <input asp-for="WatchdogWebPageArgs.SelectText"
-                           id="WatchdogWebPageArgs_SelectText_@Model.WatchdogWebPageArgs.WatchdogWebPageId"
+                    <input asp-for="ScraperWebPageArgs.SelectText"
+                           id="ScraperWebPageArgs_SelectText_@Model.ScraperWebPageArgs.ScraperWebPageId"
                            type="checkbox" 
-                           checked="@Model.WatchdogWebPageArgs.SelectText" 
+                           checked="@Model.ScraperWebPageArgs.SelectText" 
                            />
-                    <label asp-for="WatchdogWebPageArgs.SelectText" 
-                           for="WatchdogWebPageArgs_SelectText_@Model.WatchdogWebPageArgs.WatchdogWebPageId" 
+                    <label asp-for="ScraperWebPageArgs.SelectText" 
+                           for="ScraperWebPageArgs_SelectText_@Model.ScraperWebPageArgs.ScraperWebPageId" 
                            class="form-check-label fw-bold">
                     </label>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="WatchdogWebPageArgs.Name" class="form-label fw-bold"></label>
-                    <input asp-for="WatchdogWebPageArgs.Name" 
+                    <label asp-for="ScraperWebPageArgs.Name" class="form-label fw-bold"></label>
+                    <input asp-for="ScraperWebPageArgs.Name" 
                            class="form-control" 
-                           data-watchdogs--detail-web-page-overview-target="name" 
-                           data-action="input->@StimulusControllers.WatchdogsDetailWebPageOverview#onNameModified"
+                           data-scrapers--detail-web-page-overview-target="name" 
+                           data-action="input->@StimulusControllers.ScrapersDetailWebPageOverview#onNameModified"
                            />
-                    <span asp-validation-for="WatchdogWebPageArgs.Name" class="text-danger"></span>
+                    <span asp-validation-for="ScraperWebPageArgs.Name" class="text-danger"></span>
                 </div>
             </edit-mode-item>
 
             @{
-                var advancedCollapsibleSectionId = $"watchdogWebPageOverviewAdvanced_{Model.WatchdogWebPageArgs.WatchdogWebPageId}";
+                var advancedCollapsibleSectionId = $"scraperWebPageOverviewAdvanced_{Model.ScraperWebPageArgs.ScraperWebPageId}";
             }
             <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">@Resource.Advanced</a>
             <div class="collapse" id="@advancedCollapsibleSectionId">
                 <view-mode-item>
                     <div class="mb-3">
-                        <label asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
-                        <textarea asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-control" disabled rows="4"></textarea>
+                        <label asp-for="ScraperWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
+                        <textarea asp-for="ScraperWebPageArgs.HttpHeaders" class="form-control" disabled rows="4"></textarea>
                     </div>
                 </view-mode-item>
                 
                 <edit-mode-item>
                     <div class="mb-3">
-                        <label asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
-                        <textarea asp-for="WatchdogWebPageArgs.HttpHeaders" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="WatchdogWebPageArgs.HttpHeaders" class="text-danger"></span>
+                        <label asp-for="ScraperWebPageArgs.HttpHeaders" class="form-label fw-bold"></label>
+                        <textarea asp-for="ScraperWebPageArgs.HttpHeaders" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="ScraperWebPageArgs.HttpHeaders" class="text-danger"></span>
                     </div>
                 </edit-mode-item>
             </div>

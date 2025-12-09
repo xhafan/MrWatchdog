@@ -1,6 +1,6 @@
-﻿@page "{watchdogId}"
+﻿@page "{scraperId}"
 @using MrWatchdog.Core.Features.Account.Domain
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
@@ -8,7 +8,7 @@
 @model DetailModel
 
 @{
-    var title = Model.WatchdogDetailArgs.Name;
+    var title = Model.ScraperDetailArgs.Name;
     ViewData["Title"] = title;
 }
 
@@ -19,32 +19,32 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Manage/Manage">@Resource.ManageWebScrapers</a>
+                <a asp-page="/Scrapers/Manage/Manage">@Resource.ManageScrapers</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">@title</li>
         </ol>
     </nav>
     <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
-                identifier="@OnboardingIdentifiers.WatchdogsDetail"
+                identifier="@OnboardingIdentifiers.ScraperDetail"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperDetailOnboardingIntro
+                               Text: Resource.ScraperDetailOnboardingIntro
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperDetailOnboardingAddWebPage,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId}"
+                               Text: Resource.ScraperDetailOnboardingAddWebPage,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersDetailAddWebPageToWatchId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperDetailOnboardingScrapingInterval,
-                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsDetailScrapingIntervalCssClass}"
+                               Text: Resource.ScraperDetailOnboardingScrapingInterval,
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.ScrapersDetailScrapingIntervalCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperDetailOnboardingViewScrapedResults,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailViewScrapedResultsId}"
+                               Text: Resource.ScraperDetailOnboardingViewScrapedResults,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersDetailViewScrapedResultsId}"
                            ),
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperDetailOnboardingRequestToMakePublic,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WatchdogsDetailRequestToMakePublicId}"
+                               Text: Resource.ScraperDetailOnboardingRequestToMakePublic,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersDetailRequestToMakePublicId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.OnboardingViewAgainStep,
@@ -55,25 +55,25 @@
 }
 
 <div @Stimulus.Controller(
-         StimulusControllers.WatchdogsDetail,
+         StimulusControllers.ScrapersDetail,
          new DetailStimulusModel(
-             Model.WatchdogDetailArgs.WatchdogId,
-             Resource.DeleteWebScraperConfirmationMessage
+             Model.ScraperDetailArgs.ScraperId,
+             Resource.DeleteScraperConfirmationMessage
          )
      )>
 
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4 text-wrap text-break">@title</h1>
-        <turbo-frame id="watchdog_detail_badges_@(Model.WatchdogDetailArgs.WatchdogId)"
-                     src="@WatchdogUrlConstants.WatchdogDetailBadgesUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)"
-                     reload-on-event="@StimulusControllers.WatchdogsDetailActions:@DomEvents.WatchdogPublicStatusUpdated">
+        <turbo-frame id="scraper_detail_badges_@(Model.ScraperDetailArgs.ScraperId)"
+                     src="@ScraperUrlConstants.ScraperDetailBadgesUrlTemplate.WithScraperId(Model.ScraperDetailArgs.ScraperId)"
+                     reload-on-event="@StimulusControllers.ScrapersDetailActions:@DomEvents.ScraperPublicStatusUpdated">
         </turbo-frame>
     </div>
 
     <div class="d-flex justify-content-between align-items-center">
-        <turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailArgs.WatchdogId)"
-                     src="@WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)"
-                     reload-on-event="@StimulusControllers.WatchdogsDetailActions:@DomEvents.WatchdogPublicStatusUpdated">
+        <turbo-frame id="scraper_detail_actions_@(Model.ScraperDetailArgs.ScraperId)"
+                     src="@ScraperUrlConstants.ScraperDetailActionsUrlTemplate.WithScraperId(Model.ScraperDetailArgs.ScraperId)"
+                     reload-on-event="@StimulusControllers.ScrapersDetailActions:@DomEvents.ScraperPublicStatusUpdated">
         </turbo-frame>
         <div>
             <div class="dropdown">
@@ -86,15 +86,15 @@
                  </button>
                  <ul class="dropdown-menu dropdown-menu-end">
                      <li>
-                         <form asp-page-handler="ArchiveWatchdog"
-                               asp-route-watchdogId="@Model.WatchdogDetailArgs.WatchdogId"
+                         <form asp-page-handler="ArchiveScraper"
+                               asp-route-scraperId="@Model.ScraperDetailArgs.ScraperId"
                                method="post"
-                               data-watchdogs--detail-target="archiveWatchdogForm"
+                               data-scrapers--detail-target="archiveScraperForm"
                                >
                              <button class="dropdown-item text-danger" 
                                      type="submit"
                                      >
-                                 @Resource.DeleteWebScraper
+                                 @Resource.DeleteScraper
                              </button>
                          </form>
                      </li>
@@ -105,49 +105,49 @@
 
     <div class="row my-3">
         <div class="col-md-6">
-            <turbo-frame id="watchdog_detail_overview_@(Model.WatchdogDetailArgs.WatchdogId)"
-                         src="@WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)">
+            <turbo-frame id="scraper_detail_overview_@(Model.ScraperDetailArgs.ScraperId)"
+                         src="@ScraperUrlConstants.ScraperDetailOverviewUrlTemplate.WithScraperId(Model.ScraperDetailArgs.ScraperId)">
             </turbo-frame>
         </div>
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
-                    @if (User.GetUserId() != Model.WatchdogDetailArgs.UserId)
+                    @if (User.GetUserId() != Model.ScraperDetailArgs.UserId)
                     {
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label asp-for="WatchdogDetailArgs.UserEmail" class="form-label fw-bold">@Resource.Author</label>
-                                    <div>@Model.WatchdogDetailArgs.UserEmail</div>
+                                    <label asp-for="ScraperDetailArgs.UserEmail" class="form-label fw-bold">@Resource.Author</label>
+                                    <div>@Model.ScraperDetailArgs.UserEmail</div>
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
                 <div class="col-md-12">
-                    <turbo-frame id="watchdog_detail_statistics_@(Model.WatchdogDetailArgs.WatchdogId)"
-                                 src="@WatchdogUrlConstants.WatchdogDetailStatisticsUrlTemplate.WithWatchdogId(Model.WatchdogDetailArgs.WatchdogId)"
-                                 reload-on-event="@StimulusControllers.WatchdogsDetailActions:@DomEvents.WatchdogPublicStatusUpdated">
+                    <turbo-frame id="scraper_detail_statistics_@(Model.ScraperDetailArgs.ScraperId)"
+                                 src="@ScraperUrlConstants.ScraperDetailStatisticsUrlTemplate.WithScraperId(Model.ScraperDetailArgs.ScraperId)"
+                                 reload-on-event="@StimulusControllers.ScrapersDetailActions:@DomEvents.ScraperPublicStatusUpdated">
                     </turbo-frame>
                 </div>
             </div>
         </div>
     </div>
     <h2>@Resource.WatchedWebPages</h2>
-    <div data-watchdogs--detail-target="webPages">
-        @foreach (var watchdogWebPageId in Model.WatchdogDetailArgs.WebPageIds)
+    <div data-scrapers--detail-target="webPages">
+        @foreach (var scraperWebPageId in Model.ScraperDetailArgs.WebPageIds)
         {
             <partial name="WebPage/WebPageTurboFramePartial"
-                     model="(Model.WatchdogDetailArgs.WatchdogId, watchdogWebPageId)"
+                     model="(Model.ScraperDetailArgs.ScraperId, scraperWebPageId)"
             />
         }
     </div>
-    <form asp-page-handler="CreateWatchdogWebPage"
-          asp-route-watchdogId="@Model.WatchdogDetailArgs.WatchdogId"
-          data-watchdogs--detail-target="addWebPageForm">
+    <form asp-page-handler="CreateScraperWebPage"
+          asp-route-scraperId="@Model.ScraperDetailArgs.ScraperId"
+          data-scrapers--detail-target="addWebPageForm">
         <button type="submit" 
                 class="btn btn-primary"
-                id="@OnboardingElementIdentifiers.WatchdogsDetailAddWebPageToWatchId">
+                id="@OnboardingElementIdentifiers.ScrapersDetailAddWebPageToWatchId">
             @Resource.AddWebPageToScrape
         </button>
     </form>

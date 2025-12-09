@@ -1,17 +1,17 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_archiving_watchdog : BaseDatabaseTest
+public class when_archiving_scraper : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -20,30 +20,30 @@ public class when_archiving_watchdog : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new ArchiveWatchdogCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new ArchiveScraperCommandMessageHandler(new NhibernateRepository<Scraper>(UnitOfWork));
 
-        await handler.Handle(new ArchiveWatchdogCommand(_watchdog.Id));
+        await handler.Handle(new ArchiveScraperCommand(_scraper.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_is_archived()
+    public void scraper_is_archived()
     {
-        _watchdog.IsArchived.ShouldBe(true);
+        _scraper.IsArchived.ShouldBe(true);
     }
 
     [Test]
-    public void watchdog_archived_domain_event_is_raised()
+    public void scraper_archived_domain_event_is_raised()
     {
-        RaisedDomainEvents.ShouldContain(new WatchdogArchivedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldContain(new ScraperArchivedDomainEvent(_scraper.Id));
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }
 }

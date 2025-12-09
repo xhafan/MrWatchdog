@@ -3,22 +3,22 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 public class WebPageDisabledWarningModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
 
-    private long _watchdogId;
-    private long _watchdogWebPageId;
+    private long _scraperId;
+    private long _scraperWebPageId;
 
     public WebPageDisabledWarningModelBuilder WithBus(ICoreBus bus)
     {
@@ -32,15 +32,15 @@ public class WebPageDisabledWarningModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
     
-    public WebPageDisabledWarningModelBuilder WithWatchdogId(long watchdogId)
+    public WebPageDisabledWarningModelBuilder WithScraperId(long scraper)
     {
-        _watchdogId = watchdogId;
+        _scraperId = scraper;
         return this;
     }       
     
-    public WebPageDisabledWarningModelBuilder WithWatchdogWebPageId(long watchdogWebPageId)
+    public WebPageDisabledWarningModelBuilder WithScraperWebPageId(long scraperWebPageId)
     {
-        _watchdogWebPageId = watchdogWebPageId;
+        _scraperWebPageId = scraperWebPageId;
         return this;
     }  
     
@@ -50,9 +50,9 @@ public class WebPageDisabledWarningModelBuilder(NhibernateUnitOfWork unitOfWork)
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageDisabledWarningQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageDisabledWarningQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
         
         if (_authorizationService == null)
@@ -68,8 +68,8 @@ public class WebPageDisabledWarningModelBuilder(NhibernateUnitOfWork unitOfWork)
             _authorizationService
         )
         {
-            WatchdogId = _watchdogId,
-            WatchdogWebPageId = _watchdogWebPageId
+            ScraperId = _scraperId,
+            ScraperWebPageId = _scraperWebPageId
         };
         ModelValidator.ValidateModel(model);
         return model;

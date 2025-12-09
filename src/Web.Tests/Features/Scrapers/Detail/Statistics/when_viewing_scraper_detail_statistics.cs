@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Statistics;
+using MrWatchdog.Web.Features.Scrapers.Detail.Statistics;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Statistics;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Statistics;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_statistics : BaseDatabaseTest
+public class when_viewing_scraper_detail_statistics : BaseDatabaseTest
 {
     private StatisticsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -22,7 +22,7 @@ public class when_viewing_watchdog_detail_statistics : BaseDatabaseTest
         _model = new StatisticsModelBuilder(UnitOfWork)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -34,34 +34,34 @@ public class when_viewing_watchdog_detail_statistics : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.ScraperId.ShouldBe(_scraper.Id);
 
-        _model.PublicWatchdogStatistics.CalculatedEarningsForThisMonth.ShouldBe(0);
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification.ShouldBe(2);
-        _model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification.ShouldBe(1);
+        _model.PublicScraperStatistics.CalculatedEarningsForThisMonth.ShouldBe(0);
+        _model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithNotification.ShouldBe(2);
+        _model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithoutNotification.ShouldBe(1);
 
-        _model.WatchdogPublicStatus.ShouldBe(PublicStatus.Public);
+        _model.ScraperPublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
     {
-        var watchdogOwner = new UserBuilder(UnitOfWork).Build();
+        var scraperOwner = new UserBuilder(UnitOfWork).Build();
 
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithUser(watchdogOwner)
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithUser(scraperOwner)
             .Build();
-        _watchdog.MakePublic();
+        _scraper.MakePublic();
 
         // ReSharper disable UnusedVariable
         var ownersWatchdogSearchWithNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
-            .WithUser(watchdogOwner)
+            .WithScraper(_scraper)
+            .WithUser(scraperOwner)
             .WithReceiveNotification(true)
             .Build();
 
         var ownersWatchdogSearchWithoutNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
-            .WithUser(watchdogOwner)
+            .WithScraper(_scraper)
+            .WithUser(scraperOwner)
             .WithReceiveNotification(false)
             .Build();
 
@@ -69,36 +69,36 @@ public class when_viewing_watchdog_detail_statistics : BaseDatabaseTest
         var userTwo = new UserBuilder(UnitOfWork).Build();
 
         var watchdogSearchOneWithNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(userOne)
             .WithReceiveNotification(true)
             .Build();
 
         var watchdogSearchTwoWithNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(userOne)
             .WithReceiveNotification(true)
             .Build();
 
         var watchdogSearchThreeWithoutNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(userTwo)
             .WithReceiveNotification(true)
             .Build();
 
         var watchdogSearchFourWithoutNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(userTwo)
             .WithReceiveNotification(false)
             .Build();
 
         var watchdogSearchFiveWithoutNotification = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(userTwo)
             .WithReceiveNotification(false)
             .Build();
 
-        var watchdogSearchForAnotherWatchdog = new WatchdogSearchBuilder(UnitOfWork)
+        var watchdogSearchForAnotherScraper = new WatchdogSearchBuilder(UnitOfWork)
             .Build();
         // ReSharper restore UnusedVariable
     }    

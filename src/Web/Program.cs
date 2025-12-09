@@ -167,10 +167,10 @@ public class Program
             );
         }
 
-        builder.Services.Configure<KickOffDueWatchdogsScrapingHostedServiceOptions>(
-            builder.Configuration.GetSection(nameof(KickOffDueWatchdogsScrapingHostedService))
+        builder.Services.Configure<KickOffDueScrapersScrapingHostedServiceOptions>(
+            builder.Configuration.GetSection(nameof(KickOffDueScrapersScrapingHostedService))
         );
-        builder.Services.AddHostedService<KickOffDueWatchdogsScrapingHostedService>();
+        builder.Services.AddHostedService<KickOffDueScrapersScrapingHostedService>();
 
         builder.Services.AddSwaggerGen(options =>
         {

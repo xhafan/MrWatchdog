@@ -1,28 +1,28 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Manage.UserWatchdogs;
+using MrWatchdog.Web.Features.Scrapers.Manage.UserScrapers;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Manage.UserWatchdogs;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Manage.UserScrapers;
 
 [TestFixture]
-public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
+public class when_viewing_manage_user_scrapers : BaseDatabaseTest
 {
-    private Watchdog _watchdogForUserOne = null!;
-    private UserWatchdogsModel _model = null!;
+    private Scraper _scraperForUserOne = null!;
+    private UserScrapersModel _model = null!;
     private User _userOne = null!;
     private User _userTwo = null!;
-    private Watchdog _watchdogForUserTwo = null!;
-    private Watchdog _archivedWatchdogForUserOne = null!;
+    private Scraper _scraperForUserTwo = null!;
+    private Scraper _archivedScraperForUserOne = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
-        _model = new UserWatchdogsModelBuilder(UnitOfWork)
+        _model = new UserScrapersModelBuilder(UnitOfWork)
             .WithActingUser(_userOne)
             .Build();
         
@@ -32,16 +32,16 @@ public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.UserWatchdogs.ShouldContain(
-            new GetUserWatchdogsQueryResult
+        _model.UserScrapers.ShouldContain(
+            new GetUserScrapersQueryResult
             {
-                WatchdogId = _watchdogForUserOne.Id, 
-                WatchdogName = "watchdog user one",
+                ScraperId = _scraperForUserOne.Id, 
+                ScraperName = "scraper user one",
                 PublicStatus = PublicStatus.Public
             }
         );
-        _model.UserWatchdogs.Any(x => x.WatchdogId == _watchdogForUserTwo.Id).ShouldBe(false);
-        _model.UserWatchdogs.Any(x => x.WatchdogId == _archivedWatchdogForUserOne.Id).ShouldBe(false);
+        _model.UserScrapers.Any(x => x.ScraperId == _scraperForUserTwo.Id).ShouldBe(false);
+        _model.UserScrapers.Any(x => x.ScraperId == _archivedScraperForUserOne.Id).ShouldBe(false);
     }    
     
     private void _BuildEntities()
@@ -49,20 +49,20 @@ public class when_viewing_manage_user_watchdogs : BaseDatabaseTest
         _userOne = new UserBuilder(UnitOfWork).Build();
         _userTwo = new UserBuilder(UnitOfWork).Build();
 
-        _watchdogForUserOne = new WatchdogBuilder(UnitOfWork)
+        _scraperForUserOne = new ScraperBuilder(UnitOfWork)
             .WithUser(_userOne)
-            .WithName("watchdog user one")
+            .WithName("scraper user one")
             .Build();
-        _watchdogForUserOne.MakePublic();
+        _scraperForUserOne.MakePublic();
 
-        _archivedWatchdogForUserOne = new WatchdogBuilder(UnitOfWork)
+        _archivedScraperForUserOne = new ScraperBuilder(UnitOfWork)
             .WithUser(_userOne)
             .Build();
-        _archivedWatchdogForUserOne.Archive();
+        _archivedScraperForUserOne.Archive();
 
-        _watchdogForUserTwo = new WatchdogBuilder(UnitOfWork)
+        _scraperForUserTwo = new ScraperBuilder(UnitOfWork)
             .WithUser(_userTwo)
-            .WithName("watchdog user two")
+            .WithName("scraper user two")
             .Build();
         
         UnitOfWork.Flush();

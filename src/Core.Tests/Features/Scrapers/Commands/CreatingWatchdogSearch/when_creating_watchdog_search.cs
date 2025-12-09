@@ -1,16 +1,16 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.CreatingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.CreatingWatchdogSearch;
 
 [TestFixture]
 public class when_creating_watchdog_search : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private WatchdogSearch? _watchdogSearch;
     private User _user = null!;
 
@@ -20,19 +20,19 @@ public class when_creating_watchdog_search : BaseDatabaseTest
         _BuildEntities();
         
         var handler = new CreateWatchdogSearchCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+            new NhibernateRepository<Scraper>(UnitOfWork),
             new NhibernateRepository<WatchdogSearch>(UnitOfWork),
             new UserRepository(UnitOfWork),
             UnitOfWork
         );
 
-        await handler.Handle(new CreateWatchdogSearchCommand(_watchdog.Id, SearchTerm: "text") { ActingUserId = _user.Id});
+        await handler.Handle(new CreateWatchdogSearchCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _user.Id});
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
         _watchdogSearch = UnitOfWork.Session!.Query<WatchdogSearch>()
-            .SingleOrDefault(x => x.Watchdog == _watchdog);
+            .SingleOrDefault(x => x.Scraper == _scraper);
     }
 
     [Test]
@@ -49,16 +49,16 @@ public class when_creating_watchdog_search : BaseDatabaseTest
     {
         _user = new UserBuilder(UnitOfWork).Build();
 
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
     }
 }

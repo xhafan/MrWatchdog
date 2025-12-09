@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -20,7 +20,7 @@ public class when_getting_job : BaseDatabaseTest
         _job = new JobBuilder(UnitOfWork).Build();
         _job.HandlingStarted(RebusQueues.Main);
         _job.Complete();
-        _job.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
+        _job.AddAffectedEntity(nameof(Scraper), 23, isCreated: true);
         
         var controller = new JobsControllerBuilder(UnitOfWork)
             .Build();
@@ -47,7 +47,7 @@ public class when_getting_job : BaseDatabaseTest
         jobDto.RequestId.ShouldBe(JobBuilder.RequestId);
         
         var jobAffectedEntityDto = jobDto.AffectedEntities.ShouldHaveSingleItem();
-        jobAffectedEntityDto.EntityName.ShouldBe(nameof(Watchdog));
+        jobAffectedEntityDto.EntityName.ShouldBe(nameof(Scraper));
         jobAffectedEntityDto.EntityId.ShouldBe(23);
         jobAffectedEntityDto.IsCreated.ShouldBe(true);
         

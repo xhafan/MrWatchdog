@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Features.Scrapers.Search;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
 public record SearchStimulusModel(

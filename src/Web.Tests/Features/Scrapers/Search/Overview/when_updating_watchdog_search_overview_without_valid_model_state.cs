@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Search.Overview;
+using MrWatchdog.Web.Features.Scrapers.Search.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
 
 [TestFixture]
 public class when_updating_watchdog_search_overview_without_valid_model_state : BaseDatabaseTest

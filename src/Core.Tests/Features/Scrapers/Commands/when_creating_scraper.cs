@@ -1,17 +1,17 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_creating_watchdog : BaseDatabaseTest
+public class when_creating_scraper : BaseDatabaseTest
 {
-    private readonly string _watchdogName = $"watchdog name {Guid.NewGuid()}";
-    private Watchdog? _newWatchdog;
+    private readonly string _scraperName = $"scraper name {Guid.NewGuid()}";
+    private Scraper? _newScraper;
     private User _user = null!;
 
     [SetUp]
@@ -19,25 +19,25 @@ public class when_creating_watchdog : BaseDatabaseTest
     {
         _user = new UserBuilder(UnitOfWork).Build();
 
-        var handler = new CreateWatchdogCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new CreateScraperCommandMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             new UserRepository(UnitOfWork)
         );
 
-        await handler.Handle(new CreateWatchdogCommand(_user.Id, _watchdogName));
+        await handler.Handle(new CreateScraperCommand(_user.Id, _scraperName));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _newWatchdog = UnitOfWork.Session!.Query<Watchdog>()
-            .SingleOrDefault(x => x.Name == _watchdogName);
+        _newScraper = UnitOfWork.Session!.Query<Scraper>()
+            .SingleOrDefault(x => x.Name == _scraperName);
     }
 
     [Test]
-    public void new_watchdog_is_created()
+    public void new_scraper_is_created()
     {
-        _newWatchdog.ShouldNotBeNull();
-        _newWatchdog.User.ShouldBe(_user);
-        _newWatchdog.ScrapingIntervalInSeconds.ShouldBe(86400);
+        _newScraper.ShouldNotBeNull();
+        _newScraper.User.ShouldBe(_user);
+        _newScraper.ScrapingIntervalInSeconds.ShouldBe(86400);
     }
 }

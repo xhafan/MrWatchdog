@@ -1,41 +1,41 @@
 ﻿@page
 @using CoreUtils.Extensions
 @using Microsoft.Extensions.Localization
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
-@model UserWatchdogsModel
+@model UserScrapersModel
 @inject IStringLocalizer<Resource> Localizer
 @{
     Layout = null;
 }
-<!turbo-frame id="userWatchdogs">
-    <h1 class="display-4">@Resource.MyWebScrapers</h1>    
+<!turbo-frame id="userScrapers">
+    <h1 class="display-4">@Resource.MyScrapers</h1>
     <p class="text-muted">
-        @Resource.MyWebScrapersDescription
+        @Resource.MyScrapersDescription
     </p>
 
-    @foreach (var watchdog in Model.UserWatchdogs)
+    @foreach (var scraper in Model.UserScrapers)
     {
         <div>
-            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
-               asp-route-watchdogId="@watchdog.WatchdogId"
+            <a asp-page="/Scrapers/ScrapingResults/ScrapingResults" 
+               asp-route-scraperId="@scraper.ScraperId"
                data-turbo-frame="_top"
                class="text-wrap text-break"
             >
-                @watchdog.WatchdogName</a>
-            <public-status-badge public-status="@watchdog.PublicStatus"
+                @scraper.ScraperName</a>
+            <public-status-badge public-status="@scraper.PublicStatus"
                                  show-private="false"
             />
         </div>
     }
 
-    @if (Model.UserWatchdogs.IsEmpty())
+    @if (Model.UserScrapers.IsEmpty())
     {
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
         @Html.Raw(
             Localizer[
-                Resource.YouHaveNoWebScrapersCreated,
-                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
+                Resource.YouHaveNoScrapersCreated,
+                $"<a href=\"{ScraperUrlConstants.ScraperCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
             ]
         )
     }

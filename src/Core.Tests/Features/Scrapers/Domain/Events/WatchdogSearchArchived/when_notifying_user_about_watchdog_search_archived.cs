@@ -1,12 +1,12 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchArchived;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogSearchArchived;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
 
 [TestFixture]
 public class when_notifying_user_about_watchdog_search_archived : BaseDatabaseTest
@@ -34,7 +34,7 @@ public class when_notifying_user_about_watchdog_search_archived : BaseDatabaseTe
     {
         A.CallTo(() => _emailSender.SendEmail(
                 _watchdogSearch.User.Email,
-                A<string>.That.Matches(p => p.Contains("watchdog search") && p.Contains("has been deleted")),
+                A<string>.That.Matches(p => p.Contains("watchdog") && p.Contains("has been deleted")),
                 A<string>.That.Matches(p => p.Contains("has been deleted")
                 )
             ))

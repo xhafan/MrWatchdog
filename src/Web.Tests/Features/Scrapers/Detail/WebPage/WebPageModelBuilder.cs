@@ -3,14 +3,14 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
@@ -35,9 +35,9 @@ public class WebPageModelBuilder(NhibernateUnitOfWork unitOfWork)
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
         
         if (_authorizationService == null)

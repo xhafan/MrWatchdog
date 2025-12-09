@@ -2,13 +2,13 @@
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Searches;
+using MrWatchdog.Web.Features.Scrapers.Searches;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Searches;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Searches;
 
 public class SearchesModelBuilder(NhibernateUnitOfWork unitOfWork)
 {

@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
 public record ScrapingResultHistory
 {

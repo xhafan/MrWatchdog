@@ -1,13 +1,13 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
 public class WebPageScrapingResultsModel(
     IQueryExecutor queryExecutor,
@@ -16,29 +16,29 @@ public class WebPageScrapingResultsModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty(SupportsGet = true)]
-    public long WatchdogId { get; set; }
+    public long ScraperId { get; set; }
     
     [BindProperty(SupportsGet = true)]
-    public long WatchdogWebPageId { get; set; }
+    public long ScraperWebPageId { get; set; }
 
-    public WatchdogWebPageScrapingResultsDto WatchdogWebPageScrapingResults { get; private set; } = null!;
+    public ScraperWebPageScrapingResultsDto ScraperWebPageScrapingResults { get; private set; } = null!;
     
     public async Task<IActionResult> OnGet()
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(ScraperId)) return Forbid();
 
-        WatchdogWebPageScrapingResults =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageScrapingResultsQuery, WatchdogWebPageScrapingResultsDto>(
-                new GetWatchdogWebPageScrapingResultsQuery(WatchdogId, WatchdogWebPageId));
+        ScraperWebPageScrapingResults =
+            await queryExecutor.ExecuteSingleAsync<GetScraperWebPageScrapingResultsQuery, ScraperWebPageScrapingResultsDto>(
+                new GetScraperWebPageScrapingResultsQuery(ScraperId, ScraperWebPageId));
         
         return Page();
     }
 
-    public async Task<IActionResult> OnPostScrapeWatchdogWebPage()
+    public async Task<IActionResult> OnPostScrapeScraperWebPage()
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(ScraperId)) return Forbid();
 
-        var command = new ScrapeWatchdogWebPageCommand(WatchdogId, WatchdogWebPageId);
+        var command = new ScrapeScraperWebPageCommand(ScraperId, ScraperWebPageId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

@@ -15,31 +15,31 @@ public static class StimulusControllers
     public const string ViewOrEditForm = "view-or-edit-form";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsCreate = "watchdogs--create";
+    public const string ScrapersCreate = "scrapers--create";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetail = "watchdogs--detail";
+    public const string ScrapersDetail = "scrapers--detail";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetailActions = "watchdogs--detail-actions";
+    public const string ScrapersDetailActions = "scrapers--detail-actions";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetailWebPage = "watchdogs--detail-web-page";
+    public const string ScrapersDetailWebPage = "scrapers--detail-web-page";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetailWebPageOverview = "watchdogs--detail-web-page-overview";
+    public const string ScrapersDetailWebPageOverview = "scrapers--detail-web-page-overview";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetailWebPageDisabledWarning = "watchdogs--detail-web-page-disabled-warning";
+    public const string ScrapersDetailWebPageDisabledWarning = "scrapers--detail-web-page-disabled-warning";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsDetailWebPageScrapingResults = "watchdogs--detail-web-page-scraping-results";
+    public const string ScrapersDetailWebPageScrapingResults = "scrapers--detail-web-page-scraping-results";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsScrapingResults = "watchdogs--scraping-results";
+    public const string ScrapersScrapingResults = "scrapers--scraping-results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsScrapingResultsWebPages = "watchdogs--scraping-results-web-pages";
+    public const string ScrapersScrapingResultsWebPages = "scrapers--scraping-results-web-pages";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogSearch = "watchdogs--search";

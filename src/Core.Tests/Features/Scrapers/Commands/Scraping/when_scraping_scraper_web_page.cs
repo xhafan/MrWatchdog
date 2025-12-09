@@ -1,19 +1,19 @@
 ﻿using System.Net;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page : BaseDatabaseTest
+public class when_scraping_scraper_web_page : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -41,23 +41,23 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
                 }))
             .Build();
         
-        var handler = new ScrapeWatchdogWebPageCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new ScrapeScraperWebPageCommandMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             httpClientFactory
         );
 
-        await handler.Handle(new ScrapeWatchdogWebPageCommand(_watchdog.Id, _watchdogWebPageId));
+        await handler.Handle(new ScrapeScraperWebPageCommand(_scraper.Id, _scraperWebPageId));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_web_page_is_scraped_and_scraping_results_are_set()
+    public void scraper_web_page_is_scraped_and_scraping_results_are_set()
     {
-        var webPage = _watchdog.WebPages.Single();
+        var webPage = _scraper.WebPages.Single();
         webPage.ScrapingResults.ShouldBe([
             """
             <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
@@ -70,8 +70,8 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -80,6 +80,6 @@ public class when_scraping_watchdog_web_page : BaseDatabaseTest
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }
 }

@@ -6,5 +6,5 @@ namespace MrWatchdog.Web.Features.Shared;
 public static class DomEvents
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogPublicStatusUpdated = "watchdogPublicStatusUpdated";
+    public const string ScraperPublicStatusUpdated = "scraperPublicStatusUpdated";
 }

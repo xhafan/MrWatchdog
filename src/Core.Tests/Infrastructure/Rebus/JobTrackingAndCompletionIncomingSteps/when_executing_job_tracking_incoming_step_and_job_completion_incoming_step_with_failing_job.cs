@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -13,7 +13,7 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionInc
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_failing_job : BaseDatabaseTest
 {
-    private CreateWatchdogCommand _command = null!;
+    private CreateScraperCommand _command = null!;
 
     [SetUp]
     public async Task Context()
@@ -26,7 +26,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         var incomingStepContext = new IncomingStepContext(
             new TransportMessage(new Dictionary<string, string>(), []), A.Fake<ITransactionContext>()
         );
-        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name") {Guid = Guid.NewGuid()};
+        _command = new CreateScraperCommand(UserId: 23, "scraper name") {Guid = Guid.NewGuid()};
         incomingStepContext.Save(new Message(new Dictionary<string, string> {{Headers.MessageId, _command.Guid.ToString()}}, _command));
 
         try
@@ -46,7 +46,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
 
         Task _next()
         {
-            _ = new WatchdogBuilder(UnitOfWork).Build();
+            _ = new ScraperBuilder(UnitOfWork).Build();
             throw new Exception("Test exception");
         }
     }

@@ -40,7 +40,7 @@ public class when_viewing_login_link_sent_page_with_expired_token : BaseDatabase
             .WithToken(TokenGenerator.GenerateToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com", 
-                returnUrl: "/Watchdogs/Searches", 
+                returnUrl: "/Scrapers/Searches", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)
             ))

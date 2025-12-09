@@ -1,27 +1,27 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.UserWatchdogs;
+using MrWatchdog.Web.Features.Scrapers.UserScrapers;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.UserWatchdogs;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.UserScrapers;
 
 [TestFixture]
-public class when_viewing_user_watchdogs : BaseDatabaseTest
+public class when_viewing_user_scrapers : BaseDatabaseTest
 {
-    private Watchdog _publicWatchdog = null!;
-    private UserWatchdogsModel _model = null!;
-    private Watchdog _privateUserWatchdog = null!;
+    private Scraper _publicScraper = null!;
+    private UserScrapersModel _model = null!;
+    private Scraper _privateUserScraper = null!;
     private User _user = null!;
-    private Watchdog _makePublicRequestedUserWatchdog = null!;
+    private Scraper _makePublicRequestedUserScraper = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
-        _model = new UserWatchdogsModelBuilder(UnitOfWork)
+        _model = new UserScrapersModelBuilder(UnitOfWork)
             .WithActingUser(_user)
             .Build();
         
@@ -29,22 +29,22 @@ public class when_viewing_user_watchdogs : BaseDatabaseTest
     }
    
     [Test]
-    public void user_watchdogs_are_fetched()
+    public void user_scrapers_are_fetched()
     {
-        _model.UserWatchdogs.Count().ShouldBe(2);
-        _model.UserWatchdogs.ShouldContain(
-            new GetUserWatchdogsQueryResult
+        _model.UserScrapers.Count().ShouldBe(2);
+        _model.UserScrapers.ShouldContain(
+            new GetUserScrapersQueryResult
             {
-                WatchdogId = _privateUserWatchdog.Id, 
-                WatchdogName = "private user watchdog",
+                ScraperId = _privateUserScraper.Id, 
+                ScraperName = "private user scraper",
                 PublicStatus = PublicStatus.Private
             }
         );  
-        _model.UserWatchdogs.ShouldContain(
-            new GetUserWatchdogsQueryResult
+        _model.UserScrapers.ShouldContain(
+            new GetUserScrapersQueryResult
             {
-                WatchdogId = _makePublicRequestedUserWatchdog.Id, 
-                WatchdogName = "make public requested user watchdog",
+                ScraperId = _makePublicRequestedUserScraper.Id, 
+                ScraperName = "make public requested user scraper",
                 PublicStatus = PublicStatus.RequestedToBeMadePublic
             }
         );  
@@ -58,27 +58,27 @@ public class when_viewing_user_watchdogs : BaseDatabaseTest
     
     private void _BuildEntities()
     {
-        _publicWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("public watchdog")
+        _publicScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("public scraper")
             .Build();
-        _publicWatchdog.MakePublic();
+        _publicScraper.MakePublic();
         
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _privateUserWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("private user watchdog")
+        _privateUserScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("private user scraper")
             .WithUser(_user)
             .Build();
         
-        _makePublicRequestedUserWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("make public requested user watchdog")
+        _makePublicRequestedUserScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("make public requested user scraper")
             .WithUser(_user)
             .Build();
-        _makePublicRequestedUserWatchdog.RequestToMakePublic();
+        _makePublicRequestedUserScraper.RequestToMakePublic();
 
         // ReSharper disable once UnusedVariable
-        var anotherPrivateWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("another user private watchdog")
+        var anotherPrivateScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("another user private scraper")
             .Build();
         
         UnitOfWork.Flush();

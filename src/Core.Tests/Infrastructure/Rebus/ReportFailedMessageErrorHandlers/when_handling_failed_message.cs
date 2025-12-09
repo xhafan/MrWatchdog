@@ -1,6 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -47,7 +47,7 @@ public class when_handling_failed_message
         A.CallTo(() => serializer.Deserialize(_transportMessage)).Returns(
             new Message(
                 new Dictionary<string, string> {{Headers.MessageId, _jobGuid.ToString()}},
-                new ArchiveWatchdogCommand(WatchdogId: 23)
+                new ArchiveScraperCommand(ScraperId: 23)
             )
         );
 
@@ -92,7 +92,7 @@ public class when_handling_failed_message
         command.HtmlMessage.ShouldContain("failed");
         command.HtmlMessage.ShouldContain(
             $"""
-             <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveWatchdogCommand</a>
+             <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveScraperCommand</a>
              """
         );
         return true;

@@ -1,18 +1,18 @@
 ﻿using System.Net;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 
 [TestFixture]
-public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html : BaseDatabaseTest
+public class when_scraping_scraper_web_page_with_selecting_text_instead_of_html : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -40,25 +40,25 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                 }))
             .Build();
         
-        var handler = new ScrapeWatchdogWebPageDomainEventMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new ScrapeScraperWebPageDomainEventMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             httpClientFactory
         );
 
-        await handler.Handle(new WatchdogWebPageScrapingDataUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
+        await handler.Handle(new ScraperWebPageScrapingDataUpdatedDomainEvent(_scraper.Id, _scraperWebPageId));
     }
 
     [Test]
     public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
     {
-        var webPage = _watchdog.WebPages.Single();
+        var webPage = _scraper.WebPages.Single();
         webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
     }
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -68,7 +68,7 @@ public class when_scraping_watchdog_web_page_with_selecting_text_instead_of_html
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
+        _scraper.SetScrapingErrorMessage(_scraperWebPageId, "Network error");
     }
 }

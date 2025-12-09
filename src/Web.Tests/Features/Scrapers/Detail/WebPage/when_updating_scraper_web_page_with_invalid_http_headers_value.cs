@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_updating_watchdog_web_page_with_invalid_http_headers_value : BaseDatabaseTest
+public class when_updating_scraper_web_page_with_invalid_http_headers_value : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private WebPageOverviewModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -23,10 +23,10 @@ public class when_updating_watchdog_web_page_with_invalid_http_headers_value : B
         _BuildEntities();
         
         _model = new WebPageOverviewModelBuilder(UnitOfWork)
-            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            .WithScraperWebPageArgs(new ScraperWebPageArgs
             {
-                WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = _watchdogWebPageId,
+                ScraperId = _scraper.Id,
+                ScraperWebPageId = _scraperWebPageId,
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page",
@@ -52,7 +52,7 @@ public class when_updating_watchdog_web_page_with_invalid_http_headers_value : B
     public void model_is_invalid()
     {
         _model.ModelState.IsValid.ShouldBe(false);
-        const string key = $"{nameof(WatchdogWebPageArgs)}.{nameof(WatchdogWebPageArgs.HttpHeaders)}";
+        const string key = $"{nameof(ScraperWebPageArgs)}.{nameof(ScraperWebPageArgs.HttpHeaders)}";
         _model.ModelState.Keys.ShouldBe([key]);
         var errors = _model.ModelState[key]?.Errors;
         errors.ShouldNotBeNull();
@@ -63,14 +63,14 @@ public class when_updating_watchdog_web_page_with_invalid_http_headers_value : B
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

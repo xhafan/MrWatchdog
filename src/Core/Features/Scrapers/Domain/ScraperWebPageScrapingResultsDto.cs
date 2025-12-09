@@ -1,8 +1,8 @@
-﻿namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record WatchdogWebPageScrapingResultsDto(
-    long WatchdogId,
-    long WatchdogWebPageId,
+public record ScraperWebPageScrapingResultsDto(
+    long ScraperId,
+    long ScraperWebPageId,
     IEnumerable<string> ScrapingResults,
     DateTime? ScrapedOn,
     string? ScrapingErrorMessage

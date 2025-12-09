@@ -4,7 +4,7 @@ using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
 
 public class NotifyUserAboutNewWatchdogSearchScrapingResultsDomainEventMessageHandler(
     IRepository<WatchdogSearch> watchdogSearchRepository,

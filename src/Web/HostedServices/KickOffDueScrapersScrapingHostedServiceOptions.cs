@@ -1,6 +1,6 @@
 ﻿namespace MrWatchdog.Web.HostedServices;
 
-public class KickOffDueWatchdogsScrapingHostedServiceOptions
+public class KickOffDueScrapersScrapingHostedServiceOptions
 {
     public bool IsDisabled { get; set; }
 }

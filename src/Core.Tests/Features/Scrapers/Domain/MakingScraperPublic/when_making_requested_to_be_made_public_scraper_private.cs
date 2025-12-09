@@ -1,26 +1,26 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.MakingWatchdogPublic;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.MakingScraperPublic;
 
 [TestFixture]
-public class when_making_make_public_requested_watchdog_private : BaseDatabaseTest
+public class when_making_requested_to_be_made_public_scraper_private : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public void Context()
     {
-        _watchdog = new WatchdogBuilder().Build();
-        _watchdog.RequestToMakePublic();
+        _scraper = new ScraperBuilder().Build();
+        _scraper.RequestToMakePublic();
 
-        _watchdog.MakePrivate();
+        _scraper.MakePrivate();
     }
 
     [Test]
     public void public_status_is_correct()
     {
-        _watchdog.PublicStatus.ShouldBe(PublicStatus.Private);
+        _scraper.PublicStatus.ShouldBe(PublicStatus.Private);
     }
 }

@@ -1,20 +1,20 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.PublicWatchdogs;
+using MrWatchdog.Web.Features.Scrapers.PublicScrapers;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.PublicWatchdogs;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.PublicScrapers;
 
-public class PublicWatchdogsModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class PublicScrapersModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
-    public PublicWatchdogsModel Build()
+    public PublicScrapersModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetPublicWatchdogsQueryHandler(unitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetPublicScrapersQueryHandler(unitOfWork));
 
-        var model = new PublicWatchdogsModel(
+        var model = new PublicScrapersModel(
             new QueryExecutor(queryHandlerFactory)
         );
         ModelValidator.ValidateModel(model);

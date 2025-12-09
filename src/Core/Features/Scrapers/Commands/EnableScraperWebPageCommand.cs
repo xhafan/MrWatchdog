@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Messages;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Features.Scrapers.Commands;
 
-public record EnableWatchdogWebPageCommand(long WatchdogId, long WatchdogWebPageId) : Command;
+public record EnableScraperWebPageCommand(long ScraperId, long ScraperWebPageId) : Command;

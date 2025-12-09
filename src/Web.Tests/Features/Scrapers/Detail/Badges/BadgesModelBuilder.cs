@@ -3,13 +3,13 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
+using MrWatchdog.Web.Features.Scrapers.Detail.Badges;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Badges;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Badges;
 
 public class BadgesModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
@@ -25,9 +25,9 @@ public class BadgesModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperDetailArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
         
         if (_authorizationService == null)

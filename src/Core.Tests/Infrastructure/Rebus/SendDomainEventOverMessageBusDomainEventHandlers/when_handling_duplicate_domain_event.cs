@@ -24,7 +24,7 @@ public class when_handling_duplicate_domain_event : BaseDatabaseTest
         JobContext.RebusHandlingQueue.Value = $"Test{RebusQueues.Main}";
 
         _testDomainEventOne = new TestDomainEvent(23) {RelatedCommandGuid = commandJob.Guid};
-        _testDomainEventTwo = new TestDomainEvent(23) {RelatedCommandGuid = commandJob.Guid};;
+        _testDomainEventTwo = new TestDomainEvent(23) {RelatedCommandGuid = commandJob.Guid};
 
         _bus = A.Fake<ISyncBus>();
         var handler = new SendDomainEventOverMessageBusDomainEventHandler<TestDomainEvent>(

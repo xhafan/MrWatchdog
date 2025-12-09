@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_making_watchdog_public : BaseDatabaseTest
+public class when_making_scraper_public : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,24 +19,24 @@ public class when_making_watchdog_public : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new MakeWatchdogPublicCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new MakeScraperPublicCommandMessageHandler(new NhibernateRepository<Scraper>(UnitOfWork));
 
-        await handler.Handle(new MakeWatchdogPublicCommand(_watchdog.Id));
+        await handler.Handle(new MakeScraperPublicCommand(_scraper.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_is_public()
+    public void scraper_is_public()
     {
-        _watchdog.PublicStatus.ShouldBe(PublicStatus.Public);
+        _scraper.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }
 }

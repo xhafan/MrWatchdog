@@ -1,21 +1,21 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
+using MrWatchdog.Web.Features.Scrapers.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Overview;
 
 [TestFixture]
-public class when_updating_watchdog_detail_overview : BaseDatabaseTest
+public class when_updating_scraper_detail_overview : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private OverviewModel _model = null!;
     private ICoreBus _bus = null!;    
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -26,11 +26,11 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
         _model = new OverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .Build();
-        _model.WatchdogOverviewArgs = new WatchdogOverviewArgs
+        _model.ScraperOverviewArgs = new ScraperOverviewArgs
         {
-            WatchdogId = _watchdog.Id,
-            Name = "watchdog updated name",
-            Description = "watchdog updated description",
+            ScraperId = _scraper.Id,
+            Name = "scraper updated name",
+            Description = "scraper updated description",
             ScrapingIntervalInSeconds = 60,
             IntervalBetweenSameResultNotificationsInDays = 30,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 5
@@ -42,7 +42,7 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new UpdateWatchdogOverviewCommand(_model.WatchdogOverviewArgs)))
+        A.CallTo(() => _bus.Send(new UpdateScraperOverviewCommand(_model.ScraperOverviewArgs)))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -59,6 +59,6 @@ public class when_updating_watchdog_detail_overview : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

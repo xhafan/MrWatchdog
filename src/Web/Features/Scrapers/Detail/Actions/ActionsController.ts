@@ -18,29 +18,29 @@ export default class ActionsControllers extends BaseStimulusModelController<Acti
         formSubmitWithWaitForJobCompletion(
             this.requestToMakePublicFormTarget, 
             async jobDto => {
-                this.dispatchWatchdogPublicStatusUpdated();
+                this.dispatchScraperPublicStatusUpdated();
             },
-            this.modelValue.requestToMakeWebScraperPublicConfirmationMessageResource
+            this.modelValue.requestToMakeScraperPublicConfirmationMessageResource
         );
 
         formSubmitWithWaitForJobCompletion(
             this.makePublicFormTarget,
             async jobDto => {
-                this.dispatchWatchdogPublicStatusUpdated();
+                this.dispatchScraperPublicStatusUpdated();
             },
-            this.modelValue.makeWebScraperPublicConfirmationMessageResource
+            this.modelValue.makeScraperPublicConfirmationMessageResource
         );
 
         formSubmitWithWaitForJobCompletion(
             this.makePrivateFormTarget,
             async jobDto => {
-                this.dispatchWatchdogPublicStatusUpdated();
+                this.dispatchScraperPublicStatusUpdated();
             },
-            `<i class="fa-solid fa-triangle-exclamation text-warning"></i> ${this.modelValue.makeWebScraperPrivateConfirmationMessageResource}`
+            `<i class="fa-solid fa-triangle-exclamation text-warning"></i> ${this.modelValue.makeScraperPrivateConfirmationMessageResource}`
         );
     }
 
-    dispatchWatchdogPublicStatusUpdated() {
-        this.dispatch(DomEvents.watchdogPublicStatusUpdated);
+    dispatchScraperPublicStatusUpdated() {
+        this.dispatch(DomEvents.scraperPublicStatusUpdated);
     }
 }

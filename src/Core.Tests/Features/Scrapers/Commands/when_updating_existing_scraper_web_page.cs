@@ -1,17 +1,17 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_updating_existing_watchdog_web_page : BaseDatabaseTest
+public class when_updating_existing_scraper_web_page : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -20,12 +20,12 @@ public class when_updating_existing_watchdog_web_page : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new UpdateWatchdogWebPageCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new UpdateScraperWebPageCommandMessageHandler(new NhibernateRepository<Scraper>(UnitOfWork));
 
-        await handler.Handle(new UpdateWatchdogWebPageCommand(new WatchdogWebPageArgs
+        await handler.Handle(new UpdateScraperWebPageCommand(new ScraperWebPageArgs
         {
-            WatchdogId = _watchdog.Id,
-            WatchdogWebPageId = _watchdogWebPageId,
+            ScraperId = _scraper.Id,
+            ScraperWebPageId = _scraperWebPageId,
             Url = "http://url.com/page_updated",
             Selector = ".selector_updated",
             Name = "url.com/page_updated"
@@ -34,28 +34,28 @@ public class when_updating_existing_watchdog_web_page : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_web_page_is_updated()
+    public void scraper_web_page_is_updated()
     {
-        var watchdogWebPage = _watchdog.WebPages.ShouldHaveSingleItem();
-        watchdogWebPage.Url.ShouldBe("http://url.com/page_updated");
-        watchdogWebPage.Selector.ShouldBe(".selector_updated");
-        watchdogWebPage.Name.ShouldBe("url.com/page_updated");
+        var scraperWebPage = _scraper.WebPages.ShouldHaveSingleItem();
+        scraperWebPage.Url.ShouldBe("http://url.com/page_updated");
+        scraperWebPage.Selector.ShouldBe(".selector_updated");
+        scraperWebPage.Name.ShouldBe("url.com/page_updated");
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }
 }

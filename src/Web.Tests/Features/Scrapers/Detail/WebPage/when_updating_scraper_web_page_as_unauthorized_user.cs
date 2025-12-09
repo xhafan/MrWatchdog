@@ -1,25 +1,25 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_updating_watchdog_web_page_as_unauthorized_user : BaseDatabaseTest
+public class when_updating_scraper_web_page_as_unauthorized_user : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private WebPageOverviewModel _model = null!;
     private ICoreBus _bus = null!;    
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -30,18 +30,18 @@ public class when_updating_watchdog_web_page_as_unauthorized_user : BaseDatabase
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
         _model = new WebPageOverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
-            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            .WithScraperWebPageArgs(new ScraperWebPageArgs
             {
-                WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = _watchdogWebPageId,
+                ScraperId = _scraper.Id,
+                ScraperWebPageId = _scraperWebPageId,
                 Url = "http://url.com/page2",
                 Selector = ".selector2",
                 Name = "url.com/page2"
@@ -54,7 +54,7 @@ public class when_updating_watchdog_web_page_as_unauthorized_user : BaseDatabase
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new UpdateWatchdogWebPageCommand(_model.WatchdogWebPageArgs)))
+        A.CallTo(() => _bus.Send(new UpdateScraperWebPageCommand(_model.ScraperWebPageArgs)))
             .MustNotHaveHappened();
     }
     
@@ -66,14 +66,14 @@ public class when_updating_watchdog_web_page_as_unauthorized_user : BaseDatabase
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

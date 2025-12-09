@@ -6,7 +6,7 @@
 @model CreateModel
 
 @{
-    var title = Resource.CreateWebScraper;
+    var title = Resource.CreateScraper;
     ViewData["Title"] = title;
 }
 
@@ -17,17 +17,17 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Watchdogs/Manage/Manage">@Resource.ManageWebScrapers</a>
+                <a asp-page="/Scrapers/Manage/Manage">@Resource.ManageScrapers</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">@title</li>
         </ol>
     </nav>
     <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
-                identifier="@OnboardingIdentifiers.WatchdogsCreate"
+                identifier="@OnboardingIdentifiers.ScraperCreate"
                 steps="@([
                            new OnboardingStepStimulusModel(
-                               Text: Resource.WebScraperCreateOnboardingSetName,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.WebScraperCreateSetNameId}"
+                               Text: Resource.ScraperCreateOnboardingSetName,
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScraperCreateSetNameId}"
                            )
                        ])"
     />
@@ -35,13 +35,13 @@
 
 <h1 class="display-4">@title</h1>
 
-<div @Stimulus.Controller(StimulusControllers.WatchdogsCreate)>
+<div @Stimulus.Controller(StimulusControllers.ScrapersCreate)>
     <form method="post" 
-          data-watchdogs--create-target="form"
+          data-scrapers--create-target="form"
           style="max-width: 600px;">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         
-        <div class="mb-3" id="@OnboardingElementIdentifiers.WebScraperCreateSetNameId">
+        <div class="mb-3" id="@OnboardingElementIdentifiers.ScraperCreateSetNameId">
             <label asp-for="Name" class="form-label fw-bold"></label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>

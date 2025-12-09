@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page : BaseDatabaseTest
+public class when_viewing_scraper_web_page : BaseDatabaseTest
 {
     private WebPageModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -24,7 +24,7 @@ public class when_viewing_watchdog_web_page : BaseDatabaseTest
         
         _model = new WebPageModelBuilder(UnitOfWork).Build();
 
-        _actionResult = await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
+        _actionResult = await _model.OnGet(_scraper.Id, scraperWebPageId: _scraperWebPageId);
     }
 
     [Test]
@@ -36,21 +36,21 @@ public class when_viewing_watchdog_web_page : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageName.ShouldBe("url.com/page");
+        _model.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperWebPageId.ShouldBe(_scraperWebPageId);
+        _model.ScraperWebPageName.ShouldBe("url.com/page");
     }  
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

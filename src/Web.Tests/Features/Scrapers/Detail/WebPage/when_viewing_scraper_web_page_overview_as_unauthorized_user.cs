@@ -1,21 +1,21 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_overview_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_scraper_web_page_overview_as_unauthorized_user : BaseDatabaseTest
 {
     private WebPageOverviewModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -26,21 +26,21 @@ public class when_viewing_watchdog_web_page_overview_as_unauthorized_user : Base
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
         _model = new WebPageOverviewModelBuilder(UnitOfWork)
             .WithAuthorizationService(authorizationService)
-            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            .WithScraperWebPageArgs(new ScraperWebPageArgs
             {
-                WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = _watchdogWebPageId
+                ScraperId = _scraper.Id,
+                ScraperWebPageId = _scraperWebPageId
             })
             .Build();
 
-        _actionResult = await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
+        _actionResult = await _model.OnGet(_scraper.Id, scraperWebPageId: _scraperWebPageId);
     }
 
     [Test]
@@ -51,8 +51,8 @@ public class when_viewing_watchdog_web_page_overview_as_unauthorized_user : Base
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -60,7 +60,7 @@ public class when_viewing_watchdog_web_page_overview_as_unauthorized_user : Base
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
 
         UnitOfWork.Flush();
     }    

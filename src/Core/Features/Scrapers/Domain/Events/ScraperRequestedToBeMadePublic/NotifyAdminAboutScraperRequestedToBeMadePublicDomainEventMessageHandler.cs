@@ -4,21 +4,21 @@ using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 
-public class NotifyAdminAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
-    IRepository<Watchdog> watchdogRepository,
+public class NotifyAdminAboutScraperRequestedToBeMadePublicDomainEventMessageHandler(
+    IRepository<Scraper> scraperRepository,
     IEmailSender emailSender,
     IOptions<RuntimeOptions> iRuntimeOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) 
-    : IHandleMessages<WatchdogRequestedToBeMadePublicDomainEvent>
+    : IHandleMessages<ScraperRequestedToBeMadePublicDomainEvent>
 {
-    public async Task Handle(WatchdogRequestedToBeMadePublicDomainEvent domainEvent)
+    public async Task Handle(ScraperRequestedToBeMadePublicDomainEvent domainEvent)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
+        var scraper = await scraperRepository.LoadByIdAsync(domainEvent.ScraperId);
 
-        await watchdog.NotifyAdminAboutWatchdogRequestedToBeMadePublic(
+        await scraper.NotifyAdminAboutScraperRequestedToBeMadePublic(
             emailSender,
             iRuntimeOptions.Value,
             iEmailAddressesOptions.Value

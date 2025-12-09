@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Features.Scrapers.Commands;
 
-public class UpdateWatchdogWebPageCommandMessageHandler(IRepository<Watchdog> watchdogRepository) 
-    : IHandleMessages<UpdateWatchdogWebPageCommand>
+public class UpdateScraperWebPageCommandMessageHandler(IRepository<Scraper> scraperRepository) 
+    : IHandleMessages<UpdateScraperWebPageCommand>
 {
-    public async Task Handle(UpdateWatchdogWebPageCommand command)
+    public async Task Handle(UpdateScraperWebPageCommand command)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogWebPageArgs.WatchdogId);
-        watchdog.UpdateWebPage(command.WatchdogWebPageArgs);
+        var async = await scraperRepository.LoadByIdAsync(command.ScraperWebPageArgs.ScraperId);
+        async.UpdateWebPage(command.ScraperWebPageArgs);
     }
 }

@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+﻿using System.Net;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
-using System.Net;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_with_network_error : BaseTest
+public class when_scraping_scraper_with_network_error : BaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private HttpClientFactory _httpClientFactory = null!;
 
     [SetUp]
@@ -27,13 +27,13 @@ public class when_scraping_watchdog_with_network_error : BaseTest
                 }))
             .Build();
         
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
     }
 
     [Test]
-    public void watchdog_web_page_scraping_error_message_is_set_after_first_failed_scraping()
+    public void scraper_web_page_scraping_error_message_is_set_after_first_failed_scraping()
     {
-        var webPage = _watchdog.WebPages.Single();
+        var webPage = _scraper.WebPages.Single();
         
         webPage.ScrapingErrorMessage.ShouldBe("Error scraping web page, HTTP status code: 404 Not Found");
 
@@ -42,54 +42,54 @@ public class when_scraping_watchdog_with_network_error : BaseTest
     }
     
     [Test]
-    public void watchdog_web_page_scraping_failed_domain_event_is_not_raised_after_the_first_failed_scraping_attempt()
+    public void scraper_web_page_scraping_failed_domain_event_is_not_raised_after_the_first_failed_scraping_attempt()
     {
-        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldNotContain(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }  
 
     [Test]
-    public void watchdog_can_notify_about_failed_scraping_after_the_first_scraping_attempt()
+    public void scraper_can_notify_about_failed_scraping_after_the_first_scraping_attempt()
     {
-        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(true);
+        _scraper.CanNotifyAboutFailedScraping.ShouldBe(true);
     }
 
     [Test]
-    public async Task watchdog_web_page_scraping_failed_domain_event_is_raised_after_the_second_failed_scraping_attempt()
+    public async Task scraper_web_page_scraping_failed_domain_event_is_raised_after_the_second_failed_scraping_attempt()
     {
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
 
-        RaisedDomainEvents.ShouldContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldContain(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
 
     [Test]
-    public async Task watchdog_number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_second_failed_scraping_attempt()
+    public async Task number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_second_failed_scraping_attempt()
     {
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
 
-        _watchdog.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
+        _scraper.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
     
     [Test]
-    public async Task watchdog_cannot_notify_about_failed_scraping_after_the_second_failed_scraping_attempt()
+    public async Task scraper_cannot_notify_about_failed_scraping_after_the_second_failed_scraping_attempt()
     {
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
 
-        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
+        _scraper.CanNotifyAboutFailedScraping.ShouldBe(false);
     }
 
     [Test]
     public async Task scraping_for_the_third_time_does_not_raise_scraping_failed_domain_event_again()
     {
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
         RaisedDomainEvents.Clear();
         
-        await _watchdog.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_httpClientFactory);
         
-        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldNotContain(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
     
     [Test]
-    public async Task watchdog_number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_first_failed_scraping_attempt_and_subsequent_successful_scraping_attempt()
+    public async Task number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_first_failed_scraping_attempt_and_subsequent_successful_scraping_attempt()
     {
         var successfulScrapingHttpClientFactory = new HttpClientFactoryBuilder()
             .WithRequestResponse(new HttpMessageRequestResponse(
@@ -112,15 +112,15 @@ public class when_scraping_watchdog_with_network_error : BaseTest
                 }))
             .Build();
 
-        await _watchdog.Scrape(successfulScrapingHttpClientFactory);
+        await _scraper.Scrape(successfulScrapingHttpClientFactory);
 
-        _watchdog.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
+        _scraper.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
 
     private async Task _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder()
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -131,10 +131,10 @@ public class when_scraping_watchdog_with_network_error : BaseTest
             .WithNumberOfFailedScrapingAttemptsBeforeAlerting(2)
             .Build();
         
-        await _successfullyScrapeWatchdogSoItCanRaiseFailedScrapingDomainEvent();
+        await _successfullyScrapeScraperSoItCanRaiseFailedScrapingDomainEvent();
         return;
 
-        async Task _successfullyScrapeWatchdogSoItCanRaiseFailedScrapingDomainEvent()
+        async Task _successfullyScrapeScraperSoItCanRaiseFailedScrapingDomainEvent()
         {
             var httpClientFactory = new HttpClientFactoryBuilder()
                 .WithRequestResponse(new HttpMessageRequestResponse(
@@ -157,7 +157,7 @@ public class when_scraping_watchdog_with_network_error : BaseTest
                     }))
                 .Build();
 
-            await _watchdog.Scrape(httpClientFactory);
+            await _scraper.Scrape(httpClientFactory);
         }
     }
 }

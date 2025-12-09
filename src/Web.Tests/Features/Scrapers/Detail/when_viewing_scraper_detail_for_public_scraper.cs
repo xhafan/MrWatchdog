@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Scrapers.Detail;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_for_public_watchdog : BaseDatabaseTest
+public class when_viewing_scraper_detail_for_public_scraper : BaseDatabaseTest
 {
     private DetailModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,21 +19,21 @@ public class when_viewing_watchdog_detail_for_public_watchdog : BaseDatabaseTest
         _model = new DetailModelBuilder(UnitOfWork)
             .Build();
         
-        await _model.OnGet(_watchdog.Id);
+        await _model.OnGet(_scraper.Id);
     }
 
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _model.ScraperDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
             .Build();
-        _watchdog.MakePublic();
+        _scraper.MakePublic();
 
         UnitOfWork.Flush();
     }    

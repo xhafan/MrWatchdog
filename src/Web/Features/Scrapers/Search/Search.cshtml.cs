@@ -2,14 +2,14 @@ using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Features.Scrapers.Search;
 
 public class SearchModel(
     IQueryExecutor queryExecutor,
@@ -18,7 +18,7 @@ public class SearchModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     public WatchdogSearchArgs WatchdogSearchArgs { get; private set; } = null!;
-    public WatchdogScrapingResultsArgs WatchdogScrapingResultsArgs { get; private set; } = null!;
+    public ScraperScrapingResultsArgs ScraperScrapingResultsArgs { get; private set; } = null!;
 
     public async Task<IActionResult> OnGet(long watchdogSearchId)
     {
@@ -29,10 +29,10 @@ public class SearchModel(
         
         if (!await IsAuthorizedAsWatchdogSearchOwnerOrSuperAdmin(watchdogSearchId))
         {
-            if (WatchdogSearchArgs.WatchdogPublicStatus != PublicStatus.Public) return Forbid();
+            if (WatchdogSearchArgs.ScraperPublicStatus != PublicStatus.Public) return Forbid();
 
             var redirectUrl = QueryHelpers.AddQueryString(
-                WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(WatchdogSearchArgs.WatchdogId),
+                ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(WatchdogSearchArgs.ScraperId),
                 new Dictionary<string, string?>
                 {
                     {"searchTerm", WatchdogSearchArgs.SearchTerm}
@@ -41,9 +41,9 @@ public class SearchModel(
             return Redirect(redirectUrl);
         }
 
-        WatchdogScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogScrapingResultsArgsQuery, WatchdogScrapingResultsArgs>(
-                new GetWatchdogScrapingResultsArgsQuery(WatchdogSearchArgs.WatchdogId)
+        ScraperScrapingResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
+                new GetScraperScrapingResultsArgsQuery(WatchdogSearchArgs.ScraperId)
             );
         
         return Page();

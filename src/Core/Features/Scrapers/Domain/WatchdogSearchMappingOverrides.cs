@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Automapping;
 using FluentNHibernate.Automapping.Alterations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
 public class WatchdogSearchMappingOverrides : IAutoMappingOverride<WatchdogSearch>
 {

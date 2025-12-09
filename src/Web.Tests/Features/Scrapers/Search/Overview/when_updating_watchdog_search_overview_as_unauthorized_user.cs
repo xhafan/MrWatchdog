@@ -2,15 +2,15 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Search.Overview;
+using MrWatchdog.Web.Features.Scrapers.Search.Overview;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
 
 [TestFixture]
 public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseDatabaseTest

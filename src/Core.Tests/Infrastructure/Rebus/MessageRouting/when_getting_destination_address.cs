@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
 using Rebus.Messages;
@@ -22,7 +22,7 @@ public class when_getting_destination_address
         var destinationAddress = await _messageRouter.GetDestinationAddress(
             new Message(
                 new Dictionary<string, string>(),
-                new ScrapeWatchdogCommand(23)
+                new ScrapeScraperCommand(23)
             )
         );
 
@@ -30,12 +30,12 @@ public class when_getting_destination_address
     }
 
     [Test]
-    public async Task for_enable_watchdog_wen_page_command()
+    public async Task for_enable_scraper_web_page_command()
     {
         var destinationAddress = await _messageRouter.GetDestinationAddress(
             new Message(
                 new Dictionary<string, string>(),
-                new EnableWatchdogWebPageCommand(23, 24)
+                new EnableScraperWebPageCommand(23, 24)
             )
         );
 
@@ -51,7 +51,7 @@ public class when_getting_destination_address
                 {
                     {CustomHeaders.QueueForRedirection, $"Test{RebusQueues.AdminBulk}"}
                 },
-                new EnableWatchdogWebPageCommand(23, 24)
+                new EnableScraperWebPageCommand(23, 24)
             )
         );
 

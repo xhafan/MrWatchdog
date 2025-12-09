@@ -2,19 +2,19 @@
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
+namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
-public class when_getting_manage_other_users_watchdogs_as_non_superadmin : BaseDatabaseTest
+public class when_getting_manage_other_users_scrapers_as_non_superadmin : BaseDatabaseTest
 {
     private LoginToken _loginToken = null!;
     private User _nonSuperAdminUser = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private HttpClient _webApplicationClient = null!;
 
     [SetUp]
@@ -27,12 +27,12 @@ public class when_getting_manage_other_users_watchdogs_as_non_superadmin : BaseD
     }
 
     [Test]
-    public async Task non_superadmin_user_cannot_view_manage_other_users_watchdogs()
+    public async Task non_superadmin_user_cannot_view_manage_other_users_scrapers()
     {
-        var response = await _webApplicationClient.GetAsync(WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl);
+        var response = await _webApplicationClient.GetAsync(ScraperUrlConstants.ScrapersManageOtherUsersScrapersUrl);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
-        response.Headers.Location.ToString().ShouldEndWith("/Account/AccessDenied?ReturnUrl=%2FWatchdogs%2FManage%2FOtherUsersWatchdogs");
+        response.Headers.Location.ToString().ShouldEndWith("/Account/AccessDenied?ReturnUrl=%2FScrapers%2FManage%2FOtherUsersScrapers");
     }
 
     [TearDown]
@@ -49,7 +49,7 @@ public class when_getting_manage_other_users_watchdogs_as_non_superadmin : BaseD
 
                 await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
                 await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+                await newUnitOfWork.DeleteScraperCascade(_scraper);
             }
         );
     }
@@ -69,7 +69,7 @@ public class when_getting_manage_other_users_watchdogs_as_non_superadmin : BaseD
                     .Build();
                 _loginToken.Confirm();
 
-                _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
+                _scraper = new ScraperBuilder(newUnitOfWork).Build();
             }
         );
     }

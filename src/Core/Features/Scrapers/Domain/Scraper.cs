@@ -3,28 +3,28 @@ using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using MrWatchdog.Core.Resources;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public class Watchdog : VersionedEntity, IAggregateRoot
+public class Scraper : VersionedEntity, IAggregateRoot
 {
     public const int DefaultScrapingIntervalOneDayInSeconds = 86400; // 1 day
     public const int DefaultIntervalBetweenSameResultNotificationsInDays = 30;
     public const int DefaultNumberOfFailedScrapingAttemptsBeforeAlerting = 5;
     
-    private readonly IList<WatchdogWebPage> _webPages = new List<WatchdogWebPage>();
+    private readonly IList<ScraperWebPage> _webPages = new List<ScraperWebPage>();
 
-    protected Watchdog() {}
+    protected Scraper() {}
 
-    public Watchdog(
+    public Scraper(
         User user, 
         string name
     )
@@ -42,7 +42,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual string? Description { get; protected set; }
     public virtual int ScrapingIntervalInSeconds { get; protected set; }
     public virtual DateTime? NextScrapingOn { get; protected set; }
-    public virtual IEnumerable<WatchdogWebPage> WebPages => _webPages;
+    public virtual IEnumerable<ScraperWebPage> WebPages => _webPages;
     public virtual PublicStatus PublicStatus { get; protected set; }
     public virtual double IntervalBetweenSameResultNotificationsInDays { get; protected set; }
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
@@ -50,11 +50,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual bool IsArchived { get; protected set; }
     
     
-    public virtual WatchdogDetailArgs GetWatchdogDetailArgs()
+    public virtual ScraperDetailArgs GetScraperDetailArgs()
     {
-        return new WatchdogDetailArgs
+        return new ScraperDetailArgs
         {
-            WatchdogId = Id, 
+            ScraperId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
             Name = Name,
             PublicStatus = PublicStatus,
@@ -65,11 +65,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         };
     }
     
-    public virtual WatchdogOverviewArgs GetWatchdogOverviewArgs()
+    public virtual ScraperOverviewArgs GetScraperOverviewArgs()
     {
-        return new WatchdogOverviewArgs
+        return new ScraperOverviewArgs
         {
-            WatchdogId = Id, 
+            ScraperId = Id, 
             Name = Name,
             Description = Description,
             ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
@@ -78,86 +78,86 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         };
     }
 
-    public virtual void UpdateOverview(WatchdogOverviewArgs watchdogOverviewArgs)
+    public virtual void UpdateOverview(ScraperOverviewArgs scraperOverviewArgs)
     {
-        Guard.Hope(Id == watchdogOverviewArgs.WatchdogId, "Invalid watchdog Id.");
+        Guard.Hope(Id == scraperOverviewArgs.ScraperId, "Invalid scraper Id.");
         
-        Name = watchdogOverviewArgs.Name;
-        Description = watchdogOverviewArgs.Description;
+        Name = scraperOverviewArgs.Name;
+        Description = scraperOverviewArgs.Description;
 
         NextScrapingOn = NextScrapingOn?
-            .AddSeconds(-ScrapingIntervalInSeconds + watchdogOverviewArgs.ScrapingIntervalInSeconds);
+            .AddSeconds(-ScrapingIntervalInSeconds + scraperOverviewArgs.ScrapingIntervalInSeconds);
 
-        ScrapingIntervalInSeconds = watchdogOverviewArgs.ScrapingIntervalInSeconds;
-        IntervalBetweenSameResultNotificationsInDays = watchdogOverviewArgs.IntervalBetweenSameResultNotificationsInDays;
-        NumberOfFailedScrapingAttemptsBeforeAlerting = watchdogOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting;
+        ScrapingIntervalInSeconds = scraperOverviewArgs.ScrapingIntervalInSeconds;
+        IntervalBetweenSameResultNotificationsInDays = scraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays;
+        NumberOfFailedScrapingAttemptsBeforeAlerting = scraperOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting;
     }
 
-    public virtual void AddWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
+    public virtual void AddWebPage(ScraperWebPageArgs scraperWebPageArgs)
     {
-        _webPages.Add(new WatchdogWebPage(
+        _webPages.Add(new ScraperWebPage(
             this,
-            watchdogWebPageArgs
+            scraperWebPageArgs
         ));
     }
     
-    public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs(long watchdogWebPageId)
+    public virtual ScraperWebPageArgs GetScraperWebPageArgs(long scraperWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        return webPage.GetWatchdogWebPageArgs();
+        var webPage = _GetWebPage(scraperWebPageId);
+        return webPage.GetScraperWebPageArgs();
     }
 
-    public virtual WatchdogWebPageDisabledWarningDto GetWatchdogWebPageDisabledWarningDto(long watchdogWebPageId)
+    public virtual ScraperWebPageDisabledWarningDto GetScraperWebPageDisabledWarningDto(long scraperWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        return webPage.GetWatchdogWebPageDisabledWarningArgs();
+        var webPage = _GetWebPage(scraperWebPageId);
+        return webPage.GetScraperWebPageDisabledWarningArgs();
     }
 
-    private WatchdogWebPage _GetWebPage(long watchdogWebPageId)
+    private ScraperWebPage _GetWebPage(long scraperWebPageId)
     {
-        return _webPages.Single(x => x.Id == watchdogWebPageId);
+        return _webPages.Single(x => x.Id == scraperWebPageId);
     }
 
-    public virtual void UpdateWebPage(WatchdogWebPageArgs watchdogWebPageArgs)
+    public virtual void UpdateWebPage(ScraperWebPageArgs scraperWebPageArgs)
     {
-        var webPage = _GetWebPage(watchdogWebPageArgs.WatchdogWebPageId);
-        webPage.Update(watchdogWebPageArgs);
+        var webPage = _GetWebPage(scraperWebPageArgs.ScraperWebPageId);
+        webPage.Update(scraperWebPageArgs);
     }
 
-    public virtual void RemoveWebPage(long watchdogWebPageId)
+    public virtual void RemoveWebPage(long scraperWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(scraperWebPageId);
         _webPages.Remove(webPage);
     }
 
-    public virtual void SetScrapingResults(long watchdogWebPageId, ICollection<string> scrapingResults)
+    public virtual void SetScrapingResults(long scraperWebPageId, ICollection<string> scrapingResults)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(scraperWebPageId);
         webPage.SetScrapingResults(scrapingResults, canRaiseScrapingFailedDomainEvent: false);
     }
     
-    public virtual void SetScrapingErrorMessage(long watchdogWebPageId, string scrapingErrorMessage)
+    public virtual void SetScrapingErrorMessage(long scraperWebPageId, string scrapingErrorMessage)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(scraperWebPageId);
         webPage.SetScrapingErrorMessage(scrapingErrorMessage, canRaiseScrapingFailedDomainEvent: false);
     }    
     
-    public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto(long watchdogWebPageId)
+    public virtual ScraperWebPageScrapingResultsDto GetScraperWebPageScrapingResultsDto(long scraperWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
-        return webPage.GetWatchdogWebPageScrapingResultsDto();
+        var webPage = _GetWebPage(scraperWebPageId);
+        return webPage.GetScraperWebPageScrapingResultsDto();
     }
     
-    public virtual WatchdogScrapingResultsArgs GetWatchdogScrapingResultsArgs()
+    public virtual ScraperScrapingResultsArgs GetScraperScrapingResultsArgs()
     {
-        return new WatchdogScrapingResultsArgs
+        return new ScraperScrapingResultsArgs
         {
-            WatchdogId = Id,
-            WatchdogName = Name,
-            WatchdogDescription = Description,
+            ScraperId = Id,
+            ScraperName = Name,
+            ScraperDescription = Description,
             WebPages = _webPages
                 .Where(x => x.IsEnabled)
-                .Select(x => x.GetWatchdogWebPageScrapingResultsArgs())
+                .Select(x => x.GetScraperWebPageScrapingResultsArgs())
                 .WhereNotNull()
                 .ToList(),
             UserId = User.Id,
@@ -186,7 +186,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             CanNotifyAboutFailedScraping = webPagesToScrape.All(x => x.ScrapingErrorMessage == null);
         }
         
-        DomainEvents.RaiseEvent(new WatchdogScrapingCompletedDomainEvent(Id));
+        DomainEvents.RaiseEvent(new ScraperScrapingCompletedDomainEvent(Id));
     }
     
     public virtual void ScheduleNextScraping()
@@ -206,22 +206,22 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task ScrapeWebPage(
-        long watchdogWebPageId, 
+        long scraperWebPageId, 
         IHttpClientFactory httpClientFactory,
         bool canRaiseScrapingFailedDomainEvent
     )
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(scraperWebPageId);
         await webPage.Scrape(httpClientFactory, canRaiseScrapingFailedDomainEvent);
     }
 
     public virtual void RequestToMakePublic()
     {
-        Guard.Hope(PublicStatus != PublicStatus.Public, "Watchdog is already public.");
+        Guard.Hope(PublicStatus != PublicStatus.Public, "Scraper is already public.");
 
         PublicStatus = PublicStatus.RequestedToBeMadePublic;
 
-        DomainEvents.RaiseEvent(new WatchdogRequestedToBeMadePublicDomainEvent(Id));
+        DomainEvents.RaiseEvent(new ScraperRequestedToBeMadePublicDomainEvent(Id));
     }
 
     public virtual void MakePublic()
@@ -234,22 +234,22 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         PublicStatus = PublicStatus.Private;
     }
     
-    public virtual WatchdogDetailPublicStatusArgs GetWatchdogDetailPublicStatusArgs()
+    public virtual ScraperDetailPublicStatusArgs GetScraperDetailPublicStatusArgs()
     {
-        return new WatchdogDetailPublicStatusArgs
+        return new ScraperDetailPublicStatusArgs
         {
-            WatchdogId = Id, 
+            ScraperId = Id, 
             PublicStatus = PublicStatus
         };
     }
 
-    public virtual void EnableWebPage(long watchdogWebPageId)
+    public virtual void EnableWebPage(long scraperWebPageId)
     {
-        var webPage = _GetWebPage(watchdogWebPageId);
+        var webPage = _GetWebPage(scraperWebPageId);
         webPage.Enable();
     }
 
-    public virtual async Task NotifyAdminAboutWatchdogRequestedToBeMadePublic(
+    public virtual async Task NotifyAdminAboutScraperRequestedToBeMadePublic(
         IEmailSender emailSender,
         RuntimeOptions runtimeOptions,
         EmailAddressesOptions emailAddressesOptions
@@ -258,12 +258,12 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         var mrWatchdogResource = Resource.MrWatchdog;
         await emailSender.SendEmail(
             emailAddressesOptions.Admin,
-            $"{mrWatchdogResource}: watchdog {Name} requested to be made public",
+            $"{mrWatchdogResource}: scraper {Name} requested to be made public",
             $"""
              <html>
              <body>
              <p>
-                 Watchdog <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">{Name}</a> has been requested to be made public by user {User.Email}.
+                 Scraper <a href="{runtimeOptions.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(Id)}">{Name}</a> has been requested to be made public by user {User.Email}.
              </p>
              <p>
                  Kind regards,<br>
@@ -284,6 +284,6 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     {
         IsArchived = true;
 
-        DomainEvents.RaiseEvent(new WatchdogArchivedDomainEvent(Id));
+        DomainEvents.RaiseEvent(new ScraperArchivedDomainEvent(Id));
     }
 }

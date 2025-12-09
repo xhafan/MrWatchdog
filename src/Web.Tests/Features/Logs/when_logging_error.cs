@@ -50,7 +50,7 @@ public class when_logging_error
 
         await _logsController.LogError(
             """
-            JS error: {"message":"Watchdog web page name is missing.","name":"Error","source":"https://mrwatchdog_test/assets/bundle.p4xqk0duio.js","lineno":15,"colno":44916,"stack":"onWatchdogWebPageNameModified
+            JS error: {"message":"Scraper web page name is missing.","name":"Error","source":"https://mrwatchdog_test/assets/bundle.p4xqk0duio.js","lineno":15,"colno":44916,"stack":"onScraperWebPageNameModified
             """);
     }
 
@@ -65,14 +65,14 @@ public class when_logging_error
         command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.FrontendErrors);
         command.Subject.ShouldBe(
             """
-            Test JS error: {"message":"Watchdog web page name is missing.","name":"Error","source
+            Test JS error: {"message":"Scraper web page name is missing.","name":"Error","source"
             """
         );
         command.HtmlMessage.ShouldContain("RequestId:");
         command.HtmlMessage.ShouldContain("TimeStamp:");
         command.HtmlMessage.ShouldContain(
             """
-            JS error: {"message":"Watchdog web page name is missing.","name":"Error","source":"https://mrwatchdog_test/assets/bundle.p4xqk0duio.js","lineno":15,"colno":44916,"stack":"onWatchdogWebPageNameModified
+            JS error: {"message":"Scraper web page name is missing.","name":"Error","source":"https://mrwatchdog_test/assets/bundle.p4xqk0duio.js","lineno":15,"colno":44916,"stack":"onScraperWebPageNameModified
             """
         );
         return true;

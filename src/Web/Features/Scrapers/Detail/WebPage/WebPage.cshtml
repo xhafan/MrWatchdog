@@ -5,20 +5,20 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_@(Model.WatchdogWebPageId)">
+<!turbo-frame id="scraper_web_page_@(Model.ScraperWebPageId)">
     <div class="card mb-3" @Stimulus.Controller(
-                               StimulusControllers.WatchdogsDetailWebPage, 
+                               StimulusControllers.ScrapersDetailWebPage, 
                                new WebPageStimulusModel(Resource.RemoveWebPageConfirmationMessage)
                            )
          >
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span data-watchdogs--detail-web-page-target="webPageName" class="text-wrap text-break">
-                @Model.WatchdogWebPageName
+            <span data-scrapers--detail-web-page-target="webPageName" class="text-wrap text-break">
+                @Model.ScraperWebPageName
             </span>
-            <form asp-page-handler="RemoveWatchdogWebPage"
-                  asp-route-watchdogId="@Model.WatchdogId"
-                  asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
-                  data-watchdogs--detail-web-page-target="removeWebPageForm"
+            <form asp-page-handler="RemoveScraperWebPage"
+                  asp-route-scraperId="@Model.ScraperId"
+                  asp-route-scraperWebPageId="@Model.ScraperWebPageId"
+                  data-scrapers--detail-web-page-target="removeWebPageForm"
                   >
                 <button type="submit" 
                         class="border-0 bg-transparent"
@@ -29,33 +29,33 @@
             </form>
         </div>
         <div class="card-body">
-            <turbo-frame id="watchdog_web_page_disabled_warning_@(Model.WatchdogWebPageId)" 
+            <turbo-frame id="scraper_web_page_disabled_warning_@(Model.ScraperWebPageId)" 
                          src="@Url.Page("WebPageDisabledWarning", new
                               {
-                                  watchdogId = Model.WatchdogId,
-                                  watchdogWebPageId = Model.WatchdogWebPageId
+                                  scraperId = Model.ScraperId,
+                                  scraperWebPageId = Model.ScraperWebPageId
                               })"
-                         data-watchdogs--detail-web-page-target="webPageDisabledWarning"
+                         data-scrapers--detail-web-page-target="webPageDisabledWarning"
             />
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <turbo-frame id="watchdog_web_page_overview_@(Model.WatchdogWebPageId)" 
+                    <turbo-frame id="scraper_web_page_overview_@(Model.ScraperWebPageId)" 
                                  src="@Url.Page("WebPageOverview", new
                                       {
-                                          watchdogId = Model.WatchdogId,
-                                          watchdogWebPageId = Model.WatchdogWebPageId
+                                          scraperId = Model.ScraperId,
+                                          scraperWebPageId = Model.ScraperWebPageId
                                       })"
-                                 data-watchdogs--detail-web-page-target="webPageOverview"
+                                 data-scrapers--detail-web-page-target="webPageOverview"
                                  />
                 </div>
                 <div class="col-md-6">
-                    <turbo-frame id="watchdog_web_page_scraping_results_@Model.WatchdogWebPageId"
+                    <turbo-frame id="scraper_web_page_scraping_results_@Model.ScraperWebPageId"
                                  src="@Url.Page("WebPageScrapingResults", new
                                       {
-                                          watchdogId = Model.WatchdogId,
-                                          watchdogWebPageId = Model.WatchdogWebPageId
+                                          scraperId = Model.ScraperId,
+                                          scraperWebPageId = Model.ScraperWebPageId
                                       })"
-                                 data-watchdogs--detail-web-page-target="webPageScrapingResults"
+                                 data-scrapers--detail-web-page-target="webPageScrapingResults"
                                  />
                 </div>
             </div>

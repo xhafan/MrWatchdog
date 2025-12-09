@@ -5,25 +5,25 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_web_page_disabled_warning_@(Model.WatchdogWebPageId)">
+<!turbo-frame id="scraper_web_page_disabled_warning_@(Model.ScraperWebPageId)">
     <div class="alert alert-warning text-center overflow-hidden"
-        @Stimulus.Controller(StimulusControllers.WatchdogsDetailWebPageDisabledWarning)
-        style="display:@(Model.WatchdogWebPageDisabledWarningDto.IsEnabled ? "none" : "")"
+        @Stimulus.Controller(StimulusControllers.ScrapersDetailWebPageDisabledWarning)
+        style="display:@(Model.ScraperWebPageDisabledWarningDto.IsEnabled ? "none" : "")"
         >
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> @Resource.TheWebPageHasBeenAutomaticallyDisabled
-        <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "" : "none")">
+        <span style="display:@(Model.ScraperWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "" : "none")">
             @Resource.PleaseEnableItOnceYourEditsAreComplete
-            <form asp-page-handler="EnableWatchdogWebPage"
-                  asp-route-watchdogId="@Model.WatchdogId"
-                  asp-route-watchdogWebPageId="@Model.WatchdogWebPageId"
-                  data-watchdogs--detail-web-page-disabled-warning-target="enableWatchdogWebPageForm"
+            <form asp-page-handler="EnableScraperWebPage"
+                  asp-route-scraperId="@Model.ScraperId"
+                  asp-route-scraperWebPageId="@Model.ScraperWebPageId"
+                  data-scrapers--detail-web-page-disabled-warning-target="enableScraperWebPageForm"
             >
                 <button type="submit" class="btn btn-warning">
                     @Resource.EnableWebPage
                 </button>
             </form>
         </span>
-        <span style="display:@(Model.WatchdogWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "none" : "")">
+        <span style="display:@(Model.ScraperWebPageDisabledWarningDto.HasBeenScrapedSuccessfully ? "none" : "")">
             @Resource.ToEnableItMakeSureTheWebPageIsSuccessfullyScraped
         </span>
     </div>

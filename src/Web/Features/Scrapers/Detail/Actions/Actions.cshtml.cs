@@ -1,13 +1,13 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.Actions;
 
 public class ActionsModel(
     IQueryExecutor queryExecutor, 
@@ -16,42 +16,42 @@ public class ActionsModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogDetailPublicStatusArgs WatchdogDetailPublicStatusArgs { get; set; } = null!;
+    public ScraperDetailPublicStatusArgs ScraperDetailPublicStatusArgs { get; set; } = null!;
     
-    public async Task<IActionResult> OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long scraperId)
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        WatchdogDetailPublicStatusArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
-                new GetWatchdogDetailPublicStatusArgsQuery(watchdogId));
+        ScraperDetailPublicStatusArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperDetailPublicStatusArgsQuery, ScraperDetailPublicStatusArgs>(
+                new GetScraperDetailPublicStatusArgsQuery(scraperId));
 
         return Page();
     }
     
-    public async Task<IActionResult> OnPostRequestToMakePublic(long watchdogId)
+    public async Task<IActionResult> OnPostRequestToMakePublic(long scraperId)
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        var command = new RequestToMakeWatchdogPublicCommand(watchdogId);
+        var command = new RequestToMakeScraperPublicCommand(scraperId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     } 
     
-    public async Task<IActionResult> OnPostMakePrivate(long watchdogId)
+    public async Task<IActionResult> OnPostMakePrivate(long scraperId)
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        var command = new MakeWatchdogPrivateCommand(watchdogId);
+        var command = new MakeScraperPrivateCommand(scraperId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }
     
-    public async Task<IActionResult> OnPostMakePublic(long watchdogId)
+    public async Task<IActionResult> OnPostMakePublic(long scraperId)
     {
         if (!await IsAuthorizedAsSuperAdmin()) return Forbid();
 
-        var command = new MakeWatchdogPublicCommand(watchdogId);
+        var command = new MakeScraperPublicCommand(scraperId);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

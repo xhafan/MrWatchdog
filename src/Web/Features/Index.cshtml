@@ -1,6 +1,6 @@
 ﻿@page
 @using Microsoft.Extensions.Localization
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @model IndexModel
 @inject IStringLocalizer<Resource> Localizer 
@@ -17,9 +17,9 @@
         @Html.Raw(
             Localizer[
                 Resource.About,
-                $"<a href=\"/Watchdogs/Index\">{Resource.AboutWebScrapers}</a>",
-                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\">{Resource.AboutCreate}</a>",
-                $"<a href=\"{WatchdogUrlConstants.WatchdogsManageUrl}\">{Resource.AboutManage}</a>"
+                $"<a href=\"/Scrapers/Index\">{Resource.AboutScrapers}</a>",
+                $"<a href=\"{ScraperUrlConstants.ScraperCreateUrl}\">{Resource.AboutCreate}</a>",
+                $"<a href=\"{ScraperUrlConstants.ScrapersManageUrl}\">{Resource.AboutManage}</a>"
             ]
         )
     </div>

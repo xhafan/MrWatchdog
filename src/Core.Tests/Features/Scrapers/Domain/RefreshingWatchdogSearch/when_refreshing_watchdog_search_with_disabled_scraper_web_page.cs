@@ -1,13 +1,13 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.RefreshingWatchdogSearch;
 
 [TestFixture]
-public class when_refreshing_watchdog_search_with_disabled_watchdog_web_page : BaseTest
+public class when_refreshing_watchdog_search_with_disabled_scraper_web_page : BaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private WatchdogSearch _watchdogSearch = null!;
 
     [SetUp]
@@ -27,30 +27,30 @@ public class when_refreshing_watchdog_search_with_disabled_watchdog_web_page : B
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder()
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _updateWatchdogWebPageInOrderToDisableIt();
+        var scraperWebPage = _scraper.WebPages.Single();
+        _updateScraperWebPageInOrderToDisableIt();
 
         _watchdogSearch = new WatchdogSearchBuilder()
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();
         
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["Doom 1", "Another World"]);
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
         return;
 
-        void _updateWatchdogWebPageInOrderToDisableIt()
+        void _updateScraperWebPageInOrderToDisableIt()
         {
-            _watchdog.UpdateWebPage(new WatchdogWebPageArgs
+            _scraper.UpdateWebPage(new ScraperWebPageArgs
             {
-                WatchdogWebPageId = watchdogWebPage.Id,
+                ScraperWebPageId = scraperWebPage.Id,
                 Url = "http://url.com/page",
                 Selector = ".invalid_selector",
                 Name = "url.com/page"

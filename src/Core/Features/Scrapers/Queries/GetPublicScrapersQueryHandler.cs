@@ -1,33 +1,33 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using NHibernate;
 using NHibernate.Transform;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetPublicWatchdogsQueryHandler(
+public class GetPublicScrapersQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetPublicWatchdogsQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetPublicScrapersQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    protected override IQueryOver GetQueryOver<TResult>(GetPublicWatchdogsQuery query)
+    protected override IQueryOver GetQueryOver<TResult>(GetPublicScrapersQuery query)
     {
         User userAlias = null!;
-        GetPublicWatchdogsQueryResult result = null!;
+        GetPublicScrapersQueryResult result = null!;
 
-        return _unitOfWork.Session!.QueryOver<Watchdog>()
+        return _unitOfWork.Session!.QueryOver<Scraper>()
             .JoinAlias(x => x.User, () => userAlias)
             .Where(x => x.PublicStatus == PublicStatus.Public
                         && !x.IsArchived)
             .SelectList(list => list
-                .Select(x => x.Id).WithAlias(() => result.WatchdogId)
-                .Select(x => x.Name).WithAlias(() => result.WatchdogName)
+                .Select(x => x.Id).WithAlias(() => result.ScraperId)
+                .Select(x => x.Name).WithAlias(() => result.ScraperName)
                 .Select(() => userAlias.Id).WithAlias(() => result.UserId)
             )
-            .OrderByAlias(() => result.WatchdogName).Asc
-            .TransformUsing(Transformers.AliasToBean<GetPublicWatchdogsQueryResult>());
+            .OrderByAlias(() => result.ScraperName).Asc
+            .TransformUsing(Transformers.AliasToBean<GetPublicScrapersQueryResult>());
     }
 }

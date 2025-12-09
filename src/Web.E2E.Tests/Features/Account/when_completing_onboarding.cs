@@ -30,7 +30,7 @@ public class when_completing_onboarding : BaseDatabaseTest
     public async Task complete_onboarding_command_is_sent_successfully()
     {
         var response = await _webApplicationClient.PostAsync(
-            UserUrlConstants.ApiCompleteOnboardingUrlTemplate.WithOnboardingIdentifier(OnboardingIdentifiers.WatchdogsScrapingResults),
+            UserUrlConstants.ApiCompleteOnboardingUrlTemplate.WithOnboardingIdentifier(OnboardingIdentifiers.ScraperScrapingResults),
             content: null
         );
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

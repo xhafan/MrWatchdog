@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
@@ -48,7 +48,7 @@ public class when_persisting_job : BaseDatabaseTest
         _persistedJob.CompletedOn.Value.ShouldBeGreaterThanOrEqualTo(_persistedJob.CreatedOn);
         _persistedJob.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _persistedJob.Type.ShouldBe(JobBuilder.Type);
-        JsonHelper.Deserialize<CreateWatchdogCommand>(_persistedJob.InputData).ShouldBe(JobBuilder.InputData);
+        JsonHelper.Deserialize<CreateScraperCommand>(_persistedJob.InputData).ShouldBe(JobBuilder.InputData);
         _persistedJob.Kind.ShouldBe(JobBuilder.Kind);
         _persistedJob.NumberOfHandlingAttempts.ShouldBe(1);
         _persistedJob.AffectedEntities.ShouldBeEmpty();

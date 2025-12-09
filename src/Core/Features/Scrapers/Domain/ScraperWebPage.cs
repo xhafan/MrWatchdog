@@ -1,37 +1,37 @@
-﻿using CoreDdd.Domain.Events;
+﻿using System.Web;
+using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
 using Ganss.Xss;
 using HtmlAgilityPack;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using Serilog;
-using System.Web;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public class WatchdogWebPage : VersionedEntity
+public class ScraperWebPage : VersionedEntity
 {
     private readonly IList<string> _scrapingResults = new List<string>();
-    private readonly ISet<WatchdogWebPageHttpHeader> _httpHeaders = new HashSet<WatchdogWebPageHttpHeader>();
+    private readonly ISet<ScraperWebPageHttpHeader> _httpHeaders = new HashSet<ScraperWebPageHttpHeader>();
 
-    protected WatchdogWebPage() {}
+    protected ScraperWebPage() {}
 
-    public WatchdogWebPage(
-        Watchdog watchdog,
-        WatchdogWebPageArgs args
+    public ScraperWebPage(
+        Scraper scraper,
+        ScraperWebPageArgs args
     )
     {
-        Watchdog = watchdog;
+        Scraper = scraper;
 
-        Update(args, raiseWatchdogWebPageScrapingDataUpdatedDomainEvent: false);
+        Update(args, raiseScraperWebPageScrapingDataUpdatedDomainEvent: false);
     }
     
-    public virtual Watchdog Watchdog { get; } = null!;
+    public virtual Scraper Scraper { get; } = null!;
     public virtual string? Url { get; protected set; }
     public virtual string? Selector { get; protected set; }
     public virtual bool SelectText { get; protected set; }
@@ -41,14 +41,14 @@ public class WatchdogWebPage : VersionedEntity
     public virtual string? ScrapingErrorMessage { get; protected set; }
     public virtual bool IsEnabled { get; protected set; }
     public virtual int NumberOfFailedScrapingAttemptsBeforeTheNextAlert { get; protected set; }
-    public virtual IEnumerable<WatchdogWebPageHttpHeader> HttpHeaders => _httpHeaders;
+    public virtual IEnumerable<ScraperWebPageHttpHeader> HttpHeaders => _httpHeaders;
 
-    public virtual WatchdogWebPageArgs GetWatchdogWebPageArgs()
+    public virtual ScraperWebPageArgs GetScraperWebPageArgs()
     {
-        return new WatchdogWebPageArgs
+        return new ScraperWebPageArgs
         {
-            WatchdogId = Watchdog.Id,
-            WatchdogWebPageId = Id,
+            ScraperId = Scraper.Id,
+            ScraperWebPageId = Id,
             Url = Url, 
             Selector = Selector,
             SelectText = SelectText,
@@ -57,9 +57,9 @@ public class WatchdogWebPage : VersionedEntity
         };
     }
 
-    public virtual WatchdogWebPageDisabledWarningDto GetWatchdogWebPageDisabledWarningArgs()
+    public virtual ScraperWebPageDisabledWarningDto GetScraperWebPageDisabledWarningArgs()
     {
-        return new WatchdogWebPageDisabledWarningDto
+        return new ScraperWebPageDisabledWarningDto
         {
             IsEnabled = IsEnabled,
             HasBeenScrapedSuccessfully = ScrapedOn.HasValue
@@ -67,41 +67,41 @@ public class WatchdogWebPage : VersionedEntity
     }
 
     public virtual void Update(
-        WatchdogWebPageArgs watchdogWebPageArgs, 
-        bool raiseWatchdogWebPageScrapingDataUpdatedDomainEvent = true
+        ScraperWebPageArgs scraperWebPageArgs, 
+        bool raiseScraperWebPageScrapingDataUpdatedDomainEvent = true
     )
     {
         var httpHeaders = _getHttpHeaders().ToList();
         
         var hasScrapingDataUpdated =
-            Url != watchdogWebPageArgs.Url
-            || Selector != watchdogWebPageArgs.Selector
-            || SelectText != watchdogWebPageArgs.SelectText
+            Url != scraperWebPageArgs.Url
+            || Selector != scraperWebPageArgs.Selector
+            || SelectText != scraperWebPageArgs.SelectText
             || !_httpHeaders.AreEquivalent(httpHeaders);
 
-        Url = watchdogWebPageArgs.Url?.Trim();
-        Selector = watchdogWebPageArgs.Selector?.Trim();
-        SelectText = watchdogWebPageArgs.SelectText;
-        Name = watchdogWebPageArgs.Name?.Trim();
+        Url = scraperWebPageArgs.Url?.Trim();
+        Selector = scraperWebPageArgs.Selector?.Trim();
+        SelectText = scraperWebPageArgs.SelectText;
+        Name = scraperWebPageArgs.Name?.Trim();
         
         _httpHeaders.Clear();
         _httpHeaders.UnionWith(httpHeaders);
 
-        if (!raiseWatchdogWebPageScrapingDataUpdatedDomainEvent) return;
+        if (!raiseScraperWebPageScrapingDataUpdatedDomainEvent) return;
 
         if (!hasScrapingDataUpdated) return;
         
         _ResetScrapingData();
         _Disable();
         
-        DomainEvents.RaiseEvent(new WatchdogWebPageScrapingDataUpdatedDomainEvent(Watchdog.Id, Id));
+        DomainEvents.RaiseEvent(new ScraperWebPageScrapingDataUpdatedDomainEvent(Scraper.Id, Id));
         return;
 
-        IEnumerable<WatchdogWebPageHttpHeader> _getHttpHeaders()
+        IEnumerable<ScraperWebPageHttpHeader> _getHttpHeaders()
         {
-            if (string.IsNullOrWhiteSpace(watchdogWebPageArgs.HttpHeaders)) yield break;
+            if (string.IsNullOrWhiteSpace(scraperWebPageArgs.HttpHeaders)) yield break;
 
-            var lines = watchdogWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var lines = scraperWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             foreach (var line in lines)
             {
@@ -109,7 +109,7 @@ public class WatchdogWebPage : VersionedEntity
                 Guard.Hope(parts.Length == 2, $"""
                                                Invalid header format: "{line}". Expected format is "header name: value".
                                                """);
-                yield return new WatchdogWebPageHttpHeader(parts[0], parts[1]);
+                yield return new ScraperWebPageHttpHeader(parts[0], parts[1]);
             }
         }
     }
@@ -198,34 +198,34 @@ public class WatchdogWebPage : VersionedEntity
         
         ScrapingErrorMessage = scrapingErrorMessage;
 
-        if (canRaiseScrapingFailedDomainEvent && Watchdog.CanNotifyAboutFailedScraping)
+        if (canRaiseScrapingFailedDomainEvent && Scraper.CanNotifyAboutFailedScraping)
         {
             NumberOfFailedScrapingAttemptsBeforeTheNextAlert++;
             
-            if (NumberOfFailedScrapingAttemptsBeforeTheNextAlert >= Watchdog.NumberOfFailedScrapingAttemptsBeforeAlerting)
+            if (NumberOfFailedScrapingAttemptsBeforeTheNextAlert >= Scraper.NumberOfFailedScrapingAttemptsBeforeAlerting)
             {
-                DomainEvents.RaiseEvent(new WatchdogWebPageScrapingFailedDomainEvent(Watchdog.Id));
+                DomainEvents.RaiseEvent(new ScraperWebPageScrapingFailedDomainEvent(Scraper.Id));
                 
-                Watchdog.DisableNotifyingAboutFailedScraping();
+                Scraper.DisableNotifyingAboutFailedScraping();
                 ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert();
             }
         }
 
-        Log.Information("Setting watchdog web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);
+        Log.Information("Setting scraper web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);
     }
     
-    public virtual WatchdogWebPageScrapingResultsDto GetWatchdogWebPageScrapingResultsDto()
+    public virtual ScraperWebPageScrapingResultsDto GetScraperWebPageScrapingResultsDto()
     {
-        return new WatchdogWebPageScrapingResultsDto(Watchdog.Id, Id, _scrapingResults, ScrapedOn, ScrapingErrorMessage);
+        return new ScraperWebPageScrapingResultsDto(Scraper.Id, Id, _scrapingResults, ScrapedOn, ScrapingErrorMessage);
     }
 
-    public virtual WatchdogWebPageScrapingResultsArgs? GetWatchdogWebPageScrapingResultsArgs()
+    public virtual ScraperWebPageScrapingResultsArgs? GetScraperWebPageScrapingResultsArgs()
     {
         return !string.IsNullOrWhiteSpace(Url) 
                && !string.IsNullOrWhiteSpace(Name)
                && string.IsNullOrWhiteSpace(ScrapingErrorMessage)
                && ScrapedOn != null
-            ? new WatchdogWebPageScrapingResultsArgs
+            ? new ScraperWebPageScrapingResultsArgs
             {
                 Name = Name,
                 ScrapingResults = _scrapingResults.ToList(),
@@ -284,8 +284,8 @@ public class WatchdogWebPage : VersionedEntity
         {
             SetScrapingErrorMessage(ex.Message, canRaiseScrapingFailedDomainEvent);
             
-            Log.Error(ex, "Watchdog {WatchdogId} web page {WebPageId} scraping error, selector: {Selector}, html: {responseContent}",
-                Watchdog.Id, Id, Selector, responseContent);
+            Log.Error(ex, "Scraper {ScraperId} web page {WebPageId} scraping error, selector: {Selector}, html: {responseContent}",
+                Scraper.Id, Id, Selector, responseContent);
 
             return;
         }
@@ -304,7 +304,7 @@ public class WatchdogWebPage : VersionedEntity
 
     public virtual void Enable()
     {
-        Guard.Hope(ScrapedOn.HasValue, "Watchdog web page can be enabled only after successful scraping.");
+        Guard.Hope(ScrapedOn.HasValue, "Scraper web page can be enabled only after successful scraping.");
 
         IsEnabled = true;
     }

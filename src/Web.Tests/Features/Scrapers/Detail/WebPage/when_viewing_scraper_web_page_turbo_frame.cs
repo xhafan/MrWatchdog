@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_turbo_frame : BaseDatabaseTest
+public class when_viewing_scraper_web_page_turbo_frame : BaseDatabaseTest
 {
     private WebPageTurboFrameModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -23,8 +23,8 @@ public class when_viewing_watchdog_web_page_turbo_frame : BaseDatabaseTest
         UnitOfWork.Clear();
 
         _model = new WebPageTurboFrameModelBuilder()
-            .WithWatchdogId(_watchdog.Id)
-            .WithWatchdogWebPageId(_watchdogWebPageId)
+            .WithScraperId(_scraper.Id)
+            .WithScraperWebPageId(_scraperWebPageId)
             .Build();
 
         _actionResult = await _model.OnGet();
@@ -38,14 +38,14 @@ public class when_viewing_watchdog_web_page_turbo_frame : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

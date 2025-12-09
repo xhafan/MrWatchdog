@@ -1,45 +1,45 @@
 ﻿using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using NHibernate;
 
 namespace MrWatchdog.Web.HostedServices;
 
-public class KickOffDueWatchdogsScrapingHostedService(
+public class KickOffDueScrapersScrapingHostedService(
     INhibernateConfigurator nhibernateConfigurator,
     ICoreBus bus,
-    IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions> options,
-    ILogger<KickOffDueWatchdogsScrapingHostedService> logger
+    IOptions<KickOffDueScrapersScrapingHostedServiceOptions> options,
+    ILogger<KickOffDueScrapersScrapingHostedService> logger
 ) : BackgroundService
 {
     private const int ScrapingIntervalInSeconds = ScrapingConstants.ScrapingIntervalInSeconds;
 
-    private IEnumerable<long>? _watchdogIdsToScrape; // If null, all watchdogs are considered for scraping
+    private IEnumerable<long>? _scraperIdsToScrape; // If null, all scrapers are considered for scraping
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         if (options.Value.IsDisabled)
         {
-            logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is disabled.");
+            logger.LogInformation($"{nameof(KickOffDueScrapersScrapingHostedService)} is disabled.");
             return;
         }
 
-        logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is starting.");
+        logger.LogInformation($"{nameof(KickOffDueScrapersScrapingHostedService)} is starting.");
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            await _KickOffDueWatchdogsScraping();
+            await _KickOffDueScrapersScraping();
 
             await Task.Delay(TimeSpan.FromSeconds(ScrapingIntervalInSeconds), cancellationToken);
         }
 
-        logger.LogInformation($"{nameof(KickOffDueWatchdogsScrapingHostedService)} is stopping.");
+        logger.LogInformation($"{nameof(KickOffDueScrapersScrapingHostedService)} is stopping.");
     }
     
-    private async Task _KickOffDueWatchdogsScraping()
+    private async Task _KickOffDueScrapersScraping()
     {
         await NhibernateUnitOfWorkRunner.RunAsync(
             () => new NhibernateUnitOfWork(nhibernateConfigurator),
@@ -49,41 +49,41 @@ public class KickOffDueWatchdogsScrapingHostedService(
                     .CreateSQLQuery(
                         $$"""
                           SELECT
-                              {w.*}
-                          FROM "Watchdog" w
+                              {s.*}
+                          FROM "Scraper" s
                           WHERE "NextScrapingOn" <= :utcNow or "NextScrapingOn" is null
-                          and w."IsArchived" = false
-                          {{(_watchdogIdsToScrape == null
+                          and s."IsArchived" = false
+                          {{(_scraperIdsToScrape == null
                               ? ""
                               : """
-                                and w."Id" in (:watchdogIdsToScrape)
+                                and s."Id" in (:scraperIdsToScrape)
                                 """)}}
                           FOR UPDATE SKIP LOCKED
                           """
                     )
-                    .AddEntity("w", typeof(Watchdog))
+                    .AddEntity("s", typeof(Scraper))
                     .SetParameter("utcNow", DateTime.UtcNow, NHibernateUtil.DateTime);
                 
-                if (_watchdogIdsToScrape != null)
+                if (_scraperIdsToScrape != null)
                 {
-                    sqlQuery.SetParameterList("watchdogIdsToScrape", _watchdogIdsToScrape ?? [], NHibernateUtil.Int64);
+                    sqlQuery.SetParameterList("scraperIdsToScrape", _scraperIdsToScrape ?? [], NHibernateUtil.Int64);
                 }
 
-                var dueWatchdogsToScrape = await sqlQuery.ListAsync<Watchdog>();
+                var dueScrapersToScrape = await sqlQuery.ListAsync<Scraper>();
 
-                foreach (var watchdogToScrape in dueWatchdogsToScrape)
+                foreach (var scraperToScrape in dueScrapersToScrape)
                 {
-                    await bus.Send(new ScrapeWatchdogCommand(watchdogToScrape.Id));
+                    await bus.Send(new ScrapeScraperCommand(scraperToScrape.Id));
 
-                    watchdogToScrape.ScheduleNextScraping();
+                    scraperToScrape.ScheduleNextScraping();
                 }
             }
         );
     }
 
     // For testing purposes only
-    public void SetWatchdogIdsToScrape(params IEnumerable<long> watchdogIdsToScrape)
+    public void SetScraperIdsToScrape(params IEnumerable<long> scraperIdsToScrape)
     {
-        _watchdogIdsToScrape = watchdogIdsToScrape;
+        _scraperIdsToScrape = scraperIdsToScrape;
     }
 }

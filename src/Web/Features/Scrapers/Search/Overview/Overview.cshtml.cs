@@ -1,13 +1,13 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Search.Overview;
+namespace MrWatchdog.Web.Features.Scrapers.Search.Overview;
 
 public class OverviewModel(
     IQueryExecutor queryExecutor, 

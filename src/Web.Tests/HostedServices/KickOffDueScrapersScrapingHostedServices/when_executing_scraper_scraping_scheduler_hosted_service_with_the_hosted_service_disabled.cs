@@ -2,19 +2,19 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.HostedServices;
 
-namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueWatchdogsScrapingHostedServices;
+namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueScrapersScrapingHostedServices;
 
 [TestFixture]
-public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_hosted_service_disabled : BaseDatabaseTest
+public class when_executing_scraper_scraping_scheduler_hosted_service_with_the_hosted_service_disabled : BaseDatabaseTest
 {
-    private Watchdog _watchdogWithoutNextScrapingOnSet = null!;
+    private Scraper _scraperWithoutNextScrapingOnSet = null!;
     private ICoreBus _bus = null!;
 
     [SetUp]
@@ -22,13 +22,13 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
     {
         _BuildEntitiesInSeparateTransaction();
         
-        var logger = A.Fake<ILogger<KickOffDueWatchdogsScrapingHostedService>>();
+        var logger = A.Fake<ILogger<KickOffDueScrapersScrapingHostedService>>();
         _bus = A.Fake<ICoreBus>();
         
-        var options = A.Fake<IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions>>();
-        A.CallTo(() => options.Value).Returns(new KickOffDueWatchdogsScrapingHostedServiceOptions {IsDisabled = true});
+        var options = A.Fake<IOptions<KickOffDueScrapersScrapingHostedServiceOptions>>();
+        A.CallTo(() => options.Value).Returns(new KickOffDueScrapersScrapingHostedServiceOptions {IsDisabled = true});
         
-        var hostedService = new KickOffDueWatchdogsScrapingHostedService(
+        var hostedService = new KickOffDueScrapersScrapingHostedService(
             TestFixtureContext.NhibernateConfigurator,
             _bus,
             options,
@@ -45,9 +45,9 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
     }
 
     [Test]
-    public void watchdog_without_next_scraping_on_timestamp_does_not_have_scraping_scheduled()
+    public void scraper_without_next_scraping_on_timestamp_does_not_have_scraping_scheduled()
     {
-        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_watchdogWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_scraperWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
     }
     
     [TearDown]
@@ -57,7 +57,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             async newUnitOfWork =>
             {
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
+                await newUnitOfWork.DeleteScraperCascade(_scraperWithoutNextScrapingOnSet);
             }
         );
     }    
@@ -68,7 +68,7 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service_with_the_
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             newUnitOfWork =>
             {
-                _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork).Build();
+                _scraperWithoutNextScrapingOnSet = new ScraperBuilder(newUnitOfWork).Build();
             }
         );
     }

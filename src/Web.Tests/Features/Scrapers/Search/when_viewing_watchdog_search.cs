@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Search;
+using MrWatchdog.Web.Features.Scrapers.Search;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
 
 [TestFixture]
 public class when_viewing_watchdog_search : BaseDatabaseTest
 {
     private SearchModel _model = null!;
     private WatchdogSearch _watchdogSearch = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -35,13 +35,13 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
     public void model_is_correct()
     {
         _model.WatchdogSearchArgs.WatchdogSearchId.ShouldBe(_watchdogSearch.Id);
-        _model.WatchdogSearchArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogSearchArgs.ScraperId.ShouldBe(_scraper.Id);
         _model.WatchdogSearchArgs.SearchTerm.ShouldBe("text");
         
-        _model.WatchdogScrapingResultsArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogScrapingResultsArgs.WatchdogName.ShouldBe("watchdog name");
+        _model.ScraperScrapingResultsArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperScrapingResultsArgs.ScraperName.ShouldBe("scraper name");
         
-        var webPageArgs = _model.WatchdogScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        var webPageArgs = _model.ScraperScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
         webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");        
@@ -49,21 +49,21 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
         
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm("text")
             .Build();
 

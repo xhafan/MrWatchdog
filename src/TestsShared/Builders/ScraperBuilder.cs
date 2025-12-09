@@ -1,14 +1,14 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 
-public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
+public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
-    public const string Name = "watchdog name";
-    public const string Description = "watchdog description";
+    public const string Name = "scraper name";
+    public const string Description = "scraper description";
     public const int ScrapingIntervalInSeconds = 60;
     public const double IntervalBetweenSameResultNotificationsInDays = 20;
     public const int NumberOfFailedScrapingAttemptsBeforeAlerting = 5;
@@ -19,86 +19,86 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
     private int _scrapingIntervalInSeconds = ScrapingIntervalInSeconds;
     private double _intervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays;
 
-    private WatchdogWebPageArgs[]? _watchdogWebPageArgses;
+    private ScraperWebPageArgs[]? _scraperWebPageArgses;
     private DateTime? _nextScrapingOn;
     private int _numberOfFailedScrapingAttemptsBeforeAlerting = NumberOfFailedScrapingAttemptsBeforeAlerting;
 
-    public WatchdogBuilder WithUser(User user)
+    public ScraperBuilder WithUser(User user)
     {
         _user = user;
         return this;
     }
 
-    public WatchdogBuilder WithName(string name)
+    public ScraperBuilder WithName(string name)
     {
         _name = name;
         return this;
     }
     
-    public WatchdogBuilder WithDescription(string description)
+    public ScraperBuilder WithDescription(string description)
     {
         _description = description;
         return this;
     }
 
-    public WatchdogBuilder WithScrapingIntervalInSeconds(int scrapingIntervalInSeconds)
+    public ScraperBuilder WithScrapingIntervalInSeconds(int scrapingIntervalInSeconds)
     {
         _scrapingIntervalInSeconds = scrapingIntervalInSeconds;
         return this;
     }
 
-    public WatchdogBuilder WithIntervalBetweenSameResultNotificationsInDays(double intervalBetweenSameResultNotificationsInDays)
+    public ScraperBuilder WithIntervalBetweenSameResultNotificationsInDays(double intervalBetweenSameResultNotificationsInDays)
     {
         _intervalBetweenSameResultNotificationsInDays = intervalBetweenSameResultNotificationsInDays;
         return this;
     }
 
-    public WatchdogBuilder WithWebPage(params WatchdogWebPageArgs[] watchdogWebPageArgses)
+    public ScraperBuilder WithWebPage(params ScraperWebPageArgs[] scraperWebPageArgses)
     {
-        _watchdogWebPageArgses = watchdogWebPageArgses;
+        _scraperWebPageArgses = scraperWebPageArgses;
         return this;
     } 
     
-    public WatchdogBuilder WithNextScrapingOn(DateTime? nextScrapingOn)
+    public ScraperBuilder WithNextScrapingOn(DateTime? nextScrapingOn)
     {
         _nextScrapingOn = nextScrapingOn;
         return this;
     }
 
-    public WatchdogBuilder WithNumberOfFailedScrapingAttemptsBeforeAlerting(int numberOfFailedScrapingAttemptsBeforeAlerting)
+    public ScraperBuilder WithNumberOfFailedScrapingAttemptsBeforeAlerting(int numberOfFailedScrapingAttemptsBeforeAlerting)
     {
         _numberOfFailedScrapingAttemptsBeforeAlerting = numberOfFailedScrapingAttemptsBeforeAlerting;
         return this;
     }
     
-    public Watchdog Build()
+    public Scraper Build()
     {
         _user ??= new UserBuilder(unitOfWork).Build();
         
-        var watchdog = new Watchdog(_user, _name);
+        var scraper = new Scraper(_user, _name);
 
-        if (_watchdogWebPageArgses != null)
+        if (_scraperWebPageArgses != null)
         {
-            foreach (var watchdogWebPageArgs in _watchdogWebPageArgses)
+            foreach (var scraperWebPageArgs in _scraperWebPageArgses)
             {
-                watchdog.AddWebPage(watchdogWebPageArgs);
+                scraper.AddWebPage(scraperWebPageArgs);
             }
         }
 
         if (unitOfWork == null)
         {
-            watchdog.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
-            foreach (var watchdogWebPage in watchdog.WebPages)
+            scraper.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
+            foreach (var scraperWebPage in scraper.WebPages)
             {
-                watchdogWebPage.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
+                scraperWebPage.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
             }
         }        
         
-        unitOfWork?.Save(watchdog);
+        unitOfWork?.Save(scraper);
         
-        watchdog.UpdateOverview(new WatchdogOverviewArgs
+        scraper.UpdateOverview(new ScraperOverviewArgs
         {
-            WatchdogId = watchdog.Id,
+            ScraperId = scraper.Id,
             Name = _name, 
             Description = _description,
             ScrapingIntervalInSeconds = _scrapingIntervalInSeconds,
@@ -106,8 +106,8 @@ public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
             NumberOfFailedScrapingAttemptsBeforeAlerting = _numberOfFailedScrapingAttemptsBeforeAlerting
         });
         
-        watchdog.SetNextScrapingOn(_nextScrapingOn);
+        scraper.SetNextScrapingOn(_nextScrapingOn);
         
-        return watchdog;
+        return scraper;
     }
 }

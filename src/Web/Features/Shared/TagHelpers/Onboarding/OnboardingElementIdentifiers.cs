@@ -4,19 +4,19 @@ public static class OnboardingElementIdentifiers
 {
     public const string OnboardingId = "onboarding";
     
-    public const string WatchdogsScrapingResultsWebPagesWatchedWebPagesId = "watchedWebPages";
-    public const string WatchdogsScrapingResultsSearchTermInputGroupId = "scrapingResultsSearchTermInputGroup";
-    public const string WatchdogsScrapingResultsCreateWatchdogSearchId = "createWatchdogSearch";
-    public const string WatchdogsScrapingResultsLoginToCreateWatchdogSearchId = "loginToCreateWatchdogSearch";
+    public const string ScrapersScrapingResultsWebPagesWatchedWebPagesId = "scrapersScrapingResultsWebPagesWatchedWebPages";
+    public const string ScrapersScrapingResultsSearchTermInputGroupId = "scrapersScrapingResultsSearchTermInputGroup";
+    public const string ScrapersScrapingResultsCreateWatchdogSearchId = "scrapersScrapingResultsCreateWatchdogSearch";
+    public const string ScrapersScrapingResultsLoginToCreateWatchdogSearchId = "scrapersScrapingResultsLoginToCreateWatchdogSearch";
 
     public const string WatchdogsSearchSearchTermInputGroupCssClass = "watchdogsSearchSearchTermInputGroup";
     public const string WatchdogsSearchReceiveNotificationCssClass = "watchdogsSearchReceiveNotification";
 
-    public const string WatchdogsDetailAddWebPageToWatchId = "watchdogsDetailAddWebPageToWatch";
-    public const string WatchdogsDetailScrapingIntervalCssClass = "watchdogsDetailScrapingInterval";
-    public const string WatchdogsDetailViewScrapedResultsId = "watchdogsDetailViewSearchResults";
-    public const string WatchdogsDetailRequestToMakePublicId = "watchdogsDetailRequestToMakePublic";
+    public const string ScrapersDetailAddWebPageToWatchId = "scrapersDetailAddWebPageToWatch";
+    public const string ScrapersDetailScrapingIntervalCssClass = "scrapersDetailScrapingInterval";
+    public const string ScrapersDetailViewScrapedResultsId = "scrapersDetailViewScrapedResults";
+    public const string ScrapersDetailRequestToMakePublicId = "scrapersDetailRequestToMakePublic";
 
-    public const string WebScraperCreateSetNameId = "webScraperCreateSetName";
+    public const string ScraperCreateSetNameId = "scraperCreateSetName";
 
 }

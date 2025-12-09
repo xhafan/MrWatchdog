@@ -1,11 +1,11 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.Badges;
 
 public class BadgesModel(
     IQueryExecutor queryExecutor,
@@ -13,18 +13,18 @@ public class BadgesModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogDetailArgs WatchdogDetailArgs { get; set; } = null!;
+    public ScraperDetailArgs ScraperDetailArgs { get; set; } = null!;
     
     [BindProperty(SupportsGet = true)]
     public bool ShowPrivate { get; set; } = true;
 
-    public async Task<IActionResult> OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long scraperId)
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        WatchdogDetailArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailArgsQuery, WatchdogDetailArgs>(
-                new GetWatchdogDetailArgsQuery(watchdogId));
+        ScraperDetailArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperDetailArgsQuery, ScraperDetailArgs>(
+                new GetScraperDetailArgsQuery(scraperId));
 
         return Page();
     }

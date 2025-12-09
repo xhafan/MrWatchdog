@@ -6,28 +6,28 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 
-public class NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
-    IRepository<Watchdog> watchdogRepository,
+public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
+    IRepository<Scraper> scraperRepository,
     IEmailSender emailSender,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
-    : IHandleMessages<WatchdogWebPageScrapingFailedDomainEvent>
+    : IHandleMessages<ScraperWebPageScrapingFailedDomainEvent>
 {
-    public async Task Handle(WatchdogWebPageScrapingFailedDomainEvent domainEvent)
+    public async Task Handle(ScraperWebPageScrapingFailedDomainEvent domainEvent)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
-        var watchdogWebPagesWithError = watchdog.WebPages.Where(x => !string.IsNullOrWhiteSpace(x.ScrapingErrorMessage)).ToList();
+        var scraper = await scraperRepository.LoadByIdAsync(domainEvent.ScraperId);
+        var scraperWebPagesWithError = scraper.WebPages.Where(x => !string.IsNullOrWhiteSpace(x.ScrapingErrorMessage)).ToList();
 
-        if (watchdogWebPagesWithError.IsEmpty()) return;
+        if (scraperWebPagesWithError.IsEmpty()) return;
         
         var mrWatchdogResource = Resource.MrWatchdog;
-        var watchdogDetailUrl = $"{iRuntimeOptions.Value.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(watchdog.Id)}";
+        var scraperDetailUrl = $"{iRuntimeOptions.Value.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(scraper.Id)}";
         
         await emailSender.SendEmail(
-            watchdog.User.Email,
-            $"{mrWatchdogResource}: web scraping failed for the watchdog {watchdog.Name}",
+            scraper.User.Email,
+            $"{mrWatchdogResource}: web scraping failed for the scraper {scraper.Name}",
             $"""
              <html>
              <body>
@@ -35,12 +35,12 @@ public class NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
                  Hello,
              </p>
              <p>
-                 Web scraping failed for the watchdog <a href="{watchdogDetailUrl}">{watchdog.Name}</a>.<br>
-                 Failed watchdog web pages:
+                 Web scraping failed for the scraper <a href="{scraperDetailUrl}">{scraper.Name}</a>.<br>
+                 Failed web scraper web pages:
                  <ul>
-                     {string.Join("\n", watchdogWebPagesWithError
+                     {string.Join("\n", scraperWebPagesWithError
                          .Select(webPage =>
-                             $"""<li><a href="{watchdogDetailUrl}#watchdog_web_page_{webPage.Id}">{webPage.Name}</a>, error message: {webPage.ScrapingErrorMessage}</li>""")
+                             $"""<li><a href="{scraperDetailUrl}#scraper_web_page_{webPage.Id}">{webPage.Name}</a>, error message: {webPage.ScrapingErrorMessage}</li>""")
                      )}
                  </ul>
              </p>

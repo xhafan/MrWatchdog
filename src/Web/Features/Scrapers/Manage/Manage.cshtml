@@ -1,5 +1,5 @@
 ﻿@page
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
@@ -7,7 +7,7 @@
 @inject IUserRepository UserRepository
 
 @{
-    var title = Resource.ManageWebScrapers;
+    var title = Resource.ManageScrapers;
     ViewData["Title"] = title;
 }
 
@@ -26,14 +26,14 @@
 
 <div class="row">
     <div class="col-md-6">
-        <turbo-frame id="userWatchdogs"
-                     src="@WatchdogUrlConstants.WatchdogsManageUserWatchdogsUrl" />
+        <turbo-frame id="userScrapers"
+                     src="@ScraperUrlConstants.ScrapersManageUserScrapersUrl" />
     </div>
     <div class="col-md-6">
         @if (await User.IsSuperAdmin(UserRepository))
         {
-            <turbo-frame id="otherUsersWatchdogs"
-                         src="@WatchdogUrlConstants.WatchdogsManageOtherUsersWatchdogsUrl" />
+            <turbo-frame id="otherUsersScrapers"
+                         src="@ScraperUrlConstants.ScrapersManageOtherUsersScrapersUrl" />
         }
     </div>
 </div>

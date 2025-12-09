@@ -1,44 +1,44 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.PublicWatchdogs;
+using MrWatchdog.Web.Features.Scrapers.PublicScrapers;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.PublicWatchdogs;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.PublicScrapers;
 
 [TestFixture]
-public class when_viewing_public_watchdogs : BaseDatabaseTest
+public class when_viewing_public_scrapers : BaseDatabaseTest
 {
-    private Watchdog _publicWatchdog = null!;
-    private PublicWatchdogsModel _model = null!;
-    private Watchdog _anotherPrivateWatchdog = null!;
-    private Watchdog _archivedPublicWatchdog = null!;
+    private Scraper _publicScraper = null!;
+    private PublicScrapersModel _model = null!;
+    private Scraper _anotherPrivateScraper = null!;
+    private Scraper _archivedPublicScraper = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
-        _model = new PublicWatchdogsModelBuilder(UnitOfWork)
+        _model = new PublicScrapersModelBuilder(UnitOfWork)
             .Build();
         
         await _model.OnGet();
     }
 
     [Test]
-    public void public_watchdogs_are_fetched()
+    public void public_scrapers_are_fetched()
     {
-        _model.PublicWatchdogs.ShouldContain(
-            new GetPublicWatchdogsQueryResult
+        _model.PublicScrapers.ShouldContain(
+            new GetPublicScrapersQueryResult
             {
-                WatchdogId = _publicWatchdog.Id, 
-                WatchdogName = "public watchdog",
-                UserId = _publicWatchdog.User.Id
+                ScraperId = _publicScraper.Id, 
+                ScraperName = "public scraper",
+                UserId = _publicScraper.User.Id
             }
         );
-        var publicWatchdogIds = _model.PublicWatchdogs.Select(x => x.WatchdogId).ToList();
-        publicWatchdogIds.ShouldNotContain(_anotherPrivateWatchdog.Id);
-        publicWatchdogIds.ShouldNotContain(_archivedPublicWatchdog.Id);
+        var publicScraperIds = _model.PublicScrapers.Select(x => x.ScraperId).ToList();
+        publicScraperIds.ShouldNotContain(_anotherPrivateScraper.Id);
+        publicScraperIds.ShouldNotContain(_archivedPublicScraper.Id);
     }
     
     [Test]
@@ -49,18 +49,18 @@ public class when_viewing_public_watchdogs : BaseDatabaseTest
     
     private void _BuildEntities()
     {
-        _publicWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("public watchdog")
+        _publicScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("public scraper")
             .Build();
-        _publicWatchdog.MakePublic();
+        _publicScraper.MakePublic();
         
-        _anotherPrivateWatchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("another user private watchdog")
+        _anotherPrivateScraper = new ScraperBuilder(UnitOfWork)
+            .WithName("another user private scraper")
             .Build();
         
-        _archivedPublicWatchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _archivedPublicWatchdog.MakePublic();
-        _archivedPublicWatchdog.Archive();
+        _archivedPublicScraper = new ScraperBuilder(UnitOfWork).Build();
+        _archivedPublicScraper.MakePublic();
+        _archivedPublicScraper.Archive();
 
         UnitOfWork.Flush();
     }

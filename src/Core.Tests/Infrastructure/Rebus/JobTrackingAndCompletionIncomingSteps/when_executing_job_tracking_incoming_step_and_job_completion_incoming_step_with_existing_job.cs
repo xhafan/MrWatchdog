@@ -2,8 +2,8 @@
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
@@ -16,8 +16,8 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionInc
 [TestFixture]
 public class when_executing_job_tracking_incoming_step_and_job_completion_incoming_step_with_existing_job : BaseDatabaseTest
 {
-    private CreateWatchdogCommand _command = null!;
-    private Watchdog _newWatchdog = null!;
+    private CreateScraperCommand _command = null!;
+    private Scraper _newScraper = null!;
     private Job _job = null!;
     private User _user = null!;
 
@@ -45,7 +45,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
 
         Task _next()
         {
-            _newWatchdog = new WatchdogBuilder(UnitOfWork).Build();
+            _newScraper = new ScraperBuilder(UnitOfWork).Build();
             return Task.CompletedTask;
         }
     }
@@ -59,9 +59,9 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         _job.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _job.NumberOfHandlingAttempts.ShouldBe(1);
 
-        var jobAffectedEntity = _job.AffectedEntities.Single(x => x.EntityName == nameof(Watchdog));
-        jobAffectedEntity.EntityName.ShouldBe(nameof(Watchdog));
-        jobAffectedEntity.EntityId.ShouldBe(_newWatchdog.Id);
+        var jobAffectedEntity = _job.AffectedEntities.Single(x => x.EntityName == nameof(Scraper));
+        jobAffectedEntity.EntityName.ShouldBe(nameof(Scraper));
+        jobAffectedEntity.EntityId.ShouldBe(_newScraper.Id);
         
         var jobHandlingAttempt = _job.HandlingAttempts.ShouldHaveSingleItem();
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
@@ -94,11 +94,11 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             {
                 _user = new UserBuilder(newUnitOfWork).Build();
 
-                _command = new CreateWatchdogCommand(_user.Id, "watchdog name") {Guid = Guid.NewGuid()};
+                _command = new CreateScraperCommand(_user.Id, "scraper name") {Guid = Guid.NewGuid()};
 
                 _job = new JobBuilder(newUnitOfWork)
                     .WithGuid(_command.Guid)
-                    .WithType(nameof(CreateWatchdogCommand))
+                    .WithType(nameof(CreateScraperCommand))
                     .WithInputData(_command)
                     .WithKind(JobKind.Command)
                     .Build();

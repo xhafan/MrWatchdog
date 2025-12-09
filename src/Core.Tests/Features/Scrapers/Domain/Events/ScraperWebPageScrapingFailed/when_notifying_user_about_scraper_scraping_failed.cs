@@ -1,20 +1,20 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
+using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Core.Infrastructure.Configurations;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 
 [TestFixture]
-public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTest
+public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private IEmailSender _emailSender = null!;
     private User _user = null!;
 
@@ -25,13 +25,13 @@ public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTe
 
         _emailSender = A.Fake<IEmailSender>();
         
-        var handler = new NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             _emailSender,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        await handler.Handle(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
 
     [Test]
@@ -42,10 +42,10 @@ public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTe
                 A<string>.That.Matches(p => p.Contains("web scraping failed") && p.Contains("Epic Games store free game")),
                 A<string>.That.Matches(p => p.Contains("Web scraping failed")
                                             && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}">Epic Games store free game</a>
+                                                           <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}">Epic Games store free game</a>
                                                            """)
                                             && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}#watchdog_web_page_{_watchdogWebPageId}">www.pcgamer.com/epic-games-store-free-games-list/</a>
+                                                           <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}#scraper_web_page_{_scraperWebPageId}">www.pcgamer.com/epic-games-store-free-games-list/</a>
                                                            """)
                                             && p.Contains("""
                                                            Network error
@@ -59,8 +59,8 @@ public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTe
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -71,7 +71,7 @@ public class when_notifying_user_about_watchdog_scraping_failed : BaseDatabaseTe
             .WithName("Epic Games store free game")
             .WithUser(_user)
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingErrorMessage(_watchdogWebPageId, "Network error");
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
+        _scraper.SetScrapingErrorMessage(_scraperWebPageId, "Network error");
     }
 }

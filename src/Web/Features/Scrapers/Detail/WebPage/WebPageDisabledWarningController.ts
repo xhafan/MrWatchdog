@@ -3,14 +3,14 @@ import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion"
 
 export default class WebPageDisabledWarningController extends Controller {
     static targets = [
-        "enableWatchdogWebPageForm"
+        "enableScraperWebPageForm"
     ];
    
-    declare enableWatchdogWebPageFormTarget: HTMLFormElement;
+    declare enableScraperWebPageFormTarget: HTMLFormElement;
 
     connect() {
         formSubmitWithWaitForJobCompletion(
-            this.enableWatchdogWebPageFormTarget,
+            this.enableScraperWebPageFormTarget,
             async jobDto => {
                 const turboFrame = this.element.closest("turbo-frame");
                 turboFrame?.reload();

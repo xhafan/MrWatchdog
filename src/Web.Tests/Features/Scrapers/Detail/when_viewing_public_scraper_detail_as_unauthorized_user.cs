@@ -1,21 +1,21 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Scrapers.Detail;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail;
 
 [TestFixture]
-public class when_viewing_public_watchdog_detail_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_public_scraper_detail_as_unauthorized_user : BaseDatabaseTest
 {
     private DetailModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -26,8 +26,8 @@ public class when_viewing_public_watchdog_detail_as_unauthorized_user : BaseData
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
         
@@ -35,7 +35,7 @@ public class when_viewing_public_watchdog_detail_as_unauthorized_user : BaseData
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -43,15 +43,15 @@ public class when_viewing_public_watchdog_detail_as_unauthorized_user : BaseData
     {
         _actionResult.ShouldBeOfType<RedirectResult>();
         var redirectResult = (RedirectResult)_actionResult;
-        redirectResult.Url.ShouldBe(WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(_watchdog.Id));
+        redirectResult.Url.ShouldBe(ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(_scraper.Id));
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
             .Build();
-        _watchdog.MakePublic();
+        _scraper.MakePublic();
 
         UnitOfWork.Flush();
     }

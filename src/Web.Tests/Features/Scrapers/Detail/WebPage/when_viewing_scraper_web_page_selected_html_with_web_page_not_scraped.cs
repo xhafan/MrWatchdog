@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_scraped : BaseDatabaseTest
+public class when_viewing_scraper_web_page_scraping_results_with_web_page_not_scraped : BaseDatabaseTest
 {
     private WebPageScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -20,8 +20,8 @@ public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_s
         UnitOfWork.Clear();
         
         _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
-            .WithWatchdogId(_watchdog.Id)
-            .WithWatchdogWebPageId(_watchdogWebPageId)
+            .WithScraperId(_scraper.Id)
+            .WithScraperWebPageId(_scraperWebPageId)
             .Build();
 
         await _model.OnGet();
@@ -30,23 +30,23 @@ public class when_viewing_watchdog_web_page_scraping_results_with_web_page_not_s
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageScrapingResults.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageScrapingResults.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageScrapingResults.ScrapingResults.ShouldBeEmpty();
-        _model.WatchdogWebPageScrapingResults.ScrapedOn.ShouldBe(null);
-        _model.WatchdogWebPageScrapingResults.ScrapingErrorMessage.ShouldBe(null);
+        _model.ScraperWebPageScrapingResults.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperWebPageScrapingResults.ScraperWebPageId.ShouldBe(_scraperWebPageId);
+        _model.ScraperWebPageScrapingResults.ScrapingResults.ShouldBeEmpty();
+        _model.ScraperWebPageScrapingResults.ScrapedOn.ShouldBe(null);
+        _model.ScraperWebPageScrapingResults.ScrapingErrorMessage.ShouldBe(null);
     }  
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }
 }

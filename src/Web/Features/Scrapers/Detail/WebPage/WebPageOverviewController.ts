@@ -9,7 +9,7 @@ import { JobUrlConstants } from "../../../Shared/Generated/JobUrlConstants";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { ValidationConstants } from "../../../Shared/Generated/ValidationConstants";
 
-export const watchdogWebPageNameModifiedEventName = "watchdogwebPageNameModified";
+export const scraperWebPageNameModifiedEventName = "scraperWebPageNameModified";
 
 export default class WebPageOverviewController extends BaseStimulusModelController<WebPageOverviewStimulusModel> {
     static targets = [
@@ -36,8 +36,8 @@ export default class WebPageOverviewController extends BaseStimulusModelControll
         let urlWithoutHttpPrefix = this.getUrlWithoutHttpPrefix(url);
         let previousUrlWithoutHttpPrefix = this.getUrlWithoutHttpPrefix(this.previousUrlTarget.value);
         if (!this.nameTarget.value || this.nameTarget.value === previousUrlWithoutHttpPrefix) {
-            this.nameTarget.value = urlWithoutHttpPrefix.substring(0, ValidationConstants.watchdogWebPageNameMaxLength).trim();
-            this.dispatchWatchdogWebPageNameModifiedEvent();
+            this.nameTarget.value = urlWithoutHttpPrefix.substring(0, ValidationConstants.scraperWebPageNameMaxLength).trim();
+            this.dispatchScraperWebPageNameModifiedEvent();
         }
         
         this.previousUrlTarget.value = url;
@@ -48,11 +48,11 @@ export default class WebPageOverviewController extends BaseStimulusModelControll
     }
 
     onNameModified() {
-        this.dispatchWatchdogWebPageNameModifiedEvent();
+        this.dispatchScraperWebPageNameModifiedEvent();
     }
 
-    private dispatchWatchdogWebPageNameModifiedEvent() {
+    private dispatchScraperWebPageNameModifiedEvent() {
         let name = this.nameTarget.value.trim();
-        this.nameTarget.dispatchEvent(new CustomEvent(watchdogWebPageNameModifiedEventName, { bubbles: true, detail: name }));
+        this.nameTarget.dispatchEvent(new CustomEvent(scraperWebPageNameModifiedEventName, { bubbles: true, detail: name }));
     }
 }

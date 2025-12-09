@@ -1,15 +1,15 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Security.Claims;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Statistics;
-using System.Security.Claims;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.TestsShared;
+using MrWatchdog.Web.Features.Scrapers.Detail.Statistics;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Statistics;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Statistics;
 
 public class StatisticsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
@@ -25,11 +25,11 @@ public class StatisticsModelBuilder(NhibernateUnitOfWork unitOfWork)
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetPublicWatchdogStatisticsQueryHandler(unitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetPublicScraperStatisticsQueryHandler(unitOfWork));
 
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogDetailPublicStatusArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperDetailPublicStatusArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
 
         

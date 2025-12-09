@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Messages;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Features.Scrapers.Commands;
 
-public record ArchiveWatchdogCommand(long WatchdogId) : Command;
+public record ArchiveScraperCommand(long ScraperId) : Command;

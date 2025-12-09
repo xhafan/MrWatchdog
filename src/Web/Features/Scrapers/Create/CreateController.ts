@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
-import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
+import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
 
 export default class CreateController extends Controller {
     static targets  = [
@@ -17,15 +17,15 @@ export default class CreateController extends Controller {
         formSubmitWithWaitForJobCompletion(
             form, 
             jobDto => {
-                const watchdogEntity = Enumerable.from(jobDto.affectedEntities).singleOrDefault(x => x.entityName === DomainConstants.watchdogEntityName);
-                if (!watchdogEntity) {
-                    throw new Error("Error getting created Watchdog.");
+                const scraperEntity = Enumerable.from(jobDto.affectedEntities).singleOrDefault(x => x.entityName === DomainConstants.scraperEntityName);
+                if (!scraperEntity) {
+                    throw new Error(`Error getting created ${DomainConstants.scraperEntityName}.`);
                 }
 
-                const watchdogDetailUrl = WatchdogUrlConstants.watchdogDetailUrlTemplate
-                    .replace(WatchdogUrlConstants.watchdogIdVariable, String(watchdogEntity.entityId));
+                const scraperDetailUrl = ScraperUrlConstants.scraperDetailUrlTemplate
+                    .replace(ScraperUrlConstants.scraperIdVariable, String(scraperEntity.entityId));
 
-                Turbo.visit(watchdogDetailUrl);
+                Turbo.visit(scraperDetailUrl);
             }
         );
     }

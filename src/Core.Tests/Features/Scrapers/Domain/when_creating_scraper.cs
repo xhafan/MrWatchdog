@@ -1,25 +1,25 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 
 [TestFixture]
-public class when_creating_watchdog : BaseDatabaseTest
+public class when_creating_scraper : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public void Context()
     {
         var user = new UserBuilder().Build();
-        _watchdog = new Watchdog(user, "watchdog name");
+        _scraper = new Scraper(user, "scraper name");
     }
 
     [Test]
     public void default_values_are_set_correctly()
     {
-        _watchdog.ScrapingIntervalInSeconds.ShouldBe(Watchdog.DefaultScrapingIntervalOneDayInSeconds);
-        _watchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(Watchdog.DefaultIntervalBetweenSameResultNotificationsInDays);
+        _scraper.ScrapingIntervalInSeconds.ShouldBe(Scraper.DefaultScrapingIntervalOneDayInSeconds);
+        _scraper.IntervalBetweenSameResultNotificationsInDays.ShouldBe(Scraper.DefaultIntervalBetweenSameResultNotificationsInDays);
     }
 }

@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_updating_watchdog_overview : BaseDatabaseTest
+public class when_updating_scraper_overview : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,13 +19,13 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new UpdateWatchdogOverviewCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new UpdateScraperOverviewCommandMessageHandler(new NhibernateRepository<Scraper>(UnitOfWork));
 
-        await handler.Handle(new UpdateWatchdogOverviewCommand(new WatchdogOverviewArgs
+        await handler.Handle(new UpdateScraperOverviewCommand(new ScraperOverviewArgs
         {
-            WatchdogId = _watchdog.Id,
-            Name = "updated watchdog name",
-            Description = "updated watchdog description",
+            ScraperId = _scraper.Id,
+            Name = "updated scraper name",
+            Description = "updated scraper description",
             ScrapingIntervalInSeconds = 30,
             IntervalBetweenSameResultNotificationsInDays = 2.34,
             NumberOfFailedScrapingAttemptsBeforeAlerting = 2
@@ -34,21 +34,21 @@ public class when_updating_watchdog_overview : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_overview_is_updated()
+    public void scraper_overview_is_updated()
     {
-        _watchdog.Name.ShouldBe("updated watchdog name");
-        _watchdog.Description.ShouldBe("updated watchdog description");
-        _watchdog.ScrapingIntervalInSeconds.ShouldBe(30);
-        _watchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(2.34);
-        _watchdog.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(2);
+        _scraper.Name.ShouldBe("updated scraper name");
+        _scraper.Description.ShouldBe("updated scraper description");
+        _scraper.ScrapingIntervalInSeconds.ShouldBe(30);
+        _scraper.IntervalBetweenSameResultNotificationsInDays.ShouldBe(2.34);
+        _scraper.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(2);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }
 }

@@ -3,13 +3,13 @@ import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitF
 import { formSubmitJobCompletedEventName } from "../../../Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { JobDto } from "../../../Shared/Generated/JobDto";
-import { watchdogWebPageNameModifiedEventName } from "./WebPageOverviewController";
+import { scraperWebPageNameModifiedEventName } from "./WebPageOverviewController";
 import { logError } from "../../../Shared/logging";
-import { watchdogWebPageScrapedEvent } from "./WebPageScrapingResultsController";
+import { scraperWebPageScrapedEvent } from "./WebPageScrapingResultsController";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
 import { WebPageStimulusModel } from "../../../Shared/Generated/WebPageStimulusModel";
 
-export const watchdogWebPageRemovedEvent = "watchdogWebPageRemoved";
+export const scraperWebPageRemovedEvent = "scraperWebPageRemoved";
 
 export default class WebPageController extends BaseStimulusModelController<WebPageStimulusModel> {
     static targets = [
@@ -30,28 +30,28 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
         formSubmitWithWaitForJobCompletion(
             this.removeWebPageFormTarget, 
             async jobDto => {
-                this.element.dispatchEvent(new CustomEvent(watchdogWebPageRemovedEvent, { bubbles: true, detail: this.element }));
+                this.element.dispatchEvent(new CustomEvent(scraperWebPageRemovedEvent, { bubbles: true, detail: this.element }));
             },
             this.modelValue.removeWebPageConfirmationMessageResource
         );
 
-        this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateWatchdogWebPageJobCompleted.bind(this), {});
-        this.webPageOverviewTarget.addEventListener(watchdogWebPageNameModifiedEventName, this.onWatchdogWebPageNameModified.bind(this), {});
-        this.element.addEventListener(watchdogWebPageScrapedEvent, this.onWatchdogWebPageScraped.bind(this), {});
+        this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateScraperWebPageJobCompleted.bind(this), {});
+        this.webPageOverviewTarget.addEventListener(scraperWebPageNameModifiedEventName, this.onScraperWebPageNameModified.bind(this), {});
+        this.element.addEventListener(scraperWebPageScrapedEvent, this.onScraperWebPageScraped.bind(this), {});
     }
 
-    private async onUpdateWatchdogWebPageJobCompleted(event: CustomEventInit<JobDto>) {
-        let updateWatchdogWebPageJobDto = event.detail;
-        if (!updateWatchdogWebPageJobDto) throw new Error("JobDto is missing.");
-        let updateWatchdogWebPageJobGuid = updateWatchdogWebPageJobDto.guid;
+    private async onUpdateScraperWebPageJobCompleted(event: CustomEventInit<JobDto>) {
+        let updateScraperWebPageJobDto = event.detail;
+        if (!updateScraperWebPageJobDto) throw new Error("JobDto is missing.");
+        let updateScraperWebPageJobGuid = updateScraperWebPageJobDto.guid;
 
-        var watchdogWebPageScrapingDataUpdatedDomainEventJobGuid = 
-            await getRelatedDomainEventJobGuid(updateWatchdogWebPageJobGuid, DomainConstants.watchdogWebPageScrapingDataUpdatedDomainEventName);
+        var scraperWebPageScrapingDataUpdatedDomainEventJobGuid = 
+            await getRelatedDomainEventJobGuid(updateScraperWebPageJobGuid, DomainConstants.scraperWebPageScrapingDataUpdatedDomainEventName);
         
-        if (!watchdogWebPageScrapingDataUpdatedDomainEventJobGuid) return;
+        if (!scraperWebPageScrapingDataUpdatedDomainEventJobGuid) return;
 
         try {
-            var watchdogWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(watchdogWebPageScrapingDataUpdatedDomainEventJobGuid);
+            var scraperWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(scraperWebPageScrapingDataUpdatedDomainEventJobGuid);
 
             this.webPageScrapingResultsTarget.reload();
             this.webPageDisabledWarningTarget.reload();
@@ -61,12 +61,12 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
         }
     }
 
-    private onWatchdogWebPageNameModified(event: CustomEventInit<string>) {
-        let watchdogWebPageName = event.detail;
-        this.webPageNameTarget.textContent = watchdogWebPageName ?? "";
+    private onScraperWebPageNameModified(event: CustomEventInit<string>) {
+        let scraperWebPageName = event.detail;
+        this.webPageNameTarget.textContent = scraperWebPageName ?? "";
     }
 
-    private onWatchdogWebPageScraped(event: CustomEventInit<string>) {
+    private onScraperWebPageScraped(event: CustomEventInit<string>) {
         this.webPageDisabledWarningTarget.reload();
     }
 }

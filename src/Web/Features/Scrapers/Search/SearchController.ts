@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
-import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
+import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
 import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
 import { SearchStimulusModel } from "../../Shared/Generated/SearchStimulusModel";
 
@@ -21,7 +21,7 @@ export default class SearchController extends BaseStimulusModelController<Search
         formSubmitWithWaitForJobCompletion(
             this.archiveWatchdogSearchFormTarget, 
             async jobDto => {
-                Turbo.visit(WatchdogUrlConstants.watchdogsSearchesUrl);
+                Turbo.visit(ScraperUrlConstants.watchdogsSearchesUrl);
             },
             this.modelValue.deleteWatchdogConfirmationMessageResource
         );

@@ -2,7 +2,7 @@
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.TestsShared;
@@ -37,18 +37,18 @@ public static class DeleteHelper
         await unitOfWork.FlushAsync();
     }
 
-    public static async Task DeleteWatchdogCascade(this NhibernateUnitOfWork unitOfWork, Watchdog? watchdog)
+    public static async Task DeleteScraperCascade(this NhibernateUnitOfWork unitOfWork, Scraper? scraper)
     {
-        if (watchdog == null) return;
+        if (scraper == null) return;
 
-        var watchdogRepository = new NhibernateRepository<Watchdog>(unitOfWork);
-        watchdog = await watchdogRepository.GetAsync(watchdog.Id);
-        if (watchdog == null) return;
+        var scraperRepository = new NhibernateRepository<Scraper>(unitOfWork);
+        scraper = await scraperRepository.GetAsync(scraper.Id);
+        if (scraper == null) return;
 
-        await watchdogRepository.DeleteAsync(watchdog);
+        await scraperRepository.DeleteAsync(scraper);
         await unitOfWork.FlushAsync();
 
-        await unitOfWork.DeleteUserCascade(watchdog.User);
+        await unitOfWork.DeleteUserCascade(scraper.User);
     }
 
     public static async Task DeleteWatchdogSearchCascade(this NhibernateUnitOfWork unitOfWork, WatchdogSearch? watchdogSearch)
@@ -62,7 +62,7 @@ public static class DeleteHelper
         await watchdogSearchRepository.DeleteAsync(watchdogSearch);
         await unitOfWork.FlushAsync();
         
-        await unitOfWork.DeleteWatchdogCascade(watchdogSearch.Watchdog);
+        await unitOfWork.DeleteScraperCascade(watchdogSearch.Scraper);
         await unitOfWork.DeleteUserCascade(watchdogSearch.User);
     }
 

@@ -2,35 +2,35 @@
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Manage.OtherUsersWatchdogs;
+using MrWatchdog.Web.Features.Scrapers.Manage.OtherUsersScrapers;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Manage.OtherUsersWatchdogs;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Manage.OtherUsersScrapers;
 
-public class OtherUsersWatchdogsModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class OtherUsersScrapersModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private User? _actingUser;
 
-    public OtherUsersWatchdogsModelBuilder WithActingUser(User actingUser)
+    public OtherUsersScrapersModelBuilder WithActingUser(User actingUser)
     {
         _actingUser = actingUser;
         return this;
     }
 
-    public OtherUsersWatchdogsModel Build()
+    public OtherUsersScrapersModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetOtherUsersWatchdogsQueryHandler(unitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetOtherUsersScrapersQueryHandler(unitOfWork));
         
         _actingUser ??= new UserBuilder(unitOfWork).Build();
 
         var actingUserAccessor = A.Fake<IActingUserAccessor>();
         A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(_actingUser.Id);
 
-        var model = new OtherUsersWatchdogsModel(
+        var model = new OtherUsersScrapersModel(
             new QueryExecutor(queryHandlerFactory),
             actingUserAccessor
         );

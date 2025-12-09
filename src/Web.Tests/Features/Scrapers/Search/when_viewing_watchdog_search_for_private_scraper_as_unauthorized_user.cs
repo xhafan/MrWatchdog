@@ -2,20 +2,20 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Search;
+using MrWatchdog.Web.Features.Scrapers.Search;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
 
 [TestFixture]
-public class when_viewing_watchdog_search_for_private_watchdog_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_watchdog_search_for_private_scraper_as_unauthorized_user : BaseDatabaseTest
 {
     private SearchModel _model = null!;
     private WatchdogSearch _watchdogSearch = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -46,21 +46,21 @@ public class when_viewing_watchdog_search_for_private_watchdog_as_unauthorized_u
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
         
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm("text")
             .Build();
 

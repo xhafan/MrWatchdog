@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
+public class when_viewing_scraper_web_page_overview : BaseDatabaseTest
 {
     private WebPageOverviewModel _model = null!;
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -23,14 +23,14 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
         UnitOfWork.Clear();
         
         _model = new WebPageOverviewModelBuilder(UnitOfWork)
-            .WithWatchdogWebPageArgs(new WatchdogWebPageArgs
+            .WithScraperWebPageArgs(new ScraperWebPageArgs
             {
-                WatchdogId = _watchdog.Id,
-                WatchdogWebPageId = _watchdogWebPageId
+                ScraperId = _scraper.Id,
+                ScraperWebPageId = _scraperWebPageId
             })
             .Build();
 
-        _actionResult = await _model.OnGet(_watchdog.Id, watchdogWebPageId: _watchdogWebPageId);
+        _actionResult = await _model.OnGet(_scraper.Id, scraperWebPageId: _scraperWebPageId);
     }
 
     [Test]
@@ -42,13 +42,13 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogWebPageArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogWebPageArgs.WatchdogWebPageId.ShouldBe(_watchdogWebPageId);
-        _model.WatchdogWebPageArgs.Url.ShouldBe("http://url.com/page");
-        _model.WatchdogWebPageArgs.Selector.ShouldBe(".selector");
-        _model.WatchdogWebPageArgs.SelectText.ShouldBe(true);
-        _model.WatchdogWebPageArgs.Name.ShouldBe("url.com/page");
-        _model.WatchdogWebPageArgs.HttpHeaders.ShouldBe("""
+        _model.ScraperWebPageArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperWebPageArgs.ScraperWebPageId.ShouldBe(_scraperWebPageId);
+        _model.ScraperWebPageArgs.Url.ShouldBe("http://url.com/page");
+        _model.ScraperWebPageArgs.Selector.ShouldBe(".selector");
+        _model.ScraperWebPageArgs.SelectText.ShouldBe(true);
+        _model.ScraperWebPageArgs.Name.ShouldBe("url.com/page");
+        _model.ScraperWebPageArgs.HttpHeaders.ShouldBe("""
                                                         User-Agent: Mozilla/5.0
                                                         Connection: keep-alive
                                                         """, ignoreLineEndings: true);
@@ -58,8 +58,8 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -71,6 +71,6 @@ public class when_viewing_watchdog_web_page_overview : BaseDatabaseTest
                               """
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

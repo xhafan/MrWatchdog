@@ -1,9 +1,9 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Web.Features.Watchdogs.Create;
+using MrWatchdog.Web.Features.Scrapers.Create;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Create;
 
 public class CreateModelBuilder
 {

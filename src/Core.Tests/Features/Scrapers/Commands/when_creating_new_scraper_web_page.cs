@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_creating_new_watchdog_web_page : BaseDatabaseTest
+public class when_creating_new_scraper_web_page : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,27 +19,27 @@ public class when_creating_new_watchdog_web_page : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        var handler = new CreateWatchdogWebPageCommandMessageHandler(new NhibernateRepository<Watchdog>(UnitOfWork));
+        var handler = new CreateScraperWebPageCommandMessageHandler(new NhibernateRepository<Scraper>(UnitOfWork));
 
-        await handler.Handle(new CreateWatchdogWebPageCommand(_watchdog.Id));
+        await handler.Handle(new CreateScraperWebPageCommand(_scraper.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void empty_watchdog_web_page_is_created()
+    public void empty_scraper_web_page_is_created()
     {
-        var watchdogWebPage = _watchdog.WebPages.ShouldHaveSingleItem();
-        watchdogWebPage.Url.ShouldBe(null);
-        watchdogWebPage.Selector.ShouldBe(null);
-        watchdogWebPage.Name.ShouldBe(null);
+        var scraperWebPage = _scraper.WebPages.ShouldHaveSingleItem();
+        scraperWebPage.Url.ShouldBe(null);
+        scraperWebPage.Selector.ShouldBe(null);
+        scraperWebPage.Name.ShouldBe(null);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }
 }

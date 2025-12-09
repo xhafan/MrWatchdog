@@ -1,27 +1,27 @@
-﻿@page "{watchdogId}"
-@using MrWatchdog.Core.Features.Watchdogs.Domain
+﻿@page "{scraperId}"
+@using MrWatchdog.Core.Features.Scrapers.Domain
 @using MrWatchdog.Core.Resources
 @model StatisticsModel
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_detail_statistics_@(Model.WatchdogId)">
-    <div class="card" style="display:@(Model.WatchdogPublicStatus != PublicStatus.Public ? "none": "")">
+<!turbo-frame id="scraper_detail_statistics_@(Model.ScraperId)">
+    <div class="card" style="display:@(Model.ScraperPublicStatus != PublicStatus.Public ? "none": "")">
         <div class="card-body">
             <div class="mb-3">
-                <label asp-for="PublicWatchdogStatistics.CalculatedEarningsForThisMonth" class="form-label fw-bold"></label>
-                <div>€@Model.PublicWatchdogStatistics.CalculatedEarningsForThisMonth</div>
+                <label asp-for="PublicScraperStatistics.CalculatedEarningsForThisMonth" class="form-label fw-bold"></label>
+                <div>€@Model.PublicScraperStatistics.CalculatedEarningsForThisMonth</div>
                 <div class="alert alert-info mb-3">
-                    <i class="fa-solid fa-circle-info"></i> @Resource.WebScraperEarningsCalculationInfo
+                    <i class="fa-solid fa-circle-info"></i> @Resource.ScraperEarningsCalculationInfo
                 </div>
             </div>
             <div class="mb-3">
-                <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification" class="form-label fw-bold"></label>
-                <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithNotification</div>
+                <label asp-for="PublicScraperStatistics.NumberOfUsersWithWatchdogWithNotification" class="form-label fw-bold"></label>
+                <div>@Model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithNotification</div>
             </div>
             <div class="mb-3 d-none">
-                <label asp-for="PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification" class="form-label fw-bold"></label>
-                <div>@Model.PublicWatchdogStatistics.NumberOfUsersWithWatchdogWithoutNotification</div>
+                <label asp-for="PublicScraperStatistics.NumberOfUsersWithWatchdogWithoutNotification" class="form-label fw-bold"></label>
+                <div>@Model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithoutNotification</div>
             </div>
         </div>
     </div>

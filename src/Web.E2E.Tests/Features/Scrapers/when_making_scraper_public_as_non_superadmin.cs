@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
+namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
-public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
+public class when_making_scraper_public_as_non_superadmin : BaseDatabaseTest
 {
     private LoginToken _loginToken = null!;
     private User _nonSuperAdminUser = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private HttpClient _webApplicationClient = null!;
 
     [SetUp]
@@ -32,15 +32,15 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
     }
 
     [Test]
-    public async Task non_superadmin_user_is_denied_making_watchdog_public()
+    public async Task non_superadmin_user_is_denied_making_scraper_public()
     {
         var response = await _webApplicationClient.GetAsync(
-            WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));
+            ScraperUrlConstants.ScraperDetailActionsUrlTemplate.WithScraperId(_scraper.Id));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var pageHtml = await response.Content.ReadAsStringAsync();
 
         response = await _webApplicationClient.PostAsync(
-            WatchdogUrlConstants.WatchdogDetailActionsMakePublicUrlTemplate.WithWatchdogId(_watchdog.Id),
+            ScraperUrlConstants.ScraperDetailActionsMakePublicUrlTemplate.WithScraperId(_scraper.Id),
             content: E2ETestHelper.GetFormUrlEncodedContentWithRequestVerificationToken(E2ETestHelper.ExtractRequestVerificationToken(pageHtml))
         );
 
@@ -69,20 +69,20 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
                     .SingleOrDefaultAsync();
                 await newUnitOfWork.DeleteJobCascade(markLoginTokenAsUsedCommandJob, waitForJobCompletion: true);
 
-                var makeWatchdogPublicCommandJob = await newUnitOfWork.Session!.QueryOver<Job>()
-                    .Where(x => x.Type == nameof(MakeWatchdogPublicCommand))
+                var makeScraperPublicCommandJob = await newUnitOfWork.Session!.QueryOver<Job>()
+                    .Where(x => x.Type == nameof(MakeScraperPublicCommand))
                     .And(Expression.Sql(
                         """
-                        ({alias}."InputData" ->> 'watchdogId') = ?
+                        ({alias}."InputData" ->> 'scraperId') = ?
                         """,
-                        _watchdog.Id.ToString(),
+                        _scraper.Id.ToString(),
                         NHibernateUtil.String)
                     )
                     .SingleOrDefaultAsync();
-                await newUnitOfWork.DeleteJobCascade(makeWatchdogPublicCommandJob, waitForJobCompletion: true);
+                await newUnitOfWork.DeleteJobCascade(makeScraperPublicCommandJob, waitForJobCompletion: true);
 
                 await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+                await newUnitOfWork.DeleteScraperCascade(_scraper);
                 await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
             }
         );
@@ -103,7 +103,7 @@ public class when_making_watchdog_public_as_non_superadmin : BaseDatabaseTest
                     .Build();
                 _loginToken.Confirm();
 
-                _watchdog = new WatchdogBuilder(newUnitOfWork)
+                _scraper = new ScraperBuilder(newUnitOfWork)
                     .WithUser(_nonSuperAdminUser)
                     .Build();
             }

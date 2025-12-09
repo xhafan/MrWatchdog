@@ -46,7 +46,7 @@ public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTe
             .WithToken(TokenGenerator.GenerateToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com", 
-                returnUrl: "/Watchdogs/Searches", 
+                returnUrl: "/Scrapers/Searches", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)
             ))

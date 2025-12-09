@@ -1,14 +1,14 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Web.Features.Watchdogs.Create;
+using MrWatchdog.Web.Features.Scrapers.Create;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Create;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Create;
 
 [TestFixture]
-public class when_creating_new_watchdog_with_name
+public class when_creating_new_scraper_with_name
 {
     private IActionResult _actionResult = null!;
     private CreateModel _model = null!;
@@ -22,7 +22,7 @@ public class when_creating_new_watchdog_with_name
         A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(23);
         
         _model = new CreateModelBuilder()
-            .WithName("watchdog name")
+            .WithName("scraper name")
             .WithBus(_bus)
             .WithActingUserAccessor(actingUserAccessor)
             .Build();
@@ -33,7 +33,7 @@ public class when_creating_new_watchdog_with_name
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new CreateWatchdogCommand(23, "watchdog name"))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new CreateScraperCommand(23, "scraper name"))).MustHaveHappenedOnceExactly();
     }
     
     [Test]

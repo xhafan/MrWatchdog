@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using CoreDdd.Nhibernate.Configurations;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 #if DEBUG
 using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
-using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Conventions;
 using MrWatchdog.Core.Infrastructure.Interceptors;
 using NHibernate.Cfg;
@@ -24,7 +24,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
     {
         return
         [
-            typeof(Watchdog).Assembly
+            typeof(Scraper).Assembly
         ];
     }
     

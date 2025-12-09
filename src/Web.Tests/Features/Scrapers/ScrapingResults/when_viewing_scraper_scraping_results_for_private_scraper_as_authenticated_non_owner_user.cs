@@ -3,19 +3,19 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_authenticated_non_owner_user : BaseDatabaseTest
+public class when_viewing_scraper_scraping_results_for_private_scraper_as_authenticated_non_owner_user : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
     private User _actingUser = null!;
@@ -28,8 +28,8 @@ public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_auth
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
@@ -38,7 +38,7 @@ public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_auth
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -51,9 +51,9 @@ public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_auth
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -61,9 +61,9 @@ public class when_viewing_watchdog_scraping_results_for_private_watchdog_as_auth
             })
             .WithUser(_user)
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
-        _watchdog.EnableWebPage(watchdogWebPage.Id);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.EnableWebPage(scraperWebPage.Id);
         
         _actingUser = new UserBuilder(UnitOfWork).Build();
 

@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Infrastructure.Validations;
+﻿using System.ComponentModel.DataAnnotations;
+using MrWatchdog.Core.Infrastructure.Validations;
 using MrWatchdog.Core.Resources;
-using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record WatchdogWebPageArgs
+public record ScraperWebPageArgs
 {
     [NotDefault]
-    public long WatchdogId { get; set; }
+    public long ScraperId { get; set; }
     [NotDefault]
-    public long WatchdogWebPageId { get; set; }
+    public long ScraperWebPageId { get; set; }
 
     [Url]
     [Required]
@@ -26,7 +26,7 @@ public record WatchdogWebPageArgs
     public bool SelectText { get; set; }
     
     [Required]
-    [StringLength(ValidationConstants.WatchdogWebPageNameMaxLength)]
+    [StringLength(ValidationConstants.ScraperWebPageNameMaxLength)]
     [Display(Name = nameof(Resource.Name), ResourceType = typeof(Resource))]
     public string? Name { get; set; }
 

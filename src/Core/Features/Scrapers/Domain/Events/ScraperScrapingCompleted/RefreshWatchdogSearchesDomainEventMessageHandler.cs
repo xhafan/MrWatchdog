@@ -1,21 +1,21 @@
 ﻿using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 
 public class RefreshWatchdogSearchesDomainEventMessageHandler(
     IQueryExecutor queryExecutor,
     ICoreBus bus
 ) 
-    : IHandleMessages<WatchdogScrapingCompletedDomainEvent>
+    : IHandleMessages<ScraperScrapingCompletedDomainEvent>
 {
-    public async Task Handle(WatchdogScrapingCompletedDomainEvent domainEvent)
+    public async Task Handle(ScraperScrapingCompletedDomainEvent domainEvent)
     {
-        var watchdogSearchesIds = await queryExecutor.ExecuteAsync<GetWatchdogSearchesForWatchdogQuery, long>(
-            new GetWatchdogSearchesForWatchdogQuery(domainEvent.WatchdogId)
+        var watchdogSearchesIds = await queryExecutor.ExecuteAsync<GetWatchdogSearchesForScraperQuery, long>(
+            new GetWatchdogSearchesForScraperQuery(domainEvent.ScraperId)
         );
 
         foreach (var watchdogSearchId in watchdogSearchesIds)

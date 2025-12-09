@@ -1,22 +1,22 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_removing_watchdog_web_page : BaseDatabaseTest
+public class when_removing_scraper_web_page : BaseDatabaseTest
 {
     private WebPageModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
-    private long _watchdogWebPageId;
+    private long _scraperWebPageId;
 
     [SetUp]
     public async Task Context()
@@ -29,13 +29,13 @@ public class when_removing_watchdog_web_page : BaseDatabaseTest
             .WithBus(_bus)
             .Build();
         
-        _actionResult = await _model.OnPostRemoveWatchdogWebPage(_watchdog.Id, _watchdogWebPageId);
+        _actionResult = await _model.OnPostRemoveScraperWebPage(_scraper.Id, _scraperWebPageId);
     }
 
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new RemoveWatchdogWebPageCommand(_watchdog.Id, _watchdogWebPageId)))
+        A.CallTo(() => _bus.Send(new RemoveScraperWebPageCommand(_scraper.Id, _scraperWebPageId)))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -52,14 +52,14 @@ public class when_removing_watchdog_web_page : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }    
 }

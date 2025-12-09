@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;

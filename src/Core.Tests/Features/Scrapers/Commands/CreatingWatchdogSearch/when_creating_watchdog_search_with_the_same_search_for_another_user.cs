@@ -1,16 +1,16 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.CreatingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.CreatingWatchdogSearch;
 
 [TestFixture]
 public class when_creating_watchdog_search_with_the_same_search_for_another_user : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private WatchdogSearch? _watchdogSearch;
     private User _userOne = null!;
     private User _userTwo = null!;
@@ -21,19 +21,19 @@ public class when_creating_watchdog_search_with_the_same_search_for_another_user
         _BuildEntities();
         
         var handler = new CreateWatchdogSearchCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+            new NhibernateRepository<Scraper>(UnitOfWork),
             new NhibernateRepository<WatchdogSearch>(UnitOfWork),
             new UserRepository(UnitOfWork),
             UnitOfWork
         );
 
-        await handler.Handle(new CreateWatchdogSearchCommand(_watchdog.Id, SearchTerm: "text") { ActingUserId = _userOne.Id});
+        await handler.Handle(new CreateWatchdogSearchCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _userOne.Id});
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
         _watchdogSearch = UnitOfWork.Session!.Query<WatchdogSearch>()
-            .SingleOrDefault(x => x.Watchdog == _watchdog && x.User == _userOne);
+            .SingleOrDefault(x => x.Scraper == _scraper && x.User == _userOne);
     }
 
     [Test]
@@ -49,19 +49,19 @@ public class when_creating_watchdog_search_with_the_same_search_for_another_user
         _userOne = new UserBuilder(UnitOfWork).Build();
         _userTwo = new UserBuilder(UnitOfWork).Build();
 
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingResults(watchdogWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
         
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm("text")
             .WithUser(_userTwo)
             .Build();

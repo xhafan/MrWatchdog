@@ -1,5 +1,5 @@
 ﻿using CoreDdd.Queries;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public record GetWatchdogWebPageScrapingResultsQuery(long WatchdogId, long WatchdogWebPageId) : IQuery;
+public record GetScraperWebPageScrapingResultsQuery(long ScraperId, long ScraperWebPageId) : IQuery;

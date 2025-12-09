@@ -1,14 +1,14 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_with_web_page_without_url : BaseTest
+public class when_scraping_scraper_with_web_page_without_url : BaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -17,13 +17,13 @@ public class when_scraping_watchdog_with_web_page_without_url : BaseTest
 
         var httpClientFactory = new HttpClientFactoryBuilder().Build();
         
-        await _watchdog.Scrape(httpClientFactory);
+        await _scraper.Scrape(httpClientFactory);
     }
 
     [Test]
-    public void watchdog_web_page_is_not_scraped()
+    public void scraper_web_page_is_not_scraped()
     {
-        var webPage = _watchdog.WebPages.Single();
+        var webPage = _scraper.WebPages.Single();
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe(null);
@@ -31,8 +31,8 @@ public class when_scraping_watchdog_with_web_page_without_url : BaseTest
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder()
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = null,
                 Selector = null,

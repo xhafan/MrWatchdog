@@ -1,7 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 
 namespace MrWatchdog.TestsShared;
 
@@ -18,7 +18,7 @@ public static class NotDeletedRecordsChecker
         {
             unitOfWork.BeginTransaction();
         
-            if (unitOfWork.Session.QueryOver<Watchdog>().List().Any()
+            if (unitOfWork.Session.QueryOver<Scraper>().List().Any()
                 || unitOfWork.Session.QueryOver<WatchdogSearch>().List().Any()
                 || unitOfWork.Session.QueryOver<User>().List().Any()
                 || unitOfWork.Session.QueryOver<Job>().List().Any()

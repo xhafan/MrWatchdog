@@ -1,5 +1,5 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -16,7 +16,7 @@ public class when_sending_command_message : BaseDatabaseTest
 {
     private IBus _bus = null!;
     private CoreBus _coreBus = null!;
-    private CreateWatchdogCommand _command = null!;
+    private CreateScraperCommand _command = null!;
 
     [SetUp]
     public async Task Context()
@@ -39,7 +39,7 @@ public class when_sending_command_message : BaseDatabaseTest
             requestIdAccessor,
             rebusQueueRedirector
         );
-        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name");
+        _command = new CreateScraperCommand(UserId: 23, "scraper name");
         
         await _coreBus.Send(_command);
     }
@@ -48,7 +48,7 @@ public class when_sending_command_message : BaseDatabaseTest
     public void command_message_is_sent_over_the_bus()
     {
         A.CallTo(() => _bus.Send(
-                A<CreateWatchdogCommand>.That.Matches(p => p.Name == "watchdog name" 
+                A<CreateScraperCommand>.That.Matches(p => p.Name == "scraper name" 
                                                            && !p.Guid.Equals(Guid.Empty)
                                                            && p.ActingUserId == 23
                                                            && p.RequestId == "0HNFBP8T98MQS:00000045"
@@ -67,7 +67,7 @@ public class when_sending_command_message : BaseDatabaseTest
         var job = await new JobRepository(UnitOfWork).GetByGuidAsync(_command.Guid);
         job.ShouldNotBeNull();
         job.Guid.ShouldBe(_command.Guid);
-        job.Type.ShouldBe(nameof(CreateWatchdogCommand));
+        job.Type.ShouldBe(nameof(CreateScraperCommand));
         job.HandlingAttempts.ShouldBeEmpty();
         job.RequestId.ShouldBe("0HNFBP8T98MQS:00000045");
     }

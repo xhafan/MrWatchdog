@@ -1,9 +1,9 @@
 using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Searches;
+namespace MrWatchdog.Web.Features.Scrapers.Searches;
 
 public class SearchesModel(
     IQueryExecutor queryExecutor, 

@@ -9,7 +9,6 @@ using CoreDdd.Register.Castle;
 using CoreDdd.UnitOfWorks;
 using CoreUtils;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -28,6 +27,7 @@ using Rebus.Retry.Simple;
 using Rebus.Serialization;
 using Rebus.Transport.InMem;
 using System.Data;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 
 namespace MrWatchdog.Web.HostedServices;
 
@@ -86,7 +86,7 @@ public class RebusHostedService(
                 .Configure(x => x.LifestyleTransient())
         );
         
-        _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateWatchdogCommandMessageHandler>();
+        _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateScraperCommandMessageHandler>();
         
         var rebusUnitOfWork = new RebusUnitOfWork(
             unitOfWorkFactory: _hostedServiceWindsorContainer.Resolve<IUnitOfWorkFactory>(),

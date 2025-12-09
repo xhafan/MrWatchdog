@@ -1,18 +1,18 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetWatchdogWebPageScrapingResultsQueryHandler(
+public class GetScraperWebPageScrapingResultsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
-    IRepository<Watchdog> watchdogRepository
-) : BaseNhibernateQueryHandler<GetWatchdogWebPageScrapingResultsQuery>(unitOfWork)
+    IRepository<Scraper> scraperRepository
+) : BaseNhibernateQueryHandler<GetScraperWebPageScrapingResultsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogWebPageScrapingResultsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetScraperWebPageScrapingResultsQuery query)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (TResult)(object)watchdog.GetWatchdogWebPageScrapingResultsDto(query.WatchdogWebPageId);
+        var scraper = await scraperRepository.LoadByIdAsync(query.ScraperId);
+        return (TResult)(object)scraper.GetScraperWebPageScrapingResultsDto(query.ScraperWebPageId);
     }
 }

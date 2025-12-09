@@ -1,22 +1,22 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Security.Claims;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
-using System.Security.Claims;
+using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 public class WebPageOverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
-    private WatchdogWebPageArgs? _watchdogWebPageArgs;
+    private ScraperWebPageArgs? _scraperWebPageArgs;
 
     public WebPageOverviewModelBuilder WithBus(ICoreBus bus)
     {
@@ -30,9 +30,9 @@ public class WebPageOverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
 
-    public WebPageOverviewModelBuilder WithWatchdogWebPageArgs(WatchdogWebPageArgs watchdogWebPageArgs)
+    public WebPageOverviewModelBuilder WithScraperWebPageArgs(ScraperWebPageArgs scraperWebPageArgs)
     {
-        _watchdogWebPageArgs = watchdogWebPageArgs;
+        _scraperWebPageArgs = scraperWebPageArgs;
         return this;
     }       
     
@@ -42,9 +42,9 @@ public class WebPageOverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogWebPageArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
 
         if (_authorizationService == null)
@@ -60,7 +60,7 @@ public class WebPageOverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
             _authorizationService
         )
         {
-            WatchdogWebPageArgs = _watchdogWebPageArgs!
+            ScraperWebPageArgs = _scraperWebPageArgs!
         };
         ModelValidator.ValidateModel(model);
         return model;

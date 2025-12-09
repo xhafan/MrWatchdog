@@ -1,10 +1,10 @@
 ﻿using MrWatchdog.Core.Infrastructure.Validations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public class WatchdogDetailPublicStatusArgs
+public class ScraperDetailPublicStatusArgs
 {
     [NotDefault]
-    public required long WatchdogId { get; set; }
+    public required long ScraperId { get; set; }
     public required PublicStatus PublicStatus { get; set; }
 }

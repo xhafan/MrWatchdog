@@ -1,10 +1,10 @@
-﻿namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record WatchdogWebPageHttpHeader
+public record ScraperWebPageHttpHeader
 {
-    protected WatchdogWebPageHttpHeader() {}
+    protected ScraperWebPageHttpHeader() {}
 
-    public WatchdogWebPageHttpHeader(string name, string value)
+    public ScraperWebPageHttpHeader(string name, string value)
     {
         Name = name;
         Value = value;

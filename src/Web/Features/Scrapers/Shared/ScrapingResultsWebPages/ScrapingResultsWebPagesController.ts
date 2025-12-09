@@ -1,5 +1,5 @@
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../Shared/BodyController";
-import { watchdogScrapingResultsWebPagesInitializedEventName } from "../../ScrapingResults/ScrapingResultsController";
+import { scraperScrapingResultsWebPagesInitializedEventName } from "../../ScrapingResults/ScrapingResultsController";
 import Enumerable from "linq";
 import { StimulusControllers } from "../../../Shared/Generated/StimulusControllers";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
@@ -26,7 +26,7 @@ export default class ScrapingResultsWebPagesController extends BaseStimulusModel
     connect() {
         this.registerSearchTermModifiedEventHandler();
 
-        this.dispatch(watchdogScrapingResultsWebPagesInitializedEventName, { prefix: "" });
+        this.dispatch(scraperScrapingResultsWebPagesInitializedEventName, { prefix: "" });
     }
 
     private registerSearchTermModifiedEventHandler() {

@@ -3,21 +3,21 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_creating_watchdog_search_for_private_watchdog_with_user_different_from_watchdog_owner : BaseDatabaseTest
+public class when_creating_watchdog_search_for_private_scraper_with_user_different_from_scraper_owner : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
     private User _actingUser = null!;
@@ -32,8 +32,8 @@ public class when_creating_watchdog_search_for_private_watchdog_with_user_differ
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
@@ -44,13 +44,13 @@ public class when_creating_watchdog_search_for_private_watchdog_with_user_differ
             .WithSearchTerm(" search term ")
             .Build();
         
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id);
+        _actionResult = await _model.OnPostCreateWatchdogSearch(_scraper.Id);
     }
 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new CreateWatchdogSearchCommand(_watchdog.Id, "search term"))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new CreateWatchdogSearchCommand(_scraper.Id, "search term"))).MustNotHaveHappened();
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class when_creating_watchdog_search_for_private_watchdog_with_user_differ
     {
         var user = new UserBuilder(UnitOfWork).Build();
 
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _scraper = new ScraperBuilder(UnitOfWork)
             .WithUser(user)
             .Build();
 

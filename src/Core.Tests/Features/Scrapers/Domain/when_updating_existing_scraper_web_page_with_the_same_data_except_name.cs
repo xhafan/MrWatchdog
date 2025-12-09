@@ -1,24 +1,24 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 
 [TestFixture]
-public class when_updating_existing_watchdog_web_page_with_the_same_data_except_name : BaseTest
+public class when_updating_existing_scraper_web_page_with_the_same_data_except_name : BaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
 
     [SetUp]
     public void Context()
     {
         _BuildEntities();
         
-        _watchdog.UpdateWebPage(new WatchdogWebPageArgs
+        _scraper.UpdateWebPage(new ScraperWebPageArgs
         {
-            WatchdogWebPageId = _watchdogWebPageId,
+            ScraperWebPageId = _scraperWebPageId,
             Url = "http://url.com/page",
             Selector = ".selector",
             SelectText = true,
@@ -31,15 +31,15 @@ public class when_updating_existing_watchdog_web_page_with_the_same_data_except_
     }
 
     [Test]
-    public void watchdog_web_page_updated_domain_event_is_not_raised()
+    public void scraper_web_page_updated_domain_event_is_not_raised()
     {
-        RaisedDomainEvents.ShouldNotContain(new WatchdogWebPageScrapingDataUpdatedDomainEvent(_watchdog.Id, _watchdogWebPageId));
+        RaisedDomainEvents.ShouldNotContain(new ScraperWebPageScrapingDataUpdatedDomainEvent(_scraper.Id, _scraperWebPageId));
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder()
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
@@ -51,6 +51,6 @@ public class when_updating_existing_watchdog_web_page_with_the_same_data_except_
                               """
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
     }
 }

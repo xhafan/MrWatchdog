@@ -1,6 +1,6 @@
-﻿@page "{watchdogId}"
-@using MrWatchdog.Core.Features.Watchdogs
-@using MrWatchdog.Core.Features.Watchdogs.Domain
+﻿@page "{scraperId}"
+@using MrWatchdog.Core.Features.Scrapers
+@using MrWatchdog.Core.Features.Scrapers.Domain
 @using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
@@ -11,47 +11,47 @@
 @{
     Layout = null;
 }
-<!turbo-frame id="watchdog_detail_actions_@(Model.WatchdogDetailPublicStatusArgs.WatchdogId)">
+<!turbo-frame id="scraper_detail_actions_@(Model.ScraperDetailPublicStatusArgs.ScraperId)">
     <div @Stimulus.Controller(
-             StimulusControllers.WatchdogsDetailActions, 
+             StimulusControllers.ScrapersDetailActions, 
              new ActionsStimulusModel(
-                 Resource.RequestToMakeWebScraperPublicConfirmationMessage,
-                 Resource.MakeWebScraperPublicConfirmationMessage,
-                 Resource.MakeWebScraperPrivateConfirmationMessage
+                 Resource.RequestToMakeScraperPublicConfirmationMessage,
+                 Resource.MakeScraperPublicConfirmationMessage,
+                 Resource.MakeScraperPrivateConfirmationMessage
              )
          )
          >
-        <a href="@WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(Model.WatchdogDetailPublicStatusArgs.WatchdogId)" 
+        <a href="@ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(Model.ScraperDetailPublicStatusArgs.ScraperId)" 
            class="btn btn-outline-primary text-decoration-none"
            data-turbo-frame="_top"
-           id="@OnboardingElementIdentifiers.WatchdogsDetailViewScrapedResultsId"
+           id="@OnboardingElementIdentifiers.ScrapersDetailViewScrapedResultsId"
            >
             @Resource.ViewScrapedResults
         </a>
             @{
                 var isRequestToMakePublicFormVisible = !await User.IsSuperAdmin(UserRepository)
-                                                       && Model.WatchdogDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
+                                                       && Model.ScraperDetailPublicStatusArgs.PublicStatus == PublicStatus.Private;
         }
         <form asp-page-handler="RequestToMakePublic"
-              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+              asp-route-scraperId="@Model.ScraperDetailPublicStatusArgs.ScraperId"
               method="post"
-              data-watchdogs--detail-actions-target="requestToMakePublicForm"
+              data-scrapers--detail-actions-target="requestToMakePublicForm"
               style="display:@(!isRequestToMakePublicFormVisible ? "none" : "inline")"
         >
             <button class="btn btn-outline-primary"
                     type="submit"
-                    id="@OnboardingElementIdentifiers.WatchdogsDetailRequestToMakePublicId"
+                    id="@OnboardingElementIdentifiers.ScrapersDetailRequestToMakePublicId"
             >
                 @Resource.RequestToMakePublic
             </button>
         </form>
         @{
             var isMakePublicFormVisible = await User.IsSuperAdmin(UserRepository)
-                                          && Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
+                                          && Model.ScraperDetailPublicStatusArgs.PublicStatus != PublicStatus.Public;
         }
         <form asp-page-handler="MakePublic"
-              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
-              data-watchdogs--detail-actions-target="makePublicForm"
+              asp-route-scraperId="@Model.ScraperDetailPublicStatusArgs.ScraperId"
+              data-scrapers--detail-actions-target="makePublicForm"
               style="display:@(!isMakePublicFormVisible ? "none" : "inline")"
         >
             <button class="btn btn-outline-primary"
@@ -61,12 +61,12 @@
             </button>
         </form>
         @{
-            var isMakePrivateFormVisible = Model.WatchdogDetailPublicStatusArgs.PublicStatus != PublicStatus.Private;
+            var isMakePrivateFormVisible = Model.ScraperDetailPublicStatusArgs.PublicStatus != PublicStatus.Private;
         }
         <form asp-page-handler="MakePrivate"
-              asp-route-watchdogId="@Model.WatchdogDetailPublicStatusArgs.WatchdogId"
+              asp-route-scraperId="@Model.ScraperDetailPublicStatusArgs.ScraperId"
               method="post"
-              data-watchdogs--detail-actions-target="makePrivateForm"
+              data-scrapers--detail-actions-target="makePrivateForm"
               style="display:@(!isMakePrivateFormVisible ? "none" : "inline")"
         >
             <button class="btn btn-outline-primary"

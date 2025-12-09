@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
+using MrWatchdog.Web.Features.Scrapers.Detail.Actions;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Actions;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_actions_for_watchdog_with_make_public_requested : BaseDatabaseTest
+public class when_viewing_scraper_detail_actions_for_scraper_with_make_public_requested : BaseDatabaseTest
 {
     private ActionsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -18,19 +18,19 @@ public class when_viewing_watchdog_detail_actions_for_watchdog_with_make_public_
         
         _model = new ActionsModelBuilder(UnitOfWork).Build();
         
-        await _model.OnGet(_watchdog.Id);
+        await _model.OnGet(_scraper.Id);
     }
 
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailPublicStatusArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
+        _model.ScraperDetailPublicStatusArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperDetailPublicStatusArgs.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _watchdog.RequestToMakePublic();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
+        _scraper.RequestToMakePublic();
     } 
 }

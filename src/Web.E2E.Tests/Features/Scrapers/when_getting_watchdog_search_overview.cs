@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
+namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
 public class when_getting_watchdog_search_overview : BaseDatabaseTest
@@ -21,11 +21,11 @@ public class when_getting_watchdog_search_overview : BaseDatabaseTest
     [Test]
     public async Task watchdog_search_overview_page_redirects_to_login_page()
     {
-        var url = WatchdogUrlConstants.WatchdogSearchOverviewUrlTemplate.WithWatchdogSearchId(_watchdogSearch!.Id);
+        var url = ScraperUrlConstants.WatchdogSearchOverviewUrlTemplate.WithWatchdogSearchId(_watchdogSearch!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
-        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FSearch%2FOverview%2F{_watchdogSearch.Id}");
+        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FScrapers%2FSearch%2FOverview%2F{_watchdogSearch.Id}");
     }
     
     [TearDown]

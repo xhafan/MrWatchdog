@@ -1,19 +1,19 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingFailed;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 
 [TestFixture]
-public class when_notifying_user_about_watchdog_scraping_failed_for_watchdog_without_any_web_page_scraping_errors : BaseDatabaseTest
+public class when_notifying_user_about_scraper_scraping_failed_for_scraper_without_any_web_page_scraping_errors : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IEmailSender _emailSender = null!;
     private User _user = null!;
 
@@ -24,13 +24,13 @@ public class when_notifying_user_about_watchdog_scraping_failed_for_watchdog_wit
 
         _emailSender = A.Fake<IEmailSender>();
         
-        var handler = new NotifyUserAboutWatchdogScrapingFailedDomainEventMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             _emailSender,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new WatchdogWebPageScrapingFailedDomainEvent(_watchdog.Id));
+        await handler.Handle(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class when_notifying_user_about_watchdog_scraping_failed_for_watchdog_wit
     {
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _scraper = new ScraperBuilder(UnitOfWork)
             .WithUser(_user)
             .Build();
     }

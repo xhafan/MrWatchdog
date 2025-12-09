@@ -1,21 +1,21 @@
 using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Manage.UserWatchdogs;
+namespace MrWatchdog.Web.Features.Scrapers.Manage.UserScrapers;
 
-public class UserWatchdogsModel(
+public class UserScrapersModel(
     IQueryExecutor queryExecutor,
     IActingUserAccessor actingUserAccessor
 ) : BasePageModel
 {
-    public IEnumerable<GetUserWatchdogsQueryResult> UserWatchdogs { get; private set; } = null!;
+    public IEnumerable<GetUserScrapersQueryResult> UserScrapers { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        UserWatchdogs = await queryExecutor.ExecuteAsync<GetUserWatchdogsQuery, GetUserWatchdogsQueryResult>(
-            new GetUserWatchdogsQuery(actingUserAccessor.GetActingUserId())
+        UserScrapers = await queryExecutor.ExecuteAsync<GetUserScrapersQuery, GetUserScrapersQueryResult>(
+            new GetUserScrapersQuery(actingUserAccessor.GetActingUserId())
         );
     }
 }

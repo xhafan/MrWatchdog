@@ -4,5 +4,5 @@
 
 export abstract class DomEvents
 {
-	public static watchdogPublicStatusUpdated: string = `watchdogPublicStatusUpdated`;
+	public static scraperPublicStatusUpdated: string = `scraperPublicStatusUpdated`;
 }

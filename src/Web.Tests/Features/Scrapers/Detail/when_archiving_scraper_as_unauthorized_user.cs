@@ -1,22 +1,22 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Scrapers.Detail;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail;
 
 [TestFixture]
-public class when_archiving_watchdog_as_unauthorized_user : BaseDatabaseTest
+public class when_archiving_scraper_as_unauthorized_user : BaseDatabaseTest
 {
     private DetailModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
 
@@ -30,8 +30,8 @@ public class when_archiving_watchdog_as_unauthorized_user : BaseDatabaseTest
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
@@ -40,13 +40,13 @@ public class when_archiving_watchdog_as_unauthorized_user : BaseDatabaseTest
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnPostArchiveWatchdog(_watchdog.Id);
+        _actionResult = await _model.OnPostArchiveScraper(_scraper.Id);
     }
 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new ArchiveWatchdogCommand(_watchdog.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ArchiveScraperCommand(_scraper.Id))).MustNotHaveHappened();
     }
     
     [Test]
@@ -57,6 +57,6 @@ public class when_archiving_watchdog_as_unauthorized_user : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

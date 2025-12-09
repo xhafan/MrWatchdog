@@ -1,20 +1,20 @@
-﻿using MrWatchdog.Core.Infrastructure.Validations;
+﻿using System.ComponentModel.DataAnnotations;
+using MrWatchdog.Core.Infrastructure.Validations;
 using MrWatchdog.Core.Resources;
-using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record WatchdogOverviewArgs
+public record ScraperOverviewArgs
 {
     [NotDefault]
-    public required long WatchdogId { get; set; }
+    public required long ScraperId { get; set; }
 
     [Required]
-    [StringLength(ValidationConstants.WatchdogNameMaxLength)]
+    [StringLength(ValidationConstants.ScraperNameMaxLength)]
     [Display(Name = nameof(Resource.Name), ResourceType = typeof(Resource))]
     public required string Name { get; set; } = null!;
 
-    [StringLength(ValidationConstants.WatchdogDescriptionMaxLength)]
+    [StringLength(ValidationConstants.ScraperDescriptionMaxLength)]
     [Display(Name = nameof(Resource.Description), ResourceType = typeof(Resource))]
     public required string? Description { get; set; }
 

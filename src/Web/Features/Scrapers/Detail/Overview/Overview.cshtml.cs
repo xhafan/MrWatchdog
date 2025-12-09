@@ -1,13 +1,13 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.Overview;
 
 public class OverviewModel(
     IQueryExecutor queryExecutor, 
@@ -16,29 +16,29 @@ public class OverviewModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogOverviewArgs WatchdogOverviewArgs { get; set; } = null!;
+    public ScraperOverviewArgs ScraperOverviewArgs { get; set; } = null!;
 
-    public async Task<IActionResult> OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long scraperId)
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        WatchdogOverviewArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(
-                new GetWatchdogOverviewArgsQuery(watchdogId));
+        ScraperOverviewArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperOverviewArgsQuery, ScraperOverviewArgs>(
+                new GetScraperOverviewArgsQuery(scraperId));
 
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogOverviewArgs.WatchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(ScraperOverviewArgs.ScraperId)) return Forbid();
 
         if (!ModelState.IsValid)
         {
             return PageWithUnprocessableEntityStatus422();
         }
         
-        var command = new UpdateWatchdogOverviewCommand(WatchdogOverviewArgs);
+        var command = new UpdateScraperOverviewCommand(ScraperOverviewArgs);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

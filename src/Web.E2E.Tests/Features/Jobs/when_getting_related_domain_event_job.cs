@@ -6,7 +6,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -36,7 +36,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
     {
         var url = JobUrlConstants.GetRelatedDomainEventJobUrlTemplate
             .WithCommandJobGuid(_commandJobGuid)
-            .WithDomainEventType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
+            .WithDomainEventType(nameof(ScraperWebPageScrapingDataUpdatedDomainEvent));
         var response = await _webApplicationClient.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var jobDto = await response.Content.ReadFromJsonAsync<JobDto>();
@@ -80,7 +80,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
                     .Build();
 
                 _domainEventJob = new JobBuilder(newUnitOfWork)
-                    .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
+                    .WithType(nameof(ScraperWebPageScrapingDataUpdatedDomainEvent))
                     .Build();
                 _domainEventJob.SetRelatedCommandJob(_commandJob);
             }

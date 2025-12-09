@@ -1,22 +1,22 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
+using MrWatchdog.Web.Features.Scrapers.Detail.Actions;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Actions;
 
 [TestFixture]
-public class when_requesting_to_make_watchdog_public_as_unauthorized_user : BaseDatabaseTest
+public class when_requesting_to_make_scraper_public_as_unauthorized_user : BaseDatabaseTest
 {
     private ActionsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
 
@@ -30,8 +30,8 @@ public class when_requesting_to_make_watchdog_public_as_unauthorized_user : Base
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdog.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
+                _scraper.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<ScraperOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
@@ -40,13 +40,13 @@ public class when_requesting_to_make_watchdog_public_as_unauthorized_user : Base
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnPostRequestToMakePublic(_watchdog.Id);
+        _actionResult = await _model.OnPostRequestToMakePublic(_scraper.Id);
     }
 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new RequestToMakeWatchdogPublicCommand(_watchdog.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new RequestToMakeScraperPublicCommand(_scraper.Id))).MustNotHaveHappened();
     }
 
     [Test]
@@ -57,6 +57,6 @@ public class when_requesting_to_make_watchdog_public_as_unauthorized_user : Base
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

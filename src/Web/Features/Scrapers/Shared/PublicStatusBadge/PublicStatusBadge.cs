@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Web.Features.Shared.TagHelpers;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Shared.PublicStatusBadge;
+namespace MrWatchdog.Web.Features.Scrapers.Shared.PublicStatusBadge;
 
 [HtmlTargetElement("public-status-badge")]
 public class PublicStatusBadge(IHtmlHelper htmlHelper) : BaseViewTagHelper(htmlHelper)

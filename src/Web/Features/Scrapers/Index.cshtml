@@ -1,11 +1,11 @@
 ﻿@page
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @model IndexModel
 
 @{
-    var title = Resource.WebScrapers;
+    var title = Resource.Scrapers;
     ViewData["Title"] = title;
 }
 
@@ -22,15 +22,15 @@
 
 <div class="row">
     <div class="col-md-7">
-        <turbo-frame id="publicWatchdogs"
-                     src="@WatchdogUrlConstants.WachdogsPublicWatchdogsUrl"
+        <turbo-frame id="publicScrapers"
+                     src="@ScraperUrlConstants.ScrapersPublicScrapersUrl"
         />
     </div>
     <div class="col-md-5">
         @if (User.IsAuthenticated())
         {
-            <turbo-frame id="userWatchdogs"
-                         src="@WatchdogUrlConstants.WatchdogsUserWatchdogsUrl"
+            <turbo-frame id="userScrapers"
+                         src="@ScraperUrlConstants.ScrapersUserScrapersUrl"
             />
         }
     </div>

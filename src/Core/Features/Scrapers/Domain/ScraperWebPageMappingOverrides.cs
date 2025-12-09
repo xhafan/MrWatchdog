@@ -1,14 +1,14 @@
 ﻿using FluentNHibernate.Automapping;
 using FluentNHibernate.Automapping.Alterations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public class WatchdogWebPageMappingOverrides : IAutoMappingOverride<WatchdogWebPage>
+public class ScraperWebPageMappingOverrides : IAutoMappingOverride<ScraperWebPage>
 {
-    public void Override(AutoMapping<WatchdogWebPage> mapping)
+    public void Override(AutoMapping<ScraperWebPage> mapping)
     {
         mapping.HasMany(x => x.ScrapingResults)
-            .Table($"{nameof(WatchdogWebPage)}{nameof(WatchdogWebPage.ScrapingResults)}".TrimEnd('s'))
+            .Table($"{nameof(ScraperWebPage)}{nameof(ScraperWebPage.ScrapingResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();
@@ -16,7 +16,7 @@ public class WatchdogWebPageMappingOverrides : IAutoMappingOverride<WatchdogWebP
             });
 
         mapping.HasMany(x => x.HttpHeaders)
-            .Table($"{nameof(WatchdogWebPage)}{nameof(WatchdogWebPage.HttpHeaders)}")
+            .Table($"{nameof(ScraperWebPage)}{nameof(ScraperWebPage.HttpHeaders)}".TrimEnd('s'))
             .Component(c =>
             {
                 c.Map(x => x.Name).Column("Name")

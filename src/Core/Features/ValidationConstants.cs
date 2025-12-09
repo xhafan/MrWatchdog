@@ -6,13 +6,13 @@ namespace MrWatchdog.Core.Features;
 public static class ValidationConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const int WatchdogNameMaxLength = 200;
+    public const int ScraperNameMaxLength = 200;
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const int WatchdogDescriptionMaxLength = 1000;
+    public const int ScraperDescriptionMaxLength = 1000;
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const int WatchdogWebPageNameMaxLength = 200;
+    public const int ScraperWebPageNameMaxLength = 200;
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const int SearchTermMaxLength = 400;

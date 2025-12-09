@@ -7,22 +7,22 @@ namespace MrWatchdog.Web.Tests.Infrastructure.PageRouteModelConventions;
 public class when_applying_page_route_model_convention
 {
     [TestCase(
-        "/Features/Watchdogs/Create/Create.cshtml",
-        "/Watchdogs/Create/Create",
-        "Watchdogs/Create/Create",
-        "Watchdogs/Create",
+        "/Features/Scrapers/Create/Create.cshtml",
+        "/Scrapers/Create/Create",
+        "Scrapers/Create/Create",
+        "Scrapers/Create",
         TestName = "1 Razor page without parameters")]
     [TestCase(
-        "/Features/Watchdogs/Detail/Detail.cshtml",
-        "/Watchdogs/Detail/Detail",
-        "Watchdogs/Detail/Detail/{id}",
-        "Watchdogs/Detail/{id}",
+        "/Features/Scrapers/Detail/Detail.cshtml",
+        "/Scrapers/Detail/Detail",
+        "Scrapers/Detail/Detail/{id}",
+        "Scrapers/Detail/{id}",
         TestName = "2 Razor page with parameters")]
     [TestCase(
-        "/Features/Watchdogs/Detail/Overview/Overview.cshtml",
-        "/Watchdogs/Detail/Overview/Overview",
-        "Watchdogs/Detail/Overview/Overview/{id}",
-        "Watchdogs/Detail/Overview/{id}",
+        "/Features/Scrapers/Detail/Overview/Overview.cshtml",
+        "/Scrapers/Detail/Overview/Overview",
+        "Scrapers/Detail/Overview/Overview/{id}",
+        "Scrapers/Detail/Overview/{id}",
         TestName = "3 Nested razor page")]
     public void selector_template_is_correct(
         string relativePath, 

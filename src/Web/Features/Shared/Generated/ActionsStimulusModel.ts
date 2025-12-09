@@ -4,7 +4,7 @@
 
 export interface ActionsStimulusModel
 {
-	requestToMakeWebScraperPublicConfirmationMessageResource: string;
-	makeWebScraperPublicConfirmationMessageResource: string;
-	makeWebScraperPrivateConfirmationMessageResource: string;
+	requestToMakeScraperPublicConfirmationMessageResource: string;
+	makeScraperPublicConfirmationMessageResource: string;
+	makeScraperPrivateConfirmationMessageResource: string;
 }

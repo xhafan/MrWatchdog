@@ -1,9 +1,9 @@
 ﻿using MrWatchdog.Core.Resources;
 using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record PublicWatchdogStatisticsDto // todo: rename to PublicWebScraperStatisticsDto
+public record PublicScraperStatisticsDto
 {
     [Display(Name = nameof(Resource.CalculatedEarningsForThisMonth), ResourceType = typeof(Resource))]
     public required decimal CalculatedEarningsForThisMonth { get; set; }

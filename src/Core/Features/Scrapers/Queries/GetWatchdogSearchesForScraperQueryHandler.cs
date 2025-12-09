@@ -1,21 +1,21 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using NHibernate;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetWatchdogSearchesForWatchdogQueryHandler(
+public class GetWatchdogSearchesForScraperQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetWatchdogSearchesForWatchdogQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetWatchdogSearchesForScraperQuery>(unitOfWork)
 {
-    protected override IQueryOver GetQueryOver<TResult>(GetWatchdogSearchesForWatchdogQuery query)
+    protected override IQueryOver GetQueryOver<TResult>(GetWatchdogSearchesForScraperQuery query)
     {
-        Watchdog watchdog = null!;
+        Scraper scraper = null!;
 
         return Session.QueryOver<WatchdogSearch>()
-            .JoinAlias(x => x.Watchdog, () => watchdog)
-            .Where(x => watchdog.Id == query.WatchdogId
+            .JoinAlias(x => x.Scraper, () => scraper)
+            .Where(x => scraper.Id == query.ScraperId
                         && !x.IsArchived)
             .Select(x => x.Id);
     }

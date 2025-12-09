@@ -1,19 +1,19 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
 public class when_creating_watchdog_search_for_unauthenticated_user : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
 
@@ -29,13 +29,13 @@ public class when_creating_watchdog_search_for_unauthenticated_user : BaseDataba
             .WithSearchTerm(" search term ")
             .Build();
 
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id);
+        _actionResult = await _model.OnPostCreateWatchdogSearch(_scraper.Id);
     }
 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new CreateWatchdogSearchCommand(_watchdog.Id, "search term"))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new CreateWatchdogSearchCommand(_scraper.Id, "search term"))).MustNotHaveHappened();
     }
 
     [Test]
@@ -46,6 +46,6 @@ public class when_creating_watchdog_search_for_unauthenticated_user : BaseDataba
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

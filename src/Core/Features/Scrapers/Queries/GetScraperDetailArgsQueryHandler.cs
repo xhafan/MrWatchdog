@@ -1,18 +1,18 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetWatchdogDetailArgsQueryHandler(
+public class GetScraperDetailArgsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
-    IRepository<Watchdog> watchdogRepository
-) : BaseNhibernateQueryHandler<GetWatchdogDetailArgsQuery>(unitOfWork)
+    IRepository<Scraper> scraperRepository
+) : BaseNhibernateQueryHandler<GetScraperDetailArgsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogDetailArgsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetScraperDetailArgsQuery query)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
-        return (TResult)(object)watchdog.GetWatchdogDetailArgs();
+        var scraper = await scraperRepository.LoadByIdAsync(query.ScraperId);
+        return (TResult)(object)scraper.GetScraperDetailArgs();
     }
 }

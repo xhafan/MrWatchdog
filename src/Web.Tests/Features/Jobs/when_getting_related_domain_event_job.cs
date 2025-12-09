@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -24,11 +24,11 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
             .Build();
         _commandJob.HandlingStarted(RebusQueues.Main);
         _commandJob.Complete();
-        _commandJob.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
+        _commandJob.AddAffectedEntity(nameof(Scraper), 23, isCreated: true);
         
         _domainEventJob = new JobBuilder(UnitOfWork)
             .WithKind(JobKind.DomainEvent)
-            .WithType(nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent))
+            .WithType(nameof(ScraperWebPageScrapingDataUpdatedDomainEvent))
             .Build();
         _domainEventJob.HandlingStarted(RebusQueues.Main);
         _domainEventJob.Complete();
@@ -36,7 +36,7 @@ public class when_getting_related_domain_event_job : BaseDatabaseTest
         
         var controller = new JobsControllerBuilder(UnitOfWork).Build();
 
-        _actionResult = await controller.GetRelatedDomainEventJob(_commandJob.Guid, nameof(WatchdogWebPageScrapingDataUpdatedDomainEvent));
+        _actionResult = await controller.GetRelatedDomainEventJob(_commandJob.Guid, nameof(ScraperWebPageScrapingDataUpdatedDomainEvent));
     }
 
     [Test]

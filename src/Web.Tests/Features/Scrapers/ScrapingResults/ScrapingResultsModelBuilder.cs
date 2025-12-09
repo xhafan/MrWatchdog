@@ -1,23 +1,23 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Security.Claims;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
-using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.TestsShared;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
@@ -56,9 +56,9 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogScrapingResultsArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapingResultsArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<Watchdog>(unitOfWork)
+            new NhibernateRepository<Scraper>(unitOfWork)
         ));
 
         if (_authorizationService == null)

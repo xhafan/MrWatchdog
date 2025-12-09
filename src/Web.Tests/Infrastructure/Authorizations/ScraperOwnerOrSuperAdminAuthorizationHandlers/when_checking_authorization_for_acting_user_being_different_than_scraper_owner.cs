@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogOwnerOrSuperAdminAuthorizationHandlers;
+namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ScraperOwnerOrSuperAdminAuthorizationHandlers;
 
 [TestFixture]
-public class when_checking_authorization_for_acting_user_being_different_than_watchdog_owner : BaseDatabaseTest
+public class when_checking_authorization_for_acting_user_being_different_than_scraper_owner : BaseDatabaseTest
 {
     private AuthorizationHandlerContext _authorizationHandlerContext = null!;
 
@@ -25,22 +25,22 @@ public class when_checking_authorization_for_acting_user_being_different_than_wa
             .WithSuperAdmin(false)
             .Build();
 
-        var watchdog = new WatchdogBuilder(UnitOfWork)
+        var scraper = new ScraperBuilder(UnitOfWork)
             .WithUser(anotherUser)
             .Build();
 
-        var handler = new WatchdogOwnerOrSuperAdminAuthorizationHandler(
+        var handler = new ScraperOwnerOrSuperAdminAuthorizationHandler(
             new UserRepository(UnitOfWork),
-            new NhibernateRepository<Watchdog>(UnitOfWork)
+            new NhibernateRepository<Scraper>(UnitOfWork)
         );
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
-            [new WatchdogOwnerOrSuperAdminRequirement()],
+            [new ScraperOwnerOrSuperAdminRequirement()],
             new ClaimsPrincipal(new ClaimsIdentity(
                 [new Claim(ClaimTypes.NameIdentifier, $"{user.Id}")], 
                 authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
             ),
-            resource: watchdog.Id
+            resource: scraper.Id
         );
 
         await handler.HandleAsync(

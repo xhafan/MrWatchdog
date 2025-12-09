@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_archived_watchdog_scraping_results : BaseDatabaseTest
+public class when_viewing_archived_scraper_scraping_results : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -19,18 +19,18 @@ public class when_viewing_archived_watchdog_scraping_results : BaseDatabaseTest
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
-        await _model.OnGet(_watchdog.Id);
+        await _model.OnGet(_scraper.Id);
     }
 
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogScrapingResultsArgs.IsArchived.ShouldBe(true);
+        _model.ScraperScrapingResultsArgs.IsArchived.ShouldBe(true);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _watchdog.Archive();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
+        _scraper.Archive();
     }    
 }

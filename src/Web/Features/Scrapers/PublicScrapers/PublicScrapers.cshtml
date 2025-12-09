@@ -1,47 +1,47 @@
 ﻿@page
 @using CoreUtils.Extensions
 @using Microsoft.Extensions.Localization
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
-@model PublicWatchdogsModel
+@model PublicScrapersModel
 @inject IStringLocalizer<Resource> Localizer
 @{
     Layout = null;
 }
-<!turbo-frame id="publicWatchdogs">
-    <h1 class="display-4">@Resource.PublicWebScrapers</h1>    
+<!turbo-frame id="publicScrapers">
+    <h1 class="display-4">@Resource.PublicScrapers</h1>    
     <p class="text-muted">
-        @Resource.PublicWebScrapersDescription
+        @Resource.PublicScrapersDescription
     </p>
 
-    @foreach (var watchdog in Model.PublicWatchdogs)
+    @foreach (var scraper in Model.PublicScrapers)
     {
         <div>
-            <a asp-page="/Watchdogs/ScrapingResults/ScrapingResults" 
-               asp-route-watchdogId="@watchdog.WatchdogId"
+            <a asp-page="/Scrapers/ScrapingResults/ScrapingResults" 
+               asp-route-scraperId="@scraper.ScraperId"
                data-turbo-frame="_top"
                class="text-wrap text-break"
                >
-                @watchdog.WatchdogName</a>
+                @scraper.ScraperName</a>
 
-            @if (watchdog.UserId == User.GetUserId())
+            @if (scraper.UserId == User.GetUserId())
             {
                 <span class="badge text-bg-primary"
-                      title="@Resource.MyWebScraperTooltip">
-                    @Resource.MyWebScraper
+                      title="@Resource.MyScraperTooltip">
+                    @Resource.MyScraper
                 </span>
             }
         </div>
     }
         
-    @if (Model.PublicWatchdogs.IsEmpty())
+    @if (Model.PublicScrapers.IsEmpty())
     {
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
         @Html.Raw(
             Localizer[
-                Resource.ThereAreNoPublicWebScrapers, 
-                $"<a href=\"{WatchdogUrlConstants.WatchdogCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
+                Resource.ThereAreNoPublicScrapers, 
+                $"<a href=\"{ScraperUrlConstants.ScraperCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
             ]
         )
     }

@@ -1,7 +1,7 @@
 ﻿@page
 @using CoreUtils.Extensions
 @using Microsoft.Extensions.Localization
-@using MrWatchdog.Core.Features.Watchdogs
+@using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @model SearchesModel
 @inject IStringLocalizer<Resource> Localizer
@@ -29,11 +29,11 @@
 @foreach (var watchdogSearch in Model.WatchdogSearches)
 {
     <div>
-        <a asp-page="/Watchdogs/Search/Search" 
+        <a asp-page="/Scrapers/Search/Search" 
            asp-route-watchdogSearchId="@watchdogSearch.WatchdogSearchId"
            class="text-wrap text-break"
            >
-            <span>@watchdogSearch.WatchdogName</span>
+            <span>@watchdogSearch.ScraperName</span>
             <span translate="no">@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")</span>
             @if (!watchdogSearch.ReceiveNotification)
             {
@@ -53,7 +53,7 @@
     @Html.Raw(
         Localizer[
             Resource.YouHaveNoWatchdogs,
-            $"<a href=\"{WatchdogUrlConstants.WatchdogsUrl}\">{Resource.ListOfWebScrapers}</a>",
+            $"<a href=\"{ScraperUrlConstants.ScrapersUrl}\">{Resource.ListOfScrapers}</a>",
             Resource.CreateWatchdog
         ]
     )

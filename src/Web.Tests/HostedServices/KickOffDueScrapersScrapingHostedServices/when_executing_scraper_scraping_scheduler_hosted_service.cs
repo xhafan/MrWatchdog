@@ -2,23 +2,23 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.HostedServices;
 
-namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueWatchdogsScrapingHostedServices;
+namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueScrapersScrapingHostedServices;
 
 [TestFixture]
-public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDatabaseTest
+public class when_executing_scraper_scraping_scheduler_hosted_service : BaseDatabaseTest
 {
-    private Watchdog _watchdogWithoutNextScrapingOnSet = null!;
-    private Watchdog _watchdogWithNextScrapingOnSetInTheFarPast = null!;
-    private Watchdog _watchdogWithNextScrapingOnSetInTheFuture = null!;
-    private Watchdog _archivedWatchdogWithoutNextScrapingOnSet = null!;
+    private Scraper _scraperWithoutNextScrapingOnSet = null!;
+    private Scraper _scraperWithNextScrapingOnSetInTheFarPast = null!;
+    private Scraper _scraperWithNextScrapingOnSetInTheFuture = null!;
+    private Scraper _archivedScraperWithoutNextScrapingOnSet = null!;
     private ICoreBus _bus = null!;
 
     [SetUp]
@@ -33,23 +33,23 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
                 .AddConsole();
         });
         
-        var logger = loggerFactory.CreateLogger<KickOffDueWatchdogsScrapingHostedService>();
+        var logger = loggerFactory.CreateLogger<KickOffDueScrapersScrapingHostedService>();
         _bus = A.Fake<ICoreBus>();
         
-        var options = A.Fake<IOptions<KickOffDueWatchdogsScrapingHostedServiceOptions>>();
-        A.CallTo(() => options.Value).Returns(new KickOffDueWatchdogsScrapingHostedServiceOptions {IsDisabled = false});
+        var options = A.Fake<IOptions<KickOffDueScrapersScrapingHostedServiceOptions>>();
+        A.CallTo(() => options.Value).Returns(new KickOffDueScrapersScrapingHostedServiceOptions {IsDisabled = false});
         
-        var hostedService = new KickOffDueWatchdogsScrapingHostedService(
+        var hostedService = new KickOffDueScrapersScrapingHostedService(
             TestFixtureContext.NhibernateConfigurator,
             _bus,
             options,
             logger
         );
-        hostedService.SetWatchdogIdsToScrape(
-            _watchdogWithoutNextScrapingOnSet.Id,
-            _watchdogWithNextScrapingOnSetInTheFarPast.Id,
-            _watchdogWithNextScrapingOnSetInTheFuture.Id,
-            _archivedWatchdogWithoutNextScrapingOnSet.Id
+        hostedService.SetScraperIdsToScrape(
+            _scraperWithoutNextScrapingOnSet.Id,
+            _scraperWithNextScrapingOnSetInTheFarPast.Id,
+            _scraperWithNextScrapingOnSetInTheFuture.Id,
+            _archivedScraperWithoutNextScrapingOnSet.Id
         );
 
         using var cts = new CancellationTokenSource();
@@ -61,47 +61,47 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
         
         await hostedService.StopAsync(cts.Token);
 
-        _watchdogWithoutNextScrapingOnSet = UnitOfWork.LoadById<Watchdog>(_watchdogWithoutNextScrapingOnSet.Id);
-        _watchdogWithNextScrapingOnSetInTheFarPast = UnitOfWork.LoadById<Watchdog>(_watchdogWithNextScrapingOnSetInTheFarPast.Id);
-        _watchdogWithNextScrapingOnSetInTheFuture = UnitOfWork.LoadById<Watchdog>(_watchdogWithNextScrapingOnSetInTheFuture.Id);
-        _archivedWatchdogWithoutNextScrapingOnSet = UnitOfWork.LoadById<Watchdog>(_archivedWatchdogWithoutNextScrapingOnSet.Id);
+        _scraperWithoutNextScrapingOnSet = UnitOfWork.LoadById<Scraper>(_scraperWithoutNextScrapingOnSet.Id);
+        _scraperWithNextScrapingOnSetInTheFarPast = UnitOfWork.LoadById<Scraper>(_scraperWithNextScrapingOnSetInTheFarPast.Id);
+        _scraperWithNextScrapingOnSetInTheFuture = UnitOfWork.LoadById<Scraper>(_scraperWithNextScrapingOnSetInTheFuture.Id);
+        _archivedScraperWithoutNextScrapingOnSet = UnitOfWork.LoadById<Scraper>(_archivedScraperWithoutNextScrapingOnSet.Id);
     }
 
     [Test]
-    public void watchdog_without_next_scraping_on_timestamp_has_scraping_scheduled()
+    public void scraper_without_next_scraping_on_timestamp_has_scraping_scheduled()
     {
-        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_watchdogWithoutNextScrapingOnSet.Id))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_scraperWithoutNextScrapingOnSet.Id))).MustHaveHappenedOnceExactly();
     }
     
     [Test]
-    public void watchdog_with_next_scraping_on_timestamp_in_the_far_past_has_scraping_scheduled()
+    public void scraper_with_next_scraping_on_timestamp_in_the_far_past_has_scraping_scheduled()
     {
-        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_watchdogWithNextScrapingOnSetInTheFarPast.Id))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_scraperWithNextScrapingOnSetInTheFarPast.Id))).MustHaveHappenedOnceExactly();
     } 
     
     [Test]
-    public void watchdog_with_next_scraping_on_timestamp_in_the_future_does_not_have_scraping_scheduled()
+    public void scraper_with_next_scraping_on_timestamp_in_the_future_does_not_have_scraping_scheduled()
     {
-        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_watchdogWithNextScrapingOnSetInTheFuture.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_scraperWithNextScrapingOnSetInTheFuture.Id))).MustNotHaveHappened();
     }
     
     [Test]
-    public void archived_watchdog_does_not_have_scraping_scheduled()
+    public void archived_scraper_does_not_have_scraping_scheduled()
     {
-        A.CallTo(() => _bus.Send(new ScrapeWatchdogCommand(_archivedWatchdogWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_archivedScraperWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
     }
 
     [Test]
-    public void watchdog_without_next_scraping_on_timestamp_has_next_scraping_on_set()
+    public void scraper_without_next_scraping_on_timestamp_has_next_scraping_on_set()
     {
-        _watchdogWithoutNextScrapingOnSet.NextScrapingOn.ShouldNotBeNull();
-        _watchdogWithoutNextScrapingOnSet.NextScrapingOn.Value.ShouldBe(DateTime.UtcNow.AddSeconds(60), tolerance: TimeSpan.FromSeconds(5));
+        _scraperWithoutNextScrapingOnSet.NextScrapingOn.ShouldNotBeNull();
+        _scraperWithoutNextScrapingOnSet.NextScrapingOn.Value.ShouldBe(DateTime.UtcNow.AddSeconds(60), tolerance: TimeSpan.FromSeconds(5));
     }
     
     [Test]
-    public void watchdog_with_next_scraping_on_timestamp_in_the_far_past_has_next_scraping_on_set_to_the_future()
+    public void scraper_with_next_scraping_on_timestamp_in_the_far_past_has_next_scraping_on_set_to_the_future()
     {
-        _watchdogWithNextScrapingOnSetInTheFarPast.NextScrapingOn!.Value.ShouldBe(DateTime.UtcNow.AddSeconds(120), tolerance: TimeSpan.FromSeconds(5));
+        _scraperWithNextScrapingOnSetInTheFarPast.NextScrapingOn!.Value.ShouldBe(DateTime.UtcNow.AddSeconds(120), tolerance: TimeSpan.FromSeconds(5));
     }     
 
     [TearDown]
@@ -111,10 +111,10 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             async newUnitOfWork =>
             {
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithoutNextScrapingOnSet);
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFarPast);
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdogWithNextScrapingOnSetInTheFuture);
-                await newUnitOfWork.DeleteWatchdogCascade(_archivedWatchdogWithoutNextScrapingOnSet);
+                await newUnitOfWork.DeleteScraperCascade(_scraperWithoutNextScrapingOnSet);
+                await newUnitOfWork.DeleteScraperCascade(_scraperWithNextScrapingOnSetInTheFarPast);
+                await newUnitOfWork.DeleteScraperCascade(_scraperWithNextScrapingOnSetInTheFuture);
+                await newUnitOfWork.DeleteScraperCascade(_archivedScraperWithoutNextScrapingOnSet);
             }
         );
     }    
@@ -125,23 +125,23 @@ public class when_executing_watchdog_scraping_scheduler_hosted_service : BaseDat
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             newUnitOfWork =>
             {
-                _watchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
+                _scraperWithoutNextScrapingOnSet = new ScraperBuilder(newUnitOfWork)
                     .WithScrapingIntervalInSeconds(60)
                     .Build();
 
-                _watchdogWithNextScrapingOnSetInTheFarPast = new WatchdogBuilder(newUnitOfWork)
+                _scraperWithNextScrapingOnSetInTheFarPast = new ScraperBuilder(newUnitOfWork)
                     .WithScrapingIntervalInSeconds(120)
                     .WithNextScrapingOn(DateTime.UtcNow.AddYears(-1))
                     .Build();
 
-                _watchdogWithNextScrapingOnSetInTheFuture = new WatchdogBuilder(newUnitOfWork)
+                _scraperWithNextScrapingOnSetInTheFuture = new ScraperBuilder(newUnitOfWork)
                     .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(120))
                     .Build();
 
-                _archivedWatchdogWithoutNextScrapingOnSet = new WatchdogBuilder(newUnitOfWork)
+                _archivedScraperWithoutNextScrapingOnSet = new ScraperBuilder(newUnitOfWork)
                     .WithScrapingIntervalInSeconds(60)
                     .Build();
-                _archivedWatchdogWithoutNextScrapingOnSet.Archive();
+                _archivedScraperWithoutNextScrapingOnSet.Archive();
             }
         );
     }

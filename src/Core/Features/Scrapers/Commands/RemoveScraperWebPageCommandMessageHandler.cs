@@ -1,15 +1,15 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Features.Scrapers.Commands;
 
-public class RemoveWatchdogWebPageCommandMessageHandler(IRepository<Watchdog> watchdogRepository) 
-    : IHandleMessages<RemoveWatchdogWebPageCommand>
+public class RemoveScraperWebPageCommandMessageHandler(IRepository<Scraper> scraperRepository) 
+    : IHandleMessages<RemoveScraperWebPageCommand>
 {
-    public async Task Handle(RemoveWatchdogWebPageCommand command)
+    public async Task Handle(RemoveScraperWebPageCommand command)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogId);
-        watchdog.RemoveWebPage(command.WatchdogWebPageId);
+        var scraper = await scraperRepository.LoadByIdAsync(command.ScraperId);
+        scraper.RemoveWebPage(command.ScraperWebPageId);
     }
 }

@@ -1,20 +1,20 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
 
 [TestFixture]
 public class when_notifying_user_about_new_watchdog_search_scraping_results : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private WatchdogSearch _watchdogSearch = null!;
     private IEmailSender _emailSender = null!;
     private User _user = null!;
@@ -43,7 +43,7 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
                 A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for")
                                             && p.Contains($"""
-                                                          <a href="https://mrwatchdog_test/Watchdogs/Search/{_watchdogSearch.Id}">
+                                                          <a href="https://mrwatchdog_test/Scrapers/Search/{_watchdogSearch.Id}">
                                                           """)
                                             && p.Contains(">Epic Games store free game<")
                                             && p.Contains("""
@@ -65,9 +65,9 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _scraper = new ScraperBuilder(UnitOfWork)
             .WithName("Epic Games store free game")
-            .WithWebPage(new WatchdogWebPageArgs
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -76,21 +76,21 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
 
         _user = new UserBuilder(UnitOfWork).Build();
         
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithUser(_user)
             .WithSearchTerm(null)
             .Build();
         
-        _watchdog.SetScrapingResults(_watchdogWebPageId, [
+        _scraper.SetScrapingResults(_scraperWebPageId, [
             "<a href=\"https://store.epicgames.com/en-US/p/machinarium-5e6c71\" target=\"_blank\">Machinarium</a>",
             "<a href=\"https://store.epicgames.com/en-US/p/make-way-bddf5f\" target=\"_blank\">Make Way</a>"
         ]);        
-        _watchdog.EnableWebPage(_watchdogWebPageId);
+        _scraper.EnableWebPage(_scraperWebPageId);
 
         _watchdogSearch.Refresh();
     }

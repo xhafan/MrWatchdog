@@ -1,7 +1,7 @@
-﻿using MrWatchdog.Core.Infrastructure.Validations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using MrWatchdog.Core.Infrastructure.Validations;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
 public record WatchdogSearchOverviewArgs
 {

@@ -1,23 +1,23 @@
 ﻿using CoreDdd.Queries;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 
 [TestFixture]
-public class when_refreshing_watchdog_search_after_watchdog_scraping_completed : BaseDatabaseTest
+public class when_refreshing_watchdog_search_after_scraper_scraping_completed : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
-    private long _watchdogWebPageId;
+    private Scraper _scraper = null!;
+    private long _scraperWebPageId;
     private WatchdogSearch _watchdogSearch = null!;
     private ICoreBus _bus = null!;
-    private WatchdogSearch _watchdogSearchForAnotherWatchdog = null!;
+    private WatchdogSearch _watchdogSearchForAnotherScraper = null!;
     private WatchdogSearch _archivedWatchdogSearch = null!;
 
     [SetUp]
@@ -28,14 +28,14 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
         _bus = A.Fake<ICoreBus>();
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogSearchesForWatchdogQueryHandler(UnitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogSearchesForScraperQueryHandler(UnitOfWork));
         
         var handler = new RefreshWatchdogSearchesDomainEventMessageHandler(
             new QueryExecutor(queryHandlerFactory),
             _bus
         );
 
-        await handler.Handle(new WatchdogScrapingCompletedDomainEvent(_watchdog.Id));
+        await handler.Handle(new ScraperScrapingCompletedDomainEvent(_scraper.Id));
     }
 
     [Test]
@@ -53,13 +53,13 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
     [Test]
     public void command_is_not_sent_over_message_bus_for_unrelated_watchdog_search()
     {
-        A.CallTo(() => _bus.Send(new RefreshWatchdogSearchCommand(_watchdogSearchForAnotherWatchdog.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new RefreshWatchdogSearchCommand(_watchdogSearchForAnotherScraper.Id))).MustNotHaveHappened();
     }    
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",
                 Selector = """
@@ -68,19 +68,19 @@ public class when_refreshing_watchdog_search_after_watchdog_scraping_completed :
                 Name = "www.pcgamer.com/epic-games-store-free-games-list/"
             })
             .Build();
-        _watchdogWebPageId = _watchdog.WebPages.Single().Id;
-        _watchdog.SetScrapingResults(_watchdogWebPageId, ["Two Point Hospital"]);
+        _scraperWebPageId = _scraper.WebPages.Single().Id;
+        _scraper.SetScrapingResults(_scraperWebPageId, ["Two Point Hospital"]);
 
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();
 
         _archivedWatchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .Build();
         _archivedWatchdogSearch.Archive();
         
-        _watchdogSearchForAnotherWatchdog = new WatchdogSearchBuilder(UnitOfWork).Build();        
+        _watchdogSearchForAnotherScraper = new WatchdogSearchBuilder(UnitOfWork).Build();        
     }
 }

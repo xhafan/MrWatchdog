@@ -1,17 +1,17 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 
 [TestFixture]
-public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
+public class when_requesting_to_make_scraper_public : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -20,32 +20,32 @@ public class when_requesting_to_make_watchdog_public : BaseDatabaseTest
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
 
-        var handler = new RequestToMakeWatchdogPublicCommandMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork)
+        var handler = new RequestToMakeScraperPublicCommandMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork)
         );
 
-        await handler.Handle(new RequestToMakeWatchdogPublicCommand(_watchdog.Id));
+        await handler.Handle(new RequestToMakeScraperPublicCommand(_scraper.Id));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdog = UnitOfWork.LoadById<Watchdog>(_watchdog.Id);
+        _scraper = UnitOfWork.LoadById<Scraper>(_scraper.Id);
     }
 
     [Test]
-    public void watchdog_is_requested_to_make_public()
+    public void scraper_is_requested_to_make_public()
     {
-        _watchdog.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
+        _scraper.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
     }
 
     [Test]
-    public void Watchdog_requested_to_be_made_public_domain_event_is_raised()
+    public void scraper_requested_to_be_made_public_domain_event_is_raised()
     {
-        RaisedDomainEvents.ShouldContain(new WatchdogRequestedToBeMadePublicDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldContain(new ScraperRequestedToBeMadePublicDomainEvent(_scraper.Id));
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }
 }

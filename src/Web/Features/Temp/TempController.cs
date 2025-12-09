@@ -1,11 +1,11 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Diagnostics;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 
 namespace MrWatchdog.Web.Features.Temp;
 
@@ -41,15 +41,15 @@ public class TempController(
     }
 
     [HttpGet]
-    public async Task EnqueueLotOfScrapeWatchdogCommands()
+    public async Task EnqueueLotOfScrapeScraperCommands()
     {
-        var watchdogsToScrape = await unitOfWork.Session!.QueryOver<Watchdog>().ListAsync();
+        var scrapersToScrape = await unitOfWork.Session!.QueryOver<Scraper>().ListAsync();
 
         for (var i = 0; i < 1000; i++)
         {
-            foreach (var watchdogToScrape in watchdogsToScrape)
+            foreach (var scraperToScrape in scrapersToScrape)
             {
-                await bus.Send(new ScrapeWatchdogCommand(watchdogToScrape.Id));
+                await bus.Send(new ScrapeScraperCommand(scraperToScrape.Id));
             }
         }
     }

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Badges;
+using MrWatchdog.Web.Features.Scrapers.Detail.Badges;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Badges;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Badges;
 
 [TestFixture]
-public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatabaseTest
+public class when_viewing_scraper_detail_badges_for_public_scraper : BaseDatabaseTest
 {
     private BadgesModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -21,7 +21,7 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
         
         _model = new BadgesModelBuilder(UnitOfWork).Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -33,13 +33,13 @@ public class when_viewing_watchdog_detail_badges_for_public_watchdog : BaseDatab
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _model.ScraperDetailArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperDetailArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
-        _watchdog.MakePublic();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
+        _scraper.MakePublic();
     }    
 }

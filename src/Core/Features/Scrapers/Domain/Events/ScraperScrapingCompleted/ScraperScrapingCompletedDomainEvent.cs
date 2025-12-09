@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Messages;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 
-public record WatchdogScrapingCompletedDomainEvent(long WatchdogId) : DomainEvent;
+public record ScraperScrapingCompletedDomainEvent(long ScraperId) : DomainEvent;

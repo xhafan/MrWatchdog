@@ -5,12 +5,12 @@ namespace MrWatchdog.Web.Features.Shared;
 
 public abstract class BaseAuthorizationPageModel(IAuthorizationService authorizationService) : BasePageModel
 {
-    protected async Task<bool> IsAuthorizedAsWatchdogOwnerOrSuperAdmin(long watchdogId)
+    protected async Task<bool> IsAuthorizedAsScraperOwnerOrSuperAdmin(long scraperId)
     {
         var result = await authorizationService.AuthorizeAsync(
             User, 
-            watchdogId, 
-            new WatchdogOwnerOrSuperAdminRequirement()
+            scraperId, 
+            new ScraperOwnerOrSuperAdminRequirement()
         );
         return result.Succeeded;
     }

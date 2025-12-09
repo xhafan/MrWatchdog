@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
 public class when_creating_watchdog_search_with_too_long_search_term : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
     private User _actingUser = null!;
 
@@ -28,7 +28,7 @@ public class when_creating_watchdog_search_with_too_long_search_term : BaseDatab
             .WithSearchTerm(new string('x', ValidationConstants.SearchTermMaxLength + 1))
             .Build();
 
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_watchdog.Id);
+        _actionResult = await _model.OnPostCreateWatchdogSearch(_scraper.Id);
     }
 
     [Test]
@@ -50,7 +50,7 @@ public class when_creating_watchdog_search_with_too_long_search_term : BaseDatab
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
 
         _actingUser = new UserBuilder(UnitOfWork).Build();
     }    

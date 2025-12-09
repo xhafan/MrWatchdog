@@ -1,41 +1,41 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 
 [TestFixture]
-public class when_persisting_watchdog : BaseDatabaseTest
+public class when_persisting_scraper : BaseDatabaseTest
 {
-    private Watchdog _newWatchdog = null!;
-    private Watchdog? _persistedWatchdog;
+    private Scraper _newScraper = null!;
+    private Scraper? _persistedScraper;
 
     [SetUp]
     public void Context()
     {
-        _newWatchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _newScraper = new ScraperBuilder(UnitOfWork).Build();
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
 
-        _persistedWatchdog = UnitOfWork.Get<Watchdog>(_newWatchdog.Id);
+        _persistedScraper = UnitOfWork.Get<Scraper>(_newScraper.Id);
     }
 
     [Test]
-    public void persisted_watchdog_can_be_retrieved_and_has_correct_data()
+    public void persisted_scraper_can_be_retrieved_and_has_correct_data()
     {
-        _persistedWatchdog.ShouldNotBeNull();
-        _persistedWatchdog.ShouldBe(_newWatchdog);
+        _persistedScraper.ShouldNotBeNull();
+        _persistedScraper.ShouldBe(_newScraper);
 
-        _persistedWatchdog.User.ShouldBe(_newWatchdog.User);
-        _persistedWatchdog.Name.ShouldBe(WatchdogBuilder.Name);
-        _persistedWatchdog.Description.ShouldBe(WatchdogBuilder.Description);
-        _persistedWatchdog.ScrapingIntervalInSeconds.ShouldBe(WatchdogBuilder.ScrapingIntervalInSeconds);
-        _persistedWatchdog.PublicStatus.ShouldBe(PublicStatus.Private);
-        _persistedWatchdog.IntervalBetweenSameResultNotificationsInDays.ShouldBe(WatchdogBuilder.IntervalBetweenSameResultNotificationsInDays);
-        _persistedWatchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
-        _persistedWatchdog.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(5);
-        _persistedWatchdog.IsArchived.ShouldBe(false);
+        _persistedScraper.User.ShouldBe(_newScraper.User);
+        _persistedScraper.Name.ShouldBe(ScraperBuilder.Name);
+        _persistedScraper.Description.ShouldBe(ScraperBuilder.Description);
+        _persistedScraper.ScrapingIntervalInSeconds.ShouldBe(ScraperBuilder.ScrapingIntervalInSeconds);
+        _persistedScraper.PublicStatus.ShouldBe(PublicStatus.Private);
+        _persistedScraper.IntervalBetweenSameResultNotificationsInDays.ShouldBe(ScraperBuilder.IntervalBetweenSameResultNotificationsInDays);
+        _persistedScraper.CanNotifyAboutFailedScraping.ShouldBe(false);
+        _persistedScraper.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(5);
+        _persistedScraper.IsArchived.ShouldBe(false);
     }
 }

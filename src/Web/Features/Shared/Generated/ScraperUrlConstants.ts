@@ -2,30 +2,30 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export abstract class WatchdogUrlConstants
+export abstract class ScraperUrlConstants
 {
-	public static watchdogIdVariable: string = `$watchdogId`;
-	public static watchdogWebPageIdVariable: string = `$watchdogWebPageId`;
+	public static scraperIdVariable: string = `$scraperId`;
+	public static scraperWebPageIdVariable: string = `$scraperWebPageId`;
 	public static watchdogSearchIdVariable: string = `$watchdogSearchId`;
-	public static watchdogsUrl: string = `/Watchdogs`;
-	public static wachdogsPublicWatchdogsUrl: string = `/Watchdogs/PublicWatchdogs`;
-	public static watchdogsUserWatchdogsUrl: string = `/Watchdogs/UserWatchdogs`;
-	public static watchdogScrapingResultsUrlTemplate: string = `/Watchdogs/ScrapingResults/$watchdogId`;
-	public static watchdogCreateUrl: string = `/Watchdogs/Create`;
-	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;
-	public static watchdogDetailOverviewUrlTemplate: string = `/Watchdogs/Detail/Overview/$watchdogId`;
-	public static watchdogDetailStatisticsUrlTemplate: string = `/Watchdogs/Detail/Statistics/$watchdogId`;
-	public static watchdogDetailWebPageUrlTemplate: string = `/Watchdogs/Detail/WebPage?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
-	public static watchdogDetailWebPageOverviewUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageOverview?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
-	public static watchdogDetailWebPageTurboFrameUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageTurboFrame?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
-	public static watchdogDetailWebPageScrapingResultsUrlTemplate: string = `/Watchdogs/Detail/WebPage/WebPageScrapingResults?watchdogId=$watchdogId&watchdogWebPageId=$watchdogWebPageId`;
-	public static watchdogDetailBadgesUrlTemplate: string = `/Watchdogs/Detail/Badges/$watchdogId`;
-	public static watchdogDetailActionsUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId`;
-	public static watchdogDetailActionsMakePublicUrlTemplate: string = `/Watchdogs/Detail/Actions/$watchdogId?handler=MakePublic`;
-	public static watchdogSearchUrlTemplate: string = `/Watchdogs/Search/$watchdogSearchId`;
-	public static watchdogSearchOverviewUrlTemplate: string = `/Watchdogs/Search/Overview/$watchdogSearchId`;
-	public static watchdogsManageUrl: string = `/Watchdogs/Manage`;
-	public static watchdogsManageUserWatchdogsUrl: string = `/Watchdogs/Manage/UserWatchdogs`;
-	public static watchdogsManageOtherUsersWatchdogsUrl: string = `/Watchdogs/Manage/OtherUsersWatchdogs`;
-	public static watchdogsSearchesUrl: string = `/Watchdogs/Searches`;
+	public static scrapersUrl: string = `/Scrapers`;
+	public static scrapersPublicScrapersUrl: string = `/Scrapers/PublicScrapers`;
+	public static scrapersUserScrapersUrl: string = `/Scrapers/UserScrapers`;
+	public static scraperScrapingResultsUrlTemplate: string = `/Scrapers/ScrapingResults/$scraperId`;
+	public static scraperCreateUrl: string = `/Scrapers/Create`;
+	public static scraperDetailUrlTemplate: string = `/Scrapers/Detail/$scraperId`;
+	public static scraperDetailOverviewUrlTemplate: string = `/Scrapers/Detail/Overview/$scraperId`;
+	public static scraperDetailStatisticsUrlTemplate: string = `/Scrapers/Detail/Statistics/$scraperId`;
+	public static scraperDetailWebPageUrlTemplate: string = `/Scrapers/Detail/WebPage?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
+	public static scraperDetailWebPageOverviewUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageOverview?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
+	public static scraperDetailWebPageTurboFrameUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageTurboFrame?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
+	public static scraperDetailWebPageScrapingResultsUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageScrapingResults?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
+	public static scraperDetailBadgesUrlTemplate: string = `/Scrapers/Detail/Badges/$scraperId`;
+	public static scraperDetailActionsUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId`;
+	public static scraperDetailActionsMakePublicUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId?handler=MakePublic`;
+	public static watchdogSearchUrlTemplate: string = `/Scrapers/Search/$watchdogSearchId`;
+	public static watchdogSearchOverviewUrlTemplate: string = `/Scrapers/Search/Overview/$watchdogSearchId`;
+	public static scrapersManageUrl: string = `/Scrapers/Manage`;
+	public static scrapersManageUserScrapersUrl: string = `/Scrapers/Manage/UserScrapers`;
+	public static scrapersManageOtherUsersScrapersUrl: string = `/Scrapers/Manage/OtherUsersScrapers`;
+	public static watchdogsSearchesUrl: string = `/Scrapers/Searches`;
 }

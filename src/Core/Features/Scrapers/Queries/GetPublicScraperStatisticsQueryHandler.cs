@@ -1,30 +1,30 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using NHibernate;
 using NHibernate.Transform;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Queries;
+namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetPublicWatchdogStatisticsQueryHandler(
+public class GetPublicScraperStatisticsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetPublicWatchdogStatisticsQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetPublicScraperStatisticsQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    protected override IQueryOver GetQueryOver<TResult>(GetPublicWatchdogStatisticsQuery query)
+    protected override IQueryOver GetQueryOver<TResult>(GetPublicScraperStatisticsQuery query)
     {
-        Watchdog watchdogAlias = null!;
-        GetPublicWatchdogStatisticsQueryResult result = null!;
+        Scraper scraperAlias = null!;
+        GetPublicScraperStatisticsQueryResult result = null!;
 
         return _unitOfWork.Session!.QueryOver<WatchdogSearch>()
-            .JoinAlias(x => x.Watchdog, () => watchdogAlias)
-            .Where(x => x.Watchdog.Id == query.WatchdogId
-                        && x.User.Id != watchdogAlias.User.Id)
+            .JoinAlias(x => x.Scraper, () => scraperAlias)
+            .Where(x => x.Scraper.Id == query.ScraperId
+                        && x.User.Id != scraperAlias.User.Id)
             .SelectList(list => list
                 .SelectGroup(x => x.ReceiveNotification).WithAlias(() => result.ReceiveNotification)
                 .SelectCountDistinct(x => x.User.Id).WithAlias(() => result.CountOfWatchdogSearches)
             )
-            .TransformUsing(Transformers.AliasToBean<GetPublicWatchdogStatisticsQueryResult>());
+            .TransformUsing(Transformers.AliasToBean<GetPublicScraperStatisticsQueryResult>());
     }
 }

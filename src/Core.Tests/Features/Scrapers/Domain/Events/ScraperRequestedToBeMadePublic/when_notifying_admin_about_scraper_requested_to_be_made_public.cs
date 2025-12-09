@@ -1,19 +1,19 @@
 ﻿using FakeItEasy;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogRequestedToBeMadePublic;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 
 [TestFixture]
-public class when_notifying_admin_about_watchdog_requested_to_be_made_public : BaseDatabaseTest
+public class when_notifying_admin_about_scraper_requested_to_be_made_public : BaseDatabaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IEmailSender _emailSender = null!;
     private IOptions<EmailAddressesOptions> _emailAddressesOptions = null!;
 
@@ -26,14 +26,14 @@ public class when_notifying_admin_about_watchdog_requested_to_be_made_public : B
         
         _emailAddressesOptions = OptionsTestRetriever.Retrieve<EmailAddressesOptions>();
 
-        var handler = new NotifyAdminAboutWatchdogRequestedToBeMadePublicDomainEventMessageHandler(
-            new NhibernateRepository<Watchdog>(UnitOfWork),
+        var handler = new NotifyAdminAboutScraperRequestedToBeMadePublicDomainEventMessageHandler(
+            new NhibernateRepository<Scraper>(UnitOfWork),
             _emailSender,
             OptionsTestRetriever.Retrieve<RuntimeOptions>(),
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>()
         );
 
-        await handler.Handle(new WatchdogRequestedToBeMadePublicDomainEvent(_watchdog.Id));
+        await handler.Handle(new ScraperRequestedToBeMadePublicDomainEvent(_scraper.Id));
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class when_notifying_admin_about_watchdog_requested_to_be_made_public : B
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
+        _scraper = new ScraperBuilder(UnitOfWork)
             .WithName("Epic Games store free game")
             .Build();
     }

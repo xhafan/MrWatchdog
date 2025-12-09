@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
+namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
 public class when_making_post_request_to_non_existent_razor_page_handler : BaseDatabaseTest
 {
     private LoginToken _loginToken = null!;
     private User _nonSuperAdminUser = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private HttpClient _webApplicationClient = null!;
 
     [SetUp]
@@ -34,12 +34,12 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
     public async Task not_found_results_is_returned()
     {
         var response = await _webApplicationClient.GetAsync(
-            WatchdogUrlConstants.WatchdogDetailActionsUrlTemplate.WithWatchdogId(_watchdog.Id));
+            ScraperUrlConstants.ScraperDetailActionsUrlTemplate.WithScraperId(_scraper.Id));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var pageHtml = await response.Content.ReadAsStringAsync();
 
         response = await _webApplicationClient.PostAsync(
-            $"/Watchdogs/Detail/Actions/{_watchdog.Id}?handler=NonExistentAction",
+            $"/Scrapers/Detail/Actions/{_scraper.Id}?handler=NonExistentAction",
             content: E2ETestHelper.GetFormUrlEncodedContentWithRequestVerificationToken(E2ETestHelper.ExtractRequestVerificationToken(pageHtml))
         );
 
@@ -69,7 +69,7 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
                 await newUnitOfWork.DeleteJobCascade(markLoginTokenAsUsedCommandJob, waitForJobCompletion: true);
 
                 await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+                await newUnitOfWork.DeleteScraperCascade(_scraper);
                 await newUnitOfWork.DeleteUserCascade(_nonSuperAdminUser);
             }
         );
@@ -90,7 +90,7 @@ public class when_making_post_request_to_non_existent_razor_page_handler : BaseD
                     .Build();
                 _loginToken.Confirm();
 
-                _watchdog = new WatchdogBuilder(newUnitOfWork)
+                _scraper = new ScraperBuilder(newUnitOfWork)
                     .WithUser(_nonSuperAdminUser)
                     .Build();
             }

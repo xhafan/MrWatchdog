@@ -67,15 +67,15 @@ public static partial class E2ETestHelper
         await unitOfWork.DeleteJobCascade(markLoginTokenAsUsedCommandJob, waitForJobCompletion: true);
     }
     
-    public static async Task DeleteWatchdogCommandJob<TCommand>(long watchdogId, NhibernateUnitOfWork unitOfWork)
+    public static async Task DeleteScraperCommandJob<TCommand>(long scraperId, NhibernateUnitOfWork unitOfWork)
     {
         var commandJob = await unitOfWork.Session!.QueryOver<Job>()
             .Where(x => x.Type == typeof(TCommand).Name)
             .And(Expression.Sql(
                 """
-                ({alias}."InputData" ->> 'watchdogId') = ?
+                ({alias}."InputData" ->> 'scraperId') = ?
                 """,
-                watchdogId.ToString(),
+                scraperId.ToString(),
                 NHibernateUtil.String)
             )
             .SingleOrDefaultAsync();

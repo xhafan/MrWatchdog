@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_viewing_watchdog_scraping_results_with_scraping_error_set : BaseDatabaseTest
+public class when_viewing_scraper_scraping_results_with_scraping_error_set : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -22,7 +22,7 @@ public class when_viewing_watchdog_scraping_results_with_scraping_error_set : Ba
         _model = new ScrapingResultsModelBuilder(UnitOfWork)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -32,25 +32,25 @@ public class when_viewing_watchdog_scraping_results_with_scraping_error_set : Ba
     }
 
     [Test]
-    public void watchdog_scraping_result_web_pages_are_empty()
+    public void scraper_scraping_result_web_pages_are_empty()
     {
-        _model.WatchdogScrapingResultsArgs.WebPages.ShouldBeEmpty();
+        _model.ScraperScrapingResultsArgs.WebPages.ShouldBeEmpty();
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
-            .WithWebPage(new WatchdogWebPageArgs
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
+            .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
                 Name = "url.com/page"
             })
             .Build();
-        var watchdogWebPage = _watchdog.WebPages.Single();
-        _watchdog.SetScrapingErrorMessage(watchdogWebPage.Id, "scraping error");
-        _watchdog.MakePublic();
+        var scraperWebPage = _scraper.WebPages.Single();
+        _scraper.SetScrapingErrorMessage(scraperWebPage.Id, "scraping error");
+        _scraper.MakePublic();
 
         UnitOfWork.Flush();
     }    

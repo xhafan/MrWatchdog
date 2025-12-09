@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -22,7 +22,7 @@ public class when_persisting_job_affected_entity : BaseDatabaseTest
             .WithGuid(_jobGuid)
             .Build();
         _newJob.HandlingStarted(RebusQueues.Main);
-        _newJob.AddAffectedEntity(nameof(Watchdog), 23, isCreated: true);
+        _newJob.AddAffectedEntity(nameof(Scraper), 23, isCreated: true);
         UnitOfWork.Save(_newJob);
         
         UnitOfWork.Flush();
@@ -35,7 +35,7 @@ public class when_persisting_job_affected_entity : BaseDatabaseTest
     public void persisted_job_handling_attempt_can_be_retrieved_and_has_correct_data()
     {
         _persistedJobAffectedEntity.Job.ShouldBe(_newJob);
-        _persistedJobAffectedEntity.EntityName.ShouldBe(nameof(Watchdog));
+        _persistedJobAffectedEntity.EntityName.ShouldBe(nameof(Scraper));
         _persistedJobAffectedEntity.EntityId.ShouldBe(23);
         _persistedJobAffectedEntity.IsCreated.ShouldBe(true);
     }

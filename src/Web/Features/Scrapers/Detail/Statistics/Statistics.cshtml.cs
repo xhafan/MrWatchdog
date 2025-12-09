@@ -1,43 +1,43 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.Statistics;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.Statistics;
 
 public class StatisticsModel(
     IQueryExecutor queryExecutor, 
     IAuthorizationService authorizationService
 ) : BaseAuthorizationPageModel(authorizationService)
 {
-    public long WatchdogId { get; private set; }
-    public PublicWatchdogStatisticsDto PublicWatchdogStatistics { get; private set; } = null!;
-    public PublicStatus WatchdogPublicStatus { get; private set; }
+    public long ScraperId { get; private set; }
+    public PublicScraperStatisticsDto PublicScraperStatistics { get; private set; } = null!;
+    public PublicStatus ScraperPublicStatus { get; private set; }
 
-    public async Task<IActionResult> OnGet(long watchdogId)
+    public async Task<IActionResult> OnGet(long scraperId)
     {
-        WatchdogId = watchdogId;
+        ScraperId = scraperId;
 
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
         var statisticsResults = (
-            await queryExecutor.ExecuteAsync<GetPublicWatchdogStatisticsQuery, GetPublicWatchdogStatisticsQueryResult>(
-                new GetPublicWatchdogStatisticsQuery(watchdogId))
+            await queryExecutor.ExecuteAsync<GetPublicScraperStatisticsQuery, GetPublicScraperStatisticsQueryResult>(
+                new GetPublicScraperStatisticsQuery(scraperId))
         ).ToList();
 
-        PublicWatchdogStatistics = new PublicWatchdogStatisticsDto
+        PublicScraperStatistics = new PublicScraperStatisticsDto
         {
             CalculatedEarningsForThisMonth = 0,
             NumberOfUsersWithWatchdogWithNotification = statisticsResults.SingleOrDefault(x => x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0,
             NumberOfUsersWithWatchdogWithoutNotification = statisticsResults.SingleOrDefault(x => !x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0
         };
 
-        var watchdogDetailPublicStatusArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogDetailPublicStatusArgsQuery, WatchdogDetailPublicStatusArgs>(
-                new GetWatchdogDetailPublicStatusArgsQuery(watchdogId));
-        WatchdogPublicStatus = watchdogDetailPublicStatusArgs.PublicStatus;
+        var scraperDetailPublicStatusArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperDetailPublicStatusArgsQuery, ScraperDetailPublicStatusArgs>(
+                new GetScraperDetailPublicStatusArgsQuery(scraperId));
+        ScraperPublicStatus = scraperDetailPublicStatusArgs.PublicStatus;
 
         return Page();
     }

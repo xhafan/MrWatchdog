@@ -1,24 +1,24 @@
 ﻿@page
 @using MrWatchdog.Core.Resources
-@model OtherUsersWatchdogsModel
+@model OtherUsersScrapersModel
 @{
     Layout = null;
 }
-<!turbo-frame id="otherUsersWatchdogs">
+<!turbo-frame id="otherUsersScrapers">
     <p class="text-muted">
-        @Resource.ManageOtherUsersWebScrapersDescription
+        @Resource.ManageOtherUsersScrapersDescription
     </p>
-    @foreach (var watchdog in Model.OtherUsersWatchdogs)
+    @foreach (var scraper in Model.OtherUsersScrapers)
     {
         <div>
-            <a asp-page="/Watchdogs/Detail/Detail" 
-               asp-route-watchdogId="@watchdog.WatchdogId" 
+            <a asp-page="/Scrapers/Detail/Detail" 
+               asp-route-scraperId="@scraper.ScraperId" 
                data-turbo-frame="_top"
                class="text-wrap text-break"
                >
-                @watchdog.WatchdogName</a>
-            (@watchdog.UserEmail)
-            <public-status-badge public-status="@watchdog.PublicStatus"
+                @scraper.ScraperName</a>
+            (@scraper.UserEmail)
+            <public-status-badge public-status="@scraper.PublicStatus"
                                  show-private="false" />
         </div>
     }

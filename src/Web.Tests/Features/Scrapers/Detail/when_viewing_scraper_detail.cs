@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail;
+using MrWatchdog.Web.Features.Scrapers.Detail;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_detail : BaseDatabaseTest
+public class when_viewing_scraper_detail : BaseDatabaseTest
 {
     private DetailModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -21,7 +21,7 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
         
         _model = new DetailModelBuilder(UnitOfWork).Build();
         
-        _actionResult = await _model.OnGet(_watchdog.Id);
+        _actionResult = await _model.OnGet(_scraper.Id);
     }
 
     [Test]
@@ -33,19 +33,19 @@ public class when_viewing_watchdog_detail : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogDetailArgs.WatchdogId.ShouldBe(_watchdog.Id);
-        _model.WatchdogDetailArgs.WebPageIds.ShouldBeEmpty();
-        _model.WatchdogDetailArgs.Name.ShouldBe("watchdog name");
-        _model.WatchdogDetailArgs.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
-        _model.WatchdogDetailArgs.UserId.ShouldBe(_watchdog.User.Id);
-        _model.WatchdogDetailArgs.UserEmail.ShouldBe(_watchdog.User.Email);
+        _model.ScraperDetailArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperDetailArgs.WebPageIds.ShouldBeEmpty();
+        _model.ScraperDetailArgs.Name.ShouldBe("scraper name");
+        _model.ScraperDetailArgs.PublicStatus.ShouldBe(PublicStatus.RequestedToBeMadePublic);
+        _model.ScraperDetailArgs.UserId.ShouldBe(_scraper.User.Id);
+        _model.ScraperDetailArgs.UserEmail.ShouldBe(_scraper.User.Email);
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork)
-            .WithName("watchdog name")
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("scraper name")
             .Build();
-        _watchdog.RequestToMakePublic();
+        _scraper.RequestToMakePublic();
     }    
 }

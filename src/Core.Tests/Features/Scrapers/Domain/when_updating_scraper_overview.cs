@@ -1,12 +1,12 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 
 [TestFixture]
-public class when_updating_watchdog_overview
+public class when_updating_scraper_overview
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private readonly DateTime _nextScrapingOn = DateTime.UtcNow;
 
     [SetUp]
@@ -14,10 +14,10 @@ public class when_updating_watchdog_overview
     {
         _BuildEntities();
         
-        _watchdog.UpdateOverview(new WatchdogOverviewArgs
+        _scraper.UpdateOverview(new ScraperOverviewArgs
         {
-            WatchdogId = _watchdog.Id,
-            Name = "watchdog name",
+            ScraperId = _scraper.Id,
+            Name = "scraper name",
             Description = null,
             ScrapingIntervalInSeconds = 30,
             IntervalBetweenSameResultNotificationsInDays = 2.34,
@@ -26,14 +26,14 @@ public class when_updating_watchdog_overview
     }
 
     [Test]
-    public void watchdog_next_scraping_on_is_adjusted()
+    public void scraper_next_scraping_on_is_adjusted()
     {
-        _watchdog.NextScrapingOn.ShouldBe(_nextScrapingOn.AddSeconds(-60 + 30));
+        _scraper.NextScrapingOn.ShouldBe(_nextScrapingOn.AddSeconds(-60 + 30));
     }
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder()
+        _scraper = new ScraperBuilder()
             .WithScrapingIntervalInSeconds(60)
             .WithNextScrapingOn(_nextScrapingOn)
             .Build();

@@ -1,14 +1,14 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.Detail.WebPage;
+namespace MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
 public class WebPageOverviewModel(
     IQueryExecutor queryExecutor, 
@@ -17,28 +17,28 @@ public class WebPageOverviewModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogWebPageArgs WatchdogWebPageArgs { get; set; } = null!;
+    public ScraperWebPageArgs ScraperWebPageArgs { get; set; } = null!;
     public bool IsEmptyWebPage { get; private set; }
 
     public async Task<IActionResult> OnGet(
-        long watchdogId, 
-        long watchdogWebPageId
+        long scraperId, 
+        long scraperWebPageId
     )
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId)) return Forbid();
 
-        WatchdogWebPageArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogWebPageArgsQuery, WatchdogWebPageArgs>(
-                new GetWatchdogWebPageArgsQuery(watchdogId, watchdogWebPageId));
+        ScraperWebPageArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperWebPageArgsQuery, ScraperWebPageArgs>(
+                new GetScraperWebPageArgsQuery(scraperId, scraperWebPageId));
 
-        IsEmptyWebPage = string.IsNullOrWhiteSpace(WatchdogWebPageArgs.Url);
+        IsEmptyWebPage = string.IsNullOrWhiteSpace(ScraperWebPageArgs.Url);
 
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
-        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogWebPageArgs.WatchdogId)) return Forbid();
+        if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(ScraperWebPageArgs.ScraperId)) return Forbid();
 
         _validateHttpHeadersFormat();
 
@@ -47,15 +47,15 @@ public class WebPageOverviewModel(
             return PageWithUnprocessableEntityStatus422();
         }
         
-        var command = new UpdateWatchdogWebPageCommand(WatchdogWebPageArgs);
+        var command = new UpdateScraperWebPageCommand(ScraperWebPageArgs);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
 
         void _validateHttpHeadersFormat()
         {
-            if (string.IsNullOrWhiteSpace(WatchdogWebPageArgs.HttpHeaders)) return;
+            if (string.IsNullOrWhiteSpace(ScraperWebPageArgs.HttpHeaders)) return;
 
-            var lines = WatchdogWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var lines = ScraperWebPageArgs.HttpHeaders.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             foreach (var line in lines)
             {
@@ -63,7 +63,7 @@ public class WebPageOverviewModel(
                 if (parts.Length != 2)
                 {
                     ModelState.AddModelError(
-                        $"{nameof(WatchdogWebPageArgs)}.{nameof(WatchdogWebPageArgs.HttpHeaders)}",
+                        $"{nameof(ScraperWebPageArgs)}.{nameof(ScraperWebPageArgs.HttpHeaders)}",
                         string.Format(Resource.InvalidHttpHeaderFormatErrorTemplate, line)
                     );
                 }

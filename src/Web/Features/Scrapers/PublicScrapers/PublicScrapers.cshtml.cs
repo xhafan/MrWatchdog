@@ -1,21 +1,21 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Watchdogs.Queries;
+using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Watchdogs.PublicWatchdogs;
+namespace MrWatchdog.Web.Features.Scrapers.PublicScrapers;
 
 [AllowAnonymous]
-public class PublicWatchdogsModel(
+public class PublicScrapersModel(
     IQueryExecutor queryExecutor
 ) : BasePageModel
 {
-    public IEnumerable<GetPublicWatchdogsQueryResult> PublicWatchdogs { get; private set; } = null!;
+    public IEnumerable<GetPublicScrapersQueryResult> PublicScrapers { get; private set; } = null!;
     
     public async Task OnGet()
     {
-        PublicWatchdogs = await queryExecutor.ExecuteAsync<GetPublicWatchdogsQuery, GetPublicWatchdogsQueryResult>(
-            new GetPublicWatchdogsQuery()
+        PublicScrapers = await queryExecutor.ExecuteAsync<GetPublicScrapersQuery, GetPublicScrapersQueryResult>(
+            new GetPublicScrapersQuery()
         );
     }
 }

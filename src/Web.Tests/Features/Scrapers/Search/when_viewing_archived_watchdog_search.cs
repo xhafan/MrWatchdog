@@ -1,16 +1,16 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Search;
+using MrWatchdog.Web.Features.Scrapers.Search;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
 
 [TestFixture]
 public class when_viewing_archived_watchdog_search : BaseDatabaseTest
 {
     private SearchModel _model = null!;
     private WatchdogSearch _watchdogSearch = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
@@ -30,10 +30,10 @@ public class when_viewing_archived_watchdog_search : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
         
         _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
-            .WithWatchdog(_watchdog)
+            .WithScraper(_scraper)
             .Build();
         _watchdogSearch.Archive();
 

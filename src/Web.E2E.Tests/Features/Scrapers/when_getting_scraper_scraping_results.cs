@@ -1,16 +1,16 @@
 ﻿using System.Net;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Watchdogs;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
+namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
-public class when_getting_watchdog_scraping_results : BaseDatabaseTest
+public class when_getting_scraper_scraping_results : BaseDatabaseTest
 {
-    private Watchdog? _watchdog;
+    private Scraper? _scraper;
 
     [SetUp]
     public void Context()
@@ -19,9 +19,9 @@ public class when_getting_watchdog_scraping_results : BaseDatabaseTest
     }
 
     [Test]
-    public async Task watchdog_scraping_results_page_can_be_fetched_unauthenticated()
+    public async Task scraper_scraping_results_page_can_be_fetched_unauthenticated()
     {
-        var url = WatchdogUrlConstants.WatchdogScrapingResultsUrlTemplate.WithWatchdogId(_watchdog!.Id);
+        var url = ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(_scraper!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -33,7 +33,7 @@ public class when_getting_watchdog_scraping_results : BaseDatabaseTest
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             async newUnitOfWork =>
             {
-                await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
+                await newUnitOfWork.DeleteScraperCascade(_scraper);
             }
         );
     } 
@@ -44,8 +44,8 @@ public class when_getting_watchdog_scraping_results : BaseDatabaseTest
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             newUnitOfWork =>
             {
-                _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
-                _watchdog.MakePublic();
+                _scraper = new ScraperBuilder(newUnitOfWork).Build();
+                _scraper.MakePublic();
             }
         );
     }

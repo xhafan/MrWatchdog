@@ -1,14 +1,14 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 
 public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
-    public const string Type = nameof(CreateWatchdogCommand);
-    public static readonly object InputData = new CreateWatchdogCommand(23, "watchdog name");
+    public const string Type = nameof(CreateScraperCommand);
+    public static readonly object InputData = new CreateScraperCommand(23, "scraper name");
     public const JobKind Kind = JobKind.Command;
     public const string RequestId = "0HNFBP8T98MQS:00000045";
 

@@ -1,5 +1,5 @@
 ﻿using FakeItEasy;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -14,7 +14,7 @@ public class when_sending_command_message_with_guid_already_set : BaseDatabaseTe
 {
     private IBus _bus = null!;
     private CoreBus _coreBus = null!;
-    private CreateWatchdogCommand _command = null!;
+    private CreateScraperCommand _command = null!;
 
     [SetUp]
     public void Context()
@@ -27,7 +27,7 @@ public class when_sending_command_message_with_guid_already_set : BaseDatabaseTe
             A.Fake<IRequestIdAccessor>(),
             A.Fake<IRebusQueueRedirector>()
         );
-        _command = new CreateWatchdogCommand(UserId: 23, "watchdog name")
+        _command = new CreateScraperCommand(UserId: 23, "scraper name")
         {
             Guid = Guid.NewGuid()
         };

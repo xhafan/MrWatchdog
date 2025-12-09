@@ -1,22 +1,22 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Detail.Actions;
+using MrWatchdog.Web.Features.Scrapers.Detail.Actions;
 using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Security.Claims;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Actions;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Actions;
 
 [TestFixture]
-public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
+public class when_making_scraper_public_as_superadmin : BaseDatabaseTest
 {
     private ActionsModel _model = null!;
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
 
@@ -40,13 +40,13 @@ public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnPostMakePublic(_watchdog.Id);
+        _actionResult = await _model.OnPostMakePublic(_scraper.Id);
     }
 
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new MakeWatchdogPublicCommand(_watchdog.Id))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new MakeScraperPublicCommand(_scraper.Id))).MustHaveHappenedOnceExactly();
     }
     
     [Test]
@@ -62,6 +62,6 @@ public class when_making_watchdog_public_as_superadmin : BaseDatabaseTest
 
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork).Build();
     }    
 }

@@ -1,20 +1,20 @@
 ﻿using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogWebPageScrapingDataUpdated;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 
-public class ScrapeWatchdogWebPageDomainEventMessageHandler(
-    IRepository<Watchdog> watchdogRepository,
+public class ScrapeScraperWebPageDomainEventMessageHandler(
+    IRepository<Scraper> scraperRepository,
     IHttpClientFactory httpClientFactory
 ) 
-    : IHandleMessages<WatchdogWebPageScrapingDataUpdatedDomainEvent>
+    : IHandleMessages<ScraperWebPageScrapingDataUpdatedDomainEvent>
 {
-    public async Task Handle(WatchdogWebPageScrapingDataUpdatedDomainEvent domainEvent)
+    public async Task Handle(ScraperWebPageScrapingDataUpdatedDomainEvent domainEvent)
     {
-        var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
+        var scraper = await scraperRepository.LoadByIdAsync(domainEvent.ScraperId);
 
-        await watchdog.ScrapeWebPage(
-            domainEvent.WatchdogWebPageId,
+        await scraper.ScrapeWebPage(
+            domainEvent.ScraperWebPageId,
             httpClientFactory,
             canRaiseScrapingFailedDomainEvent: false
         );

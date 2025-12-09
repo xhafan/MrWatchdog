@@ -2,7 +2,7 @@
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogSearchArchived;
+namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
 
 public class NotifyUserAboutWatchdogSearchArchivedDomainEventMessageHandler(
     IRepository<WatchdogSearch> watchdogSearchRepository,

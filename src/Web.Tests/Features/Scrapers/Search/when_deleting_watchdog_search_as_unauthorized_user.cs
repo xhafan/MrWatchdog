@@ -2,15 +2,15 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Watchdogs.Search;
+using MrWatchdog.Web.Features.Scrapers.Search;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Watchdogs.Search;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
 
 [TestFixture]
 public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTest

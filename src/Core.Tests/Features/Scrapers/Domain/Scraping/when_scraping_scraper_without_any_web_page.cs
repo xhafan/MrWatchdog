@@ -1,41 +1,41 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingCompleted;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Scraping;
+namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 
 [TestFixture]
-public class when_scraping_watchdog_without_any_web_page : BaseTest
+public class when_scraping_scraper_without_any_web_page : BaseTest
 {
-    private Watchdog _watchdog = null!;
+    private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
     {
-        _BuildWatchdogWhichCan();
+        _BuildScraper();
 
         var httpClientFactory = new HttpClientFactoryBuilder().Build();
 
-        await _watchdog.Scrape(httpClientFactory);
+        await _scraper.Scrape(httpClientFactory);
     }
 
     [Test]
-    public void watchdog_scraping_completed_domain_event_is_not_raised()
+    public void scraper_scraping_completed_domain_event_is_not_raised()
     {
-        RaisedDomainEvents.ShouldNotContain(new WatchdogScrapingCompletedDomainEvent(_watchdog.Id));
+        RaisedDomainEvents.ShouldNotContain(new ScraperScrapingCompletedDomainEvent(_scraper.Id));
     }
 
     [Test]
-    public void watchdog_cannot_notify_about_failed_scraping()
+    public void scraper_cannot_notify_about_failed_scraping()
     {
-        _watchdog.CanNotifyAboutFailedScraping.ShouldBe(false);
+        _scraper.CanNotifyAboutFailedScraping.ShouldBe(false);
     }
     
-    private void _BuildWatchdogWhichCan()
+    private void _BuildScraper()
     {
-        _watchdog = new WatchdogBuilder()
+        _scraper = new ScraperBuilder()
             .WithWebPage([])
             .Build();
     }

@@ -16,8 +16,8 @@ export abstract class StimulusControllers
 	public static scrapersDetailWebPageScrapingResults: string = `scrapers--detail-web-page-scraping-results`;
 	public static scrapersScrapingResults: string = `scrapers--scraping-results`;
 	public static scrapersScrapingResultsWebPages: string = `scrapers--scraping-results-web-pages`;
-	public static watchdogSearch: string = `watchdogs--search`;
-	public static watchdogSearchOverview: string = `watchdogs--search-overview`;
+	public static watchdogDetail: string = `watchdogs--detail`;
+	public static watchdogDetailOverview: string = `watchdogs--detail-overview`;
 	public static accountLogin: string = `account--login`;
 	public static accountLoginLinkSent: string = `account--login-link-sent`;
 	public static onboarding: string = `onboarding`;

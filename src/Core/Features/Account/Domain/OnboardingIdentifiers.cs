@@ -3,7 +3,7 @@
 public static class OnboardingIdentifiers
 {
     public const string ScraperScrapingResults = nameof(ScraperScrapingResults);
-    public const string WatchdogsSearch = nameof(WatchdogsSearch);
+    public const string WatchdogDetail = nameof(WatchdogDetail);
     public const string ScraperDetail = nameof(ScraperDetail);
     public const string ScraperCreate = nameof(ScraperCreate);
 }

@@ -42,11 +42,11 @@
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingCreateWatchdog,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogSearchId}"
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingLoginOrRegisterToCreateWatchdog,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogSearchId}"
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.OnboardingViewAgainStep,
@@ -74,9 +74,9 @@
 }
 
 <div @Stimulus.Controller(StimulusControllers.ScrapersScrapingResults)>
-    <form asp-page-handler="CreateWatchdogSearch"
+    <form asp-page-handler="CreateWatchdog"
           asp-route-scraperId="@Model.ScraperScrapingResultsArgs.ScraperId"
-          data-scrapers--scraping-results-target="createWatchdogSearchForm"
+          data-scrapers--scraping-results-target="createWatchdogForm"
     >
         <!-- Prevent implicit submission of the form by hitting enter on inputs -->
         <button type="submit" disabled style="display: none"></button>
@@ -96,19 +96,19 @@
             <span asp-validation-for="SearchTerm" class="text-danger"></span>
             <div class="mt-3">
                 <button class="btn btn-primary text-wrap text-break"
-                        data-scrapers--scraping-results-target="createWatchdogSearch"
+                        data-scrapers--scraping-results-target="createWatchdog"
                         type="submit"
                         style="display:@(User.IsAuthenticated() ? "" : "none")"
-                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogSearchId"
+                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogId"
                         >
                     @Resource.CreateWatchdog
                 </button> 
                 <button class="btn btn-primary"
-                        data-scrapers--scraping-results-target="loginToCreateWatchdogSearch"
+                        data-scrapers--scraping-results-target="loginToCreateWatchdog"
                         type="button"
                         data-action="@StimulusControllers.ScrapersScrapingResults#loginToNotifyAboutNewResults"
                         style="display:@(User.IsAuthenticated() ? "none" : "")"
-                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogSearchId"
+                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogId"
                         >
                     @Resource.LoginOrRegisterToCreateWatchdog
                 </button>

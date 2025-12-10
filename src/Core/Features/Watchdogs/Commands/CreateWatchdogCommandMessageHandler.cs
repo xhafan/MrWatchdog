@@ -1,24 +1,25 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Scrapers.Commands;
+namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public class CreateWatchdogSearchCommandMessageHandler(
+public class CreateWatchdogCommandMessageHandler(
     IRepository<Scraper> scraperRepository,
-    IRepository<WatchdogSearch> watchdogSearchRepository,
+    IRepository<Watchdog> watchdogRepository,
     IUserRepository userRepository,
     NhibernateUnitOfWork unitOfWork
 ) 
-    : IHandleMessages<CreateWatchdogSearchCommand>
+    : IHandleMessages<CreateWatchdogCommand>
 {
-    public async Task Handle(CreateWatchdogSearchCommand command)
+    public async Task Handle(CreateWatchdogCommand command)
     {
         var scraper = await scraperRepository.LoadByIdAsync(command.ScraperId);
         var user = await userRepository.LoadByIdAsync(command.ActingUserId);
 
-        var watchdogSearches = await unitOfWork.Session!.QueryOver<WatchdogSearch>()
+        var watchdogs = await unitOfWork.Session!.QueryOver<Watchdog>()
             .Where(x => x.Scraper == scraper 
                         && x.User == user
                         && x.SearchTerm == command.SearchTerm
@@ -26,9 +27,9 @@ public class CreateWatchdogSearchCommandMessageHandler(
             )
             .ListAsync();
         
-        if (watchdogSearches.Any()) return;
+        if (watchdogs.Any()) return;
 
-        var newWatchdogSearch = new WatchdogSearch(scraper, user, command.SearchTerm);
-        await watchdogSearchRepository.SaveAsync(newWatchdogSearch);
+        var newWatchdog = new Watchdog(scraper, user, command.SearchTerm);
+        await watchdogRepository.SaveAsync(newWatchdog);
     }
 }

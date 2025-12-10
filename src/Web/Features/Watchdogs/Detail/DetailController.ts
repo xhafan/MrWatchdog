@@ -1,27 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
-import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import { searchTermModifiedEventName } from "../../Scrapers/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
-import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
-import { SearchStimulusModel } from "../../Shared/Generated/SearchStimulusModel";
+import { WatchdogDetailStimulusModel } from "../../Shared/Generated/WatchdogDetailStimulusModel";
 
-export default class SearchController extends BaseStimulusModelController<SearchStimulusModel> {
+export default class DetailController extends BaseStimulusModelController<WatchdogDetailStimulusModel> {
     static targets  = [
         "searchTermSuffix",
-        "archiveWatchdogSearchForm"
+        "archiveWatchdogForm"
     ];
 
     declare searchTermSuffixTarget: HTMLSpanElement;
-    declare archiveWatchdogSearchFormTarget: HTMLFormElement;
+    declare archiveWatchdogFormTarget: HTMLFormElement;
 
     connect() {
         this.registerSearchTermModifiedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
-            this.archiveWatchdogSearchFormTarget, 
+            this.archiveWatchdogFormTarget, 
             async jobDto => {
-                Turbo.visit(ScraperUrlConstants.watchdogsSearchesUrl);
+                Turbo.visit(WatchdogUrlConstants.watchdogsUrl);
             },
             this.modelValue.deleteWatchdogConfirmationMessageResource
         );

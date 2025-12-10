@@ -1,12 +1,12 @@
 ﻿using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 
-public class RefreshWatchdogSearchesDomainEventMessageHandler(
+public class RefreshWatchdogsDomainEventMessageHandler(
     IQueryExecutor queryExecutor,
     ICoreBus bus
 ) 
@@ -14,13 +14,13 @@ public class RefreshWatchdogSearchesDomainEventMessageHandler(
 {
     public async Task Handle(ScraperScrapingCompletedDomainEvent domainEvent)
     {
-        var watchdogSearchesIds = await queryExecutor.ExecuteAsync<GetWatchdogSearchesForScraperQuery, long>(
-            new GetWatchdogSearchesForScraperQuery(domainEvent.ScraperId)
+        var watchdogIds = await queryExecutor.ExecuteAsync<GetWatchdogsForScraperQuery, long>(
+            new GetWatchdogsForScraperQuery(domainEvent.ScraperId)
         );
 
-        foreach (var watchdogSearchId in watchdogSearchesIds)
+        foreach (var watchdogId in watchdogIds)
         {
-            await bus.Send(new RefreshWatchdogSearchCommand(watchdogSearchId));
+            await bus.Send(new RefreshWatchdogCommand(watchdogId));
         }
     }
 }

@@ -3,9 +3,9 @@ using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Infrastructure.Authorizations;
@@ -45,7 +45,7 @@ public class ScrapingResultsModel(
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreateWatchdogSearch(long scraperId)
+    public async Task<IActionResult> OnPostCreateWatchdog(long scraperId)
     {
         if (!User.IsAuthenticated()) return Unauthorized();
 
@@ -65,7 +65,7 @@ public class ScrapingResultsModel(
             return Forbid();
         }
 
-        var command = new CreateWatchdogSearchCommand(scraperId, SearchTerm?.Trim());
+        var command = new CreateWatchdogCommand(scraperId, SearchTerm?.Trim());
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

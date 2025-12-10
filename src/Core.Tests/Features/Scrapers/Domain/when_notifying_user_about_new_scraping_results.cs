@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
@@ -11,21 +12,21 @@ namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 public class when_notifying_user_about_new_scraping_results : BaseTest
 {
     private Scraper _scraper = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
-        await _watchdogSearch.NotifyUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+        await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
     }
 
     [Test]
-    public void watchdog_search_scraping_result_history_is_populated()
+    public void watchdog_scraping_result_history_is_populated()
     {
-        _watchdogSearch.ScrapingResultsHistory.Count().ShouldBe(1);
-        var scrapingResultHistory = _watchdogSearch.ScrapingResultsHistory.SingleOrDefault(x => x.Result == "Doom 2");
+        _watchdog.ScrapingResultsHistory.Count().ShouldBe(1);
+        var scrapingResultHistory = _watchdog.ScrapingResultsHistory.SingleOrDefault(x => x.Result == "Doom 2");
         scrapingResultHistory.ShouldNotBeNull();
         scrapingResultHistory.NotifiedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
     }
@@ -44,12 +45,12 @@ public class when_notifying_user_about_new_scraping_results : BaseTest
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
 
-        _watchdogSearch = new WatchdogSearchBuilder()
+        _watchdog = new WatchdogBuilder()
             .WithScraper(_scraper)
             .WithSearchTerm("doom")
             .Build();
         
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Doom 2", "Another World"]);
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
     }
 }

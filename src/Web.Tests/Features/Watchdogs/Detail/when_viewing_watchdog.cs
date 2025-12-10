@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search;
+using MrWatchdog.Web.Features.Watchdogs.Detail;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_search : BaseDatabaseTest
+public class when_viewing_watchdog : BaseDatabaseTest
 {
-    private SearchModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private DetailModel _model = null!;
+    private Watchdog _watchdog = null!;
     private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
@@ -20,9 +21,9 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new SearchModelBuilder(UnitOfWork).Build();
+        _model = new DetailModelBuilder(UnitOfWork).Build();
         
-        _actionResult = await _model.OnGet(_watchdogSearch.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
     }
 
     [Test]
@@ -34,9 +35,9 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogSearchArgs.WatchdogSearchId.ShouldBe(_watchdogSearch.Id);
-        _model.WatchdogSearchArgs.ScraperId.ShouldBe(_scraper.Id);
-        _model.WatchdogSearchArgs.SearchTerm.ShouldBe("text");
+        _model.WatchdogArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.WatchdogArgs.SearchTerm.ShouldBe("text");
         
         _model.ScraperScrapingResultsArgs.ScraperId.ShouldBe(_scraper.Id);
         _model.ScraperScrapingResultsArgs.ScraperName.ShouldBe("scraper name");
@@ -62,7 +63,7 @@ public class when_viewing_watchdog_search : BaseDatabaseTest
         _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .WithSearchTerm("text")
             .Build();

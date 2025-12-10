@@ -1,17 +1,18 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.CreatingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.CreatingWatchdog;
 
 [TestFixture]
-public class when_creating_watchdog_search : BaseDatabaseTest
+public class when_creating_watchdog : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
-    private WatchdogSearch? _watchdogSearch;
+    private Watchdog? _watchdog;
     private User _user = null!;
 
     [SetUp]
@@ -19,30 +20,30 @@ public class when_creating_watchdog_search : BaseDatabaseTest
     {
         _BuildEntities();
         
-        var handler = new CreateWatchdogSearchCommandMessageHandler(
+        var handler = new CreateWatchdogCommandMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            new NhibernateRepository<WatchdogSearch>(UnitOfWork),
+            new NhibernateRepository<Watchdog>(UnitOfWork),
             new UserRepository(UnitOfWork),
             UnitOfWork
         );
 
-        await handler.Handle(new CreateWatchdogSearchCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _user.Id});
+        await handler.Handle(new CreateWatchdogCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _user.Id});
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _watchdogSearch = UnitOfWork.Session!.Query<WatchdogSearch>()
+        _watchdog = UnitOfWork.Session!.Query<Watchdog>()
             .SingleOrDefault(x => x.Scraper == _scraper);
     }
 
     [Test]
     public void new_watchdog_search_is_created_with_matching_current_scraping_results()
     {
-        _watchdogSearch.ShouldNotBeNull();
-        _watchdogSearch.User.ShouldBe(_user);
-        _watchdogSearch.ReceiveNotification.ShouldBe(true);
-        _watchdogSearch.SearchTerm.ShouldBe("text");
-        _watchdogSearch.CurrentScrapingResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
+        _watchdog.ShouldNotBeNull();
+        _watchdog.User.ShouldBe(_user);
+        _watchdog.ReceiveNotification.ShouldBe(true);
+        _watchdog.SearchTerm.ShouldBe("text");
+        _watchdog.CurrentScrapingResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
     }
     
     private void _BuildEntities()

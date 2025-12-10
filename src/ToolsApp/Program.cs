@@ -134,13 +134,17 @@ public class Program
                     outputLines.Add(gitCommand);
 
                     // Replace "watchdog" with "scraper" in old path (case-insensitive)
-                    var transformedPath = Regex.Replace(oldPath, "watchdog", "scraper", RegexOptions.IgnoreCase);
+                    var transformedOldPath = Regex.Replace(oldPath, "watchdog_searches", "watchdogs", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "watchdog_search", "watchdog", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "watchdogs_searches", "watchdogs", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "WatchdogSearches", "Watchdogs", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "WatchdogSearch", "Watchdog", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "/Search/", "/Detail/", RegexOptions.IgnoreCase);
+                    transformedOldPath = Regex.Replace(transformedOldPath, "scrapers", "watchdogs", RegexOptions.IgnoreCase);
 
-                    if (!string.Equals(transformedPath, newPath, StringComparison.InvariantCultureIgnoreCase)
-                        && !oldPath.Contains("WatchdogSearch", StringComparison.InvariantCultureIgnoreCase)
-                        && !oldPath.Contains("watchdog_search", StringComparison.InvariantCultureIgnoreCase)
-                        && !oldPath.Contains("watchdogs_search", StringComparison.InvariantCultureIgnoreCase)
-                        )
+                    var transformedNewPath = Regex.Replace(newPath, "scrapers", "watchdogs", RegexOptions.IgnoreCase);
+
+                    if (!string.Equals(transformedOldPath, transformedNewPath, StringComparison.InvariantCultureIgnoreCase))
                     {
                         Console.WriteLine(gitCommand);
                     }

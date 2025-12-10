@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
-import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
+import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
 import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
@@ -12,31 +12,31 @@ export const scraperScrapingResultsWebPagesInitializedEventName = "scraperScrapi
 export default class ScrapingResultsController extends Controller {
     static targets = [
         "searchTerm",
-        "createWatchdogSearch",
-        "loginToCreateWatchdogSearch",
-        "createWatchdogSearchForm",
+        "createWatchdog",
+        "loginToCreateWatchdog",
+        "createWatchdogForm",
     ];
    
     declare searchTermTarget: HTMLInputElement;
-    declare createWatchdogSearchTarget: HTMLButtonElement;
-    declare loginToCreateWatchdogSearchTarget: HTMLButtonElement;
-    declare createWatchdogSearchFormTarget: HTMLFormElement;
+    declare createWatchdogTarget: HTMLButtonElement;
+    declare loginToCreateWatchdogTarget: HTMLButtonElement;
+    declare createWatchdogFormTarget: HTMLFormElement;
 
     connect() {
         this.registerScraperScrapingResultsWebPagesInitializedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
-            this.createWatchdogSearchFormTarget, 
+            this.createWatchdogFormTarget, 
             async jobDto => {
-                const watchdogSearchEntity = Enumerable.from(jobDto.affectedEntities)
-                    .firstOrDefault(x => x.entityName === DomainConstants.watchdogSearchEntityName);
-                if (!watchdogSearchEntity) {
-                    throw new Error(`Error getting ${DomainConstants.watchdogSearchEntityName}.`);
+                const watchdogEntity = Enumerable.from(jobDto.affectedEntities)
+                    .firstOrDefault(x => x.entityName === DomainConstants.watchdogEntityName);
+                if (!watchdogEntity) {
+                    throw new Error(`Error getting ${DomainConstants.watchdogEntityName}.`);
                 }
                 
-                const watchdogSearchUrl = ScraperUrlConstants.watchdogSearchUrlTemplate
-                    .replace(ScraperUrlConstants.watchdogSearchIdVariable, String(watchdogSearchEntity.entityId));
-                Turbo.visit(watchdogSearchUrl);
+                const watchdogUrl = WatchdogUrlConstants.watchdogDetailUrlTemplate
+                    .replace(WatchdogUrlConstants.watchdogIdVariable, String(watchdogEntity.entityId));
+                Turbo.visit(watchdogUrl);
             }
         );
     }

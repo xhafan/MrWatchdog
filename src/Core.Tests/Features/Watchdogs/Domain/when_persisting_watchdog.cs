@@ -1,16 +1,17 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
 
 [TestFixture]
-public class when_persisting_watchdog_search : BaseDatabaseTest
+public class when_persisting_watchdog : BaseDatabaseTest
 {
-    private WatchdogSearch _newWatchdogSearch = null!;
-    private WatchdogSearch? _persistedWatchdogSearch;
+    private Watchdog _newWatchdog = null!;
+    private Watchdog? _persistedWatchdog;
     private Scraper _scraper = null!;
     private User _user = null!;
 
@@ -31,7 +32,7 @@ public class when_persisting_watchdog_search : BaseDatabaseTest
 
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _newWatchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _newWatchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .WithUser(_user)
             .WithSearchTerm("text")
@@ -40,19 +41,19 @@ public class when_persisting_watchdog_search : BaseDatabaseTest
         UnitOfWork.Flush();
         UnitOfWork.Clear();
 
-        _persistedWatchdogSearch = UnitOfWork.Get<WatchdogSearch>(_newWatchdogSearch.Id);
+        _persistedWatchdog = UnitOfWork.Get<Watchdog>(_newWatchdog.Id);
     }
 
     [Test]
-    public void persisted_watchdog_search_can_be_retrieved_and_has_correct_data()
+    public void persisted_watchdog_can_be_retrieved_and_has_correct_data()
     {
-        _persistedWatchdogSearch.ShouldNotBeNull();
-        _persistedWatchdogSearch.ShouldBe(_newWatchdogSearch);
+        _persistedWatchdog.ShouldNotBeNull();
+        _persistedWatchdog.ShouldBe(_newWatchdog);
 
-        _persistedWatchdogSearch.Scraper.ShouldBe(_scraper);
-        _persistedWatchdogSearch.User.ShouldBe(_user);
-        _persistedWatchdogSearch.SearchTerm.ShouldBe("text");
-        _persistedWatchdogSearch.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
-        _persistedWatchdogSearch.IsArchived.ShouldBe(false);
+        _persistedWatchdog.Scraper.ShouldBe(_scraper);
+        _persistedWatchdog.User.ShouldBe(_user);
+        _persistedWatchdog.SearchTerm.ShouldBe("text");
+        _persistedWatchdog.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
+        _persistedWatchdog.IsArchived.ShouldBe(false);
     }
 }

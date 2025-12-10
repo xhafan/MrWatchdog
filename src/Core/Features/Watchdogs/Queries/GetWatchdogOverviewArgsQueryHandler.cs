@@ -1,18 +1,18 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Features.Scrapers.Queries;
+namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public class GetWatchdogSearchOverviewArgsQueryHandler(
+public class GetWatchdogOverviewArgsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
-    IRepository<WatchdogSearch> watchdogSearchRepository
-) : BaseNhibernateQueryHandler<GetWatchdogSearchOverviewArgsQuery>(unitOfWork)
+    IRepository<Watchdog> watchdogRepository
+) : BaseNhibernateQueryHandler<GetWatchdogOverviewArgsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogSearchOverviewArgsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetWatchdogOverviewArgsQuery query)
     {
-        var watchdogSearch = await watchdogSearchRepository.LoadByIdAsync(query.WatchdogSearchId);
-        return (TResult)(object)watchdogSearch.GetWatchdogSearchOverviewArgs();
+        var watchdog = await watchdogRepository.LoadByIdAsync(query.WatchdogId);
+        return (TResult)(object)watchdog.GetWatchdogOverviewArgs();
     }
 }

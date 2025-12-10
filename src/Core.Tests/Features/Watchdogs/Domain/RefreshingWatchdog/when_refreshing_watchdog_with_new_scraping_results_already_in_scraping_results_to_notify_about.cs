@@ -1,27 +1,28 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.RefreshingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdog;
 
 [TestFixture]
-public class when_refreshing_watchdog_search_with_new_scraping_results_already_in_scraping_results_to_notify_about : BaseTest
+public class when_refreshing_watchdog_with_new_scraping_results_already_in_scraping_results_to_notify_about : BaseTest
 {
     private Scraper _scraper = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
 
     [SetUp]
     public void Context()
     {
         _BuildEntities();
         
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
     }
 
     [Test]
     public void watchdog_search_scraping_results_to_notify_about_does_not_contain_duplicates()
     {
-        _watchdogSearch.ScrapingResultsToNotifyAbout.ShouldBe(["Doom 2"]);
+        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe(["Doom 2"]);
     }
 
     private void _BuildEntities()
@@ -38,15 +39,15 @@ public class when_refreshing_watchdog_search_with_new_scraping_results_already_i
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
 
-        _watchdogSearch = new WatchdogSearchBuilder()
+        _watchdog = new WatchdogBuilder()
             .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();
         
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Doom 2", "Another World"]);
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
         _scraper.SetScrapingResults(scraperWebPage.Id, []);
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 2"]);
     }
 }

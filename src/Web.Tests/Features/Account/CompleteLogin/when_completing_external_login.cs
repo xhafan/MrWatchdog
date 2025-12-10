@@ -32,7 +32,7 @@ public class when_completing_external_login : BaseDatabaseTest
         _bus = A.Fake<ICoreBus>();
         
         var urlHelper = A.Fake<IUrlHelper>();
-        A.CallTo(() => urlHelper.IsLocalUrl("/Scrapers/Searches")).Returns(true);
+        A.CallTo(() => urlHelper.IsLocalUrl("/Watchdogs")).Returns(true);
 
         _controller = new CompleteLoginControllerBuilder(UnitOfWork)
             .WithBus(_bus)
@@ -55,7 +55,7 @@ public class when_completing_external_login : BaseDatabaseTest
             )
         );
         
-        _actionResult = await _controller.CompleteExternalLoginCallback(returnUrl: "/Scrapers/Searches");
+        _actionResult = await _controller.CompleteExternalLoginCallback(returnUrl: "/Watchdogs");
     }
     
     [Test]
@@ -82,7 +82,7 @@ public class when_completing_external_login : BaseDatabaseTest
     {
         _actionResult.ShouldBeOfType<RedirectResult>();
         var redirectResult = (RedirectResult) _actionResult;
-        redirectResult.Url.ShouldBe("/Scrapers/Searches");
+        redirectResult.Url.ShouldBe("/Watchdogs");
     }
 
     private bool _MatchingClaimPrincipal(ClaimsPrincipal claimsPrincipal)

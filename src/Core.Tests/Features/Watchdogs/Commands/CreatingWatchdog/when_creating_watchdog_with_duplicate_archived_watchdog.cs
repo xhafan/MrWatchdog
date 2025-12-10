@@ -1,17 +1,18 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.CreatingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands.CreatingWatchdog;
 
 [TestFixture]
-public class when_creating_watchdog_search_with_duplicate_archived_watchdog_search : BaseDatabaseTest
+public class when_creating_watchdog_with_duplicate_archived_watchdog : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
-    private WatchdogSearch _archivedWatchdogSearch = null!;
+    private Watchdog _archivedWatchdog = null!;
     private User _user = null!;
 
     [SetUp]
@@ -19,14 +20,14 @@ public class when_creating_watchdog_search_with_duplicate_archived_watchdog_sear
     {
         _BuildEntities();
         
-        var handler = new CreateWatchdogSearchCommandMessageHandler(
+        var handler = new CreateWatchdogCommandMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            new NhibernateRepository<WatchdogSearch>(UnitOfWork),
+            new NhibernateRepository<Watchdog>(UnitOfWork),
             new UserRepository(UnitOfWork),
             UnitOfWork
         );
 
-        await handler.Handle(new CreateWatchdogSearchCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _user.Id});
+        await handler.Handle(new CreateWatchdogCommand(_scraper.Id, SearchTerm: "text") { ActingUserId = _user.Id});
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -35,7 +36,7 @@ public class when_creating_watchdog_search_with_duplicate_archived_watchdog_sear
     [Test]
     public void new_watchdog_search_is_created()
     {
-        UnitOfWork.Session!.Query<WatchdogSearch>().SingleOrDefault(x => x.Scraper == _scraper && !x.IsArchived).ShouldNotBeNull();
+        UnitOfWork.Session!.Query<Watchdog>().SingleOrDefault(x => x.Scraper == _scraper && !x.IsArchived).ShouldNotBeNull();
     }
     
     private void _BuildEntities()
@@ -53,11 +54,11 @@ public class when_creating_watchdog_search_with_duplicate_archived_watchdog_sear
         var scraperWebPage = _scraper.WebPages.Single();
         _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
         
-        _archivedWatchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _archivedWatchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .WithSearchTerm("text")
             .WithUser(_user)
             .Build();
-        _archivedWatchdogSearch.Archive();
+        _archivedWatchdog.Archive();
     }
 }

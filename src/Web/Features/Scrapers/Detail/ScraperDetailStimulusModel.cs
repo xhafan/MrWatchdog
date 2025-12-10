@@ -3,7 +3,7 @@
 namespace MrWatchdog.Web.Features.Scrapers.Detail;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
-public record DetailStimulusModel(
+public record ScraperDetailStimulusModel(
     // ReSharper disable NotAccessedPositionalProperty.Global
     long ScraperId,
     string DeleteScraperConfirmationMessageResource

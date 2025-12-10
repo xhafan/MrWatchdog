@@ -7,6 +7,6 @@ export abstract class DomainConstants
 	public static scraperEntityName: string = `Scraper`;
 	public static scraperWebPageEntityName: string = `ScraperWebPage`;
 	public static scraperWebPageScrapingDataUpdatedDomainEventName: string = `ScraperWebPageScrapingDataUpdatedDomainEvent`;
-	public static watchdogSearchEntityName: string = `WatchdogSearch`;
+	public static watchdogEntityName: string = `Watchdog`;
 	public static accountLoginTokenEntityName: string = `LoginToken`;
 }

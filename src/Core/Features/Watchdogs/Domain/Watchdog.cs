@@ -2,9 +2,10 @@
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
-using MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -12,17 +13,17 @@ using MrWatchdog.Core.Infrastructure.Extensions;
 using MrWatchdog.Core.Resources;
 using Serilog;
 
-namespace MrWatchdog.Core.Features.Scrapers.Domain;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogSearch : VersionedEntity, IAggregateRoot
+public class Watchdog : VersionedEntity, IAggregateRoot
 {
     private readonly IList<string> _currentScrapingResults = new List<string>();
     private readonly IList<string> _scrapingResultsToNotifyAbout = new List<string>();
     private readonly ISet<ScrapingResultHistory> _scrapingResultsHistory = new HashSet<ScrapingResultHistory>();
     
-    protected WatchdogSearch() {}
+    protected Watchdog() {}
 
-    public WatchdogSearch(
+    public Watchdog(
         Scraper scraper,
         User user,
         string? searchTerm
@@ -56,11 +57,11 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
             .Where(x => string.IsNullOrWhiteSpace(SearchTerm) || x.ContainsIgnoringDiacritics(SearchTerm));
     }
     
-    public virtual WatchdogSearchArgs GetWatchdogSearchArgs()
+    public virtual WatchdogArgs GetWatchdogArgs()
     {
-        return new WatchdogSearchArgs
+        return new WatchdogArgs
         {
-            WatchdogSearchId = Id,
+            WatchdogId = Id,
             ScraperId = Scraper.Id,
             SearchTerm = SearchTerm,
             ScraperPublicStatus = Scraper.PublicStatus,
@@ -68,17 +69,17 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         };
     }
 
-    public virtual WatchdogSearchOverviewArgs GetWatchdogSearchOverviewArgs()
+    public virtual WatchdogOverviewArgs GetWatchdogOverviewArgs()
     {
-        return new WatchdogSearchOverviewArgs
+        return new WatchdogOverviewArgs
         {
-            WatchdogSearchId = Id,
+            WatchdogId = Id,
             ReceiveNotification = ReceiveNotification,
             SearchTerm = SearchTerm
         };
     }
 
-    public virtual void UpdateOverview(WatchdogSearchOverviewArgs args)
+    public virtual void UpdateOverview(WatchdogOverviewArgs args)
     {
         ReceiveNotification = args.ReceiveNotification;
         SearchTerm = args.SearchTerm;
@@ -90,21 +91,21 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         
         _currentScrapingResults.Clear();
         _currentScrapingResults.AddRange(_GetScraperScrapingResults());
-        Log.Information("Watchdog search refresh, Id {Id}, SearchTerm {SearchTerm}, _currentScrapingResults: {_currentScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(_currentScrapingResults));
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _currentScrapingResults: {_currentScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(_currentScrapingResults));
         
         var newScrapingResultsSincePreviousScrapingResults = _currentScrapingResults.Except(previousScrapingResults).ToList();
-        Log.Information("Watchdog search refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsSincePreviousScrapingResults: {newScrapingResultsSincePreviousScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults));
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsSincePreviousScrapingResults: {newScrapingResultsSincePreviousScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults));
         var newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout = newScrapingResultsSincePreviousScrapingResults.Except(_scrapingResultsToNotifyAbout).ToList();
-        Log.Information("Watchdog search refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout: {newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout));
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout: {newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout));
        
         _addNewScrapingResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently();
         
         if (_scrapingResultsToNotifyAbout.Any())
         {
-            DomainEvents.RaiseEvent(new WatchdogSearchScrapingResultsUpdatedDomainEvent(Id));
+            DomainEvents.RaiseEvent(new WatchdogScrapingResultsUpdatedDomainEvent(Id));
         } 
 
-        Log.Information("Watchdog search refresh, Id {Id}, SearchTerm {SearchTerm}, _scrapingResultsToNotifyAbout: {_scrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(_scrapingResultsToNotifyAbout));
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _scrapingResultsToNotifyAbout: {_scrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(_scrapingResultsToNotifyAbout));
         return;
 
         void _addNewScrapingResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently()
@@ -144,7 +145,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
         if (newScrapingResults.IsEmpty()) return;
 
         var mrWatchdogResource = Resource.MrWatchdog;
-        var searchTermSuffix = (!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "");
+        var searchTermSuffix = !string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "";
 
         if (ReceiveNotification)
         {
@@ -159,7 +160,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                  </p>
                  <p>
                      New results have been found for 
-                     <a href="{runtimeOptions.Url}{ScraperUrlConstants.WatchdogSearchUrlTemplate.WithWatchdogSearchId(Id)}">
+                     <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">
                         <span>{Scraper.Name}</span><span translate="no">{searchTermSuffix}</span>
                      </a>:
                  </p>
@@ -190,20 +191,20 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
 
         if (actingUser != User)
         {
-            DomainEvents.RaiseEvent(new WatchdogSearchArchivedDomainEvent(Id));
+            DomainEvents.RaiseEvent(new WatchdogArchivedDomainEvent(Id));
         }
     }
 
-    public virtual async Task NotifyUserAboutWatchdogSearchArchived(
+    public virtual async Task NotifyUserAboutWatchdogArchived(
         IEmailSender emailSender
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
-        var watchdogSearchName = $"{Scraper.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
+        var watchdogName = $"{Scraper.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
 
         await emailSender.SendEmail(
             User.Email,
-            $"{mrWatchdogResource}: your watchdog {watchdogSearchName} has been deleted",
+            $"{mrWatchdogResource}: your watchdog {watchdogName} has been deleted",
             $"""
              <html>
              <body>
@@ -211,7 +212,7 @@ public class WatchdogSearch : VersionedEntity, IAggregateRoot
                  Hello,
              </p>
              <p>
-                 Your watchdog <b>{watchdogSearchName}</b> has been deleted due to scraper <b>{Scraper.Name}</b> deletion.
+                 Your watchdog <b>{watchdogName}</b> has been deleted due to scraper <b>{Scraper.Name}</b> deletion.
              </p>
              <p>
                  Kind regards,<br>

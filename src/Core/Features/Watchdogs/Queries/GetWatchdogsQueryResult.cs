@@ -1,8 +1,8 @@
-﻿namespace MrWatchdog.Core.Features.Scrapers.Queries;
+﻿namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public record GetWatchdogSearchesQueryResult
+public record GetWatchdogsQueryResult
 {
-    public required long WatchdogSearchId { get; init; }
+    public required long WatchdogId { get; init; }
     public required string ScraperName { get; init; }
     public required string? SearchTerm { get; init; }
     public required bool ReceiveNotification { get; init; }

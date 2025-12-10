@@ -1,11 +1,12 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 
-public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
+public class WatchdogBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const bool ReceiveNotification = true;
     public const string SearchTerm = "search term";
@@ -15,50 +16,50 @@ public class WatchdogSearchBuilder(NhibernateUnitOfWork? unitOfWork = null)
     private bool _receiveNotification = ReceiveNotification;
     private string? _searchTerm = SearchTerm;
 
-    public WatchdogSearchBuilder WithScraper(Scraper scraper)
+    public WatchdogBuilder WithScraper(Scraper scraper)
     {
         _scraper = scraper;
         return this;
     } 
     
-    public WatchdogSearchBuilder WithUser(User user)
+    public WatchdogBuilder WithUser(User user)
     {
         _user = user;
         return this;
     } 
 
-    public WatchdogSearchBuilder WithReceiveNotification(bool receiveNotification)
+    public WatchdogBuilder WithReceiveNotification(bool receiveNotification)
     {
         _receiveNotification = receiveNotification;
         return this;
     } 
 
-    public WatchdogSearchBuilder WithSearchTerm(string? searchTerm)
+    public WatchdogBuilder WithSearchTerm(string? searchTerm)
     {
         _searchTerm = searchTerm;
         return this;
     } 
 
-    public  WatchdogSearch Build()
+    public Watchdog Build()
     {
         _scraper ??= new ScraperBuilder(unitOfWork).Build();
         _user ??= new UserBuilder(unitOfWork).Build();
 
-        var watchdogSearch = new WatchdogSearch(_scraper, _user, _searchTerm);
-        watchdogSearch.UpdateOverview(new WatchdogSearchOverviewArgs
+        var watchdog = new Watchdog(_scraper, _user, _searchTerm);
+        watchdog.UpdateOverview(new WatchdogOverviewArgs
         {
-            WatchdogSearchId = 0,
+            WatchdogId = 0,
             ReceiveNotification = _receiveNotification,
             SearchTerm = _searchTerm
         });
 
         if (unitOfWork == null)
         {
-            watchdogSearch.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
+            watchdog.SetPrivateProperty(x => x.Id, Incrementer.GetNextIncrement());
         }    
         
-        unitOfWork?.Save(watchdogSearch);
+        unitOfWork?.Save(watchdog);
         
-        return watchdogSearch;
+        return watchdog;
     }
 }

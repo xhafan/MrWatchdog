@@ -1,8 +1,8 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -11,7 +11,7 @@ using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_creating_watchdog_search : BaseDatabaseTest
+public class when_creating_watchdog : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Scraper _scraper = null!;
@@ -32,13 +32,13 @@ public class when_creating_watchdog_search : BaseDatabaseTest
             .WithSearchTerm(" search term ")
             .Build();
         
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_scraper.Id);
+        _actionResult = await _model.OnPostCreateWatchdog(_scraper.Id);
     }
 
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new CreateWatchdogSearchCommand(_scraper.Id, "search term"))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new CreateWatchdogCommand(_scraper.Id, "search term"))).MustHaveHappenedOnceExactly();
     }
 
     [Test]

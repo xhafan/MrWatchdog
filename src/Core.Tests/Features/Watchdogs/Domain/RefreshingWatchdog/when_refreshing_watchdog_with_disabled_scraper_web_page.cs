@@ -1,28 +1,29 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.RefreshingWatchdogSearch;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdog;
 
 [TestFixture]
-public class when_refreshing_watchdog_search_with_disabled_scraper_web_page : BaseTest
+public class when_refreshing_watchdog_with_disabled_scraper_web_page : BaseTest
 {
     private Scraper _scraper = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
 
     [SetUp]
     public void Context()
     {
         _BuildEntities();
         
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
     }
 
     [Test]
     public void watchdog_search_is_refreshed()
     {
-        _watchdogSearch.CurrentScrapingResults.ShouldBe([]);
-        _watchdogSearch.ScrapingResultsToNotifyAbout.ShouldBe([]);
+        _watchdog.CurrentScrapingResults.ShouldBe([]);
+        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe([]);
     }
     
     private void _BuildEntities()
@@ -38,7 +39,7 @@ public class when_refreshing_watchdog_search_with_disabled_scraper_web_page : Ba
         var scraperWebPage = _scraper.WebPages.Single();
         _updateScraperWebPageInOrderToDisableIt();
 
-        _watchdogSearch = new WatchdogSearchBuilder()
+        _watchdog = new WatchdogBuilder()
             .WithScraper(_scraper)
             .WithSearchTerm(null)
             .Build();

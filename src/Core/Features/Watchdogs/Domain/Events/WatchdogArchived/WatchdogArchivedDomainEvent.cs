@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Messages;
 
-namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 
-public record WatchdogSearchArchivedDomainEvent(long WatchdogSearchId) : DomainEvent;
+public record WatchdogArchivedDomainEvent(long WatchdogId) : DomainEvent;

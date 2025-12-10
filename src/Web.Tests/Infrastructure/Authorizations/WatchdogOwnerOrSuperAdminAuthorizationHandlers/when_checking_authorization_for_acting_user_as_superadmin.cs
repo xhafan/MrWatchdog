@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogSearchOwnerOrSuperAdminAuthorizationHandlers;
+namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.WatchdogOwnerOrSuperAdminAuthorizationHandlers;
 
 [TestFixture]
 public class when_checking_authorization_for_acting_user_as_superadmin : BaseDatabaseTest
@@ -25,22 +25,22 @@ public class when_checking_authorization_for_acting_user_as_superadmin : BaseDat
             .WithSuperAdmin(false)
             .Build();
 
-        var watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        var watchdog = new WatchdogBuilder(UnitOfWork)
             .WithUser(anotherUser)
             .Build();
 
-        var handler = new WatchdogSearchOwnerOrSuperAdminAuthorizationHandler(
+        var handler = new WatchdogOwnerOrSuperAdminAuthorizationHandler(
             new UserRepository(UnitOfWork),
-            new NhibernateRepository<WatchdogSearch>(UnitOfWork)
+            new NhibernateRepository<Watchdog>(UnitOfWork)
         );
 
         _authorizationHandlerContext = new AuthorizationHandlerContext(
-            [new WatchdogSearchOwnerOrSuperAdminRequirement()],
+            [new WatchdogOwnerOrSuperAdminRequirement()],
             new ClaimsPrincipal(new ClaimsIdentity(
                 [new Claim(ClaimTypes.NameIdentifier, $"{superAdminUser.Id}")],
                 authenticationType: CookieAuthenticationDefaults.AuthenticationScheme)
             ),
-            resource: watchdogSearch.Id
+            resource: watchdog.Id
         );
 
         await handler.HandleAsync(

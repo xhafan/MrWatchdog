@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 [TestFixture]
-public class when_viewing_scraper_detail_overview : BaseDatabaseTest
+public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
 {
     private OverviewModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -21,7 +21,7 @@ public class when_viewing_scraper_detail_overview : BaseDatabaseTest
         
         _model = new OverviewModelBuilder(UnitOfWork).Build();
         
-        _actionResult = await _model.OnGet(_watchdogSearch.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
     }
 
     [Test]
@@ -33,14 +33,14 @@ public class when_viewing_scraper_detail_overview : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogSearchOverviewArgs.WatchdogSearchId.ShouldBe(_watchdogSearch.Id);
-        _model.WatchdogSearchOverviewArgs.ReceiveNotification.ShouldBe(true);
-        _model.WatchdogSearchOverviewArgs.SearchTerm.ShouldBe(WatchdogSearchBuilder.SearchTerm);
+        _model.WatchdogOverviewArgs.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogOverviewArgs.ReceiveNotification.ShouldBe(true);
+        _model.WatchdogOverviewArgs.SearchTerm.ShouldBe(WatchdogBuilder.SearchTerm);
     }
 
     private void _BuildEntities()
     {
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithReceiveNotification(true)
             .Build();
     }    

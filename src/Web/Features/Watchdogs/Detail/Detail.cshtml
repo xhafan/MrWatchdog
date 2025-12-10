@@ -1,12 +1,12 @@
-﻿@page "{watchdogSearchId}"
+﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Features.Account.Domain
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
-@model SearchModel
+@model DetailModel
 
 @{
-    var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogSearchArgs.SearchTerm) ? $" - {Model.WatchdogSearchArgs.SearchTerm}" : "")}";
+    var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogArgs.SearchTerm) ? $" - {Model.WatchdogArgs.SearchTerm}" : "")}";
     ViewData["Title"] = $"{Model.ScraperScrapingResultsArgs.ScraperName}{searchTermSuffix}";
 }
 
@@ -17,7 +17,7 @@
                 <a asp-page="/Index"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a asp-page="/Scrapers/Searches/Searches">@Resource.MyWatchdogs</a>
+                <a asp-page="/Watchdogs/Index">@Resource.MyWatchdogs</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">
                 <span>@Model.ScraperScrapingResultsArgs.ScraperName</span>
@@ -26,7 +26,7 @@
         </ol>
     </nav>
     <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
-                identifier="@OnboardingIdentifiers.WatchdogsSearch"
+                identifier="@OnboardingIdentifiers.WatchdogDetail"
                 steps="@([
                            new OnboardingStepStimulusModel(
                                Text: Resource.WatchdogOnboardingIntro
@@ -37,11 +37,11 @@
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.WatchdogOnboardingIntroSearchTerm,
-                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass}"
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsDetailSearchTermInputGroupCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.WatchdogOnboardingReceiveNotification,
-                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass}"
+                               ElementIdentifier: $".{OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.OnboardingViewAgainStep,
@@ -51,17 +51,17 @@
     />
 }
 
-<div @Stimulus.Controller(StimulusControllers.WatchdogSearch, new SearchStimulusModel(Resource.DeleteWatchdogConfirmationMessage))>
+<div @Stimulus.Controller(StimulusControllers.WatchdogDetail, new WatchdogDetailStimulusModel(Resource.DeleteWatchdogConfirmationMessage))>
     
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4 text-wrap text-break">
             <a asp-page="/Scrapers/ScrapingResults/ScrapingResults" 
-               asp-route-scraperId="@Model.WatchdogSearchArgs.ScraperId">
+               asp-route-scraperId="@Model.WatchdogArgs.ScraperId">
                 @Model.ScraperScrapingResultsArgs.ScraperName
             </a>
-            <span data-watchdogs--search-target="searchTermSuffix" translate="no">@searchTermSuffix</span>
+            <span data-watchdogs--detail-target="searchTermSuffix" translate="no">@searchTermSuffix</span>
         </h1>
-        @if (Model.WatchdogSearchArgs.IsArchived)
+        @if (Model.WatchdogArgs.IsArchived)
         {
             <span class="badge text-bg-warning">
                 @Resource.Archived
@@ -81,10 +81,10 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <form asp-page-handler="ArchiveWatchdogSearch"
-                              asp-route-watchdogSearchId="@Model.WatchdogSearchArgs.WatchdogSearchId"
+                        <form asp-page-handler="ArchiveWatchdog"
+                              asp-route-watchdogId="@Model.WatchdogArgs.WatchdogId"
                               method="post"
-                              data-watchdogs--search-target="archiveWatchdogSearchForm"
+                              data-watchdogs--detail-target="archiveWatchdogForm"
                         >
                             <button class="dropdown-item text-danger" 
                                     type="submit"
@@ -101,8 +101,8 @@
     <div>
         <div class="row">
             <div class="col-md-6">
-                <turbo-frame id="watchdog_search_overview_@(Model.WatchdogSearchArgs.WatchdogSearchId)"
-                             src="@Url.Page("Overview/Overview", new {Model.WatchdogSearchArgs.WatchdogSearchId})">
+                <turbo-frame id="watchdog_overview_@(Model.WatchdogArgs.WatchdogId)"
+                             src="@Url.Page("Overview/Overview", new {Model.WatchdogArgs.WatchdogId})">
                 </turbo-frame>
             </div>
         </div>

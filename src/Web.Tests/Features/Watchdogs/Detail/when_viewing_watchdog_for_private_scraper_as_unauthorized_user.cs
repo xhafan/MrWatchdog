@@ -3,18 +3,19 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search;
+using MrWatchdog.Web.Features.Watchdogs.Detail;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_viewing_watchdog_search_for_private_scraper_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_watchdog_for_private_scraper_as_unauthorized_user : BaseDatabaseTest
 {
-    private SearchModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private DetailModel _model = null!;
+    private Watchdog _watchdog = null!;
     private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
@@ -26,16 +27,16 @@ public class when_viewing_watchdog_search_for_private_scraper_as_unauthorized_us
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdogSearch.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogSearchOwnerOrSuperAdminRequirement>().Any())
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
         
-        _model = new SearchModelBuilder(UnitOfWork)
+        _model = new DetailModelBuilder(UnitOfWork)
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdogSearch.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
     }
 
     [Test]
@@ -59,7 +60,7 @@ public class when_viewing_watchdog_search_for_private_scraper_as_unauthorized_us
         _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .WithSearchTerm("text")
             .Build();

@@ -4,19 +4,19 @@ using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 
-public class NotifyUserAboutNewWatchdogSearchScrapingResultsDomainEventMessageHandler(
-    IRepository<WatchdogSearch> watchdogSearchRepository,
+public class NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
+    IRepository<Watchdog> watchdogRepository,
     IEmailSender emailSender,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
-    : IHandleMessages<WatchdogSearchScrapingResultsUpdatedDomainEvent>
+    : IHandleMessages<WatchdogScrapingResultsUpdatedDomainEvent>
 {
-    public async Task Handle(WatchdogSearchScrapingResultsUpdatedDomainEvent domainEvent)
+    public async Task Handle(WatchdogScrapingResultsUpdatedDomainEvent domainEvent)
     {
-        var watchdogSearch = await watchdogSearchRepository.LoadByIdAsync(domainEvent.WatchdogSearchId);
+        var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdogSearch.NotifyUserAboutNewScrapingResults(emailSender, iRuntimeOptions.Value);
+        await watchdog.NotifyUserAboutNewScrapingResults(emailSender, iRuntimeOptions.Value);
     }
 }

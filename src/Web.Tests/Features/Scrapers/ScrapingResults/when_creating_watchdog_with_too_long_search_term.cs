@@ -11,7 +11,7 @@ using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
 
 [TestFixture]
-public class when_creating_watchdog_search_with_too_long_search_term : BaseDatabaseTest
+public class when_creating_watchdog_with_too_long_search_term : BaseDatabaseTest
 {
     private ScrapingResultsModel _model = null!;
     private Scraper _scraper = null!;
@@ -28,7 +28,7 @@ public class when_creating_watchdog_search_with_too_long_search_term : BaseDatab
             .WithSearchTerm(new string('x', ValidationConstants.SearchTermMaxLength + 1))
             .Build();
 
-        _actionResult = await _model.OnPostCreateWatchdogSearch(_scraper.Id);
+        _actionResult = await _model.OnPostCreateWatchdog(_scraper.Id);
     }
 
     [Test]

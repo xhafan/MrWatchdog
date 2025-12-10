@@ -30,8 +30,8 @@ public class StatisticsModel(
         PublicScraperStatistics = new PublicScraperStatisticsDto
         {
             CalculatedEarningsForThisMonth = 0,
-            NumberOfUsersWithWatchdogWithNotification = statisticsResults.SingleOrDefault(x => x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0,
-            NumberOfUsersWithWatchdogWithoutNotification = statisticsResults.SingleOrDefault(x => !x.ReceiveNotification)?.CountOfWatchdogSearches ?? 0
+            NumberOfUsersWithWatchdogWithNotification = statisticsResults.SingleOrDefault(x => x.ReceiveNotification)?.CountOfWatchdogs ?? 0,
+            NumberOfUsersWithWatchdogWithoutNotification = statisticsResults.SingleOrDefault(x => !x.ReceiveNotification)?.CountOfWatchdogs ?? 0
         };
 
         var scraperDetailPublicStatusArgs =

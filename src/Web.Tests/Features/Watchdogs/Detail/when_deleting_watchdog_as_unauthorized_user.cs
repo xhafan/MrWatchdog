@@ -2,21 +2,21 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search;
+using MrWatchdog.Web.Features.Watchdogs.Detail;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTest
+public class when_deleting_watchdog_as_unauthorized_user : BaseDatabaseTest
 {
-    private SearchModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private DetailModel _model = null!;
+    private Watchdog _watchdog = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
     
@@ -30,23 +30,23 @@ public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTe
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdogSearch.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogSearchOwnerOrSuperAdminRequirement>().Any())
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
-        _model = new SearchModelBuilder(UnitOfWork)
+        _model = new DetailModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnPostArchiveWatchdogSearch(_watchdogSearch.Id);
+        _actionResult = await _model.OnPostArchiveWatchdog(_watchdog.Id);
     }
 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new ArchiveWatchdogSearchCommand(_watchdogSearch.Id))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new ArchiveWatchdogCommand(_watchdog.Id))).MustNotHaveHappened();
     }
     
     [Test]
@@ -57,6 +57,6 @@ public class when_deleting_watchdog_search_as_unauthorized_user : BaseDatabaseTe
 
     private void _BuildEntities()
     {
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork).Build();
+        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
     }
 }

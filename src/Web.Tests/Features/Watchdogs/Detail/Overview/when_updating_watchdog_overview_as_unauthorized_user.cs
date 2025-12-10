@@ -2,23 +2,23 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 [TestFixture]
-public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseDatabaseTest
+public class when_updating_watchdog_overview_as_unauthorized_user : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private OverviewModel _model = null!;
     private ICoreBus _bus = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
 
     [SetUp]
     public async Task Context()
@@ -29,18 +29,18 @@ public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseD
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdogSearch.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogSearchOwnerOrSuperAdminRequirement>().Any())
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
         _model = new OverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
-            .WithWatchdogSearchOverviewArgs(
-                new WatchdogSearchOverviewArgs
+            .WithWatchdogOverviewArgs(
+                new WatchdogOverviewArgs
                 {
-                    WatchdogSearchId = _watchdogSearch.Id,
+                    WatchdogId = _watchdog.Id,
                     ReceiveNotification = true,
                     SearchTerm = "new search term",
                 }
@@ -53,7 +53,7 @@ public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseD
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new UpdateWatchdogSearchOverviewCommand(_model.WatchdogSearchOverviewArgs))).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(new UpdateWatchdogOverviewCommand(_model.WatchdogOverviewArgs))).MustNotHaveHappened();
     }
     
     [Test]
@@ -64,7 +64,7 @@ public class when_updating_watchdog_search_overview_as_unauthorized_user : BaseD
 
     private void _BuildEntities()
     {
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithSearchTerm("search term")
             .Build();
     }

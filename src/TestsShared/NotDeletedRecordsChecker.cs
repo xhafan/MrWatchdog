@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 
 namespace MrWatchdog.TestsShared;
 
@@ -19,7 +20,7 @@ public static class NotDeletedRecordsChecker
             unitOfWork.BeginTransaction();
         
             if (unitOfWork.Session.QueryOver<Scraper>().List().Any()
-                || unitOfWork.Session.QueryOver<WatchdogSearch>().List().Any()
+                || unitOfWork.Session.QueryOver<Watchdog>().List().Any()
                 || unitOfWork.Session.QueryOver<User>().List().Any()
                 || unitOfWork.Session.QueryOver<Job>().List().Any()
                )

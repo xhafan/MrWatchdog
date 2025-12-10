@@ -2,35 +2,35 @@
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Searches;
+using MrWatchdog.Web.Features.Watchdogs;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Searches;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs;
 
-public class SearchesModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class IndexModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private User? _actingUser;
 
-    public SearchesModelBuilder WithActingUser(User actingUser)
+    public IndexModelBuilder WithActingUser(User actingUser)
     {
         _actingUser = actingUser;
         return this;
     }
     
-    public SearchesModel Build()
+    public IndexModel Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogSearchesQueryHandler(unitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogsQueryHandler(unitOfWork));
 
         _actingUser ??= new UserBuilder(unitOfWork).Build();
 
         var actingUserAccessor = A.Fake<IActingUserAccessor>();
         A.CallTo(() => actingUserAccessor.GetActingUserId()).Returns(_actingUser.Id);
         
-        var model = new SearchesModel(
+        var model = new IndexModel(
             new QueryExecutor(queryHandlerFactory), 
             actingUserAccessor
         );

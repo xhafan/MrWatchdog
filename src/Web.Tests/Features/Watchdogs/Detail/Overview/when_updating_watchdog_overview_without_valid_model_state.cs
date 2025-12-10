@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Scrapers.Search.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 [TestFixture]
-public class when_updating_watchdog_search_overview_without_valid_model_state : BaseDatabaseTest
+public class when_updating_watchdog_overview_without_valid_model_state : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
     private OverviewModel _model = null!;
@@ -24,10 +24,10 @@ public class when_updating_watchdog_search_overview_without_valid_model_state : 
         
         _model = new OverviewModelBuilder(UnitOfWork)
             .WithBus(_bus)
-            .WithWatchdogSearchOverviewArgs(
-                new WatchdogSearchOverviewArgs
+            .WithWatchdogOverviewArgs(
+                new WatchdogOverviewArgs
                 {
-                    WatchdogSearchId = 0,
+                    WatchdogId = 0,
                     ReceiveNotification = true,
                     SearchTerm = null
                 }
@@ -40,7 +40,7 @@ public class when_updating_watchdog_search_overview_without_valid_model_state : 
     [Test]
     public void command_is_not_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(A<UpdateWatchdogSearchOverviewCommand>._)).MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(A<UpdateWatchdogOverviewCommand>._)).MustNotHaveHappened();
     }
     
     [Test]
@@ -55,9 +55,9 @@ public class when_updating_watchdog_search_overview_without_valid_model_state : 
     public void model_is_invalid()
     {
         _model.ModelState.IsValid.ShouldBe(false);
-        var watchdogSearchOverviewArgsWatchdogSearchIdErrors = _model
-            .ModelState[$"{nameof(OverviewModel.WatchdogSearchOverviewArgs)}.{nameof(OverviewModel.WatchdogSearchOverviewArgs.WatchdogSearchId)}"]?.Errors;
-        watchdogSearchOverviewArgsWatchdogSearchIdErrors.ShouldNotBeNull();
-        watchdogSearchOverviewArgsWatchdogSearchIdErrors.ShouldContain(x => x.ErrorMessage.Contains("default value"));
+        var watchdogOverviewArgsWatchdogIdErrors = _model
+            .ModelState[$"{nameof(OverviewModel.WatchdogOverviewArgs)}.{nameof(OverviewModel.WatchdogOverviewArgs.WatchdogId)}"]?.Errors;
+        watchdogOverviewArgsWatchdogIdErrors.ShouldNotBeNull();
+        watchdogOverviewArgsWatchdogIdErrors.ShouldContain(x => x.ErrorMessage.Contains("default value"));
     }    
 }

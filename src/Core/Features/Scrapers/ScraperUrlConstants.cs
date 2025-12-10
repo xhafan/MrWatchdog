@@ -3,16 +3,13 @@
 namespace MrWatchdog.Core.Features.Scrapers;
 
 [TsClass(IncludeNamespace = false, AutoExportMethods = false)]
-public static class ScraperUrlConstants // todo: move WatchdogSearch to WatchdogUrlConstants
+public static class ScraperUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]    
     public const string ScraperIdVariable = "$scraperId";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScraperWebPageIdVariable = "$scraperWebPageId";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogSearchIdVariable = "$watchdogSearchId";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScrapersUrl = "/Scrapers";
@@ -64,12 +61,6 @@ public static class ScraperUrlConstants // todo: move WatchdogSearch to Watchdog
     public const string ScraperDetailActionsMakePublicUrlTemplate = $"/Scrapers/Detail/Actions/{ScraperIdVariable}?handler=MakePublic";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogSearchUrlTemplate = $"/Scrapers/Search/{WatchdogSearchIdVariable}";
-    
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogSearchOverviewUrlTemplate = $"/Scrapers/Search/Overview/{WatchdogSearchIdVariable}";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScrapersManageUrl = "/Scrapers/Manage";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
@@ -78,10 +69,6 @@ public static class ScraperUrlConstants // todo: move WatchdogSearch to Watchdog
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScrapersManageOtherUsersScrapersUrl = "/Scrapers/Manage/OtherUsersScrapers";
 
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogsSearchesUrl = "/Scrapers/Searches";
-
-    
     extension(string urlTemplate)
     {
         public string WithScraperId(long scraperId)
@@ -92,11 +79,6 @@ public static class ScraperUrlConstants // todo: move WatchdogSearch to Watchdog
         public string WithScraperWebPageIdVariable(long scraperWebPageId)
         {
             return urlTemplate.WithVariable(ScraperWebPageIdVariable, scraperWebPageId.ToString());
-        }
-
-        public string WithWatchdogSearchId(long watchdogSearchId)
-        {
-            return urlTemplate.WithVariable(WatchdogSearchIdVariable, watchdogSearchId.ToString());
         }
     }
 }

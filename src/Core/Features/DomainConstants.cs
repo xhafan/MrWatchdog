@@ -1,6 +1,7 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Core.Features;
@@ -18,7 +19,7 @@ public static class DomainConstants
     public const string ScraperWebPageScrapingDataUpdatedDomainEventName = nameof(ScraperWebPageScrapingDataUpdatedDomainEvent);
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string WatchdogSearchEntityName = nameof(WatchdogSearch);
+    public const string WatchdogEntityName = nameof(Watchdog);
     
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

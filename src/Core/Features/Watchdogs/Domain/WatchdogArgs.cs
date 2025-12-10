@@ -1,8 +1,10 @@
-﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record WatchdogSearchArgs
+namespace MrWatchdog.Core.Features.Watchdogs.Domain;
+
+public record WatchdogArgs
 {
-    public required long WatchdogSearchId { get; set; }
+    public required long WatchdogId { get; set; }
     public required long ScraperId { get; set; }
     public required string? SearchTerm { get; set; }
     public required PublicStatus ScraperPublicStatus { get; set; }

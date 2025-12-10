@@ -1,21 +1,22 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.WatchdogSearchScrapingResultsUpdated;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 
 [TestFixture]
-public class when_notifying_user_about_new_watchdog_search_scraping_results : BaseDatabaseTest
+public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
     private IEmailSender _emailSender = null!;
     private User _user = null!;
 
@@ -26,13 +27,13 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
 
         _emailSender = A.Fake<IEmailSender>();
         
-        var handler = new NotifyUserAboutNewWatchdogSearchScrapingResultsDomainEventMessageHandler(
-            new NhibernateRepository<WatchdogSearch>(UnitOfWork),
+        var handler = new NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
+            new NhibernateRepository<Watchdog>(UnitOfWork),
             _emailSender,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new WatchdogSearchScrapingResultsUpdatedDomainEvent(_watchdogSearch.Id));
+        await handler.Handle(new WatchdogScrapingResultsUpdatedDomainEvent(_watchdog.Id));
     }
 
     [Test]
@@ -43,7 +44,7 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
                 A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game")),
                 A<string>.That.Matches(p => p.Contains("New results have been found for")
                                             && p.Contains($"""
-                                                          <a href="https://mrwatchdog_test/Scrapers/Search/{_watchdogSearch.Id}">
+                                                          <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}">
                                                           """)
                                             && p.Contains(">Epic Games store free game<")
                                             && p.Contains("""
@@ -60,7 +61,7 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
     [Test]
     public void watchdog_search_scraping_results_to_notify_about_are_cleared()
     {
-        _watchdogSearch.ScrapingResultsToNotifyAbout.ShouldBeEmpty();
+        _watchdog.ScrapingResultsToNotifyAbout.ShouldBeEmpty();
     }
     
     private void _BuildEntities()
@@ -80,7 +81,7 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
 
         _user = new UserBuilder(UnitOfWork).Build();
         
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .WithUser(_user)
             .WithSearchTerm(null)
@@ -92,6 +93,6 @@ public class when_notifying_user_about_new_watchdog_search_scraping_results : Ba
         ]);        
         _scraper.EnableWebPage(_scraperWebPageId);
 
-        _watchdogSearch.Refresh();
+        _watchdog.Refresh();
     }
 }

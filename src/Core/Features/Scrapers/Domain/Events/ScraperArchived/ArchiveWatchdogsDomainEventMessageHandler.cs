@@ -1,12 +1,12 @@
 ﻿using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 
-public class ArchiveWatchdogSearchesDomainEventMessageHandler(
+public class ArchiveWatchdogsDomainEventMessageHandler(
     IQueryExecutor queryExecutor,
     ICoreBus bus
 ) 
@@ -14,13 +14,13 @@ public class ArchiveWatchdogSearchesDomainEventMessageHandler(
 {
     public async Task Handle(ScraperArchivedDomainEvent domainEvent)
     {
-        var watchdogSearchesIds = await queryExecutor.ExecuteAsync<GetWatchdogSearchesForScraperQuery, long>(
-            new GetWatchdogSearchesForScraperQuery(domainEvent.ScraperId)
+        var watchdogIds = await queryExecutor.ExecuteAsync<GetWatchdogsForScraperQuery, long>(
+            new GetWatchdogsForScraperQuery(domainEvent.ScraperId)
         );
 
-        foreach (var watchdogSearchId in watchdogSearchesIds)
+        foreach (var watchdogId in watchdogIds)
         {
-            await bus.Send(new ArchiveWatchdogSearchCommand(watchdogSearchId));
+            await bus.Send(new ArchiveWatchdogCommand(watchdogId));
         }
     }
 }

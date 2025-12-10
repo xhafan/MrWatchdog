@@ -1,29 +1,29 @@
 ﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Searches;
+using MrWatchdog.Web.Features.Watchdogs;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Searches;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs;
 
 [TestFixture]
-public class when_viewing_watchdog_searches : BaseDatabaseTest
+public class when_viewing_watchdogs : BaseDatabaseTest
 {
-    private WatchdogSearch _watchdogSearchForUserOne = null!;
-    private SearchesModel _model = null!;
+    private Watchdog _watchdogForUserOne = null!;
+    private IndexModel _model = null!;
     private User _userOne = null!;
     private User _userTwo = null!;
-    private WatchdogSearch _watchdogSearchForUserTwo = null!;
-    private WatchdogSearch _archivedWatchdogSearchForUserOne = null!;
-    private WatchdogSearch _watchdogSearchForArchivedScraperForUserOne = null!;
+    private Watchdog _watchdogForUserTwo = null!;
+    private Watchdog _archivedWatchdogForUserOne = null!;
+    private Watchdog _watchdogForArchivedScraperForUserOne = null!;
 
     [SetUp]
     public async Task Context()
     {
         _BuildEntities();
         
-        _model = new SearchesModelBuilder(UnitOfWork)
+        _model = new IndexModelBuilder(UnitOfWork)
             .WithActingUser(_userOne)
             .Build();
         
@@ -33,19 +33,19 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogSearches.ShouldContain(
-            new GetWatchdogSearchesQueryResult
+        _model.Watchdogs.ShouldContain(
+            new GetWatchdogsQueryResult
             {
-                WatchdogSearchId = _watchdogSearchForUserOne.Id,
+                WatchdogId = _watchdogForUserOne.Id,
                 ScraperName = "scraper name",
                 SearchTerm = "search term",
                 ReceiveNotification = true
             }
         );
-        var watchdogSearchIds = _model.WatchdogSearches.Select(x => x.WatchdogSearchId).ToList();
-        watchdogSearchIds.ShouldNotContain(_watchdogSearchForUserTwo.Id);
-        watchdogSearchIds.ShouldNotContain(_archivedWatchdogSearchForUserOne.Id);
-        watchdogSearchIds.ShouldNotContain(_watchdogSearchForArchivedScraperForUserOne.Id);
+        var watchdogIds = _model.Watchdogs.Select(x => x.WatchdogId).ToList();
+        watchdogIds.ShouldNotContain(_watchdogForUserTwo.Id);
+        watchdogIds.ShouldNotContain(_archivedWatchdogForUserOne.Id);
+        watchdogIds.ShouldNotContain(_watchdogForArchivedScraperForUserOne.Id);
     }    
     
     private void _BuildEntities()
@@ -57,20 +57,20 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
             .WithName("scraper name")
             .Build();
 
-        _watchdogSearchForUserOne = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdogForUserOne = new WatchdogBuilder(UnitOfWork)
             .WithScraper(scraper)
             .WithSearchTerm("search term")
             .WithUser(_userOne)
             .WithReceiveNotification(true)
             .Build();
 
-        _archivedWatchdogSearchForUserOne = new WatchdogSearchBuilder(UnitOfWork)
+        _archivedWatchdogForUserOne = new WatchdogBuilder(UnitOfWork)
             .WithScraper(scraper)
             .WithUser(_userOne)
             .Build();
-        _archivedWatchdogSearchForUserOne.Archive();
+        _archivedWatchdogForUserOne.Archive();
 
-        _watchdogSearchForUserTwo = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdogForUserTwo = new WatchdogBuilder(UnitOfWork)
             .WithScraper(scraper)
             .WithUser(_userTwo)
             .Build();
@@ -78,7 +78,7 @@ public class when_viewing_watchdog_searches : BaseDatabaseTest
         var archivedScraper = new ScraperBuilder(UnitOfWork).Build();
         archivedScraper.Archive();
 
-        _watchdogSearchForArchivedScraperForUserOne = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdogForArchivedScraperForUserOne = new WatchdogBuilder(UnitOfWork)
             .WithScraper(archivedScraper)
             .WithUser(_userOne)
             .Build();

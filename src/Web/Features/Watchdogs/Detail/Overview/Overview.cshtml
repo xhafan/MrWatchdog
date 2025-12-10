@@ -1,4 +1,4 @@
-﻿@page "{watchdogSearchId}"
+﻿@page "{watchdogId}"
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
@@ -6,26 +6,26 @@
 @{
    Layout = null;
 }
-<!turbo-frame id="watchdog_search_overview_@(Model.WatchdogSearchOverviewArgs.WatchdogSearchId)">
-    <div @Stimulus.Controller(StimulusControllers.WatchdogSearchOverview)>
+<!turbo-frame id="watchdog_overview_@(Model.WatchdogOverviewArgs.WatchdogId)">
+    <div @Stimulus.Controller(StimulusControllers.WatchdogDetailOverview)>
         <view-or-edit-form action="@Url.Page("Overview")">
         
             <view-mode-item>
                 <div class="mb-3">
-                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass">
+                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsDetailSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
+                        <input asp-for="WatchdogOverviewArgs.SearchTerm" 
                                class="form-control" 
                                placeholder="@Resource.FilterResults"
                                disabled
                         />
                     </div>
                 </div>
-                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass">
-                    <input type="checkbox" checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" disabled/>
-                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
+                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
+                    <input type="checkbox" checked="@Model.WatchdogOverviewArgs.ReceiveNotification" disabled/>
+                    <label asp-for="WatchdogOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
                         <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
@@ -33,28 +33,28 @@
         
             <edit-mode-item>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input asp-for="WatchdogSearchOverviewArgs.WatchdogSearchId" type="hidden" />
+                <input asp-for="WatchdogOverviewArgs.WatchdogId" type="hidden" />
                 
                 <div class="mb-3">
-                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsSearchSearchTermInputGroupCssClass">
+                    <div class="input-group @OnboardingElementIdentifiers.WatchdogsDetailSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input asp-for="WatchdogSearchOverviewArgs.SearchTerm" 
+                        <input asp-for="WatchdogOverviewArgs.SearchTerm" 
                                class="form-control"
-                               data-watchdogs--search-overview-target="searchTerm"
-                               data-action="input->@StimulusControllers.WatchdogSearchOverview#onSearchTermModified"
+                               data-watchdogs--detail-overview-target="searchTerm"
+                               data-action="input->@StimulusControllers.WatchdogDetailOverview#onSearchTermModified"
                                placeholder="@Resource.FilterResults"
                         />
                     </div>
-                    <span asp-validation-for="WatchdogSearchOverviewArgs.SearchTerm" class="text-danger"></span>
+                    <span asp-validation-for="WatchdogOverviewArgs.SearchTerm" class="text-danger"></span>
                 </div>
-                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsSearchReceiveNotificationCssClass">
-                    <input asp-for="WatchdogSearchOverviewArgs.ReceiveNotification"
+                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
+                    <input asp-for="WatchdogOverviewArgs.ReceiveNotification"
                            type="checkbox" 
-                           checked="@Model.WatchdogSearchOverviewArgs.ReceiveNotification" 
+                           checked="@Model.WatchdogOverviewArgs.ReceiveNotification" 
                     />
-                    <label asp-for="WatchdogSearchOverviewArgs.ReceiveNotification" 
+                    <label asp-for="WatchdogOverviewArgs.ReceiveNotification" 
                            class="form-check-label fw-bold">
                         <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>

@@ -1,20 +1,20 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Scrapers.Commands;
+namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 
-public class ArchiveWatchdogSearchCommandMessageHandler(
-    IRepository<WatchdogSearch> watchdogSearchRepository,
+public class ArchiveWatchdogCommandMessageHandler(
+    IRepository<Watchdog> watchdogRepository,
     IUserRepository userRepository
     ) 
-    : IHandleMessages<ArchiveWatchdogSearchCommand>
+    : IHandleMessages<ArchiveWatchdogCommand>
 {
-    public async Task Handle(ArchiveWatchdogSearchCommand command)
+    public async Task Handle(ArchiveWatchdogCommand command)
     {
         var actingUser = await userRepository.LoadByIdAsync(command.ActingUserId);
-        var watchdogSearch = await watchdogSearchRepository.LoadByIdAsync(command.WatchdogSearchId);
+        var watchdog = await watchdogRepository.LoadByIdAsync(command.WatchdogId);
 
-        watchdogSearch.Archive(actingUser);
+        watchdog.Archive(actingUser);
     }
 }

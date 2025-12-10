@@ -1,16 +1,16 @@
 ﻿using System.Net;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Scrapers;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
+namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
 
 [TestFixture]
-public class when_getting_watchdog_search_overview : BaseDatabaseTest
+public class when_getting_watchdog_overview : BaseDatabaseTest
 {
-    private WatchdogSearch? _watchdogSearch;
+    private Watchdog? _watchdog;
 
     [SetUp]
     public void Context()
@@ -19,13 +19,13 @@ public class when_getting_watchdog_search_overview : BaseDatabaseTest
     }
 
     [Test]
-    public async Task watchdog_search_overview_page_redirects_to_login_page()
+    public async Task watchdog_overview_page_redirects_to_login_page()
     {
-        var url = ScraperUrlConstants.WatchdogSearchOverviewUrlTemplate.WithWatchdogSearchId(_watchdogSearch!.Id);
+        var url = WatchdogUrlConstants.WatchdogDetailOverviewUrlTemplate.WithWatchdogId(_watchdog!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
-        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FScrapers%2FSearch%2FOverview%2F{_watchdogSearch.Id}");
+        response.Headers.Location.ToString().ShouldEndWith($"/Account/Login?ReturnUrl=%2FWatchdogs%2FDetail%2FOverview%2F{_watchdog.Id}");
     }
     
     [TearDown]
@@ -35,7 +35,7 @@ public class when_getting_watchdog_search_overview : BaseDatabaseTest
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             async newUnitOfWork =>
             {
-                await newUnitOfWork.DeleteWatchdogSearchCascade(_watchdogSearch);
+                await newUnitOfWork.DeleteWatchdogCascade(_watchdog);
             }
         );
     } 
@@ -46,7 +46,7 @@ public class when_getting_watchdog_search_overview : BaseDatabaseTest
             () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
             newUnitOfWork =>
             {
-                _watchdogSearch = new WatchdogSearchBuilder(newUnitOfWork).Build();
+                _watchdog = new WatchdogBuilder(newUnitOfWork).Build();
             }
         );
     }

@@ -6,11 +6,11 @@ public static class OnboardingElementIdentifiers
     
     public const string ScrapersScrapingResultsWebPagesWatchedWebPagesId = "scrapersScrapingResultsWebPagesWatchedWebPages";
     public const string ScrapersScrapingResultsSearchTermInputGroupId = "scrapersScrapingResultsSearchTermInputGroup";
-    public const string ScrapersScrapingResultsCreateWatchdogSearchId = "scrapersScrapingResultsCreateWatchdogSearch";
-    public const string ScrapersScrapingResultsLoginToCreateWatchdogSearchId = "scrapersScrapingResultsLoginToCreateWatchdogSearch";
+    public const string ScrapersScrapingResultsCreateWatchdogId = "scrapersScrapingResultsCreateWatchdog";
+    public const string ScrapersScrapingResultsLoginToCreateWatchdogId = "scrapersScrapingResultsLoginToCreateWatchdog";
 
-    public const string WatchdogsSearchSearchTermInputGroupCssClass = "watchdogsSearchSearchTermInputGroup";
-    public const string WatchdogsSearchReceiveNotificationCssClass = "watchdogsSearchReceiveNotification";
+    public const string WatchdogsDetailSearchTermInputGroupCssClass = "watchdogsDetailSearchTermInputGroup";
+    public const string WatchdogsDetailReceiveNotificationCssClass = "watchdogsDetailReceiveNotification";
 
     public const string ScrapersDetailAddWebPageToWatchId = "scrapersDetailAddWebPageToWatch";
     public const string ScrapersDetailScrapingIntervalCssClass = "scrapersDetailScrapingInterval";

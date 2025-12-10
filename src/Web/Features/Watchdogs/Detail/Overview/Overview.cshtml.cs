@@ -1,13 +1,13 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 
-namespace MrWatchdog.Web.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
 public class OverviewModel(
     IQueryExecutor queryExecutor, 
@@ -16,29 +16,29 @@ public class OverviewModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     [BindProperty]
-    public WatchdogSearchOverviewArgs WatchdogSearchOverviewArgs { get; set; } = null!;
+    public WatchdogOverviewArgs WatchdogOverviewArgs { get; set; } = null!;
 
-    public async Task<IActionResult> OnGet(long watchdogSearchId)
+    public async Task<IActionResult> OnGet(long watchdogId)
     {
-        if (!await IsAuthorizedAsWatchdogSearchOwnerOrSuperAdmin(watchdogSearchId)) return Forbid();
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
 
-        WatchdogSearchOverviewArgs =
-            await queryExecutor.ExecuteSingleAsync<GetWatchdogSearchOverviewArgsQuery, WatchdogSearchOverviewArgs>(
-                new GetWatchdogSearchOverviewArgsQuery(watchdogSearchId));
+        WatchdogOverviewArgs =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(
+                new GetWatchdogOverviewArgsQuery(watchdogId));
 
         return Page();
     }
     
     public async Task<IActionResult> OnPost()
     {
-        if (!await IsAuthorizedAsWatchdogSearchOwnerOrSuperAdmin(WatchdogSearchOverviewArgs.WatchdogSearchId)) return Forbid();
+        if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(WatchdogOverviewArgs.WatchdogId)) return Forbid();
 
         if (!ModelState.IsValid)
         {
             return PageWithUnprocessableEntityStatus422();
         }
         
-        var command = new UpdateWatchdogSearchOverviewCommand(WatchdogSearchOverviewArgs);
+        var command = new UpdateWatchdogOverviewCommand(WatchdogOverviewArgs);
         await bus.Send(command);
         return Ok(command.Guid.ToString());
     }

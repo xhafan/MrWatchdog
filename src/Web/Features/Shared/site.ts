@@ -20,8 +20,8 @@ import ScrapersDetailWebPageDisabledWarningController from "../Scrapers/Detail/W
 import ScrapersDetailWebPageScrapingResultsController from "../Scrapers/Detail/WebPage/WebPageScrapingResultsController";
 import ScrapersScrapingResultsController from "../Scrapers/ScrapingResults/ScrapingResultsController";
 import ScrapersScrapingResultsWebPagesController from "../Scrapers/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
-import ScrapersSearchController from "../Scrapers/Search/SearchController";
-import ScrapersSearchOverviewController from "../Scrapers/Search/Overview/OverviewController";
+import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
+import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
 import AccountLoginController from "../Account/Login/LoginController";
 import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSentController";
@@ -42,8 +42,8 @@ application.register(StimulusControllers.scrapersDetailWebPageDisabledWarning, S
 application.register(StimulusControllers.scrapersDetailWebPageScrapingResults, ScrapersDetailWebPageScrapingResultsController);
 application.register(StimulusControllers.scrapersScrapingResults, ScrapersScrapingResultsController);
 application.register(StimulusControllers.scrapersScrapingResultsWebPages, ScrapersScrapingResultsWebPagesController);
-application.register(StimulusControllers.watchdogSearch, ScrapersSearchController);
-application.register(StimulusControllers.watchdogSearchOverview, ScrapersSearchOverviewController);
+application.register(StimulusControllers.watchdogDetail, WatchdogsDetailController);
+application.register(StimulusControllers.watchdogDetailOverview, WatchdogsDetailOverviewController);
 
 application.register(StimulusControllers.accountLogin, AccountLoginController);
 application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);

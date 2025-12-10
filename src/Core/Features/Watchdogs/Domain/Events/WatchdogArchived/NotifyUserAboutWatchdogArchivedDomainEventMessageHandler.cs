@@ -2,18 +2,18 @@
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.WatchdogSearchArchived;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 
-public class NotifyUserAboutWatchdogSearchArchivedDomainEventMessageHandler(
-    IRepository<WatchdogSearch> watchdogSearchRepository,
+public class NotifyUserAboutWatchdogArchivedDomainEventMessageHandler(
+    IRepository<Watchdog> watchdogRepository,
     IEmailSender emailSender
 ) 
-    : IHandleMessages<WatchdogSearchArchivedDomainEvent>
+    : IHandleMessages<WatchdogArchivedDomainEvent>
 {
-    public async Task Handle(WatchdogSearchArchivedDomainEvent domainEvent)
+    public async Task Handle(WatchdogArchivedDomainEvent domainEvent)
     {
-        var watchdogSearch = await watchdogSearchRepository.LoadByIdAsync(domainEvent.WatchdogSearchId);
+        var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdogSearch.NotifyUserAboutWatchdogSearchArchived(emailSender);
+        await watchdog.NotifyUserAboutWatchdogArchived(emailSender);
     }
 }

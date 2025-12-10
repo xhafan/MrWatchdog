@@ -5,39 +5,41 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Scrapers.Search;
+using MrWatchdog.Web.Features.Watchdogs.Detail;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
-public class SearchModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
 
-    public SearchModelBuilder WithBus(ICoreBus bus)
+    public DetailModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }
 
-    public SearchModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
+    public DetailModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
     {
         _authorizationService = authorizationService;
         return this;
     }
     
-    public SearchModel Build()
+    public DetailModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogSearchArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<WatchdogSearch>(unitOfWork)
+            new NhibernateRepository<Watchdog>(unitOfWork)
         ));
         
         queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapingResultsArgsQueryHandler(
@@ -52,7 +54,7 @@ public class SearchModelBuilder(NhibernateUnitOfWork unitOfWork)
                 .Returns(AuthorizationResult.Success());
         }
 
-        var model = new SearchModel(
+        var model = new DetailModel(
             new QueryExecutor(queryHandlerFactory),
             _bus,
             _authorizationService

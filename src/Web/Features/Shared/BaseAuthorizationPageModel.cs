@@ -15,12 +15,12 @@ public abstract class BaseAuthorizationPageModel(IAuthorizationService authoriza
         return result.Succeeded;
     }
 
-    protected async Task<bool> IsAuthorizedAsWatchdogSearchOwnerOrSuperAdmin(long watchdogSearchId)
+    protected async Task<bool> IsAuthorizedAsWatchdogOwnerOrSuperAdmin(long watchdogId)
     {
         var result = await authorizationService.AuthorizeAsync(
             User, 
-            watchdogSearchId, 
-            new WatchdogSearchOwnerOrSuperAdminRequirement()
+            watchdogId, 
+            new WatchdogOwnerOrSuperAdminRequirement()
         );
         return result.Succeeded;
     }

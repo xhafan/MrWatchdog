@@ -1,13 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
-import { DetailStimulusModel } from "../../Shared/Generated/DetailStimulusModel";
+import { ScraperDetailStimulusModel } from "../../Shared/Generated/ScraperDetailStimulusModel";
 import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { scraperWebPageRemovedEvent } from "./WebPage/WebPageController";
 import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
 
-export default class DetailController extends BaseStimulusModelController<DetailStimulusModel> {
+export default class DetailController extends BaseStimulusModelController<ScraperDetailStimulusModel> {
     static targets = [
         "webPages",
         "addWebPageForm",

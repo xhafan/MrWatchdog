@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using NHibernate;
 using NHibernate.Transform;
 
@@ -17,13 +18,13 @@ public class GetPublicScraperStatisticsQueryHandler(
         Scraper scraperAlias = null!;
         GetPublicScraperStatisticsQueryResult result = null!;
 
-        return _unitOfWork.Session!.QueryOver<WatchdogSearch>()
+        return _unitOfWork.Session!.QueryOver<Watchdog>()
             .JoinAlias(x => x.Scraper, () => scraperAlias)
             .Where(x => x.Scraper.Id == query.ScraperId
                         && x.User.Id != scraperAlias.User.Id)
             .SelectList(list => list
                 .SelectGroup(x => x.ReceiveNotification).WithAlias(() => result.ReceiveNotification)
-                .SelectCountDistinct(x => x.User.Id).WithAlias(() => result.CountOfWatchdogSearches)
+                .SelectCountDistinct(x => x.User.Id).WithAlias(() => result.CountOfWatchdogs)
             )
             .TransformUsing(Transformers.AliasToBean<GetPublicScraperStatisticsQueryResult>());
     }

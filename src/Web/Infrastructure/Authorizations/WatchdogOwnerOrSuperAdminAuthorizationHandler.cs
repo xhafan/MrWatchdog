@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;
 
-public class WatchdogSearchOwnerOrSuperAdminAuthorizationHandler(
+public class WatchdogOwnerOrSuperAdminAuthorizationHandler(
     IUserRepository userRepository,
-    IRepository<WatchdogSearch> watchdogSearchRepository
+    IRepository<Watchdog> watchdogRepository
 ) 
-    : AuthorizationHandler<WatchdogSearchOwnerOrSuperAdminRequirement, long>
+    : AuthorizationHandler<WatchdogOwnerOrSuperAdminRequirement, long>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
-        WatchdogSearchOwnerOrSuperAdminRequirement requirement,
-        long watchdogSearchId
+        WatchdogOwnerOrSuperAdminRequirement requirement,
+        long watchdogId
     )
     {
-        var watchdogSearch = await watchdogSearchRepository.LoadByIdAsync(watchdogSearchId);
-        if (context.User.GetUserId() == watchdogSearch.User.Id
+        var watchdog = await watchdogRepository.LoadByIdAsync(watchdogId);
+        if (context.User.GetUserId() == watchdog.User.Id
             || await context.User.IsSuperAdmin(userRepository))
         {
             context.Succeed(requirement);

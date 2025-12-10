@@ -2,19 +2,19 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 [TestFixture]
-public class when_viewing_scraper_detail_overview_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_watchdog_detail_overview_as_unauthorized_user : BaseDatabaseTest
 {
     private OverviewModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private Watchdog _watchdog = null!;
     private IActionResult _actionResult = null!;
 
     [SetUp]
@@ -25,8 +25,8 @@ public class when_viewing_scraper_detail_overview_as_unauthorized_user : BaseDat
         var authorizationService = A.Fake<IAuthorizationService>();
         A.CallTo(() => authorizationService.AuthorizeAsync(
                 A<ClaimsPrincipal>._,
-                _watchdogSearch.Id,
-                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogSearchOwnerOrSuperAdminRequirement>().Any())
+                _watchdog.Id,
+                A<IAuthorizationRequirement[]>.That.Matches(p => p.OfType<WatchdogOwnerOrSuperAdminRequirement>().Any())
             ))
             .Returns(AuthorizationResult.Failed());
 
@@ -34,7 +34,7 @@ public class when_viewing_scraper_detail_overview_as_unauthorized_user : BaseDat
             .WithAuthorizationService(authorizationService)
             .Build();
         
-        _actionResult = await _model.OnGet(_watchdogSearch.Id);
+        _actionResult = await _model.OnGet(_watchdog.Id);
     }
 
     [Test]
@@ -45,6 +45,6 @@ public class when_viewing_scraper_detail_overview_as_unauthorized_user : BaseDat
 
     private void _BuildEntities()
     {
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork).Build();
+        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
     }    
 }

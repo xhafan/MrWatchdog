@@ -3,21 +3,21 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Features.Scrapers.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Scrapers.Search.Overview;
+using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search.Overview;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;
 
 public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
 
-    private WatchdogSearchOverviewArgs? _watchdogSearchOverviewArgs;
+    private WatchdogOverviewArgs? _watchdogOverviewArgs;
 
     public OverviewModelBuilder WithBus(ICoreBus bus)
     {
@@ -31,9 +31,9 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
 
-    public OverviewModelBuilder WithWatchdogSearchOverviewArgs(WatchdogSearchOverviewArgs watchdogSearchOverviewArgs)
+    public OverviewModelBuilder WithWatchdogOverviewArgs(WatchdogOverviewArgs watchdogOverviewArgs)
     {
-        _watchdogSearchOverviewArgs = watchdogSearchOverviewArgs;
+        _watchdogOverviewArgs = watchdogOverviewArgs;
         return this;
     }
     
@@ -43,9 +43,9 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogSearchOverviewArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogOverviewArgsQueryHandler(
             unitOfWork,
-            new NhibernateRepository<WatchdogSearch>(unitOfWork)
+            new NhibernateRepository<Watchdog>(unitOfWork)
         ));
 
         if (_authorizationService == null)
@@ -61,9 +61,9 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
             _authorizationService
         )
         {
-            WatchdogSearchOverviewArgs = _watchdogSearchOverviewArgs ?? new WatchdogSearchOverviewArgs
+            WatchdogOverviewArgs = _watchdogOverviewArgs ?? new WatchdogOverviewArgs
             {
-                WatchdogSearchId = 0,
+                WatchdogId = 0,
                 ReceiveNotification = true,
                 SearchTerm = null
             }

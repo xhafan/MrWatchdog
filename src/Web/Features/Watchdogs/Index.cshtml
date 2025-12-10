@@ -3,7 +3,7 @@
 @using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
-@model SearchesModel
+@model IndexModel
 @inject IStringLocalizer<Resource> Localizer
 @{
     var title = Resource.MyWatchdogs;
@@ -26,16 +26,16 @@
     @Resource.MyWatchdogsDescription
 </p>
 
-@foreach (var watchdogSearch in Model.WatchdogSearches)
+@foreach (var watchdog in Model.Watchdogs)
 {
     <div>
-        <a asp-page="/Scrapers/Search/Search" 
-           asp-route-watchdogSearchId="@watchdogSearch.WatchdogSearchId"
+        <a asp-page="/Watchdogs/Detail/Detail" 
+           asp-route-watchdogId="@watchdog.WatchdogId"
            class="text-wrap text-break"
            >
-            <span>@watchdogSearch.ScraperName</span>
-            <span translate="no">@(!string.IsNullOrWhiteSpace(watchdogSearch.SearchTerm) ? $" - {watchdogSearch.SearchTerm}" : "")</span>
-            @if (!watchdogSearch.ReceiveNotification)
+            <span>@watchdog.ScraperName</span>
+            <span translate="no">@(!string.IsNullOrWhiteSpace(watchdog.SearchTerm) ? $" - {watchdog.SearchTerm}" : "")</span>
+            @if (!watchdog.ReceiveNotification)
             {
                 <span title="Email notification disabled" style="position: relative; display: inline-block; color: #bbb;">
                     <i class="fa-solid fa-envelope"></i>
@@ -48,7 +48,7 @@
 }
 
 <p class="pt-3">
-    @if (Model.WatchdogSearches.IsEmpty())
+    @if (Model.Watchdogs.IsEmpty())
     {
         <i class="fa-solid fa-triangle-exclamation text-warning"></i> @Resource.YouHaveNoWatchdogs
     }

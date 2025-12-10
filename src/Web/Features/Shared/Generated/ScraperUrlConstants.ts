@@ -6,7 +6,6 @@ export abstract class ScraperUrlConstants
 {
 	public static scraperIdVariable: string = `$scraperId`;
 	public static scraperWebPageIdVariable: string = `$scraperWebPageId`;
-	public static watchdogSearchIdVariable: string = `$watchdogSearchId`;
 	public static scrapersUrl: string = `/Scrapers`;
 	public static scrapersPublicScrapersUrl: string = `/Scrapers/PublicScrapers`;
 	public static scrapersUserScrapersUrl: string = `/Scrapers/UserScrapers`;
@@ -22,10 +21,7 @@ export abstract class ScraperUrlConstants
 	public static scraperDetailBadgesUrlTemplate: string = `/Scrapers/Detail/Badges/$scraperId`;
 	public static scraperDetailActionsUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId`;
 	public static scraperDetailActionsMakePublicUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId?handler=MakePublic`;
-	public static watchdogSearchUrlTemplate: string = `/Scrapers/Search/$watchdogSearchId`;
-	public static watchdogSearchOverviewUrlTemplate: string = `/Scrapers/Search/Overview/$watchdogSearchId`;
 	public static scrapersManageUrl: string = `/Scrapers/Manage`;
 	public static scrapersManageUserScrapersUrl: string = `/Scrapers/Manage/UserScrapers`;
 	public static scrapersManageOtherUsersScrapersUrl: string = `/Scrapers/Manage/OtherUsersScrapers`;
-	public static watchdogsSearchesUrl: string = `/Scrapers/Searches`;
 }

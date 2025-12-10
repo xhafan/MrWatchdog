@@ -1,14 +1,14 @@
 ﻿using FluentNHibernate.Automapping;
 using FluentNHibernate.Automapping.Alterations;
 
-namespace MrWatchdog.Core.Features.Scrapers.Domain;
+namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
-public class WatchdogSearchMappingOverrides : IAutoMappingOverride<WatchdogSearch>
+public class WatchdogMappingOverrides : IAutoMappingOverride<Watchdog>
 {
-    public void Override(AutoMapping<WatchdogSearch> mapping)
+    public void Override(AutoMapping<Watchdog> mapping)
     {
         mapping.HasMany(x => x.CurrentScrapingResults)
-            .Table($"{nameof(WatchdogSearch)}{nameof(WatchdogSearch.CurrentScrapingResults)}".TrimEnd('s'))
+            .Table($"{nameof(Watchdog)}{nameof(Watchdog.CurrentScrapingResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();
@@ -16,7 +16,7 @@ public class WatchdogSearchMappingOverrides : IAutoMappingOverride<WatchdogSearc
             });
         
         mapping.HasMany(x => x.ScrapingResultsToNotifyAbout)
-            .Table($"{nameof(WatchdogSearch)}ScrapingResultToNotifyAbout")
+            .Table($"{nameof(Watchdog)}ScrapingResultToNotifyAbout")
             .Element("Value", x =>
             {
                 x.Not.Nullable();
@@ -24,7 +24,7 @@ public class WatchdogSearchMappingOverrides : IAutoMappingOverride<WatchdogSearc
             });
         
         mapping.HasMany(x => x.ScrapingResultsHistory)
-            .Table($"{nameof(WatchdogSearch)}ScrapingResultHistory")
+            .Table($"{nameof(Watchdog)}ScrapingResultHistory")
             .Component(x =>
             {
                 x.Map(c => c.Result)

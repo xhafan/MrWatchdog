@@ -33,7 +33,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new SendLoginLinkToUserCommand(_email, ReturnUrl: "/Scrapers/Searches"));
+        await handler.Handle(new SendLoginLinkToUserCommand(_email, ReturnUrl: "/Watchdogs"));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -50,7 +50,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
 
         claimsPrincipal.FindFirstValue(ClaimTypes.Email).ShouldBe(_email);
         claimsPrincipal.FindFirstValue(CustomClaimTypes.Guid).ShouldBe(_loginToken.Guid.ToString());
-        claimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl).ShouldBe("/Scrapers/Searches");
+        claimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl).ShouldBe("/Watchdogs");
     }
 
     [Test]

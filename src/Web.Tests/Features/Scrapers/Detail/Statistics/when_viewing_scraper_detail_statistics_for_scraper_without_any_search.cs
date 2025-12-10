@@ -23,7 +23,7 @@ public class when_viewing_scraper_detail_statistics_for_scraper_without_any_sear
     }
 
     [Test]
-    public void number_of_watchdog_searches_is_correct()
+    public void number_of_watchdogs_is_correct()
     {
         _model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithNotification.ShouldBe(0);
         _model.PublicScraperStatistics.NumberOfUsersWithWatchdogWithoutNotification.ShouldBe(0);

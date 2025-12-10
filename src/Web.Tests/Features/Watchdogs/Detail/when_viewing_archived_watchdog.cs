@@ -1,15 +1,16 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.Search;
+using MrWatchdog.Web.Features.Watchdogs.Detail;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.Search;
+namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;
 
 [TestFixture]
-public class when_viewing_archived_watchdog_search : BaseDatabaseTest
+public class when_viewing_archived_watchdog : BaseDatabaseTest
 {
-    private SearchModel _model = null!;
-    private WatchdogSearch _watchdogSearch = null!;
+    private DetailModel _model = null!;
+    private Watchdog _watchdog = null!;
     private Scraper _scraper = null!;
 
     [SetUp]
@@ -17,25 +18,25 @@ public class when_viewing_archived_watchdog_search : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new SearchModelBuilder(UnitOfWork).Build();
+        _model = new DetailModelBuilder(UnitOfWork).Build();
         
-        await _model.OnGet(_watchdogSearch.Id);
+        await _model.OnGet(_watchdog.Id);
     }
 
     [Test]
     public void model_is_correct()
     {
-        _model.WatchdogSearchArgs.IsArchived.ShouldBe(true);
+        _model.WatchdogArgs.IsArchived.ShouldBe(true);
     }
 
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder(UnitOfWork).Build();
         
-        _watchdogSearch = new WatchdogSearchBuilder(UnitOfWork)
+        _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)
             .Build();
-        _watchdogSearch.Archive();
+        _watchdog.Archive();
 
         UnitOfWork.Flush();
     }

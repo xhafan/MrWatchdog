@@ -24,6 +24,7 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.HttpClients;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -191,10 +192,21 @@ public class Program
         var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(30); // Timeout for an individual try
 
         builder.Services.AddHttpClient(HttpClientConstants.HttpClientWithRetries)
+            .AddHttpMessageHandler<RequestHigherHttpVersionHandler>()
             .AddPolicyHandler(retryPolicy)
             .AddPolicyHandler(timeoutPolicy); // the timeoutPolicy is inside the retryPolicy, to make it time out each try.
-        
+
+        builder.Services.AddHttpClient(HttpClientConstants.HttpClientWithLoggingAndRetries)
+            .AddHttpMessageHandler<RequestHigherHttpVersionHandler>()
+            .AddHttpMessageHandler<HttpClientLoggingHandler>()
+            .AddPolicyHandler(retryPolicy)
+            .AddPolicyHandler(timeoutPolicy); // We place the timeoutPolicy inside the retryPolicy, to make it time out each try.;
+
         builder.Services.AddHttpClient();
+
+        builder.Services.AddTransient<RequestHigherHttpVersionHandler>();
+        builder.Services.AddTransient<HttpClientLoggingHandler>();
+
 
         builder.Services.AddLocalization();
 

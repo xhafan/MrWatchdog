@@ -1,5 +1,4 @@
-﻿using System.Web;
-using CoreDdd.Domain.Events;
+﻿using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
@@ -8,9 +7,10 @@ using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Infrastructure.HttpClients;
 using Serilog;
+using System.Web;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
@@ -240,7 +240,7 @@ public class ScraperWebPage : VersionedEntity
         )
     {
         var httpClient = httpClientFactory.CreateClient(HttpClientConstants.HttpClientWithRetries);
-        
+
         string? responseContent;
         
         try
@@ -248,7 +248,7 @@ public class ScraperWebPage : VersionedEntity
             using var request = new HttpRequestMessage(HttpMethod.Get, Url);
             foreach (var httpHeader in _httpHeaders)
             {
-                request.Headers.Add(httpHeader.Name, httpHeader.Value);
+                request.Headers.TryAddWithoutValidation(httpHeader.Name, httpHeader.Value);
             }
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 

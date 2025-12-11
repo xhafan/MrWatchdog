@@ -30,9 +30,10 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
                 .ToArray();
             
             logger.LogInformation(
-                "Request started: {Method} {Path} from {RemoteIp}:{RemotePort}, Headers: {Headers}",
+                "Request started: {Method} {Path} {Protocol} from {RemoteIp}:{RemotePort}, Headers: {Headers}",
                 request.Method,
                 request.Path + request.QueryString,
+                request.Protocol,
                 connection.RemoteIpAddress,
                 connection.RemotePort,
                 string.Join(", ", headers)

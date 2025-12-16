@@ -47,7 +47,8 @@ public class when_scraping_scraper_web_page_with_invalid_http_status_code_when_d
             """
             Scraping failed:
             HttpClientScraper: Error scraping web page, HTTP status code: 404 Not Found
-            """
+            """,
+            ignoreLineEndings: true
         );
     }
     

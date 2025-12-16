@@ -44,7 +44,8 @@ public class when_scraping_scraper_web_page_with_exception_when_downloading_web_
             """
             Scraping failed:
             HttpClientScraper: No such host is known
-            """
+            """,
+           ignoreLineEndings: true
         );
     }
     

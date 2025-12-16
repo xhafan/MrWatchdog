@@ -38,7 +38,8 @@ public class when_web_scraping_with_the_first_web_scraper_failing_on_404_and_sto
             """
             Scraping failed:
             HttpClientScraper: Error scraping web page, HTTP status code: 404 Not Found
-            """
+            """,
+            ignoreLineEndings: true
         );
     }
 }

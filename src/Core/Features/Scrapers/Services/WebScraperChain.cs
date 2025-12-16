@@ -33,6 +33,6 @@ public class WebScraperChain(
             if (result.StopWebScraperChain) break;
         }
 
-        return ScrapeResult.Failed($"Scraping failed:{Environment.NewLine}{string.Join(Environment.NewLine, failureReasons)}");
+        return ScrapeResult.Failed($"Scraping failed:\n{string.Join("\n", failureReasons)}");
     }
 }

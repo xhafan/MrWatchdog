@@ -42,7 +42,8 @@ public class when_scraping_scraper_with_network_error : BaseTest
             """
             Scraping failed:
             HttpClientScraper: Error scraping web page, HTTP status code: 404 Not Found
-            """
+            """,
+            ignoreLineEndings: true
         );
 
         webPage.ScrapingResults.ShouldBeEmpty();

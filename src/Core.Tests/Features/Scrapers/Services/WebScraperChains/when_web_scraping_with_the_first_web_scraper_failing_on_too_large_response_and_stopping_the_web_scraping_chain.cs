@@ -45,7 +45,8 @@ public class when_web_scraping_with_the_first_web_scraper_failing_on_too_large_r
             """
             Scraping failed:
             HttpClientScraper: Web page larger than 10 MB.
-            """
+            """,
+            ignoreLineEndings: true
         );
     }
 }

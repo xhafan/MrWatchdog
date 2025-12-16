@@ -206,20 +206,18 @@ public class Program
 
         builder.Services.AddTransient<RequestHigherHttpVersionHandler>();
         builder.Services.AddTransient<HttpClientLoggingHandler>();
-
-
+        
         builder.Services.AddLocalization();
-
-        var supportedCultures = new[] { "cs", "en" };
-
         builder.Services.Configure<RequestLocalizationOptions>(options =>
         {
+            var supportedCultures = new[] { "cs", "en" };
+
             options.SetDefaultCulture("en");
             options.AddSupportedCultures(supportedCultures);
             options.AddSupportedUICultures(supportedCultures);
 
-            // use "Accept-Language" header
-            options.RequestCultureProviders.Insert(0, new AcceptLanguageHeaderRequestCultureProvider());
+            options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider()); // ?culture=cs
+            options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider()); // use "Accept-Language" header
         });
        
         builder.Services.Configure<SmtpServerEmailSenderOptions>(builder.Configuration.GetSection(nameof(SmtpServerEmailSender)));

@@ -37,7 +37,9 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 # Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
 WORKDIR /app
+RUN apk add --no-cache icu-libs # .NET localization requires icu-libs
 COPY --from=build /app/Web/publish .
 ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 EXPOSE 80
 ENTRYPOINT ["dotnet", "MrWatchdog.Web.dll"]

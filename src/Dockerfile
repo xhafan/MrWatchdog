@@ -2,8 +2,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /app
 
-# Install Node.js, npm and ICU libs (ICU - International Components for Unicode -> needed for .NET localization)
-RUN apk add --no-cache nodejs npm icu-libs
+# Install Node.js and npm
+RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
 COPY Core/*.csproj ./Core/

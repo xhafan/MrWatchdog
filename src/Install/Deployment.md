@@ -19,7 +19,7 @@
 	* Deploy `<destination>` again after initial setup: `kamal deploy -d <destination>`
 
 * After initial deployment, change Kamal proxy to listen on port 8080, HTTP only (no HTTPS).
-  The incoming traffic to the host is handled by Traefik installed on the host, which forwards 
+  The incoming traffic to the host is handled by Caddy reverse proxy installed on the host, which forwards 
   requests to Kamal proxy over HTTP on port 8080:
 	* `kamal proxy boot_config reset -d <destination>`
 	* `kamal proxy boot_config set --no-publish --docker-options="publish 127.0.0.1:8080:80" -d <destination>`

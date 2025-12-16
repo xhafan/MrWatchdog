@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -43,7 +44,7 @@ public class when_scraping_scraper_web_page_with_invalid_selector : BaseDatabase
         
         var handler = new ScrapeScraperWebPageDomainEventMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            httpClientFactory
+            new WebScraperChain([new HttpClientScraper(httpClientFactory)])
         );
 
         await handler.Handle(new ScraperWebPageScrapingDataUpdatedDomainEvent(_scraper.Id, _scraperWebPageId));

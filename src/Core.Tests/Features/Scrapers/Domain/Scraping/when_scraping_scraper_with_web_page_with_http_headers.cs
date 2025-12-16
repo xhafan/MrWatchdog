@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
@@ -38,7 +39,7 @@ public class when_scraping_scraper_with_web_page_with_http_headers : BaseTest
                 }, RequestHeaders: [("User-Agent", "Mozilla/5.0")]))
             .Build();
 
-        await _scraper.Scrape(httpClientFactory);
+        await _scraper.Scrape(new WebScraperChain([new HttpClientScraper(httpClientFactory)]));
     }
 
     [Test]

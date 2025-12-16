@@ -1,9 +1,10 @@
-﻿using System.Net;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
+using System.Net;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 
@@ -12,6 +13,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
 {
     private Scraper _scraper = null!;
     private HttpClientFactory _httpClientFactory = null!;
+    private WebScraperChain _webScraperChain = null!;
 
     [SetUp]
     public async Task Context()
@@ -26,16 +28,22 @@ public class when_scraping_scraper_with_network_error : BaseTest
                     StatusCode = HttpStatusCode.NotFound
                 }))
             .Build();
-        
-        await _scraper.Scrape(_httpClientFactory);
+        _webScraperChain = new WebScraperChain([new HttpClientScraper(_httpClientFactory)]);
+
+        await _scraper.Scrape(_webScraperChain);
     }
 
     [Test]
     public void scraper_web_page_scraping_error_message_is_set_after_first_failed_scraping()
     {
         var webPage = _scraper.WebPages.Single();
-        
-        webPage.ScrapingErrorMessage.ShouldBe("Error scraping web page, HTTP status code: 404 Not Found");
+
+        webPage.ScrapingErrorMessage.ShouldBe(
+            """
+            Scraping failed:
+            HttpClientScraper: Error scraping web page, HTTP status code: 404 Not Found
+            """
+        );
 
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBeNull();
@@ -56,7 +64,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
     [Test]
     public async Task scraper_web_page_scraping_failed_domain_event_is_raised_after_the_second_failed_scraping_attempt()
     {
-        await _scraper.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_webScraperChain);
 
         RaisedDomainEvents.ShouldContain(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
@@ -64,7 +72,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
     [Test]
     public async Task number_of_failed_scraping_attempts_before_the_next_alert_is_reset_after_the_second_failed_scraping_attempt()
     {
-        await _scraper.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_webScraperChain);
 
         _scraper.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
@@ -72,7 +80,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
     [Test]
     public async Task scraper_cannot_notify_about_failed_scraping_after_the_second_failed_scraping_attempt()
     {
-        await _scraper.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_webScraperChain);
 
         _scraper.CanNotifyAboutFailedScraping.ShouldBe(false);
     }
@@ -80,10 +88,10 @@ public class when_scraping_scraper_with_network_error : BaseTest
     [Test]
     public async Task scraping_for_the_third_time_does_not_raise_scraping_failed_domain_event_again()
     {
-        await _scraper.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_webScraperChain);
         RaisedDomainEvents.Clear();
         
-        await _scraper.Scrape(_httpClientFactory);
+        await _scraper.Scrape(_webScraperChain);
         
         RaisedDomainEvents.ShouldNotContain(new ScraperWebPageScrapingFailedDomainEvent(_scraper.Id));
     }
@@ -112,7 +120,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
                 }))
             .Build();
 
-        await _scraper.Scrape(successfulScrapingHttpClientFactory);
+        await _scraper.Scrape(new WebScraperChain([new HttpClientScraper(successfulScrapingHttpClientFactory)]));
 
         _scraper.WebPages.Single().NumberOfFailedScrapingAttemptsBeforeTheNextAlert.ShouldBe(0);
     }
@@ -157,7 +165,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
                     }))
                 .Build();
 
-            await _scraper.Scrape(httpClientFactory);
+            await _scraper.Scrape(new WebScraperChain([new HttpClientScraper(httpClientFactory)]));
         }
     }
 }

@@ -6,7 +6,7 @@ using MrWatchdog.Web.Features.Scrapers.Detail.Badges;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Badges;
 
 [TestFixture]
-public class when_viewing_scraper_detail_badges_for_scraper_with_requested_to_be_made_public : BaseDatabaseTest // todo: rename the file to when_viewing_scraper_detail_badges_for_requested_to_be_made_public_scraper
+public class when_viewing_scraper_detail_badges_for_requested_to_be_made_public_scraper : BaseDatabaseTest
 {
     private BadgesModel _model = null!;
     private Scraper _scraper = null!;

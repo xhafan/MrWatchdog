@@ -1,4 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.HttpClients;
@@ -17,7 +18,7 @@ public class when_scraping_scraper_with_web_page_without_url : BaseTest
 
         var httpClientFactory = new HttpClientFactoryBuilder().Build();
         
-        await _scraper.Scrape(httpClientFactory);
+        await _scraper.Scrape(new WebScraperChain([new HttpClientScraper(httpClientFactory)]));
     }
 
     [Test]

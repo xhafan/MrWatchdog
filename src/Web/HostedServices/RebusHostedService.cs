@@ -27,7 +27,9 @@ using Rebus.Retry.Simple;
 using Rebus.Serialization;
 using Rebus.Transport.InMem;
 using System.Data;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Services;
 
 namespace MrWatchdog.Web.HostedServices;
 
@@ -83,8 +85,20 @@ public class RebusHostedService(
                 .FromAssemblyContaining(typeof(SendDomainEventOverMessageBusDomainEventHandler<>))
                 .BasedOn(typeof(IDomainEventHandler<>))
                 .WithService.FirstInterface()
-                .Configure(x => x.LifestyleTransient())
+                .Configure(x => x.LifestyleTransient()),
+
+            Classes
+                .FromAssemblyContaining<IWebScraper>()
+                .BasedOn<IWebScraper>()
+                .WithService.FromInterface()
+                .LifestyleTransient(),
+
+            Component.For<IWebScraperChain>()
+                .ImplementedBy<WebScraperChain>()
+                .LifestyleTransient()
         );
+
+        _hostedServiceWindsorContainer.Kernel.Resolver.AddSubResolver(new CollectionResolver(_hostedServiceWindsorContainer.Kernel));
         
         _hostedServiceWindsorContainer.AutoRegisterHandlersFromAssemblyOf<CreateScraperCommandMessageHandler>();
         

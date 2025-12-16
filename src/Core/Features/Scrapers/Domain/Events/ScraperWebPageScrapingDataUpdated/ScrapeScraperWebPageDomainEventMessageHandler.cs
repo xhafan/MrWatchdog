@@ -1,11 +1,12 @@
-﻿using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using MrWatchdog.Core.Features.Scrapers.Services;
+using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 
 public class ScrapeScraperWebPageDomainEventMessageHandler(
     IRepository<Scraper> scraperRepository,
-    IHttpClientFactory httpClientFactory
+    IWebScraperChain webScraperChain
 ) 
     : IHandleMessages<ScraperWebPageScrapingDataUpdatedDomainEvent>
 {
@@ -15,7 +16,7 @@ public class ScrapeScraperWebPageDomainEventMessageHandler(
 
         await scraper.ScrapeWebPage(
             domainEvent.ScraperWebPageId,
-            httpClientFactory,
+            webScraperChain,
             canRaiseScrapingFailedDomainEvent: false
         );
     }

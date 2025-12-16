@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -42,7 +43,7 @@ public class when_scraping_scraper : BaseDatabaseTest
         
         var handler = new ScrapeScraperCommandMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            httpClientFactory
+            new WebScraperChain([new HttpClientScraper(httpClientFactory)])
         );
 
         await handler.Handle(new ScrapeScraperCommand(_scraper.Id));

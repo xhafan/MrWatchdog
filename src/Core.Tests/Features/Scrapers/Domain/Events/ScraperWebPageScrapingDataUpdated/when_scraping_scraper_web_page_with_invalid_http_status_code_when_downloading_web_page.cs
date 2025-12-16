@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -30,7 +31,7 @@ public class when_scraping_scraper_web_page_with_invalid_http_status_code_when_d
         
         var handler = new ScrapeScraperWebPageDomainEventMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            httpClientFactory
+            new WebScraperChain([new HttpClientScraper(httpClientFactory)])
         );
 
         await handler.Handle(new ScraperWebPageScrapingDataUpdatedDomainEvent(_scraper.Id, _scraperWebPageId));
@@ -42,7 +43,12 @@ public class when_scraping_scraper_web_page_with_invalid_http_status_code_when_d
         var webPage = _scraper.WebPages.Single();
         webPage.ScrapingResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("Error scraping web page, HTTP status code: 404 Not Found");
+        webPage.ScrapingErrorMessage.ShouldBe(
+            """
+            Scraping failed:
+            HttpClientScraper: Error scraping web page, HTTP status code: 404 Not Found
+            """
+        );
     }
     
     private void _BuildEntities()

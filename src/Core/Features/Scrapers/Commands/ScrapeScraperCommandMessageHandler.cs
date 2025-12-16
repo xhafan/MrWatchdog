@@ -1,4 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
@@ -6,7 +7,7 @@ namespace MrWatchdog.Core.Features.Scrapers.Commands;
 
 public class ScrapeScraperCommandMessageHandler(
     IRepository<Scraper> scraperRepository,
-    IHttpClientFactory httpClientFactory
+    IWebScraperChain webScraperChain
 ) 
     : IHandleMessages<ScrapeScraperCommand>
 {
@@ -14,6 +15,6 @@ public class ScrapeScraperCommandMessageHandler(
     {
         var scraper = await scraperRepository.LoadByIdAsync(command.ScraperId);
 
-        await scraper.Scrape(httpClientFactory);
+        await scraper.Scrape(webScraperChain);
     }
 }

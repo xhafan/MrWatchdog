@@ -6,6 +6,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -166,7 +167,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
         };
     }
 
-    public virtual async Task Scrape(IHttpClientFactory httpClientFactory)
+    public virtual async Task Scrape(IWebScraperChain webScraperChain)
     {
         var webPagesToScrape = _webPages.Where(x => !string.IsNullOrWhiteSpace(x.Url)).ToList();
         
@@ -176,7 +177,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
         {
             await ScrapeWebPage(
                 webPage.Id,
-                httpClientFactory,
+                webScraperChain,
                 canRaiseScrapingFailedDomainEvent: true
             );
         }
@@ -207,12 +208,12 @@ public class Scraper : VersionedEntity, IAggregateRoot
 
     public virtual async Task ScrapeWebPage(
         long scraperWebPageId, 
-        IHttpClientFactory httpClientFactory,
+        IWebScraperChain webScraperChain,
         bool canRaiseScrapingFailedDomainEvent
     )
     {
         var webPage = _GetWebPage(scraperWebPageId);
-        await webPage.Scrape(httpClientFactory, canRaiseScrapingFailedDomainEvent);
+        await webPage.Scrape(webScraperChain, canRaiseScrapingFailedDomainEvent);
     }
 
     public virtual void RequestToMakePublic()

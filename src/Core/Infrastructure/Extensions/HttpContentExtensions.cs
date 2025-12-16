@@ -14,7 +14,7 @@ public static class HttpContentExtensions
         var contentLength = content.Headers.ContentLength;
         if (contentLength > maxBytes)
         {
-            throw new InvalidOperationException(largeResponseErrorMessage);
+            throw new HttpResponseTooLargeException(largeResponseErrorMessage);
         }
 
         var encoding = GetEncodingFromHeaders(content);
@@ -35,7 +35,7 @@ public static class HttpContentExtensions
             totalBytes += encoding.GetByteCount(buffer.AsSpan(0, read));
             if (totalBytes > maxBytes)
             {
-                throw new InvalidOperationException(largeResponseErrorMessage);
+                throw new HttpResponseTooLargeException(largeResponseErrorMessage);
             }
 
             sb.Append(buffer, 0, read);

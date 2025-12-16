@@ -6,9 +6,9 @@ using Ganss.Xss;
 using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Extensions;
-using MrWatchdog.Core.Infrastructure.HttpClients;
 using Serilog;
 using System.Web;
 
@@ -235,43 +235,27 @@ public class ScraperWebPage : VersionedEntity
     }
     
     public virtual async Task Scrape(
-        IHttpClientFactory httpClientFactory,
+        IWebScraperChain webScraperChain,
         bool canRaiseScrapingFailedDomainEvent
-        )
+    )
     {
-        var httpClient = httpClientFactory.CreateClient(HttpClientConstants.HttpClientWithRetries);
+        Guard.Hope(!string.IsNullOrWhiteSpace(Url), "Url is not set.");
 
-        string? responseContent;
-        
-        try
+        var scrapeResult = await webScraperChain.Scrape(Url, _httpHeaders.Select(x => (x.Name, x.Value)).ToList());
+        if (!scrapeResult.Success)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, Url);
-            foreach (var httpHeader in _httpHeaders)
-            {
-                request.Headers.TryAddWithoutValidation(httpHeader.Name, httpHeader.Value);
-            }
-            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            Guard.Hope(scrapeResult.FailureReason != null, "Scrape result FailureReason is null.");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                SetScrapingErrorMessage(
-                    $"Error scraping web page, HTTP status code: {(int) response.StatusCode} {response.ReasonPhrase}",
-                    canRaiseScrapingFailedDomainEvent
-                );
-                return;
-            }
-            
-            responseContent = await response.Content.ReadAsStringWithLimitAsync(
-                ScrapingConstants.WebPageSizeLimitInMegaBytes,
-                $"Web page larger than {ScrapingConstants.WebPageSizeLimitInMegaBytes} MB."
-                );
-        }
-        catch (Exception ex)
-        {
-            SetScrapingErrorMessage(ex.Message, canRaiseScrapingFailedDomainEvent);
+            SetScrapingErrorMessage(
+                scrapeResult.FailureReason,
+                canRaiseScrapingFailedDomainEvent
+            );
             return;
         }
-        
+
+        var responseContent = scrapeResult.Content;
+        Guard.Hope(responseContent != null, "Response content is null.");
+
         List<HtmlNode> selectedHtmlNodes;
         try
         {

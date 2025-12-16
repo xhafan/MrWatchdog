@@ -1,11 +1,12 @@
-﻿using System.Net;
-using MrWatchdog.Core.Features.Scrapers.Commands;
+﻿using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.TestsShared.HttpClients;
+using System.Net;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.Scraping;
 
@@ -43,7 +44,7 @@ public class when_scraping_scraper_web_page : BaseDatabaseTest
         
         var handler = new ScrapeScraperWebPageCommandMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            httpClientFactory
+            new WebScraperChain([new HttpClientScraper(httpClientFactory)])
         );
 
         await handler.Handle(new ScrapeScraperWebPageCommand(_scraper.Id, _scraperWebPageId));

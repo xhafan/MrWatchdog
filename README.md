@@ -14,5 +14,5 @@ To run the solution locally, you need to setup user secrets first. See <a href="
 ## Hosting
 To host the app, see [Hosting-server-installation](src/Install/Hosting-server-installation.md).
 
-## Deployment#1 First version - 
+## Deployment
 To deploy the app to the hosting server, see [Deployment](src/Install/Deployment.md).

@@ -10,6 +10,7 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using Serilog;
 
@@ -136,7 +137,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyUserAboutNewScrapingResults(
-        IEmailSender emailSender,
+        ICoreBus bus,
         RuntimeOptions runtimeOptions
     )
     {
@@ -149,7 +150,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
         if (ReceiveNotification)
         {
-            await emailSender.SendEmail(
+            await bus.Send(new SendEmailCommand(
                 User.Email,
                 $"{mrWatchdogResource}: new results for {Scraper.Name}{searchTermSuffix}",
                 $"""
@@ -174,7 +175,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                  </body>
                  </html>
                  """
-            );
+            ));
 
             foreach (var scrapingResult in _scrapingResultsToNotifyAbout)
             {
@@ -196,13 +197,13 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyUserAboutWatchdogArchived(
-        IEmailSender emailSender
+        ICoreBus bus
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
         var watchdogName = $"{Scraper.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
 
-        await emailSender.SendEmail(
+        await bus.Send(new SendEmailCommand(
             User.Email,
             $"{mrWatchdogResource}: your watchdog {watchdogName} has been deleted",
             $"""
@@ -221,7 +222,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
              </body>
              </html>
              """
-        );
+        ));
     }
 
 }

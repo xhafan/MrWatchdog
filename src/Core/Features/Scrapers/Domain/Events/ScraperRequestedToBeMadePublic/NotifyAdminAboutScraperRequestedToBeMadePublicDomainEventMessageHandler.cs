@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
@@ -8,7 +9,7 @@ namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMa
 
 public class NotifyAdminAboutScraperRequestedToBeMadePublicDomainEventMessageHandler(
     IRepository<Scraper> scraperRepository,
-    IEmailSender emailSender,
+    ICoreBus bus,
     IOptions<RuntimeOptions> iRuntimeOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) 
@@ -19,7 +20,7 @@ public class NotifyAdminAboutScraperRequestedToBeMadePublicDomainEventMessageHan
         var scraper = await scraperRepository.LoadByIdAsync(domainEvent.ScraperId);
 
         await scraper.NotifyAdminAboutScraperRequestedToBeMadePublic(
-            emailSender,
+            bus,
             iRuntimeOptions.Value,
             iEmailAddressesOptions.Value
         );

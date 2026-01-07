@@ -2,7 +2,7 @@
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -19,7 +19,7 @@ public class when_notifying_user_about_new_scraping_results : BaseTest
     {
         _BuildEntities();
         
-        await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+        await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
     }
 
     [Test]

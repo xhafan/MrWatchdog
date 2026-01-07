@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Infrastructure.EmailSenders;
+﻿using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
@@ -6,7 +6,7 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 
 public class NotifyUserAboutWatchdogArchivedDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,
-    IEmailSender emailSender
+    ICoreBus bus
 ) 
     : IHandleMessages<WatchdogArchivedDomainEvent>
 {
@@ -14,6 +14,6 @@ public class NotifyUserAboutWatchdogArchivedDomainEventMessageHandler(
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdog.NotifyUserAboutWatchdogArchived(emailSender);
+        await watchdog.NotifyUserAboutWatchdogArchived(bus);
     }
 }

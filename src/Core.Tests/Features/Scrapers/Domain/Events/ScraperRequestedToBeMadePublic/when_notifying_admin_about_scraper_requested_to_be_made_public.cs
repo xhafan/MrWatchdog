@@ -4,6 +4,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -14,7 +15,7 @@ namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperRequested
 public class when_notifying_admin_about_scraper_requested_to_be_made_public : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private IOptions<EmailAddressesOptions> _emailAddressesOptions = null!;
 
     [SetUp]
@@ -22,13 +23,13 @@ public class when_notifying_admin_about_scraper_requested_to_be_made_public : Ba
     {
         _BuildEntities();
 
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
         
         _emailAddressesOptions = OptionsTestRetriever.Retrieve<EmailAddressesOptions>();
 
         var handler = new NotifyAdminAboutScraperRequestedToBeMadePublicDomainEventMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            _emailSender,
+            _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>(),
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>()
         );
@@ -39,14 +40,17 @@ public class when_notifying_admin_about_scraper_requested_to_be_made_public : Ba
     [Test]
     public void email_notification_about_new_scraping_results_is_sent_to_user()
     {
-        A.CallTo(() => _emailSender.SendEmail(
-                _emailAddressesOptions.Value.Admin,
-                A<string>.That.Matches(p => p.Contains("Epic Games store free game") && p.Contains("requested to be made public")),
-                A<string>.That.Matches(p => p.Contains("has been requested to be made public")
-                                            && p.Contains("Epic Games store free game")
-                )
-            ))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
+    }
+
+    private bool _MatchingCommand(SendEmailCommand command)
+    {
+        command.RecipientEmail.ShouldBe(_emailAddressesOptions.Value.Admin);
+        command.Subject.ShouldContain("Epic Games store free game");
+        command.Subject.ShouldContain("requested to be made public");
+        command.HtmlMessage.ShouldContain("has been requested to be made public");
+        command.HtmlMessage.ShouldContain("Epic Games store free game");
+        return true;
     }
     
     private void _BuildEntities()

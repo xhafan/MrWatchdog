@@ -2,7 +2,7 @@
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -48,7 +48,7 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
         
         _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1"]);
         _watchdog.Refresh();
-        await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+        await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
 
         _scraper.SetScrapingResults(scraperWebPage.Id, []);
         _watchdog.Refresh();

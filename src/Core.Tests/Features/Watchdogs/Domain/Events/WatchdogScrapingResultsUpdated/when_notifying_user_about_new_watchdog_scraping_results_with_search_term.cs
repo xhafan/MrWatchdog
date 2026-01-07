@@ -5,6 +5,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -17,7 +18,7 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_search
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
     private Watchdog _watchdog = null!;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private User _user = null!;
 
     [SetUp]
@@ -25,11 +26,11 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_search
     {
         _BuildEntities();
 
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
         
         var handler = new NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
-            _emailSender,
+            _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
@@ -39,24 +40,33 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_search
     [Test]
     public void email_notification_about_new_scraping_results_is_sent_to_user()
     {
-        A.CallTo(() => _emailSender.SendEmail(
-                _user.Email,
-                A<string>.That.Matches(p => p.Contains("new results for") && p.Contains("Epic Games store free game - Ma")),
-                A<string>.That.Matches(p => p.Contains("New results have been found for")
-                                            && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}">
-                                                           """)
-                                            && p.Contains(">Epic Games store free game<")
-                                            && p.Contains("> - Ma<")
-                                            && p.Contains("""
-                                                          <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
-                                                          """)
-                                            && p.Contains("""
-                                                          <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
-                                                          """)
-                )
-            ))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
+    }
+
+    private bool _MatchingCommand(SendEmailCommand command)
+    {
+        command.RecipientEmail.ShouldBe( _user.Email);
+        command.Subject.ShouldContain("new results for");
+        command.Subject.ShouldContain("Epic Games store free game - Ma");
+        command.HtmlMessage.ShouldContain("New results have been found for");
+        command.HtmlMessage.ShouldContain(
+            $"""
+             <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}">
+             """
+        );
+        command.HtmlMessage.ShouldContain(">Epic Games store free game<");
+        command.HtmlMessage.ShouldContain("> - Ma<");
+        command.HtmlMessage.ShouldContain(
+            """
+            <a href="https://store.epicgames.com/en-US/p/machinarium-5e6c71" target="_blank">Machinarium</a>
+            """
+        );
+        command.HtmlMessage.ShouldContain(
+            """
+            <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
+            """
+        );
+        return true;
     }
     
     private void _BuildEntities()

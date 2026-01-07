@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
@@ -8,7 +8,7 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResul
 
 public class NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,
-    IEmailSender emailSender,
+    ICoreBus bus,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
     : IHandleMessages<WatchdogScrapingResultsUpdatedDomainEvent>
@@ -17,6 +17,6 @@ public class NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
     {
         var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
-        await watchdog.NotifyUserAboutNewScrapingResults(emailSender, iRuntimeOptions.Value);
+        await watchdog.NotifyUserAboutNewScrapingResults(bus, iRuntimeOptions.Value);
     }
 }

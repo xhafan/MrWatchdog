@@ -4,8 +4,9 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -17,7 +18,7 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_notifi
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
     private Watchdog _watchdog = null!;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private User _user = null!;
 
     [SetUp]
@@ -25,11 +26,11 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_notifi
     {
         _BuildEntities();
 
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
         
         var handler = new NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
-            _emailSender,
+            _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
@@ -39,12 +40,7 @@ public class when_notifying_user_about_new_watchdog_scraping_results_with_notifi
     [Test]
     public void email_notification_about_new_scraping_results_is_not_sent_to_user()
     {
-        A.CallTo(() => _emailSender.SendEmail(
-                _user.Email,
-                A<string>._,
-                A<string>._
-            ))
-            .MustNotHaveHappened();
+        A.CallTo(() => _bus.Send(A<Command>._)).MustNotHaveHappened();
     }
 
     [Test]

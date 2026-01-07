@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
@@ -10,7 +11,7 @@ namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScraping
 
 public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
     IRepository<Scraper> scraperRepository,
-    IEmailSender emailSender,
+    ICoreBus bus,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
     : IHandleMessages<ScraperWebPageScrapingFailedDomainEvent>
@@ -25,7 +26,7 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
         var mrWatchdogResource = Resource.MrWatchdog;
         var scraperDetailUrl = $"{iRuntimeOptions.Value.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(scraper.Id)}";
         
-        await emailSender.SendEmail(
+        await bus.Send(new SendEmailCommand(
             scraper.User.Email,
             $"{mrWatchdogResource}: web scraping failed for the scraper {scraper.Name}",
             $"""
@@ -51,6 +52,6 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
              </body>
              </html>
              """
-        );
+        ));
     }
 }

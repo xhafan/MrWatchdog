@@ -4,6 +4,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -15,7 +16,7 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
 {
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private User _user = null!;
 
     [SetUp]
@@ -23,11 +24,11 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
     {
         _BuildEntities();
 
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
         
         var handler = new NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
             new NhibernateRepository<Scraper>(UnitOfWork),
-            _emailSender,
+            _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
@@ -37,22 +38,31 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
     [Test]
     public void email_notification_about_scraping_errors_is_sent_to_user()
     {
-        A.CallTo(() => _emailSender.SendEmail(
-                _user.Email,
-                A<string>.That.Matches(p => p.Contains("web scraping failed") && p.Contains("Epic Games store free game")),
-                A<string>.That.Matches(p => p.Contains("Web scraping failed")
-                                            && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}">Epic Games store free game</a>
-                                                           """)
-                                            && p.Contains($"""
-                                                           <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}#scraper_web_page_{_scraperWebPageId}">www.pcgamer.com/epic-games-store-free-games-list/</a>
-                                                           """)
-                                            && p.Contains("""
-                                                           Network error
-                                                           """)
-                )
-            ))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
+    }
+
+    private bool _MatchingCommand(SendEmailCommand command)
+    {
+        command.RecipientEmail.ShouldBe(_user.Email);
+        command.Subject.ShouldContain("web scraping failed");
+        command.Subject.ShouldContain("Epic Games store free game");
+        command.HtmlMessage.ShouldContain("Web scraping failed");
+        command.HtmlMessage.ShouldContain(
+            $"""
+             <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}">Epic Games store free game</a>
+             """
+        );
+        command.HtmlMessage.ShouldContain(
+            $"""
+             <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}#scraper_web_page_{_scraperWebPageId}">www.pcgamer.com/epic-games-store-free-games-list/</a>
+             """
+        );
+        command.HtmlMessage.ShouldContain(
+            """
+            Network error
+            """
+        );
+        return true;
     }
     
     private void _BuildEntities()

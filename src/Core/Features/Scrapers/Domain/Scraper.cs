@@ -11,6 +11,7 @@ using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
@@ -251,13 +252,13 @@ public class Scraper : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyAdminAboutScraperRequestedToBeMadePublic(
-        IEmailSender emailSender,
+        ICoreBus bus,
         RuntimeOptions runtimeOptions,
         EmailAddressesOptions emailAddressesOptions
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
-        await emailSender.SendEmail(
+        await bus.Send(new SendEmailCommand(
             emailAddressesOptions.Admin,
             $"{mrWatchdogResource}: scraper {Name} requested to be made public",
             $"""
@@ -273,7 +274,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
              </body>
              </html>
              """
-        );
+        ));
     }
 
     public virtual void DisableNotifyingAboutFailedScraping()

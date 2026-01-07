@@ -6,6 +6,7 @@ using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 
@@ -16,7 +17,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
 {
     private readonly string _email = $"user+{Guid.NewGuid()}@email.com";
     private IOptions<JwtOptions> _iJwtOptions = null!;
-    private IEmailSender _emailSender = null!;
+    private ICoreBus _bus = null!;
     private LoginToken? _loginToken;
 
     [SetUp]
@@ -24,11 +25,11 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
     {
         _iJwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>();
         
-        _emailSender = A.Fake<IEmailSender>();
+        _bus = A.Fake<ICoreBus>();
         
         var handler = new SendLoginLinkToUserCommandMessageHandler(
             new LoginTokenRepository(UnitOfWork),
-            _emailSender,
+            _bus,
             _iJwtOptions,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
@@ -56,14 +57,17 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
     [Test]
     public void login_link_email_is_sent()
     {
+        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
+    }
+
+    private bool _MatchingCommand(SendEmailCommand command)
+    {
         _loginToken.ShouldNotBeNull();
-        A.CallTo(() => _emailSender.SendEmail(
-                _email,
-                A<string>.That.Matches(p => p.Contains("login link")),
-                A<string>.That.Matches(p => p.Contains("log in")
-                                            && p.Contains($"https://mrwatchdog_test/Account/ConfirmLogin?token={_loginToken.Token}")
-                )
-            ))
-            .MustHaveHappenedOnceExactly();
+
+        command.RecipientEmail.ShouldBe(_email);
+        command.Subject.ShouldContain("login link");
+        command.HtmlMessage.ShouldContain("log in");
+        command.HtmlMessage.ShouldContain($"https://mrwatchdog_test/Account/ConfirmLogin?token={_loginToken.Token}");
+        return true;
     }
 }

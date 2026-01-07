@@ -3,7 +3,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -56,7 +56,7 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
         async Task _simulateNotifyingUserAboutTheSameScrapingResultLongTimeAgo()
         {
             Clock.CurrentDateTimeProvider.Value = () => DateTime.Now.AddDays(-31);
-            await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<IEmailSender>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+            await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
             Clock.CurrentDateTimeProvider.Value = null;
         }
 

@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 
 public class SendLoginLinkToUserCommandMessageHandler(
     ILoginTokenRepository loginTokenRepository,
-    IEmailSender emailSender,
+    ICoreBus bus,
     IOptions<JwtOptions> iJwtOptions,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
@@ -32,7 +33,7 @@ public class SendLoginLinkToUserCommandMessageHandler(
         var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(tokenParam)}";
 
         var mrWatchdogResource = Resource.MrWatchdog;
-        await emailSender.SendEmail(
+        await bus.Send(new SendEmailCommand(
             command.Email,
             $"{mrWatchdogResource} login link",
             $"""
@@ -50,6 +51,6 @@ public class SendLoginLinkToUserCommandMessageHandler(
               </body>
               </html>
               """
-        );
+        ));
     }
 }

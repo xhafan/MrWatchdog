@@ -56,7 +56,13 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         var mailServer = mxRecords.First().Exchange.Value;
         
         using var smtp = new SmtpClient();
-        
+        var ehloDomainName = iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.EhloDomainName;
+        if (!string.IsNullOrWhiteSpace(ehloDomainName))
+        {
+            logger?.LogInformation("Setting EHLO domain name: {ehloDomainName}", ehloDomainName);
+            smtp.LocalDomain = ehloDomainName;
+        }
+
         logger?.LogInformation("Mail server: {mailServer}", mailServer);
 
         await smtp.ConnectAsync(mailServer, 25, SecureSocketOptions.StartTlsWhenAvailable);

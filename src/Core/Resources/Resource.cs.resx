@@ -144,13 +144,13 @@
 		<value>Veřejné scrapery</value>
 	</data>
 	<data name="PublicScrapersDescription" xml:space="preserve">
-		<value>Procházejte veřejné scrapery vytvořené ostatními uživateli a Vámi.</value>
+		<value>Procházejte veřejné scrapery pro vytvoření hlídacího psa.</value>
 	</data>
 	<data name="MyScrapers" xml:space="preserve">
 		<value>Moje scrapery</value>
 	</data>
 	<data name="MyScrapersDescription" xml:space="preserve">
-		<value>Procházejte scrapery, které jste vytvořili Vy.</value>
+		<value>Procházejte scrapery pro vytvoření hlídacího psa.</value>
 	</data>
 	<data name="MyScraper" xml:space="preserve">
 		<value>Můj scraper</value>

@@ -257,13 +257,13 @@
 	  <value>Public scrapers</value>
   </data>
   <data name="PublicScrapersDescription" xml:space="preserve">
-	  <value>Browse public scrapers created by other users and you.</value>
+	  <value>Browse public scrapers to create a watchdog.</value>
   </data>
   <data name="MyScrapers" xml:space="preserve">
 	  <value>My scrapers</value>
   </data>
   <data name="MyScrapersDescription" xml:space="preserve">
-	  <value>Browse scrapers created by you.</value>
+	  <value>Browse your scrapers to create a watchdog.</value>
   </data>
   <data name="MyScraper" xml:space="preserve">
 	  <value>My scraper</value>

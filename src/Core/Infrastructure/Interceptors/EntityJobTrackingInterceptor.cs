@@ -1,5 +1,6 @@
 ﻿using CoreDdd.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
+using MrWatchdog.Core.Infrastructure.DataProtections;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using NHibernate;
 using NHibernate.Type;
@@ -27,7 +28,8 @@ public class EntityJobTrackingInterceptor : EmptyInterceptor
     {
         return entity is not Job 
                && entity is not JobAffectedEntity
-               && entity is not JobHandlingAttempt;
+               && entity is not JobHandlingAttempt
+               && entity is not DataProtectionKey;
     }    
 
     public override bool OnLoad(
@@ -48,6 +50,7 @@ public class EntityJobTrackingInterceptor : EmptyInterceptor
     private bool _IsLoadedAggregateRootEntityToTrack(object entity)
     {
         return entity is not Job
+               && entity is not DataProtectionKey
                && entity is IAggregateRoot;
     }    
 

@@ -53,6 +53,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi;
 
 namespace MrWatchdog.Web;
@@ -125,7 +126,8 @@ public class Program
         }
 
         builder.Services.AddCoreDdd();
-        builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>(_ => new NhibernateConfigurator(connectionString));
+        var nhibernateConfigurator = new NhibernateConfigurator(connectionString);
+        builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>(_ => nhibernateConfigurator);
         builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
         builder.Services.AddSingleton<ICoreBus, CoreBus>();
         
@@ -312,6 +314,13 @@ public class Program
         {
             options.EnableForHttps = true;
         });
+
+        // https://nicolas.guelpa.me/blog/2017/01/11/dotnet-core-data-protection-keys-repository.html
+        builder.Services.AddDataProtection()
+            .AddKeyManagementOptions(options =>
+            {
+                options.XmlRepository = new DataProtectionKeyXmlRepository(nhibernateConfigurator);
+            });
 
         var reCaptchaConfigurationSection = builder.Configuration.GetSection("ReCaptcha");
         builder.Services.AddReCaptcha(reCaptchaConfigurationSection);        

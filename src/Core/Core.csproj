@@ -17,27 +17,27 @@
     <PackageReference Include="DatabaseBuilder" Version="1.2.5" />
     <PackageReference Include="DnsClient" Version="1.8.0" />
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
-    <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+    <PackageReference Include="HtmlSanitizer" Version="9.0.889" />
     <PackageReference Include="MailKit" Version="4.14.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
     <PackageReference Include="NHibernate" Version="5.6.0" />
-    <PackageReference Include="Npgsql" Version="9.0.4" />
-    <PackageReference Include="Rebus" Version="8.8.0" />
+    <PackageReference Include="Npgsql" Version="10.0.1" />
+    <PackageReference Include="Rebus" Version="8.9.0" />
     <PackageReference Include="Rebus.PostgreSql" Version="9.1.1" />
-    <PackageReference Include="Rebus.RabbitMq" Version="10.0.1" />
-    <PackageReference Include="Reinforced.Typings" Version="1.6.5" />
-    <PackageReference Include="Serilog" Version="4.2.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.1" />
+    <PackageReference Include="Rebus.RabbitMq" Version="10.1.0" />
+    <PackageReference Include="Reinforced.Typings" Version="1.6.7" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-     <PackageReference Include="NHibernateProfiler.Appender" Version="6.0.6048" />
+     <PackageReference Include="NHibernateProfiler.Appender" Version="6.0.6049" />
   </ItemGroup>
 
   <ItemGroup>

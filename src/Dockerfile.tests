@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /app
 
 # Install Node.js and npm
@@ -51,7 +51,7 @@ COPY Web.Tests/. ./Web.Tests/
 RUN dotnet build
 
 # ---- Runtime container: runs the tests ----
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 WORKDIR /app
 COPY --from=build /app .
 

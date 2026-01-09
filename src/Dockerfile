@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /app
 
 # Install Node.js and npm
@@ -35,7 +35,7 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 RUN apk add --no-cache icu-libs # .NET localization requires icu-libs
 COPY --from=build /app/Web/publish .

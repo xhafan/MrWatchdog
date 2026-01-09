@@ -1,4 +1,4 @@
-﻿using CoreDdd.Domain.Events;
+using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
 using Fizzler.Systems.HtmlAgilityPack;
@@ -253,8 +253,10 @@ public class ScraperWebPage : VersionedEntity
             return;
         }
 
-        var responseContent = scrapeResult.Content;
+		var responseContent = scrapeResult.Content;
         Guard.Hope(responseContent != null, "Response content is null.");
+        
+        responseContent = _ProcessAbsolutePathLinks(responseContent);
 
         List<HtmlNode> selectedHtmlNodes;
         try
@@ -293,9 +295,39 @@ public class ScraperWebPage : VersionedEntity
         IsEnabled = true;
     }
 
+	private string _ProcessAbsolutePathLinks(string htmlContent) // Does not handle relative path links, e.g. <a href="relative/path">Relative path</a>
+    {
+        if (string.IsNullOrWhiteSpace(htmlContent) || string.IsNullOrWhiteSpace(Url))
+            return htmlContent;
+
+        var uri = new Uri(Url);
+        var baseUrl  = $"{uri.Scheme}://{uri.Host}";
+        
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(htmlContent);
+
+        var linkNodes = htmlDoc.DocumentNode.SelectNodes("//a[@href] | //img[@src]");
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (linkNodes == null) return htmlContent;
+
+        foreach (var node in linkNodes)
+        {
+            var attributeName = node.Name == "a" ? "href" : "src";
+            var attribute = node.Attributes[attributeName];
+            var attributeValue = attribute.Value;
+            
+            // Only convert URLs that start with "/" but not "//" (protocol-relative)
+            if (attributeValue.StartsWith("/") && !attributeValue.StartsWith("//"))
+            {
+                attribute.Value = baseUrl + attributeValue;
+            }
+        }
+            
+        return htmlDoc.DocumentNode.OuterHtml;
+    }
+
     private void _Disable()
     {
         IsEnabled = false;
     }
-
 }

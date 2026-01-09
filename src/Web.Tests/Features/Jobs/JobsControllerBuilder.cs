@@ -12,17 +12,19 @@ public class JobsControllerBuilder(NhibernateUnitOfWork unitOfWork)
     public JobsController Build()
     {
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        
+
+        var jobRepository = new JobRepository(unitOfWork);
         queryHandlerFactory.RegisterQueryHandler(new GetJobQueryHandler(
             unitOfWork,
-            new JobRepository(unitOfWork)
+            jobRepository
         ));
         queryHandlerFactory.RegisterQueryHandler(new GetRelatedDomainEventJobQueryHandler(
             unitOfWork
         ));        
         
         return new JobsController(
-            new QueryExecutor(queryHandlerFactory)
+            new QueryExecutor(queryHandlerFactory),
+            jobRepository
         );
     }
 }

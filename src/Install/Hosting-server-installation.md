@@ -39,6 +39,10 @@
 	        dns-nameservers 2001:4860:4860::8888 2001:4860:4860::8844
         ```
 	    restart networking: `rc-service networking restart`, and configure SFP1 TXT `ip4` and `ip6` record at your domain registrar.
+	* Synchronize time via NTP
+	  	* `apk add openntpd`
+        * `rc-update add openntpd`
+        * `service openntpd start`
 	* Install docker: 
 		* `nano /etc/apk/repositories` - uncomment line http://dl-cdn.alpinelinux.org/alpine/v3.22/community
 		* `apk add docker`

@@ -15,7 +15,7 @@ public class KickOffDueScrapersScrapingHostedService(
     ILogger<KickOffDueScrapersScrapingHostedService> logger
 ) : BackgroundService
 {
-    private const int ScrapingIntervalInSeconds = ScrapingConstants.ScrapingIntervalInSeconds;
+    private const int ScrapingIntervalInSeconds = ScrapingConstants.MinimumScrapingIntervalInSeconds;
 
     private IEnumerable<long>? _scraperIdsToScrape; // If null, all scrapers are considered for scraping
 

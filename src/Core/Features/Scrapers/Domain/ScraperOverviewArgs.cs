@@ -18,7 +18,7 @@ public record ScraperOverviewArgs
     [Display(Name = nameof(Resource.Description), ResourceType = typeof(Resource))]
     public required string? Description { get; set; }
 
-    [Range(ScrapingConstants.ScrapingIntervalInSeconds, int.MaxValue)]
+    [Range(ScrapingConstants.MinimumScrapingIntervalInSeconds, int.MaxValue)]
     [Display(Name = nameof(Resource.ScrapingIntervalInSeconds), ResourceType = typeof(Resource))]
     public required int ScrapingIntervalInSeconds { get; set; }
     

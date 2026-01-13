@@ -85,16 +85,15 @@ public class when_handling_failed_message
     {
         command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.BackendErrors);
         
-        command.Subject.ShouldContain("Test job");
-        command.Subject.ShouldContain("failed");
+        command.Subject.ShouldBe("Job ArchiveScraperCommand failed");
         
-        command.HtmlMessage.ShouldContain("Test job");
-        command.HtmlMessage.ShouldContain("failed");
+        command.HtmlMessage.ShouldContain("Job");
         command.HtmlMessage.ShouldContain(
             $"""
              <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveScraperCommand</a>
              """
         );
+        command.HtmlMessage.ShouldContain("failed");
         return true;
     }
 }

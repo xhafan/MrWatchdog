@@ -36,10 +36,9 @@ public class ReportFailedMessageErrorHandler(
 
         await bus.Send(new SendEmailCommand(
             iEmailAddressesOptions.Value.BackendErrors,
-            Subject: $"{iRuntimeOptions.Value.Environment} job {failedMessageTypeName} failed",
+            Subject: $"Job {failedMessageTypeName} failed",
             HtmlMessage: $"""
-                          {iRuntimeOptions.Value.Environment} job <a href="{iRuntimeOptions.Value.Url}{JobUrlConstants.GetJobUrlTemplate.WithJobGuid(jobGuid)}">{failedMessageTypeName}</a> 
-                          failed.
+                          Job <a href="{iRuntimeOptions.Value.Url}{JobUrlConstants.GetJobUrlTemplate.WithJobGuid(jobGuid)}">{failedMessageTypeName}</a> failed.
                           """
         ));
     }

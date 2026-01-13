@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
@@ -35,8 +34,7 @@ public class when_logging_error
             _logger,
             iLoggingOptions,
             _bus,
-            _iEmailAddressesOptions,
-            OptionsTestRetriever.Retrieve<RuntimeOptions>()
+            _iEmailAddressesOptions
         )
         {
             ControllerContext = new ControllerContext(new ActionContext(
@@ -65,7 +63,7 @@ public class when_logging_error
         command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.FrontendErrors);
         command.Subject.ShouldBe(
             """
-            Test JS error: {"message":"Scraper web page name is missing.","name":"Error","source"
+            JS error: {"message":"Scraper web page name is missing.","name":"Error","source"
             """
         );
         command.HtmlMessage.ShouldContain("RequestId:");

@@ -1,11 +1,18 @@
-﻿using Rebus.Handlers;
+﻿using Microsoft.Extensions.Hosting;
+using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
-public class SendEmailCommandMessageHandler(IEmailSender emailSender) : IHandleMessages<SendEmailCommand>
+public class SendEmailCommandMessageHandler(
+    IEmailSender emailSender,
+    IHostEnvironment environment
+) : IHandleMessages<SendEmailCommand>
 {
     public async Task Handle(SendEmailCommand command)
     {
-        await emailSender.SendEmail(command.RecipientEmail, command.Subject, command.HtmlMessage);
+        var subject = environment.IsProduction() 
+            ? command.Subject
+            : $"({environment.EnvironmentName}) {command.Subject}";
+        await emailSender.SendEmail(command.RecipientEmail, subject, command.HtmlMessage);
     }
 }

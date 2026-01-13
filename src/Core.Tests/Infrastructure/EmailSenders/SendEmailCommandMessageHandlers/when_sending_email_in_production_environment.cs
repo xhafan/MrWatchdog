@@ -1,11 +1,12 @@
 ﻿using FakeItEasy;
+using Microsoft.Extensions.Hosting;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.SendEmailCommandMessageHandlers;
 
 [TestFixture]
-public class when_sending_email : BaseDatabaseTest
+public class when_sending_email_in_production_environment : BaseDatabaseTest
 {
     private IEmailSender _emailSender = null!;
 
@@ -13,7 +14,11 @@ public class when_sending_email : BaseDatabaseTest
     public async Task Context()
     {
         _emailSender = A.Fake<IEmailSender>();
-        var handler = new SendEmailCommandMessageHandler(_emailSender);
+
+        var hostEnvironment = A.Fake<IHostEnvironment>();
+        A.CallTo(() => hostEnvironment.EnvironmentName).Returns(Environments.Production);
+
+        var handler = new SendEmailCommandMessageHandler(_emailSender, hostEnvironment);
 
         await handler.Handle(new SendEmailCommand("recipient@email.com", "subject", "html message"));
     }
@@ -28,4 +33,6 @@ public class when_sending_email : BaseDatabaseTest
             ))
             .MustHaveHappenedOnceExactly();
     }
+
+
 }

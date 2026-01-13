@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
@@ -18,8 +17,7 @@ public class LogsController(
     ILogger<LogsController> logger,
     IOptions<LoggingOptions> iLoggingOptions,
     ICoreBus bus,
-    IOptions<EmailAddressesOptions> iEmailAddressesOptions,
-    IOptions<RuntimeOptions> iRuntimeOptions
+    IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) : ControllerBase
 {
     [HttpPost]
@@ -50,7 +48,7 @@ public class LogsController(
 
         await bus.Send(new SendEmailCommand(
             iEmailAddressesOptions.Value.FrontendErrors,
-            $"{iRuntimeOptions.Value.Environment} {safeMessage[..Math.Min(80, safeMessage.Length)]}",
+            $"{safeMessage[..Math.Min(80, safeMessage.Length)]}",
             HtmlMessage: $"""
                           RequestId: {HttpContext.TraceIdentifier}<br/>
                           TimeStamp: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff} UTC<br/>

@@ -3,6 +3,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreDdd.Queries;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Jobs.Queries;
@@ -69,7 +70,10 @@ public static class WindsorContainerRegistrator
                 .Instance(mainWindsorContainer.Resolve<IHttpClientFactory>()),
             
             Component.For(typeof(IOptions<>))
-                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(IOptions<>).MakeGenericType(creationContext.GenericArguments[0])))
+                .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(IOptions<>).MakeGenericType(creationContext.GenericArguments[0]))),
+
+            Component.For<IHostEnvironment>()
+                .Instance(mainWindsorContainer.Resolve<IHostEnvironment>())
         );
     }
 }

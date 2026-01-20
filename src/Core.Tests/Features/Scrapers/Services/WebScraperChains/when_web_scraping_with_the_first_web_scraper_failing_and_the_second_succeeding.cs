@@ -23,7 +23,7 @@ public class when_web_scraping_with_the_first_web_scraper_failing_and_the_second
 
         var webScraperChain = new WebScraperChain([
             new HttpClientScraper(httpClientFactory),
-            new CurlScraper()
+            new HttpClientScraper(new HttpClientFactory())
         ]);
 
         _scrapeResult = await webScraperChain.Scrape(

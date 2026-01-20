@@ -51,8 +51,7 @@ RUN apk add --no-cache \
     nodejs \
     xvfb \
     dbus \
-    mesa-gl \
-    curl
+    mesa-gl
 
 # Tell Playwright to use system Node
 ENV PLAYWRIGHT_NODEJS_PATH=/usr/bin/node

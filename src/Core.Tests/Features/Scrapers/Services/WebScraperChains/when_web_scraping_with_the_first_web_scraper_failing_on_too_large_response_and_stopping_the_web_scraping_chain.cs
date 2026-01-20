@@ -30,7 +30,7 @@ public class when_web_scraping_with_the_first_web_scraper_failing_on_too_large_r
 
         var webScraperChain = new WebScraperChain([
             new HttpClientScraper(httpClientFactory),
-            new CurlScraper()
+            new HttpClientScraper(httpClientFactory)
         ]);
 
         _scrapeResult = await webScraperChain.Scrape(

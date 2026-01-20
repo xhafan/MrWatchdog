@@ -29,11 +29,11 @@ public class WebScraperChain(
             result = await scraper.Scrape(url, httpHeaders);
             if (result.Success)
             {
-                logger?.LogInformation("{scraperType} successfully scraped: {Url}", scraper.GetType().Name, url);
+                logger?.LogInformation("{scraperType} successfully scraped: {Url}, HTTP status code {HttpStatusCode}", scraper.GetType().Name, url, result.HttpStatusCode);
                 return result;
             }
 
-            logger?.LogInformation("{scraperType} failed scraping: {Url}", scraper.GetType().Name, url);
+            logger?.LogInformation("{scraperType} failed scraping: {Url}, HTTP status code {HttpStatusCode}", scraper.GetType().Name, url, result.HttpStatusCode);
 
             Guard.Hope(result.FailureReason != null, "Scrape result FailureReason is null.");
             failureReasons.Add($"{scraper.GetType().Name}: {result.FailureReason}");

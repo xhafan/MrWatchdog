@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace MrWatchdog.Core.Features.Scrapers.Services;
 
-public class CurlScraper : IWebScraper
+public class CurlScraper(ILogger<CurlScraper>? logger = null) : IWebScraper // todo: implement response size check
 {
     public int Priority => 20;
+    public bool IsBrowserRenderedHtmlScrapingSupported => false;
 
     public async Task<ScrapeResult> Scrape(string url, ICollection<(string Name, string Value)>? httpHeaders)
     {
@@ -34,7 +36,9 @@ public class CurlScraper : IWebScraper
         var splitIndex = stdout.LastIndexOf("\nStatus: ", StringComparison.Ordinal);
         if (splitIndex < 0)
         {
-            return ScrapeResult.Failed($"Unable to parse curl output. stderr={stderr}");
+            var failureReason = $"Unable to parse curl output. stderr={stderr}";
+            logger?.LogError(failureReason);
+            return ScrapeResult.Failed(failureReason);
         }
 
         var html = stdout[..splitIndex];
@@ -42,12 +46,17 @@ public class CurlScraper : IWebScraper
 
         if (!int.TryParse(statusPart, out var statusCode))
         {
-            return ScrapeResult.Failed($"Invalid status code from curl: {statusPart}");
+            var failureReason = $"Invalid status code from curl: {statusPart}";
+            logger?.LogError(failureReason);
+            return ScrapeResult.Failed(failureReason);
         }
 
         return statusCode >= 200 && statusCode < 300
-            ? ScrapeResult.Succeeded(html)
-            : ScrapeResult.Failed($"Status code {statusCode}; {(stderr.Length > 0 ? stderr.Trim() : html)}");
+            ? ScrapeResult.Succeeded(html, httpStatusCode: statusCode)
+            : ScrapeResult.Failed(
+                $"Status code {statusCode}; {(stderr.Length > 0 ? stderr.Trim() : html)}",
+                httpStatusCode: statusCode
+            );
     }
 
     private string _BuildCurlArguments(

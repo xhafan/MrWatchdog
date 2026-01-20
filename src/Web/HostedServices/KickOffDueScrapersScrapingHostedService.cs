@@ -51,7 +51,7 @@ public class KickOffDueScrapersScrapingHostedService(
                           SELECT
                               {s.*}
                           FROM "Scraper" s
-                          WHERE "NextScrapingOn" <= :utcNow or "NextScrapingOn" is null
+                          WHERE ("NextScrapingOn" <= :utcNow or "NextScrapingOn" is null)
                           and s."IsArchived" = false
                           {{(_scraperIdsToScrape == null
                               ? ""

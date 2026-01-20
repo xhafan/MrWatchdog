@@ -27,6 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.57.0" />
     <PackageReference Include="NHibernate" Version="5.6.0" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
     <PackageReference Include="Rebus" Version="8.9.0" />

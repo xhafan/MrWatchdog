@@ -19,6 +19,7 @@ public class when_executing_scraper_scraping_scheduler_hosted_service : BaseData
     private Scraper _scraperWithNextScrapingOnSetInTheFarPast = null!;
     private Scraper _scraperWithNextScrapingOnSetInTheFuture = null!;
     private Scraper _archivedScraperWithoutNextScrapingOnSet = null!;
+    private Scraper _archivedScraperWithNextScrapingOnSetInThePast = null!;
     private ICoreBus _bus = null!;
 
     [SetUp]
@@ -86,9 +87,15 @@ public class when_executing_scraper_scraping_scheduler_hosted_service : BaseData
     }
     
     [Test]
-    public void archived_scraper_does_not_have_scraping_scheduled()
+    public void archived_scraper_without_next_scraping_set_does_not_have_scraping_scheduled()
     {
         A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_archivedScraperWithoutNextScrapingOnSet.Id))).MustNotHaveHappened();
+    }
+
+    [Test]
+    public void archived_scraper_with_next_scraping_set_in_the_past_does_not_have_scraping_scheduled()
+    {
+        A.CallTo(() => _bus.Send(new ScrapeScraperCommand(_archivedScraperWithNextScrapingOnSetInThePast.Id))).MustNotHaveHappened();
     }
 
     [Test]
@@ -142,6 +149,13 @@ public class when_executing_scraper_scraping_scheduler_hosted_service : BaseData
                     .WithScrapingIntervalInSeconds(60)
                     .Build();
                 _archivedScraperWithoutNextScrapingOnSet.Archive();
+
+                _archivedScraperWithNextScrapingOnSetInThePast = new ScraperBuilder(newUnitOfWork)
+                    .WithScrapingIntervalInSeconds(60)
+                    .WithNextScrapingOn(DateTime.UtcNow.AddSeconds(-120))
+                    .Build();
+                _archivedScraperWithoutNextScrapingOnSet.Archive();
+
             }
         );
     }

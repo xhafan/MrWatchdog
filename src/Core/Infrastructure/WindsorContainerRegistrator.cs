@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -73,7 +74,11 @@ public static class WindsorContainerRegistrator
                 .UsingFactoryMethod((_, creationContext) => mainWindsorContainer.Resolve(typeof(IOptions<>).MakeGenericType(creationContext.GenericArguments[0]))),
 
             Component.For<IHostEnvironment>()
-                .Instance(mainWindsorContainer.Resolve<IHostEnvironment>())
+                .Instance(mainWindsorContainer.Resolve<IHostEnvironment>()),
+
+            Component
+                .For<IPlaywright>()
+                .Instance(mainWindsorContainer.Resolve<IPlaywright>())
         );
     }
 }

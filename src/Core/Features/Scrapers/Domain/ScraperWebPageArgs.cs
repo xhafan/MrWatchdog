@@ -22,6 +22,9 @@ public record ScraperWebPageArgs
     [Required]
     public string? Selector { get; set; }
     
+    [Display(Name = nameof(Resource.ScrapeHtmlAsRenderedByBrowser), ResourceType = typeof(Resource))]
+    public bool ScrapeHtmlAsRenderedByBrowser { get; set; }
+
     [Display(Name = nameof(Resource.SelectTextInsteadOfHtml), ResourceType = typeof(Resource))]
     public bool SelectText { get; set; }
     

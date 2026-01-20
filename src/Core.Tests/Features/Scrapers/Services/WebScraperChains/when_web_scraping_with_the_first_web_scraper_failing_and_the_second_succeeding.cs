@@ -26,7 +26,11 @@ public class when_web_scraping_with_the_first_web_scraper_failing_and_the_second
             new CurlScraper()
         ]);
 
-        _scrapeResult = await webScraperChain.Scrape("https://google.com", httpHeaders: null);
+        _scrapeResult = await webScraperChain.Scrape(
+            "https://google.com",
+            scrapeHtmlAsRenderedByBrowser: false,
+            httpHeaders: null
+        );
     }
 
     [Test]
@@ -37,5 +41,6 @@ public class when_web_scraping_with_the_first_web_scraper_failing_and_the_second
         _scrapeResult.Content.ShouldContain("<html");
         _scrapeResult.Content.Length.ShouldBeGreaterThan(10000);
         _scrapeResult.FailureReason.ShouldBe(null);
+        _scrapeResult.HttpStatusCode.ShouldBe((int)HttpStatusCode.OK);
     }
 }

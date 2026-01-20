@@ -2,5 +2,9 @@
 
 public interface IWebScraperChain
 {
-    Task<ScrapeResult> Scrape(string url, ICollection<(string Name, string Value)>? httpHeaders = null);
+    Task<ScrapeResult> Scrape(
+        string url,
+        bool scrapeHtmlAsRenderedByBrowser,
+        ICollection<(string Name, string Value)>? httpHeaders = null
+    );
 }

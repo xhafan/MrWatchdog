@@ -46,6 +46,7 @@ public class when_viewing_scraper_web_page_overview : BaseDatabaseTest
         _model.ScraperWebPageArgs.ScraperWebPageId.ShouldBe(_scraperWebPageId);
         _model.ScraperWebPageArgs.Url.ShouldBe("http://url.com/page");
         _model.ScraperWebPageArgs.Selector.ShouldBe(".selector");
+        _model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser.ShouldBe(true);
         _model.ScraperWebPageArgs.SelectText.ShouldBe(true);
         _model.ScraperWebPageArgs.Name.ShouldBe("url.com/page");
         _model.ScraperWebPageArgs.HttpHeaders.ShouldBe("""
@@ -63,6 +64,7 @@ public class when_viewing_scraper_web_page_overview : BaseDatabaseTest
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
+                ScrapeHtmlAsRenderedByBrowser = true,
                 SelectText = true,
                 Name = "url.com/page",
                 HttpHeaders = """

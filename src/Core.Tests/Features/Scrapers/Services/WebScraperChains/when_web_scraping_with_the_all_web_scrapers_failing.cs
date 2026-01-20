@@ -26,7 +26,11 @@ public class when_web_scraping_with_the_all_web_scrapers_failing
             new CurlScraper()
         ]);
 
-        _scrapeResult = await webScraperChain.Scrape("https://non_existent_domain.mrwatchdog.com", httpHeaders: null);
+        _scrapeResult = await webScraperChain.Scrape(
+            "https://non_existent_domain.mrwatchdog.com",
+            scrapeHtmlAsRenderedByBrowser: false,
+            httpHeaders: null
+        );
     }
 
     [Test]
@@ -34,13 +38,10 @@ public class when_web_scraping_with_the_all_web_scrapers_failing
     {
         _scrapeResult.Success.ShouldBe(false);
         _scrapeResult.Content.ShouldBe(null);
-        _scrapeResult.FailureReason.ShouldBe(
-            """
-            Scraping failed:
-            HttpClientScraper: Error scraping web page, HTTP status code: 403 Forbidden
-            CurlScraper: Status code 0; curl: (6) Could not resolve host: non_existent_domain.mrwatchdog.com
-            """,
-            ignoreLineEndings: true
-        );
+        _scrapeResult.FailureReason.ShouldNotBeNull();
+        _scrapeResult.FailureReason.ShouldContain("Scraping failed:");
+        _scrapeResult.FailureReason.ShouldContain("HttpClientScraper: Error scraping web page, HTTP status code: 403 Forbidden");
+        _scrapeResult.FailureReason.ShouldContain("CurlScraper: Status code 0; curl: (6) Could not resolve host: non_existent_domain.mrwatchdog.com");
+        _scrapeResult.HttpStatusCode.ShouldBe(0);
     }
 }

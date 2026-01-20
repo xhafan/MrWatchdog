@@ -11,14 +11,17 @@ using DatabaseBuilder;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Jobs.Services;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -53,8 +56,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.OpenApi;
+using Microsoft.Playwright;
 
 namespace MrWatchdog.Web;
 
@@ -302,6 +304,7 @@ public class Program
 
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
         builder.Services.Configure<RuntimeOptions>(builder.Configuration.GetSection("Runtime"));
+        builder.Services.Configure<PlaywrightScraperOptions>(builder.Configuration.GetSection(nameof(PlaywrightScraper)));
         
         builder.Services.AddSingleton<IJobCompletionAwaiter, JobCompletionAwaiter>();
         
@@ -381,6 +384,8 @@ public class Program
 
         builder.Services.Configure<LoggingOptions>(builder.Configuration.GetSection(LogConstants.LoggingConfigurationSectionName));
 
+        var playwright = await Playwright.CreateAsync();
+        builder.Services.AddSingleton(playwright);
 
         var app = builder.Build();
         var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
@@ -476,6 +481,8 @@ public class Program
         }
         finally
         {
+            playwright.Dispose();
+
             // Castle Windsor is the root container and it needs to be disposed manually.
             mainWindsorContainer.Dispose();
         

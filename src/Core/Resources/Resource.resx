@@ -535,4 +535,7 @@
   <data name="AddNewWatchdogRecommendation" xml:space="preserve">
 	  <value>To add a new watchdog, go to the list of {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
+  <data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
+	  <value>Scrape HTML as rendered by a browser</value>
+  </data>
 </root>

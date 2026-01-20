@@ -33,7 +33,11 @@ public class when_web_scraping_with_the_first_web_scraper_failing_on_too_large_r
             new CurlScraper()
         ]);
 
-        _scrapeResult = await webScraperChain.Scrape("https://google.com", httpHeaders: null);
+        _scrapeResult = await webScraperChain.Scrape(
+            "https://google.com",
+            scrapeHtmlAsRenderedByBrowser: false,
+            httpHeaders: null
+        );
     }
 
     [Test]

@@ -53,9 +53,29 @@ RUN dotnet build
 # ---- Runtime container: runs the tests ----
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 WORKDIR /app
+
+# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl)
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    nodejs \
+    xvfb \
+    dbus \
+    mesa-gl
+
+# Tell Playwright to use system Node
+ENV PLAYWRIGHT_NODEJS_PATH=/usr/bin/node
+# This tells the .NET driver where the Alpine-native browser is
+ENV PlaywrightScraper__BrowserExecutablePath=/usr/bin/chromium-browser
+
 COPY --from=build /app .
 
 # Copy NuGet packages cache
 COPY --from=build /root/.nuget/packages /root/.nuget/packages
 
-ENTRYPOINT ["dotnet", "test", "--no-restore", "--no-build"]
+# Start Xvfb in the background to support headed Chrome browser and then run tests
+ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet test --no-restore --no-build"]

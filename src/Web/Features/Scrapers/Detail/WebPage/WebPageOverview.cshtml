@@ -1,4 +1,5 @@
 ﻿@page
+@using MrWatchdog.Core.Features.Scrapers.Domain
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model WebPageOverviewModel
@@ -19,6 +20,10 @@
                 <div class="mb-3">
                     <label asp-for="ScraperWebPageArgs.Selector" class="form-label fw-bold"></label>
                     <div>@Model.ScraperWebPageArgs.Selector</div>
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" checked="@Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" disabled/>
+                    <label asp-for="ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" class="form-check-label fw-bold"></label>
                 </div>
                 <div class="mb-3">
                     <input type="checkbox" checked="@Model.ScraperWebPageArgs.SelectText" disabled/>
@@ -53,13 +58,32 @@
                     <span asp-validation-for="ScraperWebPageArgs.Selector" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
+                    @{
+                        var scrapeHtmlAsRenderedByBrowserInputId = 
+                            $"{nameof(ScraperWebPageArgs)}_{nameof(ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser)}_{Model.ScraperWebPageArgs.ScraperWebPageId}";
+                    }
+                    <input asp-for="ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser"
+                           id="@scrapeHtmlAsRenderedByBrowserInputId"
+                           type="checkbox" 
+                           checked="@Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" 
+                    />
+                    <label asp-for="ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" 
+                           for="@scrapeHtmlAsRenderedByBrowserInputId" 
+                           class="form-check-label fw-bold">
+                    </label>
+                </div>
+                <div class="mb-3">
+                    @{
+                        var selectTextInputId = 
+                            $"{nameof(ScraperWebPageArgs)}_{nameof(ScraperWebPageArgs.SelectText)}_{Model.ScraperWebPageArgs.ScraperWebPageId}";
+                    }
                     <input asp-for="ScraperWebPageArgs.SelectText"
-                           id="ScraperWebPageArgs_SelectText_@Model.ScraperWebPageArgs.ScraperWebPageId"
+                           id="@selectTextInputId"
                            type="checkbox" 
                            checked="@Model.ScraperWebPageArgs.SelectText" 
                            />
                     <label asp-for="ScraperWebPageArgs.SelectText" 
-                           for="ScraperWebPageArgs_SelectText_@Model.ScraperWebPageArgs.ScraperWebPageId" 
+                           for="@selectTextInputId"
                            class="form-check-label fw-bold">
                     </label>
                 </div>

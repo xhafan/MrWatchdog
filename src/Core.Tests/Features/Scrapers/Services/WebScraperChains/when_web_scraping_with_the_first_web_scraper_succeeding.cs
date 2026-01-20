@@ -38,7 +38,11 @@ public class when_web_scraping_with_the_first_web_scraper_succeeding
             new HttpClientScraper(httpClientFactory),
         ]);
 
-        _scrapeResult = await webScraperChain.Scrape("https://www.pcgamer.com/epic-games-store-free-games-list/", httpHeaders: null);
+        _scrapeResult = await webScraperChain.Scrape(
+            "https://www.pcgamer.com/epic-games-store-free-games-list/",
+            scrapeHtmlAsRenderedByBrowser: false,
+            httpHeaders: null
+        );
     }
 
     [Test]
@@ -59,5 +63,6 @@ public class when_web_scraping_with_the_first_web_scraper_succeeding
             """
         );
         _scrapeResult.FailureReason.ShouldBe(null);
+        _scrapeResult.HttpStatusCode.ShouldBe((int)HttpStatusCode.OK);
     }
 }

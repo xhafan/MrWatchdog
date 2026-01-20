@@ -417,4 +417,7 @@
 	<data name="AddNewWatchdogRecommendation" xml:space="preserve">
 		<value>Chcete-li přidat nového hlídacího psa, přejděte do seznamu {0}, vyberte nějaký a zvolte &lt;i&gt;{1}&lt;/i&gt;.</value>
 	</data>
+	<data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
+		<value>Scrapovat HTML tak jak je renderováno prohlížečem</value>
+	</data>
 </root>

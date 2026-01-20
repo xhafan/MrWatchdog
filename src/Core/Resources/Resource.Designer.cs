@@ -911,6 +911,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scrape HTML as rendered by a browser.
+        /// </summary>
+        public static string ScrapeHtmlAsRenderedByBrowser {
+            get {
+                return ResourceManager.GetString("ScrapeHtmlAsRenderedByBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the scraper name. In the next step you will define web pages to scrape..
         /// </summary>
         public static string ScraperCreateOnboardingSetName {

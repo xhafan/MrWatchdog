@@ -20,6 +20,7 @@ public class when_persisting_scraper_web_page : BaseDatabaseTest
             {
                 Url = "http://url.com/page",
                 Selector = ".selector",
+                ScrapeHtmlAsRenderedByBrowser = true,
                 SelectText = true,
                 Name = "url.com/page"
             })
@@ -40,6 +41,7 @@ public class when_persisting_scraper_web_page : BaseDatabaseTest
         _persistedScraperWebPage.Scraper.ShouldBe(_newScraper);
         _persistedScraperWebPage.Url.ShouldBe("http://url.com/page");
         _persistedScraperWebPage.Selector.ShouldBe(".selector");
+        _persistedScraperWebPage.ScrapeHtmlAsRenderedByBrowser.ShouldBe(true);
         _persistedScraperWebPage.SelectText.ShouldBe(true);
         _persistedScraperWebPage.Name.ShouldBe("url.com/page");
         _persistedScraperWebPage.ScrapingResults.ShouldBe(["text"]);

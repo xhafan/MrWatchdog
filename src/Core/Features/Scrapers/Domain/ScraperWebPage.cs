@@ -78,6 +78,7 @@ public class ScraperWebPage : VersionedEntity
         var hasScrapingDataUpdated =
             Url != scraperWebPageArgs.Url
             || Selector != scraperWebPageArgs.Selector
+            || ScrapeHtmlAsRenderedByBrowser != scraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser
             || SelectText != scraperWebPageArgs.SelectText
             || !_httpHeaders.AreEquivalent(httpHeaders);
 

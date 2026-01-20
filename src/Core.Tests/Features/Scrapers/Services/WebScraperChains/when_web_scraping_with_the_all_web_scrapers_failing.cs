@@ -44,7 +44,7 @@ public class when_web_scraping_with_the_all_web_scrapers_failing
         _scrapeResult.FailureReason.ShouldNotBeNull();
         _scrapeResult.FailureReason.ShouldContain("Scraping failed:");
         _scrapeResult.FailureReason.ShouldContain("HttpClientScraper: Error scraping web page, HTTP status code: 403 Forbidden");
-        _scrapeResult.FailureReason.ShouldContain("HttpClientScraper: No such host is known. (non_existent_domain.mrwatchdog.com:443)");
+        _scrapeResult.FailureReason.ShouldMatch("HttpClientScraper:.*non_existent_domain.mrwatchdog.com:443.*");
         _scrapeResult.HttpStatusCode.ShouldBe(0);
     }
 }

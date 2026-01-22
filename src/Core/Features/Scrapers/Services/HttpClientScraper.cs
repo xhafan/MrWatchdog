@@ -41,7 +41,7 @@ public class HttpClientScraper(
 
             var responseContent = await response.Content.ReadAsStringWithLimitAsync(
                 ScrapingConstants.WebPageSizeLimitInMegaBytes,
-                $"Web page larger than {ScrapingConstants.WebPageSizeLimitInMegaBytes} MB."
+                $"Web page {url} larger than {ScrapingConstants.WebPageSizeLimitInMegaBytes} MB."
             );
 
             return ScrapeResult.Succeeded(

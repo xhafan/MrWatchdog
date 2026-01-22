@@ -21,7 +21,8 @@ public class PlaywrightScraper( // todo: implement response size check
             var launchOptions = new BrowserTypeLaunchOptions 
             {
                 ExecutablePath = playwrightScraperOptions.Value.BrowserExecutablePath,
-                Headless = false
+                Headless = false,
+                Args = ["--window-position=-2000,0"] // Open the browser window "Off-Screen"
             };
             
             await using var browser = await playwright.Chromium.LaunchAsync(launchOptions);

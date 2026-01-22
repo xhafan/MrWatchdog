@@ -1,5 +1,4 @@
-﻿using Microsoft.Playwright;
-using MrWatchdog.Core.Features.Scrapers.Services;
+﻿using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.HttpClients;
 using System.Net;
@@ -10,13 +9,10 @@ namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
 public class when_web_scraping_with_the_first_web_scraper_succeeding
 {
     private ScrapeResult _scrapeResult = null!;
-    private IPlaywright _playwright = null!;
 
     [SetUp]
     public async Task Context()
     {
-        _playwright = await Playwright.CreateAsync();
-
         var httpClientFactory = new HttpClientFactoryBuilder()
             .WithRequestResponse(new HttpMessageRequestResponse(
                 "https://www.pcgamer.com/epic-games-store-free-games-list/",
@@ -40,7 +36,7 @@ public class when_web_scraping_with_the_first_web_scraper_succeeding
 
         var webScraperChain = new WebScraperChain([
             new PlaywrightScraper(
-                _playwright,
+                await RunOncePerTestRun.PlaywrightTask.Value,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             ),
             new HttpClientScraper(httpClientFactory),
@@ -73,10 +69,5 @@ public class when_web_scraping_with_the_first_web_scraper_succeeding
         _scrapeResult.FailureReason.ShouldBe(null);
         _scrapeResult.HttpStatusCode.ShouldBe((int)HttpStatusCode.OK);
     }
-
-    [TearDown]
-    public void Cleanup()
-    {
-        _playwright.Dispose();
-    }
 }
+ 

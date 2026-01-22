@@ -56,7 +56,9 @@ public class HttpClientScraper(
         catch (Exception ex)
         {
             logger?.LogError(ex, ex.Message);
-            return ScrapeResult.Failed(ex.Message);
+            return ScrapeResult.Failed(ex.Message, stopWebScraperChain: ex.Message.Contains("No such host is known") // Windows
+                                                                        || ex.Message.Contains("Name does not resolve") // Linux
+            );
         }
     }
 }

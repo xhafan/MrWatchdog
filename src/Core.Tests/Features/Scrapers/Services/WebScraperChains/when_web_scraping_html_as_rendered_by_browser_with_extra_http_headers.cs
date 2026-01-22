@@ -1,5 +1,4 @@
-﻿using Microsoft.Playwright;
-using MrWatchdog.Core.Features.Scrapers.Services;
+﻿using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
@@ -7,17 +6,14 @@ namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
 [TestFixture]
 public class when_web_scraping_html_as_rendered_by_browser_with_extra_http_headers
 {
-    private IPlaywright _playwright = null!;
     private ScrapeResult _scrapeResult = null!;
 
     [SetUp]
     public async Task Context()
     {
-        _playwright = await Playwright.CreateAsync();
-
         var webScraperChain = new WebScraperChain([
             new PlaywrightScraper(
-                _playwright,
+                await RunOncePerTestRun.PlaywrightTask.Value,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]);
@@ -37,11 +33,5 @@ public class when_web_scraping_html_as_rendered_by_browser_with_extra_http_heade
         _scrapeResult.Content.ShouldNotBeNull();
         _scrapeResult.Content.ShouldContain("X-Test-Header");
         _scrapeResult.Content.ShouldContain("TestValue");
-    }
-
-    [TearDown]
-    public void Cleanup()
-    {
-        _playwright.Dispose();
     }
 }

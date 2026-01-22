@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.TestsShared;
@@ -11,14 +10,11 @@ namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 [TestFixture]
 public class when_scraping_scraper_with_scraping_as_rendered_by_browser : BaseTest
 {
-    private IPlaywright _playwright = null!;
     private Scraper _scraper = null!;
 
     [SetUp]
     public async Task Context()
     {
-        _playwright = await Playwright.CreateAsync();
-
         _BuildEntities();
 
         var httpClientFactory = new HttpClientFactoryBuilder()
@@ -32,7 +28,7 @@ public class when_scraping_scraper_with_scraping_as_rendered_by_browser : BaseTe
         await _scraper.Scrape(new WebScraperChain([
             new HttpClientScraper(httpClientFactory),
             new PlaywrightScraper(
-                _playwright,
+                await RunOncePerTestRun.PlaywrightTask.Value,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]));
@@ -48,12 +44,6 @@ public class when_scraping_scraper_with_scraping_as_rendered_by_browser : BaseTe
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }
 
-    [TearDown]
-    public void Cleanup()
-    {
-        _playwright.Dispose();
-    }
-    
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder()

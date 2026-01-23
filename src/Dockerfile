@@ -61,6 +61,10 @@ ENV PlaywrightScraper__BrowserExecutablePath=/usr/bin/chromium-browser
 COPY --from=build /app/Web/publish .
 ENV ASPNETCORE_URLS=http://+:80
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+ARG GIT_SHA
+ENV Runtime__AppGitShaVersion=$GIT_SHA
+
 EXPOSE 80
 # Start Xvfb in the background to support headed Chrome browser and then run the application
 ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet MrWatchdog.Web.dll"]

@@ -15,6 +15,8 @@ registry:
 
 builder:
   arch: amd64
+  args:
+    GIT_SHA: <%= `git rev-parse HEAD`.strip %>
 
 env:
   secret:

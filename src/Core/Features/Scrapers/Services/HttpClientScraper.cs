@@ -13,7 +13,11 @@ public class HttpClientScraper(
     public int Priority => 10;
     public bool IsBrowserRenderedHtmlScrapingSupported => false;
 
-    public async Task<ScrapeResult> Scrape(string url, ICollection<(string Name, string Value)>? httpHeaders)
+    public async Task<ScrapeResult> Scrape(
+        string url, 
+        ICollection<(string Name, string Value)>? httpHeaders,
+        ScrapeOptions? options = null
+    )
     {
         var httpClient = httpClientFactory.CreateClient(HttpClientConstants.HttpClientWithRetries);
 

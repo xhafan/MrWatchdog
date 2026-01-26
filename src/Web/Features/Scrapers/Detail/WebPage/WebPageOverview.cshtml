@@ -2,6 +2,7 @@
 @using MrWatchdog.Core.Features.Scrapers.Domain
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
+@using MrWatchdog.Web.Infrastructure.Extensions.HtmlHelpers
 @model WebPageOverviewModel
 @{
    Layout = null;
@@ -24,6 +25,12 @@
                 <div class="mb-3">
                     <input type="checkbox" checked="@Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" disabled/>
                     <label asp-for="ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" class="form-check-label fw-bold"></label>
+                </div>
+                <div class="mb-3"
+                     style="display:@(!Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser ? "none": "")"
+                     >
+                    <label asp-for="ScraperWebPageArgs.ScrapingByBrowserWaitFor" class="form-label fw-bold"></label>
+                    <div>@Html.DisplayFor(x => x.ScraperWebPageArgs.ScrapingByBrowserWaitFor)</div>
                 </div>
                 <div class="mb-3">
                     <input type="checkbox" checked="@Model.ScraperWebPageArgs.SelectText" disabled/>
@@ -66,11 +73,25 @@
                            id="@scrapeHtmlAsRenderedByBrowserInputId"
                            type="checkbox" 
                            checked="@Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" 
+                           data-action="@StimulusControllers.ScrapersDetailWebPageOverview#onScrapeHtmlAsRenderedByBrowseToggled"
                     />
                     <label asp-for="ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser" 
                            for="@scrapeHtmlAsRenderedByBrowserInputId" 
                            class="form-check-label fw-bold">
                     </label>
+                </div>
+                <div class="mb-3" 
+                     data-scrapers--detail-web-page-overview-target="scrapingByBrowserWaitFor"
+                     style="display:@(!Model.ScraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser ? "none": "")"
+                     >
+                    <label asp-for="ScraperWebPageArgs.ScrapingByBrowserWaitFor" 
+                           class="form-check-label fw-bold">
+                    </label>
+                    <select asp-for="ScraperWebPageArgs.ScrapingByBrowserWaitFor"
+                        class="form-control"
+                        asp-items="Html.GetEnumSelectListWithDefaultValue(ScrapingByBrowserWaitFor.Load)"
+                        >
+                    </select>
                 </div>
                 <div class="mb-3">
                     @{

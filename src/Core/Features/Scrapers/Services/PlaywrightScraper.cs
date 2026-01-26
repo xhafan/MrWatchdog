@@ -15,7 +15,11 @@ public class PlaywrightScraper(
     public int Priority => 30;
     public bool IsBrowserRenderedHtmlScrapingSupported => true;
 
-    public async Task<ScrapeResult> Scrape(string url, ICollection<(string Name, string Value)>? httpHeaders)
+    public async Task<ScrapeResult> Scrape(
+        string url, 
+        ICollection<(string Name, string Value)>? httpHeaders,
+        ScrapeOptions? options = null
+    )
     {
         var isPageTooLarge = false;
 
@@ -48,7 +52,9 @@ public class PlaywrightScraper(
             _checkContentLengthResponseSize();
             await _checkChunkEncodingResponseSize();
 
-            var response = await page.GotoAsync(url);
+            var waitUntil = _MapWaitFor(options?.ScrapingByBrowserWaitFor); // not unit tested
+
+            var response = await page.GotoAsync(url, new PageGotoOptions {WaitUntil = waitUntil});
             Guard.Hope(response != null, "Response is null.");
 
             if (!response.Ok)
@@ -151,7 +157,13 @@ public class PlaywrightScraper(
             logger?.LogError(ex, ex.Message);
             return ScrapeResult.Failed(ex.Message, stopWebScraperChain: true);
         }
-
-
     }
+
+    private WaitUntilState _MapWaitFor(ScrapingByBrowserWaitFor? value) =>
+        value switch
+        {
+            ScrapingByBrowserWaitFor.DomContentLoaded => WaitUntilState.DOMContentLoaded,
+            ScrapingByBrowserWaitFor.NetworkIdle => WaitUntilState.NetworkIdle,
+            _ => WaitUntilState.Load
+        };
 }

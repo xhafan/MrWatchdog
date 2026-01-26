@@ -1046,6 +1046,42 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wait for.
+        /// </summary>
+        public static string ScrapingByBrowserWaitFor {
+            get {
+                return ResourceManager.GetString("ScrapingByBrowserWaitFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTML loaded; images and CSS not loaded.
+        /// </summary>
+        public static string ScrapingByBrowserWaitForDomContentLoaded {
+            get {
+                return ResourceManager.GetString("ScrapingByBrowserWaitForDomContentLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTML, images and CSS loaded.
+        /// </summary>
+        public static string ScrapingByBrowserWaitForLoad {
+            get {
+                return ResourceManager.GetString("ScrapingByBrowserWaitForLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTML, images and CSS loaded; no network activity for 0.5 seconds; highest chance of all scripts to complete.
+        /// </summary>
+        public static string ScrapingByBrowserWaitForNetworkIdle {
+            get {
+                return ResourceManager.GetString("ScrapingByBrowserWaitForNetworkIdle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scraping interval in seconds.
         /// </summary>
         public static string ScrapingIntervalInSeconds {

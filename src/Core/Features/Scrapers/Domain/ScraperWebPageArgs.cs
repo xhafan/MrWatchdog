@@ -25,6 +25,9 @@ public record ScraperWebPageArgs
     [Display(Name = nameof(Resource.ScrapeHtmlAsRenderedByBrowser), ResourceType = typeof(Resource))]
     public bool ScrapeHtmlAsRenderedByBrowser { get; set; }
 
+    [Display(Name = nameof(Resource.ScrapingByBrowserWaitFor), ResourceType = typeof(Resource))]
+    public ScrapingByBrowserWaitFor? ScrapingByBrowserWaitFor { get; set; }
+
     [Display(Name = nameof(Resource.SelectTextInsteadOfHtml), ResourceType = typeof(Resource))]
     public bool SelectText { get; set; }
     

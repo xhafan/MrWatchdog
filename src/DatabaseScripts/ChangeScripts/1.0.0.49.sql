@@ -1,0 +1,1 @@
+alter table "ScraperWebPage" add "ScrapingByBrowserWaitFor" char(1);

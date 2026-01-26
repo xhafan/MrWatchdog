@@ -420,4 +420,16 @@
 	<data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
 		<value>Scrapovat HTML tak jak je renderováno prohlížečem</value>
 	</data>
+	<data name="ScrapingByBrowserWaitFor" xml:space="preserve">
+		<value>Počkat na</value>
+	</data>
+	<data name="ScrapingByBrowserWaitForDomContentLoaded" xml:space="preserve">
+		<value>Načtení HTML; obrázky a CSS nejsou načteny</value>
+	</data>
+	<data name="ScrapingByBrowserWaitForNetworkIdle" xml:space="preserve">
+		<value>Načtení HTML, obrázků a CSS; žádná síťová aktivita po dobu 0,5 sekundy; nejvyšší šance na dokončení všech skriptů</value>
+	</data>
+	<data name="ScrapingByBrowserWaitForLoad" xml:space="preserve">
+		<value>Načtení HTML, obrázků a CSS</value>
+	</data>
 </root>

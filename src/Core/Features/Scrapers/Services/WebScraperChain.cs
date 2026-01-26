@@ -12,7 +12,8 @@ public class WebScraperChain(
     public async Task<ScrapeResult> Scrape(
         string url, 
         bool scrapeHtmlAsRenderedByBrowser,
-        ICollection<(string Name, string Value)>? httpHeaders
+        ICollection<(string Name, string Value)>? httpHeaders,
+        ScrapeOptions? options = null
     )
     {
         var scrapersOrderedByPriority = scrapers
@@ -26,7 +27,7 @@ public class WebScraperChain(
 
         foreach (var scraper in scrapersOrderedByPriority)
         {
-            result = await scraper.Scrape(url, httpHeaders);
+            result = await scraper.Scrape(url, httpHeaders, options);
             if (result.Success)
             {
                 logger?.LogInformation("{scraperType} successfully scraped: {Url}, HTTP status code {HttpStatusCode}", scraper.GetType().Name, url, result.HttpStatusCode);

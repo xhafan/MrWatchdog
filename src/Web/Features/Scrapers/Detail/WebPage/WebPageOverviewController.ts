@@ -15,12 +15,14 @@ export default class WebPageOverviewController extends BaseStimulusModelControll
     static targets = [
         "url",
         "previousUrl",
-        "name"
+        "name",
+        "scrapingByBrowserWaitFor"
     ];
    
     declare urlTarget: HTMLInputElement;
     declare previousUrlTarget: HTMLInputElement;
     declare nameTarget: HTMLInputElement;
+    declare scrapingByBrowserWaitForTarget: HTMLSelectElement;
 
     connect() {
         if (this.modelValue.isEmptyWebPage) {
@@ -54,5 +56,13 @@ export default class WebPageOverviewController extends BaseStimulusModelControll
     private dispatchScraperWebPageNameModifiedEvent() {
         let name = this.nameTarget.value.trim();
         this.nameTarget.dispatchEvent(new CustomEvent(scraperWebPageNameModifiedEventName, { bubbles: true, detail: name }));
+    }
+
+    onScrapeHtmlAsRenderedByBrowseToggled(event: Event) {
+        if (!event.currentTarget) return;
+        const checkbox = event.currentTarget as HTMLInputElement;
+        const scrapeHtmlAsRenderedByBrowser = checkbox.checked;
+
+        this.scrapingByBrowserWaitForTarget.style.display = scrapeHtmlAsRenderedByBrowser ? "" : "none";
     }
 }

@@ -35,6 +35,7 @@ public class ScraperWebPage : VersionedEntity
     public virtual string? Url { get; protected set; }
     public virtual string? Selector { get; protected set; }
     public virtual bool ScrapeHtmlAsRenderedByBrowser { get; protected set; }
+    public virtual ScrapingByBrowserWaitFor? ScrapingByBrowserWaitFor { get; protected set; }
     public virtual bool SelectText { get; protected set; }
     public virtual IEnumerable<string> ScrapingResults => _scrapingResults;
     public virtual string? Name { get; protected set; }
@@ -53,6 +54,7 @@ public class ScraperWebPage : VersionedEntity
             Url = Url, 
             Selector = Selector,
             ScrapeHtmlAsRenderedByBrowser = ScrapeHtmlAsRenderedByBrowser,
+            ScrapingByBrowserWaitFor = ScrapingByBrowserWaitFor,
             SelectText = SelectText,
             Name = Name,
             HttpHeaders = string.Join(Environment.NewLine, _httpHeaders.Select(httpHeader => $"{httpHeader.Name}: {httpHeader.Value}"))
@@ -79,12 +81,14 @@ public class ScraperWebPage : VersionedEntity
             Url != scraperWebPageArgs.Url
             || Selector != scraperWebPageArgs.Selector
             || ScrapeHtmlAsRenderedByBrowser != scraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser
+            || ScrapingByBrowserWaitFor != scraperWebPageArgs.ScrapingByBrowserWaitFor
             || SelectText != scraperWebPageArgs.SelectText
             || !_httpHeaders.AreEquivalent(httpHeaders);
 
         Url = scraperWebPageArgs.Url?.Trim();
         Selector = scraperWebPageArgs.Selector?.Trim();
         ScrapeHtmlAsRenderedByBrowser = scraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser;
+        ScrapingByBrowserWaitFor = scraperWebPageArgs.ScrapingByBrowserWaitFor;
         SelectText = scraperWebPageArgs.SelectText;
         Name = scraperWebPageArgs.Name?.Trim();
         
@@ -245,7 +249,11 @@ public class ScraperWebPage : VersionedEntity
     {
         Guard.Hope(!string.IsNullOrWhiteSpace(Url), "Url is not set.");
 
-        var scrapeResult = await webScraperChain.Scrape(Url, ScrapeHtmlAsRenderedByBrowser, _httpHeaders.Select(x => (x.Name, x.Value)).ToList());
+        var scrapeResult = await webScraperChain.Scrape(
+            Url,
+            ScrapeHtmlAsRenderedByBrowser, _httpHeaders.Select(x => (x.Name, x.Value)).ToList(),
+            new ScrapeOptions {ScrapingByBrowserWaitFor = ScrapingByBrowserWaitFor}
+        );
         if (!scrapeResult.Success)
         {
             Guard.Hope(scrapeResult.FailureReason != null, "Scrape result FailureReason is null.");

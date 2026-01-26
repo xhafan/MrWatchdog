@@ -538,4 +538,16 @@
   <data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
 	  <value>Scrape HTML as rendered by a browser</value>
   </data>
+  <data name="ScrapingByBrowserWaitFor" xml:space="preserve">
+	  <value>Wait for</value>
+  </data>
+  <data name="ScrapingByBrowserWaitForDomContentLoaded" xml:space="preserve">
+	  <value>HTML loaded; images and CSS not loaded</value>
+  </data>
+  <data name="ScrapingByBrowserWaitForNetworkIdle" xml:space="preserve">
+	  <value>HTML, images and CSS loaded; no network activity for 0.5 seconds; highest chance of all scripts to complete</value>
+  </data>
+  <data name="ScrapingByBrowserWaitForLoad" xml:space="preserve">
+	  <value>HTML, images and CSS loaded</value>
+  </data>
 </root>

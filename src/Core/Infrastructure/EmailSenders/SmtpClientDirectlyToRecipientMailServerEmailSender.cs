@@ -1,4 +1,5 @@
-﻿using CoreUtils;
+﻿using System.Net.Security;
+using CoreUtils;
 using DnsClient;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -84,9 +85,24 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
 
         logger?.LogInformation("Mail server: {mailServer}", mailServer);
 
+        _allowConnectionEvenIfCertificateValidationFails();
+
         await smtp.ConnectAsync(mailServer, 25, SecureSocketOptions.StartTlsWhenAvailable);
         
         await smtp.SendAsync(message);
         await smtp.DisconnectAsync(true);
+        return;
+
+        void _allowConnectionEvenIfCertificateValidationFails()
+        {
+            smtp.ServerCertificateValidationCallback = (_, _, _, sslPolicyErrors) =>
+            {
+                if (sslPolicyErrors == SslPolicyErrors.None) return true;
+
+                logger?.LogWarning("SSL Certificate for {mailServer} has policy errors: {errors}", mailServer, sslPolicyErrors);
+
+                return true; // In a Direct-to-MX scenario, return true to ensure delivery.
+            };
+        }
     }
 }

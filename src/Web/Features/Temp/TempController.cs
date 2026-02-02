@@ -1,12 +1,13 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Web.Infrastructure.Authorizations;
-using System.Diagnostics;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Messages;
+using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Diagnostics;
 
 namespace MrWatchdog.Web.Features.Temp;
 
@@ -56,12 +57,14 @@ public class TempController(
     }
 
     [HttpPost]
-    public async Task SendJustSpamRemovalEmail()
+    public async Task<IActionResult> SendJustSpamRemovalEmail()
     {
-        await bus.Send(new SendEmailCommand(
+        var command = new SendEmailCommand(
             "remove+46.224.68.58@db.justspam.org",
             "remove 46.224.68.58 :x:900adc2ee089dc1:x:",
-            "Please remove 46.224.68.58 from your blacklist."
-        ));
+            ""
+        );
+        await bus.Send(command);
+        return Ok(command.Guid.ToString());
     }
 }

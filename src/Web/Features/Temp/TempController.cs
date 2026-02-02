@@ -6,6 +6,7 @@ using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Diagnostics;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Infrastructure.EmailSenders;
 
 namespace MrWatchdog.Web.Features.Temp;
 
@@ -18,7 +19,7 @@ public class TempController(
     NhibernateUnitOfWork unitOfWork
 ) : ControllerBase
 {
-    [HttpGet]
+    [HttpPost]
     public string GcCollect()
     {
         long memoryInMbBefore;
@@ -40,7 +41,7 @@ public class TempController(
         return $"Memory allocation before: {memoryInMbBefore} MB and after GC collection: {memoryInMbAfter} MB.";
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task EnqueueLotOfScrapeScraperCommands()
     {
         var scrapersToScrape = await unitOfWork.Session!.QueryOver<Scraper>().ListAsync();
@@ -52,5 +53,15 @@ public class TempController(
                 await bus.Send(new ScrapeScraperCommand(scraperToScrape.Id));
             }
         }
+    }
+
+    [HttpPost]
+    public async Task SendJustSpamRemovalEmail()
+    {
+        await bus.Send(new SendEmailCommand(
+            "remove+46.224.68.58@db.justspam.org",
+            "remove 46.224.68.58 :x:900adc2ee089dc1:x:",
+            "Please remove 46.224.68.58 from your blacklist."
+        ));
     }
 }

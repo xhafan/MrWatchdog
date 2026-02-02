@@ -2,5 +2,10 @@
 
 public interface IEmailSender
 {
-    Task SendEmail(string recipientEmail, string subject, string htmlMessage);
+    Task SendEmail(
+        string recipientEmail,
+        string subject,
+        string htmlMessage,
+        string? unsubscribeUrl = null
+    );
 }

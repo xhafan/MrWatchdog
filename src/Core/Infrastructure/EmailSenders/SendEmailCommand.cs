@@ -5,4 +5,9 @@ using MrWatchdog.Core.Messages;
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
 [RebusRouting(RebusQueues.Email)]
-public record SendEmailCommand(string RecipientEmail, string Subject, string HtmlMessage) : Command;
+public record SendEmailCommand(
+    string RecipientEmail, 
+    string Subject, 
+    string HtmlMessage,
+    string? UnsubscribeUrl = null
+) : Command;

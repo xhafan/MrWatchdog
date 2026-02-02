@@ -20,7 +20,12 @@ public class when_sending_email_in_production_environment : BaseDatabaseTest
 
         var handler = new SendEmailCommandMessageHandler(_emailSender, hostEnvironment);
 
-        await handler.Handle(new SendEmailCommand("recipient@email.com", "subject", "html message"));
+        await handler.Handle(new SendEmailCommand(
+            "recipient@email.com",
+            "subject",
+            "html message",
+            "https://dev.mrwatchdog.com/api/Watchdogs/123/DisableNotification"
+        ));
     }
 
     [Test]
@@ -29,7 +34,8 @@ public class when_sending_email_in_production_environment : BaseDatabaseTest
         A.CallTo(() => _emailSender.SendEmail(
                 "recipient@email.com",
                 "subject",
-                "html message"
+                "html message",
+                "https://dev.mrwatchdog.com/api/Watchdogs/123/DisableNotification"
             ))
             .MustHaveHappenedOnceExactly();
     }

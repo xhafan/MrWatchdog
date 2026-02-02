@@ -9,7 +9,12 @@ public class SmtpServerEmailSender(
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) : IEmailSender
 {
-    public async Task SendEmail(string recipientEmail, string subject, string htmlMessage)
+    public async Task SendEmail(
+        string recipientEmail, 
+        string subject, 
+        string htmlMessage, 
+        string? unsubscribeUrl = null
+    )
     {
         var emailSenderOptions = iEmailSenderOptions.Value;
         using var client = new SmtpClient(emailSenderOptions.SmtpServer, emailSenderOptions.Port);
@@ -20,6 +25,13 @@ public class SmtpServerEmailSender(
         {
             IsBodyHtml = true
         };
+
+        if (!string.IsNullOrWhiteSpace(unsubscribeUrl))
+        {
+            // make sure the SMTP server supports these headers; for instance mailersend.net supports them only in Professional or Enterprise plan
+            message.Headers.Add("List-Unsubscribe", $"<{unsubscribeUrl}>");
+            message.Headers.Add("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+        }
 
         await client.SendMailAsync(message);
     }

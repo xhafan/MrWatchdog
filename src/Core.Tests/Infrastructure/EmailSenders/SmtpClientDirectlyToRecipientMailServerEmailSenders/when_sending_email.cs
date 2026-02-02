@@ -15,6 +15,11 @@ public class when_sending_email
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>()
         );
 
-        await emailSender.SendEmail("xhafan+mrwatchdog_test@gmail.com", "test", "<span>Test message</span>");
+        await emailSender.SendEmail(
+            "xhafan+mrwatchdog_test@gmail.com",
+            "test",
+            "<span>Test message</span>",
+            "https://dev.mrwatchdog.com/api/Watchdogs/123/DisableNotification"
+        );
     }
 }

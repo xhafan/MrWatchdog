@@ -16,13 +16,24 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null
 ) : IEmailSender
 {
-    public async Task SendEmail(string recipientEmail, string subject, string htmlMessage)
+    public async Task SendEmail(
+        string recipientEmail, 
+        string subject, 
+        string htmlMessage, 
+        string? unsubscribeUrl = null
+    )
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(name: null, iEmailAddressesOptions.Value.NoReply));
         message.To.Add(new MailboxAddress(name: null, recipientEmail));
         message.Subject = subject;
         message.Body = new TextPart("html") { Text = htmlMessage };
+
+        if (!string.IsNullOrWhiteSpace(unsubscribeUrl))
+        {
+            message.Headers.Add(HeaderId.ListUnsubscribe, $"<{unsubscribeUrl}>");
+            message.Headers.Add(HeaderId.ListUnsubscribePost, "List-Unsubscribe=One-Click");
+        }
 
         var signer = new DkimSigner(
             new MemoryStream(Encoding.UTF8.GetBytes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.DkimPrivateKey)),
@@ -34,14 +45,22 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
             BodyCanonicalizationAlgorithm = DkimCanonicalizationAlgorithm.Relaxed
         };
 
-        message.Prepare(EncodingConstraint.SevenBit);
-        signer.Sign(message, [
+        var headersToSign = new List<HeaderId> {
             HeaderId.From,
             HeaderId.To,
             HeaderId.Subject,
             HeaderId.Date,
             HeaderId.MessageId
-        ]);
+        };
+
+        if (!string.IsNullOrWhiteSpace(unsubscribeUrl))
+        {
+            headersToSign.Add(HeaderId.ListUnsubscribe);
+            headersToSign.Add(HeaderId.ListUnsubscribePost);
+        }
+
+        message.Prepare(EncodingConstraint.SevenBit);
+        signer.Sign(message, headersToSign);
 
         var lookup = new LookupClient();
         var recipientEmailDomain = message.To.Mailboxes.First().Address.Split('@')[1];

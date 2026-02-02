@@ -152,7 +152,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         {
             await bus.Send(new SendEmailCommand(
                 User.Email,
-                $"{mrWatchdogResource}: new results for {Scraper.Name}{searchTermSuffix}",
+                Subject: $"{mrWatchdogResource}: new results for {Scraper.Name}{searchTermSuffix}",
+                HtmlMessage:
                 $"""
                  <html>
                  <body>
@@ -174,7 +175,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                  </p>
                  </body>
                  </html>
-                 """
+                 """,
+                UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithWatchdogId(Id)}"
             ));
 
             foreach (var scrapingResult in _scrapingResultsToNotifyAbout)
@@ -225,4 +227,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         ));
     }
 
+    public virtual void DisableNotification()
+    {
+        ReceiveNotification = false;
+    }
 }

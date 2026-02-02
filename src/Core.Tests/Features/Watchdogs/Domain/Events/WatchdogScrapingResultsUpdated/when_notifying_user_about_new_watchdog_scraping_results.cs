@@ -46,8 +46,10 @@ public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatab
     private bool _MatchingCommand(SendEmailCommand command)
     {
         command.RecipientEmail.ShouldBe(_user.Email);
+        
         command.Subject.ShouldContain("new results for");
         command.Subject.ShouldContain("Epic Games store free game");
+        
         command.HtmlMessage.ShouldContain("New results have been found for");
         command.HtmlMessage.ShouldContain(
             $"""
@@ -65,6 +67,8 @@ public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatab
             <a href="https://store.epicgames.com/en-US/p/make-way-bddf5f" target="_blank">Make Way</a>
             """
         );
+        
+        command.UnsubscribeUrl.ShouldBe($"https://mrwatchdog_test/api/Watchdogs/{_watchdog.Id}/DisableNotification");
         return true;
     }
 

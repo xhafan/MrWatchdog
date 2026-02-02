@@ -13,6 +13,11 @@ public class SendEmailCommandMessageHandler(
         var subject = environment.IsProduction() 
             ? command.Subject
             : $"({environment.EnvironmentName}) {command.Subject}";
-        await emailSender.SendEmail(command.RecipientEmail, subject, command.HtmlMessage);
+        await emailSender.SendEmail(
+            command.RecipientEmail,
+            subject,
+            command.HtmlMessage,
+            command.UnsubscribeUrl
+        );
     }
 }

@@ -17,6 +17,8 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null
 ) : IEmailSender
 {
+    public int Priority => 10;
+
     public async Task SendEmail(
         string recipientEmail, 
         string subject, 

@@ -9,6 +9,8 @@ public class SmtpServerEmailSender(
     IOptions<EmailAddressesOptions> iEmailAddressesOptions
 ) : IEmailSender
 {
+    public int Priority => 20;
+
     public async Task SendEmail(
         string recipientEmail, 
         string subject, 

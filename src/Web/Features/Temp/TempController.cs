@@ -5,7 +5,6 @@ using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Messages;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Diagnostics;
 

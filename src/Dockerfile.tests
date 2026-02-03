@@ -54,8 +54,9 @@ RUN dotnet build
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 WORKDIR /app
 
-# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl)
+# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache \
+    icu-libs \
     chromium \
     nss \
     freetype \

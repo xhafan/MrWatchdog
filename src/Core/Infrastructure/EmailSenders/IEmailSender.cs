@@ -2,6 +2,8 @@
 
 public interface IEmailSender
 {
+    int Priority { get; }
+
     Task SendEmail(
         string recipientEmail,
         string subject,

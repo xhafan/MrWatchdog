@@ -38,10 +38,9 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 
-RUN apk add --no-cache icu-libs # .NET localization requires icu-libs
-
-# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl)
+# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache \
+    icu-libs \
     chromium \
     nss \
     freetype \

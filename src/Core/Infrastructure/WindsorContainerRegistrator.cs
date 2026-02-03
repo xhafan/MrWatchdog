@@ -35,28 +35,31 @@ public static class WindsorContainerRegistrator
             Component.For<IJobRepositoryFactory>().AsFactory()
         );
 
-        var emailSenderService = configuration["EmailSender:Service"];
-        switch (emailSenderService)
+        var emailSenderChainService = configuration["EmailSenderChain:Service"];
+        switch (emailSenderChainService)
         {
-            case nameof(SmtpServerEmailSender):
-                windsorContainer.Register(Component.For<IEmailSender>()
-                    .ImplementedBy<SmtpServerEmailSender>().LifeStyle.Singleton
+            case nameof(NullEmailSenderChain):
+                windsorContainer.Register(
+                    Component.For<IEmailSenderChain>().ImplementedBy<NullEmailSenderChain>().LifeStyle.Singleton
                 );
                 break;
-            case nameof(NullEmailSender):
-                windsorContainer.Register(Component.For<IEmailSender>()
-                    .ImplementedBy<NullEmailSender>().LifeStyle.Singleton
-                );
-                break;
-            case nameof(SmtpClientDirectlyToRecipientMailServerEmailSender):
+            case nameof(EmailSenderChain):
             case null:
-                windsorContainer.Register(Component.For<IEmailSender>()
-                    .ImplementedBy<SmtpClientDirectlyToRecipientMailServerEmailSender>().LifeStyle.Singleton
+                windsorContainer.Register(
+                    Component.For<IEmailSenderChain>().ImplementedBy<EmailSenderChain>().LifeStyle.Singleton
                 );
                 break;
             default:
-                throw new NotSupportedException($"Email sender service {emailSenderService} not supported.");
+                throw new NotSupportedException($"Email sender chain service {emailSenderChainService} not supported.");
         }
+
+        windsorContainer.Register(
+            Classes
+                .FromAssemblyContaining<IEmailSender>()
+                .BasedOn<IEmailSender>()
+                .WithService.FromInterface()
+                .LifestyleSingleton()
+        );
     }
 
     public static void RegisterServicesFromMainWindsorContainer(IWindsorContainer windsorContainer, IWindsorContainer mainWindsorContainer)

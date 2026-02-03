@@ -24,6 +24,10 @@ env:
     - SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey
     - SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain
     - SmtpClientDirectlyToRecipientMailServerEmailSender__EhloDomainName
+    - SmtpServerEmailSender__SmtpServer
+    - SmtpServerEmailSender__Port
+    - SmtpServerEmailSender__Username
+    - SmtpServerEmailSender__Password
     - ReCaptcha__SiteKey
     - ReCaptcha__SecretKey
     - Logging__LogErrorApiSecret

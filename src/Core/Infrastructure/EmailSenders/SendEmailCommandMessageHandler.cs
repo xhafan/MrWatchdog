@@ -4,7 +4,7 @@ using Rebus.Handlers;
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 
 public class SendEmailCommandMessageHandler(
-    IEmailSender emailSender,
+    IEmailSenderChain emailSenderChain,
     IHostEnvironment environment
 ) : IHandleMessages<SendEmailCommand>
 {
@@ -13,7 +13,7 @@ public class SendEmailCommandMessageHandler(
         var subject = environment.IsProduction() 
             ? command.Subject
             : $"({environment.EnvironmentName}) {command.Subject}";
-        await emailSender.SendEmail(
+        await emailSenderChain.SendEmail(
             command.RecipientEmail,
             subject,
             command.HtmlMessage,

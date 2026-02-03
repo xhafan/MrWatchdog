@@ -18,7 +18,7 @@ public class when_sending_email_in_non_production_environment : BaseDatabaseTest
         var hostEnvironment = A.Fake<IHostEnvironment>();
         A.CallTo(() => hostEnvironment.EnvironmentName).Returns(Environments.Development);
         
-        var handler = new SendEmailCommandMessageHandler(_emailSender, hostEnvironment);
+        var handler = new SendEmailCommandMessageHandler(new EmailSenderChain([_emailSender]), hostEnvironment);
 
         await handler.Handle(new SendEmailCommand("recipient@email.com", "subject", "html message"));
     }

@@ -91,11 +91,11 @@ public class Program
 
         // Add services to the container.
 
-        // Castle Windsor is the root container, not the default .NET DI. Rebus hosted services use Castle Windsor as the container
+        // Castle Windsor is the root container, not the default .NET ServiceProvider. Rebus hosted services use Castle Windsor as the container
         // to be able to use advanced features like interceptors, etc., and there are common services registrations for Castle Windsor like query handlers, etc.
         builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
-        builder.Host.ConfigureContainer<IWindsorContainer>(windsorContainer =>
-            WindsorContainerRegistrator.RegisterCommonServices(windsorContainer, builder.Configuration)
+        builder.Host.ConfigureContainer<IWindsorContainer>(mainWindsorContainer =>
+            WindsorContainerRegistrator.RegisterCommonServices(mainWindsorContainer, builder.Configuration)
         );
 
         var mvcBuilder = builder.Services

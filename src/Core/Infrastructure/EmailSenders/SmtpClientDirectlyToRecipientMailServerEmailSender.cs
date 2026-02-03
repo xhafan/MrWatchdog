@@ -1,4 +1,5 @@
-﻿using System.Net.Security;
+﻿using CoreDdd.Nhibernate.Configurations;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
 using DnsClient;
 using MailKit.Net.Smtp;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
+using MrWatchdog.Core.Infrastructure.EmailSenders.Domain;
+using System.Net.Security;
 using System.Text;
 
 namespace MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -14,7 +17,9 @@ namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     IOptions<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions> iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions,
-    ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null
+    INhibernateConfigurator nhibernateConfigurator,
+    ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null,
+    Func<SmtpClient>? smtpClientFactory = null
 ) : IEmailSender
 {
     public int Priority => 10;
@@ -77,27 +82,46 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         Guard.Hope(mxRecords.Any(), $"No MX record found for domain {recipientEmailDomain}.");
         var mailServer = mxRecords.First().Exchange.Value;
         
-        using var smtp = new SmtpClient();
+        logger?.LogInformation("Mail server: {mailServer}", mailServer);
+
+        if (await _IsMailServerIsInCoolDownPeriodDueToRateLimiting(mailServer))
+        {
+            throw new EmailSendingNotAllowedInCoolDownPeriodException(
+                $"Email not sent due to {mailServer} mail server being in cool down period due to the previous email being rate limited."
+            );
+        }
+
+        using var smtpClient = smtpClientFactory?.Invoke() ?? new SmtpClient();
         var ehloDomainName = iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.EhloDomainName;
         if (!string.IsNullOrWhiteSpace(ehloDomainName))
         {
             logger?.LogInformation("Setting EHLO domain name: {ehloDomainName}", ehloDomainName);
-            smtp.LocalDomain = ehloDomainName;
+            smtpClient.LocalDomain = ehloDomainName;
         }
-
-        logger?.LogInformation("Mail server: {mailServer}", mailServer);
 
         _allowConnectionEvenIfCertificateValidationFails();
 
-        await smtp.ConnectAsync(mailServer, 25, SecureSocketOptions.StartTlsWhenAvailable);
-        
-        await smtp.SendAsync(message);
-        await smtp.DisconnectAsync(true);
+        await smtpClient.ConnectAsync(mailServer, 25, SecureSocketOptions.StartTlsWhenAvailable);
+
+        try
+        {
+            await smtpClient.SendAsync(message);
+        }
+        catch (SmtpCommandException ex) when (ex.Message.Contains("4.7.28") 
+                                              && ex.Message.Contains("rate") 
+                                              && ex.Message.Contains("limited"))
+        {
+            await _SetMailServerCoolDownPeriodDueToRateLimiting(mailServer);
+
+            throw new EmailSendingRateLimitedException($"Email not sent due to rate limiting by {mailServer} mail server.", ex);
+        }
+
+        await smtpClient.DisconnectAsync(true);
         return;
 
         void _allowConnectionEvenIfCertificateValidationFails()
         {
-            smtp.ServerCertificateValidationCallback = (_, _, _, sslPolicyErrors) =>
+            smtpClient.ServerCertificateValidationCallback = (_, _, _, sslPolicyErrors) =>
             {
                 if (sslPolicyErrors == SslPolicyErrors.None) return true;
 
@@ -106,5 +130,65 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
                 return true; // In a Direct-to-MX scenario, return true to ensure delivery.
             };
         }
+    }
+
+    private async Task _SetMailServerCoolDownPeriodDueToRateLimiting(string mailServer)
+    {
+        try
+        {
+            await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(nhibernateConfigurator),
+                async newUnitOfWork =>
+                {
+                    var mailServerRateLimiting = await newUnitOfWork.Session!.QueryOver<MailServerRateLimiting>()
+                        .Where(x => x.MailServerName == mailServer)
+                        .SingleOrDefaultAsync();
+                    if (mailServerRateLimiting == null)
+                    {
+                        mailServerRateLimiting = new MailServerRateLimiting(mailServer, DateTime.UtcNow);
+                        await newUnitOfWork.Session.SaveAsync(mailServerRateLimiting);
+                    }
+                    else
+                    {
+                        mailServerRateLimiting.SetLastRateLimitedOn(DateTime.UtcNow);
+                    }
+                }
+            );
+        }
+        catch (Exception ex)
+        {
+            logger?.LogError(ex, "_SetMailServerCoolDownPeriodDueToRateLimiting: {exceptionMessage}", ex.Message);
+        }
+    }
+
+    private async Task<bool> _IsMailServerIsInCoolDownPeriodDueToRateLimiting(string mailServer)
+    {
+        var mailServerIsInCoolDownPeriod = false;
+
+        try
+        {
+            await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(nhibernateConfigurator),
+                async newUnitOfWork =>
+                {
+                    var mailServerRateLimiting = await newUnitOfWork.Session!.QueryOver<MailServerRateLimiting>()
+                        .Where(x => x.MailServerName == mailServer)
+                        .SingleOrDefaultAsync();
+                    
+                    if (mailServerRateLimiting == null) return;
+
+                    var coolDownPeriodEnd = mailServerRateLimiting.LastRateLimitedOn
+                        .AddMinutes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.MailServerRateLimitingCoolDownPeriodInMinutes);
+
+                    mailServerIsInCoolDownPeriod = DateTime.UtcNow <= coolDownPeriodEnd;
+                }
+            );
+        }
+        catch (Exception ex)
+        {
+            logger?.LogError(ex, "_IsMailServerIsInCoolDownPeriodDueToRateLimiting: {exceptionMessage}", ex.Message);
+        }
+
+        return mailServerIsInCoolDownPeriod;
     }
 }

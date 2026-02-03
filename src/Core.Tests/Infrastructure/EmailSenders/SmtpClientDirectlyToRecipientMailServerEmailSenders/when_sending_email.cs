@@ -12,7 +12,8 @@ public class when_sending_email
     {
         var emailSender = new SmtpClientDirectlyToRecipientMailServerEmailSender(
             OptionsTestRetriever.Retrieve<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(),
-            OptionsTestRetriever.Retrieve<EmailAddressesOptions>()
+            OptionsTestRetriever.Retrieve<EmailAddressesOptions>() ,
+            TestFixtureContext.NhibernateConfigurator
         );
 
         await emailSender.SendEmail(

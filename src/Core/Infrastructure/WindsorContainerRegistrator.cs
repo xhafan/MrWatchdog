@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreDdd.Queries;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -58,6 +59,7 @@ public static class WindsorContainerRegistrator
                 .FromAssemblyContaining<IEmailSender>()
                 .BasedOn<IEmailSender>()
                 .WithService.FromInterface()
+                .Configure(c => c.DependsOn(Dependency.OnValue<Func<SmtpClient>>(null)))
                 .LifestyleSingleton()
         );
     }

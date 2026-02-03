@@ -34,6 +34,10 @@ services:
       KickOffDueWatchdogsScrapingHostedService__IsDisabled: true
       Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
       Authentication__Google__ClientId: ${Authentication__Google__ClientId}
+      SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector: ${SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector}
+      SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey: ${SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey}
+      SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain: ${SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain}
+      SmtpClientDirectlyToRecipientMailServerEmailSender__EhloDomainName: ${SmtpClientDirectlyToRecipientMailServerEmailSender__EhloDomainName}
 
     depends_on:
       postgres:

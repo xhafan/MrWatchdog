@@ -29,6 +29,12 @@ export ReCaptcha__SecretKey=$(jq -r '.ReCaptcha__SecretKey' "$SECRETS_FILE")
 export Authentication__Google__ClientSecret=$(jq -r '.Authentication__Google__ClientSecret' "$SECRETS_FILE")
 export Authentication__Google__ClientId=$(jq -r '.Authentication__Google__ClientId' "$SECRETS_FILE")
 
+SECRETS_FILE="$HOME/.kamal/mrwatchdog_secrets_test.json"
+export SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector=$(jq -r '.SmtpClientDirectlyToRecipientMailServerEmailSender__DkimSelector' "$SECRETS_FILE")
+export SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey=$(jq -r '.SmtpClientDirectlyToRecipientMailServerEmailSender__DkimPrivateKey' "$SECRETS_FILE")
+export SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain=$(jq -r '.SmtpClientDirectlyToRecipientMailServerEmailSender__DkimDomain' "$SECRETS_FILE")
+export SmtpClientDirectlyToRecipientMailServerEmailSender__EhloDomainName=$(jq -r '.SmtpClientDirectlyToRecipientMailServerEmailSender__EhloDomainName' "$SECRETS_FILE")
+
 if [ "$DIRTY_MODE" = true ]; then
     echo "==> Running in DIRTY mode (no clone, using working directory)"
     BUILD_ROOT="$PWD"

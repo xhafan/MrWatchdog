@@ -52,7 +52,6 @@ RUN dotnet build
 
 # ---- Runtime container: runs the tests ----
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:d17d8d6511aee3dd54b4d9e8e03d867b1c3df28fb518ee9dd69e50305b7af4ee
-WORKDIR /app
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache \
@@ -67,6 +66,8 @@ RUN apk add --no-cache \
     xvfb \
     dbus \
     mesa-gl
+
+WORKDIR /app
 
 # Tell Playwright to use system Node
 ENV PLAYWRIGHT_NODEJS_PATH=/usr/bin/node

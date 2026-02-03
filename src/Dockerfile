@@ -36,7 +36,6 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 # Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:8e21337e482e353c958681789872b3451e966e07c259b9a6f9a8b7902749a785
-WORKDIR /app
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache \
@@ -51,6 +50,8 @@ RUN apk add --no-cache \
     xvfb \
     dbus \
     mesa-gl
+
+WORKDIR /app
 
 # Tell Playwright to use system Node
 ENV PLAYWRIGHT_NODEJS_PATH=/usr/bin/node

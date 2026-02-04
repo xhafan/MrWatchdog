@@ -1,14 +1,12 @@
-﻿using CoreDdd.Nhibernate.Configurations;
-using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreUtils;
+﻿using CoreUtils;
 using DnsClient;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
-using MrWatchdog.Core.Infrastructure.EmailSenders.Domain;
 using System.Net.Security;
 using System.Text;
 
@@ -17,11 +15,13 @@ namespace MrWatchdog.Core.Infrastructure.EmailSenders;
 public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     IOptions<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions> iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions,
     IOptions<EmailAddressesOptions> iEmailAddressesOptions,
-    INhibernateConfigurator nhibernateConfigurator,
+    HybridCache cache,
     ILogger<SmtpClientDirectlyToRecipientMailServerEmailSender>? logger = null,
     Func<SmtpClient>? smtpClientFactory = null
 ) : IEmailSender
 {
+    private const string MailServerLastRateLimitedOnCacheKeyFormat = "mailServer_{0}_LastRateLimitedOn";
+
     public int Priority => 10;
 
     public async Task SendEmail(
@@ -84,7 +84,7 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
         
         logger?.LogInformation("Mail server: {mailServer}", mailServer);
 
-        if (await _IsMailServerIsInCoolDownPeriodDueToRateLimiting(mailServer))
+        if (await _IsMailServerInCoolDownPeriodDueToRateLimiting(mailServer))
         {
             throw new EmailSendingNotAllowedInCoolDownPeriodException(
                 $"Email not sent due to {mailServer} mail server being in cool down period due to the previous email being rate limited."
@@ -134,60 +134,38 @@ public class SmtpClientDirectlyToRecipientMailServerEmailSender(
 
     private async Task _SetMailServerCoolDownPeriodDueToRateLimiting(string mailServer)
     {
-        try
-        {
-            await NhibernateUnitOfWorkRunner.RunAsync(
-                () => new NhibernateUnitOfWork(nhibernateConfigurator),
-                async newUnitOfWork =>
-                {
-                    var mailServerRateLimiting = await newUnitOfWork.Session!.QueryOver<MailServerRateLimiting>()
-                        .Where(x => x.MailServerName == mailServer)
-                        .SingleOrDefaultAsync();
-                    if (mailServerRateLimiting == null)
-                    {
-                        mailServerRateLimiting = new MailServerRateLimiting(mailServer, DateTime.UtcNow);
-                        await newUnitOfWork.Session.SaveAsync(mailServerRateLimiting);
-                    }
-                    else
-                    {
-                        mailServerRateLimiting.SetLastRateLimitedOn(DateTime.UtcNow);
-                    }
-                }
-            );
-        }
-        catch (Exception ex)
-        {
-            logger?.LogError(ex, "_SetMailServerCoolDownPeriodDueToRateLimiting: {exceptionMessage}", ex.Message);
-        }
+        var cacheKey = string.Format(MailServerLastRateLimitedOnCacheKeyFormat, mailServer);
+
+        await cache.SetAsync<DateTime?>(
+            cacheKey,
+            DateTime.UtcNow,
+            new HybridCacheEntryOptions
+            {
+                Expiration = TimeSpan.FromMinutes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.MailServerRateLimitingCoolDownPeriodInMinutes),
+                Flags = HybridCacheEntryFlags.DisableLocalCache // use only distributed L2 cache
+            }
+        );
     }
 
-    private async Task<bool> _IsMailServerIsInCoolDownPeriodDueToRateLimiting(string mailServer)
+    private async Task<bool> _IsMailServerInCoolDownPeriodDueToRateLimiting(string mailServer)
     {
-        var mailServerIsInCoolDownPeriod = false;
+        var cacheKey = string.Format(MailServerLastRateLimitedOnCacheKeyFormat, mailServer);
 
-        try
-        {
-            await NhibernateUnitOfWorkRunner.RunAsync(
-                () => new NhibernateUnitOfWork(nhibernateConfigurator),
-                async newUnitOfWork =>
-                {
-                    var mailServerRateLimiting = await newUnitOfWork.Session!.QueryOver<MailServerRateLimiting>()
-                        .Where(x => x.MailServerName == mailServer)
-                        .SingleOrDefaultAsync();
-                    
-                    if (mailServerRateLimiting == null) return;
+        var lastRateLimitedOn = await cache.GetOrCreateAsync(
+            cacheKey,
+            _ => ValueTask.FromResult<DateTime?>(null),
+            new HybridCacheEntryOptions
+            {
+                Flags = HybridCacheEntryFlags.DisableLocalCache | HybridCacheEntryFlags.DisableDistributedCacheWrite // use only distributed L2 cache and when the key is missing don't write null to the L2 distributed cache 
+            }
+        );
 
-                    var coolDownPeriodEnd = mailServerRateLimiting.LastRateLimitedOn
-                        .AddMinutes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.MailServerRateLimitingCoolDownPeriodInMinutes);
+        if (lastRateLimitedOn == null) return false;
 
-                    mailServerIsInCoolDownPeriod = DateTime.UtcNow <= coolDownPeriodEnd;
-                }
-            );
-        }
-        catch (Exception ex)
-        {
-            logger?.LogError(ex, "_IsMailServerIsInCoolDownPeriodDueToRateLimiting: {exceptionMessage}", ex.Message);
-        }
+        var coolDownPeriodEnd = lastRateLimitedOn.Value
+            .AddMinutes(iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions.Value.MailServerRateLimitingCoolDownPeriodInMinutes);
+
+        var mailServerIsInCoolDownPeriod = DateTime.UtcNow <= coolDownPeriodEnd;
 
         return mailServerIsInCoolDownPeriod;
     }

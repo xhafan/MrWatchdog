@@ -1,10 +1,8 @@
 using AspNetCore.ReCaptcha;
-using Castle.Windsor;
-using Castle.Windsor.MsDependencyInjection;
 using CoreDdd.AspNetCore.Middlewares;
 using CoreDdd.Domain.Events;
-using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
+using CoreDdd.Queries;
 using CoreDdd.Register.DependencyInjection;
 using CoreUtils;
 using DatabaseBuilder;
@@ -19,7 +17,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure;
@@ -30,6 +30,7 @@ using MrWatchdog.Core.Infrastructure.HttpClients;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
+using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Account.Login;
@@ -56,7 +57,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using Microsoft.Playwright;
 
 namespace MrWatchdog.Web;
 
@@ -91,13 +91,22 @@ public class Program
 
         // Add services to the container.
 
-        // Castle Windsor is the root container, not the default .NET ServiceProvider. Rebus hosted services use Castle Windsor as the container
-        // to be able to use advanced features like interceptors, etc., and there are common services registrations for Castle Windsor like query handlers, etc.
-        builder.Host.UseServiceProviderFactory(new WindsorServiceProviderFactory());
-        builder.Host.ConfigureContainer<IWindsorContainer>(mainWindsorContainer =>
-            WindsorContainerRegistrator.RegisterCommonServices(mainWindsorContainer, builder.Configuration)
+        // register repositories
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<JobRepository>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
         );
 
+        // register query handlers
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<GetJobQueryHandler>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
+        );
+        
         var mvcBuilder = builder.Services
             .AddRazorPages()
             .AddRazorPagesOptions(options =>
@@ -151,9 +160,7 @@ public class Program
                 new RebusHostedService(
                     inputQueueName,
                     environmentName,
-                    serviceProvider.GetRequiredService<INhibernateConfigurator>(),
-                    serviceProvider.GetRequiredService<IWindsorContainer>(),
-                    serviceProvider.GetRequiredService<IConfiguration>(),
+                    serviceProvider,
                     connectionString
                 )
             );
@@ -164,9 +171,7 @@ public class Program
                 new RebusHostedService(
                     inputQueueNameForSending,
                     environmentName,
-                    serviceProvider.GetRequiredService<INhibernateConfigurator>(),
-                    serviceProvider.GetRequiredService<IWindsorContainer>(),
-                    serviceProvider.GetRequiredService<IConfiguration>(),
+                    serviceProvider,
                     connectionString
                 )
             );
@@ -387,8 +392,18 @@ public class Program
         var playwright = await Playwright.CreateAsync();
         builder.Services.AddSingleton(playwright);
 
+        builder.Services.AddDistributedPostgresCache(options =>
+        {
+            options.ConnectionString = connectionString;
+            options.SchemaName = "public";
+            options.TableName = "cache";
+            options.CreateIfNotExists = false;
+            options.UseWAL = false;
+        });
+        
+        builder.Services.AddHybridCache();
+
         var app = builder.Build();
-        var mainWindsorContainer = app.Services.GetRequiredService<IWindsorContainer>();
 
         _buildDatabase();
 
@@ -483,9 +498,6 @@ public class Program
         {
             playwright.Dispose();
 
-            // Castle Windsor is the root container and it needs to be disposed manually.
-            mainWindsorContainer.Dispose();
-        
             await Log.CloseAndFlushAsync();
         }
         return;
@@ -535,8 +547,8 @@ public class Program
 
         void _buildDatabase()
         {
-            var logger = mainWindsorContainer.Resolve<ILogger<BuilderOfDatabase>>();
-            var configuration = mainWindsorContainer.Resolve<IConfiguration>();
+            var logger = app.Services.GetRequiredService<ILogger<BuilderOfDatabase>>();
+            var configuration = app.Services.GetRequiredService<IConfiguration>();
             var connectionStringWithTimeout = $"{connectionString}CommandTimeout=120;";
             var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
             DatabaseBuilderHelper.BuildDatabase(connectionStringWithTimeout, databaseScriptsDirectoryPath, logger, environmentName);

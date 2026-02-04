@@ -13,7 +13,7 @@ public class when_sending_email
         var emailSender = new SmtpClientDirectlyToRecipientMailServerEmailSender(
             OptionsTestRetriever.Retrieve<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(),
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>() ,
-            TestFixtureContext.NhibernateConfigurator
+            new FakeHybridCache()
         );
 
         await emailSender.SendEmail(

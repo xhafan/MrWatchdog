@@ -15,8 +15,6 @@ public class KickOffDueScrapersScrapingHostedService(
     ILogger<KickOffDueScrapersScrapingHostedService> logger
 ) : BackgroundService
 {
-    private const int ScrapingIntervalInSeconds = ScrapingConstants.MinimumScrapingIntervalInSeconds;
-
     private IEnumerable<long>? _scraperIdsToScrape; // If null, all scrapers are considered for scraping
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -33,7 +31,7 @@ public class KickOffDueScrapersScrapingHostedService(
         {
             await _KickOffDueScrapersScraping();
 
-            await Task.Delay(TimeSpan.FromSeconds(ScrapingIntervalInSeconds), cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(options.Value.DelayBetweenKickOffsInSeconds), cancellationToken);
         }
 
         logger.LogInformation($"{nameof(KickOffDueScrapersScrapingHostedService)} is stopping.");

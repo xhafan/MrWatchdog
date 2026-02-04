@@ -14,7 +14,7 @@ public class when_sending_email_with_mail_server_returning_rate_limiting_error
         _emailSender = new SmtpClientDirectlyToRecipientMailServerEmailSender(
             OptionsTestRetriever.Retrieve<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions>(),
             OptionsTestRetriever.Retrieve<EmailAddressesOptions>(),
-            TestFixtureContext.NhibernateConfigurator,
+            new FakeHybridCache(),
             smtpClientFactory: () => new FakeRateLimitingSmtpClient()
         );
     }

@@ -57,6 +57,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace MrWatchdog.Web;
 
@@ -408,7 +409,13 @@ public class Program
         _buildDatabase();
 
         // Configure the HTTP request pipeline.
-            
+
+        // Temporarily redirect Scrapers/ScrapingResults/ to Scrapers/ScrapedResults/
+        var rewriteOptions = new RewriteOptions()
+            .AddRedirect("^Scrapers/ScrapingResults/(.*)$", "Scrapers/ScrapedResults/$1", StatusCodes.Status301MovedPermanently);
+        
+        app.UseRewriter(rewriteOptions);        
+        
         var forwardedHeadersOptions = new ForwardedHeadersOptions
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor // identify client IP address

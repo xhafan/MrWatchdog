@@ -70,7 +70,7 @@ public class when_refreshing_watchdog_after_scraper_scraping_completed : BaseDat
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(_scraperWebPageId, ["Two Point Hospital"]);
+        _scraper.SetScrapedResults(_scraperWebPageId, ["Two Point Hospital"]);
 
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)

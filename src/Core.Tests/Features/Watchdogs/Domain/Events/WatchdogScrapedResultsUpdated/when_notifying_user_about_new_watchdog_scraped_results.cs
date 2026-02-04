@@ -2,7 +2,7 @@
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -10,10 +10,10 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
+namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 
 [TestFixture]
-public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatabaseTest
+public class when_notifying_user_about_new_watchdog_scraped_results : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
@@ -28,17 +28,17 @@ public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatab
 
         _bus = A.Fake<ICoreBus>();
         
-        var handler = new NotifyUserAboutNewWatchdogScrapingResultsDomainEventMessageHandler(
+        var handler = new NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             _bus,
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new WatchdogScrapingResultsUpdatedDomainEvent(_watchdog.Id));
+        await handler.Handle(new WatchdogScrapedResultsUpdatedDomainEvent(_watchdog.Id));
     }
 
     [Test]
-    public void email_notification_about_new_scraping_results_is_sent_to_user()
+    public void email_notification_about_new_scraped_results_is_sent_to_user()
     {
         A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
     }
@@ -73,9 +73,9 @@ public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatab
     }
 
     [Test]
-    public void watchdog_search_scraping_results_to_notify_about_are_cleared()
+    public void watchdog_scraped_results_to_notify_about_are_cleared()
     {
-        _watchdog.ScrapingResultsToNotifyAbout.ShouldBeEmpty();
+        _watchdog.ScrapedResultsToNotifyAbout.ShouldBeEmpty();
     }
     
     private void _BuildEntities()
@@ -101,7 +101,7 @@ public class when_notifying_user_about_new_watchdog_scraping_results : BaseDatab
             .WithSearchTerm(null)
             .Build();
         
-        _scraper.SetScrapingResults(_scraperWebPageId, [
+        _scraper.SetScrapedResults(_scraperWebPageId, [
             "<a href=\"https://store.epicgames.com/en-US/p/machinarium-5e6c71\" target=\"_blank\">Machinarium</a>",
             "<a href=\"https://store.epicgames.com/en-US/p/make-way-bddf5f\" target=\"_blank\">Make Way</a>"
         ]);        

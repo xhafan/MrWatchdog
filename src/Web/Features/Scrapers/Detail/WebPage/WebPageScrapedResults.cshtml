@@ -1,15 +1,15 @@
 ﻿@page
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
-@model WebPageScrapingResultsModel
+@model WebPageScrapedResultsModel
 @{
    Layout = null;
 }
-<!turbo-frame id="scraper_web_page_scraping_results_@(Model.ScraperWebPageScrapingResults.ScraperWebPageId)">
+<!turbo-frame id="scraper_web_page_scraped_results_@(Model.ScraperWebPageScrapedResults.ScraperWebPageId)">
     <div class="mb-3" 
          @Stimulus.Controller(
-             StimulusControllers.ScrapersDetailWebPageScrapingResults, 
-             new WebPageScrapingResultsStimulusModel($"{Model.ScraperWebPageScrapingResults.ScrapedOn:o}")
+             StimulusControllers.ScrapersDetailWebPageScrapedResults, 
+             new WebPageScrapedResultsStimulusModel($"{Model.ScraperWebPageScrapedResults.ScrapedOn:o}")
          )
          >
         <div class="d-flex justify-content-between">
@@ -18,7 +18,7 @@
                   asp-route-scraperId="@Model.ScraperId"
                   asp-route-scraperWebPageId="@Model.ScraperWebPageId"
                   style="display: inline"
-                  data-scrapers--detail-web-page-scraping-results-target="scrapeWebPageForm"
+                  data-scrapers--detail-web-page-scraped-results-target="scrapeWebPageForm"
             >
                 <button type="submit" 
                         class="btn btn-outline-primary"
@@ -28,14 +28,14 @@
             </form>
         </div>
         <div>
-            @if (Model.ScraperWebPageScrapingResults.ScrapingResults.Any())
+            @if (Model.ScraperWebPageScrapedResults.ScrapedResults.Any())
             {
                 <div style="max-height:360px; overflow-y:auto;">
                     <ul translate="no">
-                        @foreach (var scrapingResults in Model.ScraperWebPageScrapingResults.ScrapingResults)
+                        @foreach (var scrapedResults in Model.ScraperWebPageScrapedResults.ScrapedResults)
                         {
                             <li>
-                                @Html.Raw(scrapingResults)
+                                @Html.Raw(scrapedResults)
                             </li>
                         }
                     </ul>
@@ -44,9 +44,9 @@
             else
             {
                 <span class="text-danger">
-                    @if (Model.ScraperWebPageScrapingResults.ScrapingErrorMessage != null)
+                    @if (Model.ScraperWebPageScrapedResults.ScrapingErrorMessage != null)
                     {
-                        @Resource.Error@:: @Model.ScraperWebPageScrapingResults.ScrapingErrorMessage
+                        @Resource.Error@:: @Model.ScraperWebPageScrapedResults.ScrapingErrorMessage
                     }
                     else
                     {
@@ -55,10 +55,10 @@
                 </span>
             }
         </div>
-        @if (Model.ScraperWebPageScrapingResults.ScrapedOn != null)
+        @if (Model.ScraperWebPageScrapedResults.ScrapedOn != null)
         {
             <div class="mt-3">
-                @Resource.ScrapedOn: <span data-scrapers--detail-web-page-scraping-results-target="scrapedOnInBrowserLocale"></span>
+                @Resource.ScrapedOn: <span data-scrapers--detail-web-page-scraped-results-target="scrapedOnInBrowserLocale"></span>
             </div>
         }
     </div>

@@ -9,7 +9,7 @@ using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
-public class WebPageScrapingResultsModel(
+public class WebPageScrapedResultsModel(
     IQueryExecutor queryExecutor,
     ICoreBus bus,
     IAuthorizationService authorizationService
@@ -21,15 +21,15 @@ public class WebPageScrapingResultsModel(
     [BindProperty(SupportsGet = true)]
     public long ScraperWebPageId { get; set; }
 
-    public ScraperWebPageScrapingResultsDto ScraperWebPageScrapingResults { get; private set; } = null!;
+    public ScraperWebPageScrapedResultsDto ScraperWebPageScrapedResults { get; private set; } = null!;
     
     public async Task<IActionResult> OnGet()
     {
         if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(ScraperId)) return Forbid();
 
-        ScraperWebPageScrapingResults =
-            await queryExecutor.ExecuteSingleAsync<GetScraperWebPageScrapingResultsQuery, ScraperWebPageScrapingResultsDto>(
-                new GetScraperWebPageScrapingResultsQuery(ScraperId, ScraperWebPageId));
+        ScraperWebPageScrapedResults =
+            await queryExecutor.ExecuteSingleAsync<GetScraperWebPageScrapedResultsQuery, ScraperWebPageScrapedResultsDto>(
+                new GetScraperWebPageScrapedResultsQuery(ScraperId, ScraperWebPageId));
         
         return Page();
     }

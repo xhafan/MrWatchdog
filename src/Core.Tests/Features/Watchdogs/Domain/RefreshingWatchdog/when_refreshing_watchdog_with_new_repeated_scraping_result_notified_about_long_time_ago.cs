@@ -24,9 +24,9 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
     }
 
     [Test]
-    public void watchdog_search_scraping_results_to_notify_about_is_correct()
+    public void watchdog_scraped_results_to_notify_about_is_correct()
     {
-        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe(["Doom 1"]);
+        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Doom 1"]);
     }
 
     private async Task _BuildEntities()
@@ -47,7 +47,7 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
             .WithSearchTerm(null)
             .Build();
         
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         _watchdog.Refresh();
         
@@ -56,14 +56,14 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
         async Task _simulateNotifyingUserAboutTheSameScrapingResultLongTimeAgo()
         {
             Clock.CurrentDateTimeProvider.Value = () => DateTime.Now.AddDays(-31);
-            await _watchdog.NotifyUserAboutNewScrapingResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+            await _watchdog.NotifyUserAboutNewScrapedResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
             Clock.CurrentDateTimeProvider.Value = null;
         }
 
-        _scraper.SetScrapingResults(scraperWebPage.Id, []);
+        _scraper.SetScrapedResults(scraperWebPage.Id, []);
         _watchdog.Refresh();
 
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1"]);
         _watchdog.Refresh();
     }
 }

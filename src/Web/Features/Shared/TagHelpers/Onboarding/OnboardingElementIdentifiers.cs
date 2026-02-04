@@ -4,10 +4,10 @@ public static class OnboardingElementIdentifiers
 {
     public const string OnboardingId = "onboarding";
     
-    public const string ScrapersScrapingResultsWebPagesWatchedWebPagesId = "scrapersScrapingResultsWebPagesWatchedWebPages";
-    public const string ScrapersScrapingResultsSearchTermInputGroupId = "scrapersScrapingResultsSearchTermInputGroup";
-    public const string ScrapersScrapingResultsCreateWatchdogId = "scrapersScrapingResultsCreateWatchdog";
-    public const string ScrapersScrapingResultsLoginToCreateWatchdogId = "scrapersScrapingResultsLoginToCreateWatchdog";
+    public const string ScrapersScrapedResultsWebPagesWatchedWebPagesId = "scrapersScrapedResultsWebPagesWatchedWebPages";
+    public const string ScrapersScrapedResultsSearchTermInputGroupId = "scrapersScrapedResultsSearchTermInputGroup";
+    public const string ScrapersScrapedResultsCreateWatchdogId = "scrapersScrapedResultsCreateWatchdog";
+    public const string ScrapersScrapedResultsLoginToCreateWatchdogId = "scrapersScrapedResultsLoginToCreateWatchdog";
 
     public const string WatchdogsDetailSearchTermInputGroupCssClass = "watchdogsDetailSearchTermInputGroup";
     public const string WatchdogsDetailReceiveNotificationCssClass = "watchdogsDetailReceiveNotification";

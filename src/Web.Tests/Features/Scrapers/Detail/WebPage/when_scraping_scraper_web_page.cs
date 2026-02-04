@@ -13,7 +13,7 @@ namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 public class when_scraping_scraper_web_page : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
-    private WebPageScrapingResultsModel _model = null!;
+    private WebPageScrapedResultsModel _model = null!;
     private ICoreBus _bus = null!;    
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
@@ -24,7 +24,7 @@ public class when_scraping_scraper_web_page : BaseDatabaseTest
         _BuildEntities();
         _bus = A.Fake<ICoreBus>();
 
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+        _model = new WebPageScrapedResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithScraperId(_scraper.Id)
             .WithScraperWebPageId(_scraperWebPageId)

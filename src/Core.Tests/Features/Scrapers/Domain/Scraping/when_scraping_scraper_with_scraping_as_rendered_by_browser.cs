@@ -40,7 +40,7 @@ public class when_scraping_scraper_with_scraping_as_rendered_by_browser : BaseTe
         var webPage = _scraper.WebPages.Single();
         webPage.ScrapedOn.ShouldNotBeNull();
         webPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(30));
-        webPage.ScrapingResults.ShouldNotBeEmpty();
+        webPage.ScrapedResults.ShouldNotBeEmpty();
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }
 

@@ -8,7 +8,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
-public class when_getting_scraper_scraping_results : BaseDatabaseTest
+public class when_getting_scraper_scraped_results : BaseDatabaseTest
 {
     private Scraper? _scraper;
 
@@ -19,9 +19,9 @@ public class when_getting_scraper_scraping_results : BaseDatabaseTest
     }
 
     [Test]
-    public async Task scraper_scraping_results_page_can_be_fetched_unauthenticated()
+    public async Task scraper_scraped_results_page_can_be_fetched_unauthenticated()
     {
-        var url = ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(_scraper!.Id);
+        var url = ScraperUrlConstants.ScraperScrapedResultsUrlTemplate.WithScraperId(_scraper!.Id);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

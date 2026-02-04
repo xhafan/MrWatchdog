@@ -11,9 +11,9 @@ using MrWatchdog.Web.Infrastructure.Authorizations;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_scraper_web_page_scraping_results_as_unauthorized_user : BaseDatabaseTest
+public class when_viewing_scraper_web_page_scraped_results_as_unauthorized_user : BaseDatabaseTest
 {
-    private WebPageScrapingResultsModel _model = null!;
+    private WebPageScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
     private IActionResult _actionResult = null!;
@@ -31,7 +31,7 @@ public class when_viewing_scraper_web_page_scraping_results_as_unauthorized_user
             ))
             .Returns(AuthorizationResult.Failed());
 
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+        _model = new WebPageScrapedResultsModelBuilder(UnitOfWork)
             .WithAuthorizationService(authorizationService)
             .WithScraperId(_scraper.Id)
             .WithScraperWebPageId(_scraperWebPageId)
@@ -57,7 +57,7 @@ public class when_viewing_scraper_web_page_scraping_results_as_unauthorized_user
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(_scraperWebPageId, ["<div>text</div>"]);
+        _scraper.SetScrapedResults(_scraperWebPageId, ["<div>text</div>"]);
 
         UnitOfWork.Flush();
     }    

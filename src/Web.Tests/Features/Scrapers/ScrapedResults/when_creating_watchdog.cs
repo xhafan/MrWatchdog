@@ -6,14 +6,14 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
 public class when_creating_watchdog : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
@@ -26,7 +26,7 @@ public class when_creating_watchdog : BaseDatabaseTest
         
         _bus = A.Fake<ICoreBus>();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithActingUser(_actingUser)
             .WithSearchTerm(" search term ")

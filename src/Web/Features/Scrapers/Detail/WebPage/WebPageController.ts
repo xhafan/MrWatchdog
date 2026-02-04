@@ -5,7 +5,7 @@ import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { JobDto } from "../../../Shared/Generated/JobDto";
 import { scraperWebPageNameModifiedEventName } from "./WebPageOverviewController";
 import { logError } from "../../../Shared/logging";
-import { scraperWebPageScrapedEvent } from "./WebPageScrapingResultsController";
+import { scraperWebPageScrapedEvent } from "./WebPageScrapedResultsController";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
 import { WebPageStimulusModel } from "../../../Shared/Generated/WebPageStimulusModel";
 
@@ -15,14 +15,14 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
     static targets = [
         "removeWebPageForm",
         "webPageOverview",
-        "webPageScrapingResults",
+        "webPageScrapedResults",
         "webPageName",
         "webPageDisabledWarning"
     ];
    
     declare removeWebPageFormTarget: HTMLFormElement;
     declare webPageOverviewTarget: FrameElement;
-    declare webPageScrapingResultsTarget: FrameElement;
+    declare webPageScrapedResultsTarget: FrameElement;
     declare webPageNameTarget: HTMLSpanElement;
     declare webPageDisabledWarningTarget: FrameElement;
 
@@ -53,7 +53,7 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
         try {
             var scraperWebPageUpdatedDomainEventJobDto = await waitForJobCompletion(scraperWebPageScrapingDataUpdatedDomainEventJobGuid);
 
-            this.webPageScrapingResultsTarget.reload();
+            this.webPageScrapedResultsTarget.reload();
             this.webPageDisabledWarningTarget.reload();
         }
         catch (error) {

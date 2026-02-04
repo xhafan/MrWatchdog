@@ -7,8 +7,8 @@ public class ScraperWebPageMappingOverrides : IAutoMappingOverride<ScraperWebPag
 {
     public void Override(AutoMapping<ScraperWebPage> mapping)
     {
-        mapping.HasMany(x => x.ScrapingResults)
-            .Table($"{nameof(ScraperWebPage)}{nameof(ScraperWebPage.ScrapingResults)}".TrimEnd('s'))
+        mapping.HasMany(x => x.ScrapedResults)
+            .Table($"{nameof(ScraperWebPage)}{nameof(ScraperWebPage.ScrapedResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();

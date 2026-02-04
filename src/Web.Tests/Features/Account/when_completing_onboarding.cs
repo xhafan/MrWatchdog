@@ -22,13 +22,13 @@ public class when_completing_onboarding : BaseDatabaseTest
 
         _controller = new UsersController(_bus);
 
-        _actionResult = await _controller.CompleteOnboarding(OnboardingIdentifiers.ScraperScrapingResults);
+        _actionResult = await _controller.CompleteOnboarding(OnboardingIdentifiers.ScraperScrapedResults);
     } 
 
     [Test]
     public void command_is_sent_over_message_bus()
     {
-        A.CallTo(() => _bus.Send(new CompleteOnboardingCommand(OnboardingIdentifiers.ScraperScrapingResults))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _bus.Send(new CompleteOnboardingCommand(OnboardingIdentifiers.ScraperScrapedResults))).MustHaveHappenedOnceExactly();
     }
     
     [Test]

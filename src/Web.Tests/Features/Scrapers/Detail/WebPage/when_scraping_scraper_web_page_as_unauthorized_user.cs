@@ -16,7 +16,7 @@ namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 public class when_scraping_scraper_web_page_as_unauthorized_user : BaseDatabaseTest
 {
     private IActionResult _actionResult = null!;
-    private WebPageScrapingResultsModel _model = null!;
+    private WebPageScrapedResultsModel _model = null!;
     private ICoreBus _bus = null!;    
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
@@ -35,7 +35,7 @@ public class when_scraping_scraper_web_page_as_unauthorized_user : BaseDatabaseT
             ))
             .Returns(AuthorizationResult.Failed());
 
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+        _model = new WebPageScrapedResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
             .WithScraperId(_scraper.Id)

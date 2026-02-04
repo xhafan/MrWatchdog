@@ -42,7 +42,7 @@ public class DetailModelBuilder(NhibernateUnitOfWork unitOfWork)
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
         
-        queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapingResultsArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapedResultsArgsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Scraper>(unitOfWork)
         ));

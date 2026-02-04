@@ -15,48 +15,48 @@ using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
-public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class ScrapedResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
     private User? _actingUser;
     private string? _searchTerm;
 
-    public ScrapingResultsModelBuilder WithBus(ICoreBus bus)
+    public ScrapedResultsModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }   
 
-    public ScrapingResultsModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
+    public ScrapedResultsModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
     {
         _authorizationService = authorizationService;
         return this;
     }
 
-    public ScrapingResultsModelBuilder WithActingUser(User actingUser)
+    public ScrapedResultsModelBuilder WithActingUser(User actingUser)
     {
         _actingUser = actingUser;
         return this;
     }
 
-    public ScrapingResultsModelBuilder WithSearchTerm(string? searchTerm)
+    public ScrapedResultsModelBuilder WithSearchTerm(string? searchTerm)
     {
         _searchTerm = searchTerm;
         return this;
     }
 
-    public ScrapingResultsModel Build()
+    public ScrapedResultsModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
 
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapingResultsArgsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperScrapedResultsArgsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Scraper>(unitOfWork)
         ));
@@ -68,7 +68,7 @@ public class ScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
                 .Returns(AuthorizationResult.Success());
         }
 
-        var model = new ScrapingResultsModel(
+        var model = new ScrapedResultsModel(
             new QueryExecutor(queryHandlerFactory),
             _bus,
             _authorizationService

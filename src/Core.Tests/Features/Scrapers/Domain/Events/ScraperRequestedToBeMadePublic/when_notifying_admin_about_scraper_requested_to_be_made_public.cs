@@ -38,7 +38,7 @@ public class when_notifying_admin_about_scraper_requested_to_be_made_public : Ba
     }
 
     [Test]
-    public void email_notification_about_new_scraping_results_is_sent_to_user()
+    public void email_notification_about_new_scraped_results_is_sent_to_user()
     {
         A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
     }

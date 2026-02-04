@@ -13,9 +13,9 @@ export abstract class StimulusControllers
 	public static scrapersDetailWebPage: string = `scrapers--detail-web-page`;
 	public static scrapersDetailWebPageOverview: string = `scrapers--detail-web-page-overview`;
 	public static scrapersDetailWebPageDisabledWarning: string = `scrapers--detail-web-page-disabled-warning`;
-	public static scrapersDetailWebPageScrapingResults: string = `scrapers--detail-web-page-scraping-results`;
-	public static scrapersScrapingResults: string = `scrapers--scraping-results`;
-	public static scrapersScrapingResultsWebPages: string = `scrapers--scraping-results-web-pages`;
+	public static scrapersDetailWebPageScrapedResults: string = `scrapers--detail-web-page-scraped-results`;
+	public static scrapersScrapedResults: string = `scrapers--scraped-results`;
+	public static scrapersScrapedResultsWebPages: string = `scrapers--scraped-results-web-pages`;
 	public static watchdogDetail: string = `watchdogs--detail`;
 	public static watchdogDetailOverview: string = `watchdogs--detail-overview`;
 	public static accountLogin: string = `account--login`;

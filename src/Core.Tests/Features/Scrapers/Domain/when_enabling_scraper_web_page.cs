@@ -36,6 +36,6 @@ public class when_enabling_scraper_web_page : BaseTest
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(_scraperWebPageId, ["Another World", "Doom 1"]);
+        _scraper.SetScrapedResults(_scraperWebPageId, ["Another World", "Doom 1"]);
     }
 }

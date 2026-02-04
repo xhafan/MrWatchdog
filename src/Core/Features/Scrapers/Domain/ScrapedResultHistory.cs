@@ -1,10 +1,10 @@
 ﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public record ScrapingResultHistory
+public record ScrapedResultHistory
 {
-    protected ScrapingResultHistory() {}
+    protected ScrapedResultHistory() {}
     
-    public ScrapingResultHistory(string result, DateTime notifiedOn)
+    public ScrapedResultHistory(string result, DateTime notifiedOn)
     {
         Result = result;
         NotifiedOn = notifiedOn;

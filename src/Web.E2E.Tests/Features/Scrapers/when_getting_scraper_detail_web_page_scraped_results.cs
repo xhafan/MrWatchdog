@@ -8,7 +8,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 
 [TestFixture]
-public class when_getting_scraper_detail_web_page_scraping_results : BaseDatabaseTest
+public class when_getting_scraper_detail_web_page_scraped_results : BaseDatabaseTest
 {
     private Scraper _scraper = null!;
 
@@ -23,14 +23,14 @@ public class when_getting_scraper_detail_web_page_scraping_results : BaseDatabas
     {
         var scraperWebPageId = _scraper.WebPages.Single().Id;
 
-        var url = ScraperUrlConstants.ScraperDetailWebPageScrapingResultsUrlTemplate
+        var url = ScraperUrlConstants.ScraperDetailWebPageScrapedResultsUrlTemplate
             .WithScraperId(_scraper.Id)
             .WithScraperWebPageIdVariable(scraperWebPageId);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();
         response.Headers.Location.ToString().ShouldEndWith(
-            $"/Account/Login?ReturnUrl=%2FScrapers%2FDetail%2FWebPage%2FWebPageScrapingResults%3FscraperId%3D{_scraper.Id}%26scraperWebPageId%3D{scraperWebPageId}");
+            $"/Account/Login?ReturnUrl=%2FScrapers%2FDetail%2FWebPage%2FWebPageScrapedResults%3FscraperId%3D{_scraper.Id}%26scraperWebPageId%3D{scraperWebPageId}");
     }
     
     [TearDown]

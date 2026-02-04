@@ -1,9 +1,9 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Web.Features.Scrapers.Shared.ScrapingResultsWebPages;
+namespace MrWatchdog.Web.Features.Scrapers.Shared.ScrapedResultsWebPages;
 
 [TsInterface(IncludeNamespace = false, AutoI = false)]
-public record ScrapingResultsWebPagesStimulusModel(
+public record ScrapedResultsWebPagesStimulusModel(
     // ReSharper disable NotAccessedPositionalProperty.Global
     string NoScrapedResultsAvailableResource,
     string NoScrapedResultsMatchingTheSearchTermAvailableResource

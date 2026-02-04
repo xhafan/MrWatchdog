@@ -46,7 +46,7 @@ public class when_scraping_scraper_with_network_error : BaseTest
             ignoreLineEndings: true
         );
 
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBeNull();
     }
     

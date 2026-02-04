@@ -10,16 +10,16 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
 [AllowAnonymous]
-public class ScrapingResultsModel(
+public class ScrapedResultsModel(
     IQueryExecutor queryExecutor,
     ICoreBus bus,
     IAuthorizationService authorizationService
 ) : BaseAuthorizationPageModel(authorizationService)
 {
-    public ScraperScrapingResultsArgs ScraperScrapingResultsArgs { get; private set; } = null!;
+    public ScraperScrapedResultsArgs ScraperScrapedResultsArgs { get; private set; } = null!;
     
     [BindProperty(SupportsGet = true)]
     [StringLength(ValidationConstants.SearchTermMaxLength)]
@@ -27,12 +27,12 @@ public class ScrapingResultsModel(
     
     public async Task<IActionResult> OnGet(long scraperId)
     {
-        ScraperScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
-                new GetScraperScrapingResultsArgsQuery(scraperId)
+        ScraperScrapedResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
+                new GetScraperScrapedResultsArgsQuery(scraperId)
             );
 
-        if (ScraperScrapingResultsArgs.PublicStatus == PublicStatus.Public)
+        if (ScraperScrapedResultsArgs.PublicStatus == PublicStatus.Public)
         {
             return Page();
         }
@@ -49,9 +49,9 @@ public class ScrapingResultsModel(
     {
         if (!User.IsAuthenticated()) return Unauthorized();
 
-        ScraperScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
-                new GetScraperScrapingResultsArgsQuery(scraperId)
+        ScraperScrapedResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
+                new GetScraperScrapedResultsArgsQuery(scraperId)
             );
 
         if (!ModelState.IsValid)
@@ -59,7 +59,7 @@ public class ScrapingResultsModel(
             return PageWithUnprocessableEntityStatus422();
         }
 
-        if (ScraperScrapingResultsArgs.PublicStatus != PublicStatus.Public 
+        if (ScraperScrapedResultsArgs.PublicStatus != PublicStatus.Public 
             && !await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId))
         {
             return Forbid();

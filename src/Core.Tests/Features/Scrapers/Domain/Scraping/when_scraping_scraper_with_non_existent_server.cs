@@ -38,7 +38,7 @@ public class when_scraping_scraper_with_non_existent_server : BaseTest
         webPage.ScrapingErrorMessage.ShouldContain("HttpClientScraper:");
         webPage.ScrapingErrorMessage.ShouldNotContain("PlaywrightScraper:");
 
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBeNull();
     }
     

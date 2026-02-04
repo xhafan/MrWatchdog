@@ -5,22 +5,22 @@ using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Features.Shared.TagHelpers;
 
-namespace MrWatchdog.Web.Features.Scrapers.Shared.ScrapingResultsWebPages;
+namespace MrWatchdog.Web.Features.Scrapers.Shared.ScrapedResultsWebPages;
 
-[HtmlTargetElement("scraping-results-web-pages")]
-public class ScrapingResultsWebPages(IHtmlHelper htmlHelper) : BaseStimulusModelViewTagHelper<ScrapingResultsWebPagesStimulusModel>(htmlHelper)
+[HtmlTargetElement("scraped-results-web-pages")]
+public class ScrapedResultsWebPages(IHtmlHelper htmlHelper) : BaseStimulusModelViewTagHelper<ScrapedResultsWebPagesStimulusModel>(htmlHelper)
 {
-    public ScraperScrapingResultsArgs ScraperScrapingResultsArgs { get; set; } = null!;
+    public ScraperScrapedResultsArgs ScraperScrapedResultsArgs { get; set; } = null!;
     
     protected override string GetStimulusControllerName()
     {
-        return StimulusControllers.ScrapersScrapingResultsWebPages;
+        return StimulusControllers.ScrapersScrapedResultsWebPages;
     }
 
-    protected override Task<ScrapingResultsWebPagesStimulusModel> GetStimulusModel()
+    protected override Task<ScrapedResultsWebPagesStimulusModel> GetStimulusModel()
     {
         return Task.FromResult(
-            new ScrapingResultsWebPagesStimulusModel(
+            new ScrapedResultsWebPagesStimulusModel(
                 Resource.NoScrapedResultsAvailable,
                 Resource.NoScrapedResultsMatchingTheSearchTermAvailable
             )

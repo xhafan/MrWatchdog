@@ -7,24 +7,24 @@ public class WatchdogMappingOverrides : IAutoMappingOverride<Watchdog>
 {
     public void Override(AutoMapping<Watchdog> mapping)
     {
-        mapping.HasMany(x => x.CurrentScrapingResults)
-            .Table($"{nameof(Watchdog)}{nameof(Watchdog.CurrentScrapingResults)}".TrimEnd('s'))
+        mapping.HasMany(x => x.CurrentScrapedResults)
+            .Table($"{nameof(Watchdog)}{nameof(Watchdog.CurrentScrapedResults)}".TrimEnd('s'))
             .Element("Value", x =>
             {
                 x.Not.Nullable();
                 x.Length(10000);
             });
         
-        mapping.HasMany(x => x.ScrapingResultsToNotifyAbout)
-            .Table($"{nameof(Watchdog)}ScrapingResultToNotifyAbout")
+        mapping.HasMany(x => x.ScrapedResultsToNotifyAbout)
+            .Table($"{nameof(Watchdog)}ScrapedResultToNotifyAbout")
             .Element("Value", x =>
             {
                 x.Not.Nullable();
                 x.Length(10000);
             });
         
-        mapping.HasMany(x => x.ScrapingResultsHistory)
-            .Table($"{nameof(Watchdog)}ScrapingResultHistory")
+        mapping.HasMany(x => x.ScrapedResultsHistory)
+            .Table($"{nameof(Watchdog)}ScrapedResultHistory")
             .Component(x =>
             {
                 x.Map(c => c.Result)

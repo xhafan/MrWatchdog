@@ -12,44 +12,44 @@ using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
-public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
+public class WebPageScrapedResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IAuthorizationService? _authorizationService;
     private long _scraperId;
     private long _scraperWebPageId;
 
-    public WebPageScrapingResultsModelBuilder WithBus(ICoreBus bus)
+    public WebPageScrapedResultsModelBuilder WithBus(ICoreBus bus)
     {
         _bus = bus;
         return this;
     }
 
-    public WebPageScrapingResultsModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
+    public WebPageScrapedResultsModelBuilder WithAuthorizationService(IAuthorizationService authorizationService)
     {
         _authorizationService = authorizationService;
         return this;
     }
     
-    public WebPageScrapingResultsModelBuilder WithScraperId(long scraperId)
+    public WebPageScrapedResultsModelBuilder WithScraperId(long scraperId)
     {
         _scraperId = scraperId;
         return this;
     }       
     
-    public WebPageScrapingResultsModelBuilder WithScraperWebPageId(long scraperWebPageId)
+    public WebPageScrapedResultsModelBuilder WithScraperWebPageId(long scraperWebPageId)
     {
         _scraperWebPageId = scraperWebPageId;
         return this;
     } 
 
-    public WebPageScrapingResultsModel Build()
+    public WebPageScrapedResultsModel Build()
     {
         _bus ??= A.Fake<ICoreBus>();
 
         var queryHandlerFactory = new FakeQueryHandlerFactory();
         
-        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageScrapingResultsQueryHandler(
+        queryHandlerFactory.RegisterQueryHandler(new GetScraperWebPageScrapedResultsQueryHandler(
             unitOfWork,
             new NhibernateRepository<Scraper>(unitOfWork)
         ));
@@ -61,7 +61,7 @@ public class WebPageScrapingResultsModelBuilder(NhibernateUnitOfWork unitOfWork)
                 .Returns(AuthorizationResult.Success());
         }
 
-        var model = new WebPageScrapingResultsModel(
+        var model = new WebPageScrapedResultsModel(
             new QueryExecutor(queryHandlerFactory),
             _bus,
             _authorizationService

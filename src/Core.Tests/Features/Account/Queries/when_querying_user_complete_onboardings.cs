@@ -14,7 +14,7 @@ public class when_querying_user_complete_onboardings : BaseDatabaseTest
     public async Task Context()
     {
         var user = new UserBuilder(UnitOfWork).Build();
-        user.CompleteOnboarding(OnboardingIdentifiers.ScraperScrapingResults);
+        user.CompleteOnboarding(OnboardingIdentifiers.ScraperScrapedResults);
 
         var queryHandler = new GetUserCompleteOnboardingsQueryHandler(UnitOfWork);
 
@@ -24,6 +24,6 @@ public class when_querying_user_complete_onboardings : BaseDatabaseTest
     [Test]
     public void complete_onboardings_are_correct()
     {
-        _completeOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapingResults]);
+        _completeOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapedResults]);
     }
 }

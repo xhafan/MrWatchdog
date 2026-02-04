@@ -27,7 +27,7 @@ public class when_persisting_scraper_web_page : BaseDatabaseTest
             })
             .Build();
         _newScraperWebPage = _newScraper.WebPages.Single();
-        _newScraper.SetScrapingResults(_newScraperWebPage.Id, ["<div>text</div>"]);
+        _newScraper.SetScrapedResults(_newScraperWebPage.Id, ["<div>text</div>"]);
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
@@ -46,7 +46,7 @@ public class when_persisting_scraper_web_page : BaseDatabaseTest
         _persistedScraperWebPage.ScrapingByBrowserWaitFor.ShouldBe(ScrapingByBrowserWaitFor.NetworkIdle);
         _persistedScraperWebPage.SelectText.ShouldBe(true);
         _persistedScraperWebPage.Name.ShouldBe("url.com/page");
-        _persistedScraperWebPage.ScrapingResults.ShouldBe(["text"]);
+        _persistedScraperWebPage.ScrapedResults.ShouldBe(["text"]);
         _persistedScraperWebPage.ScrapedOn.ShouldNotBeNull();
         _persistedScraperWebPage.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _persistedScraperWebPage.IsEnabled.ShouldBe(false);

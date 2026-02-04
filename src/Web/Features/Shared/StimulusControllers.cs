@@ -33,13 +33,13 @@ public static class StimulusControllers
     public const string ScrapersDetailWebPageDisabledWarning = "scrapers--detail-web-page-disabled-warning";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ScrapersDetailWebPageScrapingResults = "scrapers--detail-web-page-scraping-results";
+    public const string ScrapersDetailWebPageScrapedResults = "scrapers--detail-web-page-scraped-results";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ScrapersScrapingResults = "scrapers--scraping-results";
+    public const string ScrapersScrapedResults = "scrapers--scraped-results";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ScrapersScrapingResultsWebPages = "scrapers--scraping-results-web-pages";
+    public const string ScrapersScrapedResultsWebPages = "scrapers--scraped-results-web-pages";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogDetail = "watchdogs--detail";

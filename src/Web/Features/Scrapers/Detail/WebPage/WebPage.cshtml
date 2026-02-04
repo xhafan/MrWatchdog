@@ -49,13 +49,13 @@
                                  />
                 </div>
                 <div class="col-md-6">
-                    <turbo-frame id="scraper_web_page_scraping_results_@Model.ScraperWebPageId"
-                                 src="@Url.Page("WebPageScrapingResults", new
+                    <turbo-frame id="scraper_web_page_scraped_results_@Model.ScraperWebPageId"
+                                 src="@Url.Page("WebPageScrapedResults", new
                                       {
                                           scraperId = Model.ScraperId,
                                           scraperWebPageId = Model.ScraperWebPageId
                                       })"
-                                 data-scrapers--detail-web-page-target="webPageScrapingResults"
+                                 data-scrapers--detail-web-page-target="webPageScrapedResults"
                                  />
                 </div>
             </div>

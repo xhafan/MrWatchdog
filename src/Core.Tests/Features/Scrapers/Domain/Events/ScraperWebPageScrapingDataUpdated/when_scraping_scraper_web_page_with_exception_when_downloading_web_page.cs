@@ -38,7 +38,7 @@ public class when_scraping_scraper_web_page_with_exception_when_downloading_web_
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe(
             """

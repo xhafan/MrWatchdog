@@ -1,14 +1,14 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
-public class when_viewing_archived_scraper_scraping_results : BaseDatabaseTest
+public class when_viewing_archived_scraper_scraped_results : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
 
     [SetUp]
@@ -16,7 +16,7 @@ public class when_viewing_archived_scraper_scraping_results : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .Build();
         
         await _model.OnGet(_scraper.Id);
@@ -25,7 +25,7 @@ public class when_viewing_archived_scraper_scraping_results : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.ScraperScrapingResultsArgs.IsArchived.ShouldBe(true);
+        _model.ScraperScrapedResultsArgs.IsArchived.ShouldBe(true);
     }
 
     private void _BuildEntities()

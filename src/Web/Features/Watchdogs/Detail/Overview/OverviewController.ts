@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { searchTermModifiedEventName } from "../../../Scrapers/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import { searchTermModifiedEventName } from "../../../Scrapers/Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
 
 export default class OverviewController extends Controller {
     static targets  = [

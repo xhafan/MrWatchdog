@@ -31,7 +31,7 @@ public class when_notifying_user_about_watchdog_archived : BaseDatabaseTest
     }
 
     [Test]
-    public void email_notification_about_watchdog_search_archived_is_sent()
+    public void email_notification_about_watchdog_archived_is_sent()
     {
         A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
     }

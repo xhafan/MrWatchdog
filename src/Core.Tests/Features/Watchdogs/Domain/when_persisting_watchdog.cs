@@ -27,7 +27,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
             })
             .Build();
         var scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(scraperWebPageId, ["<div>text</div>", "<div>hello</div>"]);
+        _scraper.SetScrapedResults(scraperWebPageId, ["<div>text</div>", "<div>hello</div>"]);
         _scraper.EnableWebPage(scraperWebPageId);
 
         _user = new UserBuilder(UnitOfWork).Build();
@@ -53,7 +53,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.Scraper.ShouldBe(_scraper);
         _persistedWatchdog.User.ShouldBe(_user);
         _persistedWatchdog.SearchTerm.ShouldBe("text");
-        _persistedWatchdog.CurrentScrapingResults.ShouldBe(["<div>text</div>"]);
+        _persistedWatchdog.CurrentScrapedResults.ShouldBe(["<div>text</div>"]);
         _persistedWatchdog.IsArchived.ShouldBe(false);
     }
 }

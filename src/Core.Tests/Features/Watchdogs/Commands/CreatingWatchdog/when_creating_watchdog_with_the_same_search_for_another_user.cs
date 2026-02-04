@@ -38,7 +38,7 @@ public class when_creating_watchdog_with_the_same_search_for_another_user : Base
     }
 
     [Test]
-    public void new_watchdog_search_is_created()
+    public void new_watchdog_is_created()
     {
         _watchdog.ShouldNotBeNull();
         _watchdog.User.ShouldBe(_userOne);
@@ -59,7 +59,7 @@ public class when_creating_watchdog_with_the_same_search_for_another_user : Base
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
         
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)

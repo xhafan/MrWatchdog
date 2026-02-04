@@ -57,7 +57,7 @@ public class when_viewing_watchdog_for_private_scraper_as_unauthorized_user : Ba
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
         _watchdog = new WatchdogBuilder(UnitOfWork)

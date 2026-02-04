@@ -25,7 +25,7 @@ public class when_scraping_scraper_with_web_page_without_url : BaseTest
     public void scraper_web_page_is_not_scraped()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe(null);
     }

@@ -27,7 +27,7 @@ public class DetailModel(
         if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId))
         {
             return ScraperDetailArgs.PublicStatus == PublicStatus.Public 
-                ? Redirect(ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(scraperId))
+                ? Redirect(ScraperUrlConstants.ScraperScrapedResultsUrlTemplate.WithScraperId(scraperId))
                 : Forbid();
         }
 

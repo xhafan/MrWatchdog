@@ -52,10 +52,10 @@ public class when_scraping_scraper_web_page_with_selecting_text_instead_of_html_
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_values_contain_only_non_empty_text()
+    public void web_page_is_scraped_and_scraped_results_values_contain_only_non_empty_text()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe(["Text one"]);
+        webPage.ScrapedResults.ShouldBe(["Text one"]);
     }
     
     private void _BuildEntities()

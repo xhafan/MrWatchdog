@@ -17,9 +17,9 @@ import ScrapersDetailActionsController from "../Scrapers/Detail/Actions/ActionsC
 import ScrapersDetailWebPageController from "../Scrapers/Detail/WebPage/WebPageController";
 import ScrapersDetailWebPageOverviewController from "../Scrapers/Detail/WebPage/WebPageOverviewController";
 import ScrapersDetailWebPageDisabledWarningController from "../Scrapers/Detail/WebPage/WebPageDisabledWarningController";
-import ScrapersDetailWebPageScrapingResultsController from "../Scrapers/Detail/WebPage/WebPageScrapingResultsController";
-import ScrapersScrapingResultsController from "../Scrapers/ScrapingResults/ScrapingResultsController";
-import ScrapersScrapingResultsWebPagesController from "../Scrapers/Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import ScrapersDetailWebPageScrapedResultsController from "../Scrapers/Detail/WebPage/WebPageScrapedResultsController";
+import ScrapersScrapedResultsController from "../Scrapers/ScrapedResults/ScrapedResultsController";
+import ScrapersScrapedResultsWebPagesController from "../Scrapers/Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
@@ -39,9 +39,9 @@ application.register(StimulusControllers.scrapersDetailActions, ScrapersDetailAc
 application.register(StimulusControllers.scrapersDetailWebPage, ScrapersDetailWebPageController);
 application.register(StimulusControllers.scrapersDetailWebPageOverview, ScrapersDetailWebPageOverviewController);
 application.register(StimulusControllers.scrapersDetailWebPageDisabledWarning, ScrapersDetailWebPageDisabledWarningController);
-application.register(StimulusControllers.scrapersDetailWebPageScrapingResults, ScrapersDetailWebPageScrapingResultsController);
-application.register(StimulusControllers.scrapersScrapingResults, ScrapersScrapingResultsController);
-application.register(StimulusControllers.scrapersScrapingResultsWebPages, ScrapersScrapingResultsWebPagesController);
+application.register(StimulusControllers.scrapersDetailWebPageScrapedResults, ScrapersDetailWebPageScrapedResultsController);
+application.register(StimulusControllers.scrapersScrapedResults, ScrapersScrapedResultsController);
+application.register(StimulusControllers.scrapersScrapedResultsWebPages, ScrapersScrapedResultsWebPagesController);
 application.register(StimulusControllers.watchdogDetail, WatchdogsDetailController);
 application.register(StimulusControllers.watchdogDetailOverview, WatchdogsDetailOverviewController);
 

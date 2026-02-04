@@ -132,10 +132,10 @@ public class Scraper : VersionedEntity, IAggregateRoot
         _webPages.Remove(webPage);
     }
 
-    public virtual void SetScrapingResults(long scraperWebPageId, ICollection<string> scrapingResults)
+    public virtual void SetScrapedResults(long scraperWebPageId, ICollection<string> scrapedResults)
     {
         var webPage = _GetWebPage(scraperWebPageId);
-        webPage.SetScrapingResults(scrapingResults, canRaiseScrapingFailedDomainEvent: false);
+        webPage.SetScrapedResults(scrapedResults, canRaiseScrapingFailedDomainEvent: false);
     }
     
     public virtual void SetScrapingErrorMessage(long scraperWebPageId, string scrapingErrorMessage)
@@ -144,22 +144,22 @@ public class Scraper : VersionedEntity, IAggregateRoot
         webPage.SetScrapingErrorMessage(scrapingErrorMessage, canRaiseScrapingFailedDomainEvent: false);
     }    
     
-    public virtual ScraperWebPageScrapingResultsDto GetScraperWebPageScrapingResultsDto(long scraperWebPageId)
+    public virtual ScraperWebPageScrapedResultsDto GetScraperWebPageScrapedResultsDto(long scraperWebPageId)
     {
         var webPage = _GetWebPage(scraperWebPageId);
-        return webPage.GetScraperWebPageScrapingResultsDto();
+        return webPage.GetScraperWebPageScrapedResultsDto();
     }
     
-    public virtual ScraperScrapingResultsArgs GetScraperScrapingResultsArgs()
+    public virtual ScraperScrapedResultsArgs GetScraperScrapedResultsArgs()
     {
-        return new ScraperScrapingResultsArgs
+        return new ScraperScrapedResultsArgs
         {
             ScraperId = Id,
             ScraperName = Name,
             ScraperDescription = Description,
             WebPages = _webPages
                 .Where(x => x.IsEnabled)
-                .Select(x => x.GetScraperWebPageScrapingResultsArgs())
+                .Select(x => x.GetScraperWebPageScrapedResultsArgs())
                 .WhereNotNull()
                 .ToList(),
             UserId = User.Id,

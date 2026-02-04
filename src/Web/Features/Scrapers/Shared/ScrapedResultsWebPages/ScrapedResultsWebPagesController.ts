@@ -1,13 +1,13 @@
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../Shared/BodyController";
-import { scraperScrapingResultsWebPagesInitializedEventName } from "../../ScrapingResults/ScrapingResultsController";
+import { scraperScrapedResultsWebPagesInitializedEventName } from "../../ScrapedResults/ScrapedResultsController";
 import Enumerable from "linq";
 import { StimulusControllers } from "../../../Shared/Generated/StimulusControllers";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
-import { ScrapingResultsWebPagesStimulusModel } from "../../../Shared/Generated/ScrapingResultsWebPagesStimulusModel";
+import { ScrapedResultsWebPagesStimulusModel } from "../../../Shared/Generated/ScrapedResultsWebPagesStimulusModel";
 
 export const searchTermModifiedEventName = "searchTermModified";
 
-export default class ScrapingResultsWebPagesController extends BaseStimulusModelController<ScrapingResultsWebPagesStimulusModel> {
+export default class ScrapedResultsWebPagesController extends BaseStimulusModelController<ScrapedResultsWebPagesStimulusModel> {
     
     static targets = [
         "scrapingResult",
@@ -26,7 +26,7 @@ export default class ScrapingResultsWebPagesController extends BaseStimulusModel
     connect() {
         this.registerSearchTermModifiedEventHandler();
 
-        this.dispatch(scraperScrapingResultsWebPagesInitializedEventName, { prefix: "" });
+        this.dispatch(scraperScrapedResultsWebPagesInitializedEventName, { prefix: "" });
     }
 
     private registerSearchTermModifiedEventHandler() {
@@ -74,11 +74,11 @@ export default class ScrapingResultsWebPagesController extends BaseStimulusModel
     private refreshWebPagesVisibility() {
         this.webPageTargets.forEach(webPage => {
      
-            const webPageScrapingResults = Enumerable.from(this.scrapingResultTargets).where(scrapingResult =>
-                webPage.contains(scrapingResult)
+            const webPageScrapedResults = Enumerable.from(this.scrapingResultTargets).where(scrapedResult =>
+                webPage.contains(scrapedResult)
             );
 
-            const allHidden = Enumerable.from(webPageScrapingResults).all(x => x.style.display === "none");
+            const allHidden = Enumerable.from(webPageScrapedResults).all(x => x.style.display === "none");
 
             webPage.style.display = allHidden ? "none" : "";
         });

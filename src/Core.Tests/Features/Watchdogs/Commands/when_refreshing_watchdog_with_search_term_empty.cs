@@ -34,8 +34,8 @@ public class when_refreshing_watchdog_with_search_term_empty : BaseDatabaseTest
     [Test]
     public void watchdog_is_refreshed()
     {
-        _watchdog.CurrentScrapingResults.ShouldBe(["Doom 1", "Prince Of Persia"]);
-        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe(["Prince Of Persia"]);
+        _watchdog.CurrentScrapedResults.ShouldBe(["Doom 1", "Prince Of Persia"]);
+        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Prince Of Persia"]);
     }
     
     private void _BuildEntities()
@@ -49,7 +49,7 @@ public class when_refreshing_watchdog_with_search_term_empty : BaseDatabaseTest
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Another World", "Doom 1"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Another World", "Doom 1"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
 
         _watchdog = new WatchdogBuilder(UnitOfWork)
@@ -57,6 +57,6 @@ public class when_refreshing_watchdog_with_search_term_empty : BaseDatabaseTest
             .WithSearchTerm(null)
             .Build();
         
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Prince Of Persia"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1", "Prince Of Persia"]);
     }
 }

@@ -34,7 +34,7 @@ public class when_creating_watchdog_with_duplicate_archived_watchdog : BaseDatab
     }
 
     [Test]
-    public void new_watchdog_search_is_created()
+    public void new_watchdog_is_created()
     {
         UnitOfWork.Session!.Query<Watchdog>().SingleOrDefault(x => x.Scraper == _scraper && !x.IsArchived).ShouldNotBeNull();
     }
@@ -52,7 +52,7 @@ public class when_creating_watchdog_with_duplicate_archived_watchdog : BaseDatab
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>string 2</div>", "<div>text 3</div>"]);
         
         _archivedWatchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)

@@ -52,10 +52,10 @@ public class when_updating_existing_scraper_web_page : BaseTest
     }
 
     [Test]
-    public void web_page_scraping_results_and_scraped_on_are_reset()
+    public void web_page_scraped_results_and_scraped_on_are_reset()
     {
         var scraperWebPage = _scraper.WebPages.Single();
-        scraperWebPage.ScrapingResults.ShouldBeEmpty();
+        scraperWebPage.ScrapedResults.ShouldBeEmpty();
         scraperWebPage.ScrapedOn.ShouldBe(null);
     }
 
@@ -77,7 +77,7 @@ public class when_updating_existing_scraper_web_page : BaseTest
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(_scraperWebPageId, ["<div>x</div>"]);
+        _scraper.SetScrapedResults(_scraperWebPageId, ["<div>x</div>"]);
         _scraper.EnableWebPage(_scraperWebPageId);
     }
 }

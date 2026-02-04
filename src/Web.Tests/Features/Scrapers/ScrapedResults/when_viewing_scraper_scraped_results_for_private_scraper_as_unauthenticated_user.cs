@@ -3,14 +3,14 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
-public class when_viewing_scraper_scraping_results_for_private_scraper_as_unauthenticated_user : BaseDatabaseTest
+public class when_viewing_scraper_scraped_results_for_private_scraper_as_unauthenticated_user : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
@@ -20,7 +20,7 @@ public class when_viewing_scraper_scraping_results_for_private_scraper_as_unauth
     {
         _BuildEntities();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .Build();
         
         _actionResult = await _model.OnGet(_scraper.Id);
@@ -47,7 +47,7 @@ public class when_viewing_scraper_scraping_results_for_private_scraper_as_unauth
             .WithUser(_user)
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
         UnitOfWork.Flush();

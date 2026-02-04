@@ -50,10 +50,10 @@ public class when_scraping_scraper_web_page : BaseDatabaseTest
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_are_set()
+    public void web_page_is_scraped_and_scraped_results_are_set()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe([
+        webPage.ScrapedResults.ShouldBe([
             """
             <a href="https://store.epicgames.com/en-US/p/two-point-hospital" target="_blank">Two Point Hospital</a>
             """

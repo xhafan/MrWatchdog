@@ -8,15 +8,15 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
 public class when_creating_watchdog_for_public_scraper_with_user_different_from_scraper_owner : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private ICoreBus _bus = null!;
     private IActionResult _actionResult = null!;
@@ -37,7 +37,7 @@ public class when_creating_watchdog_for_public_scraper_with_user_different_from_
             ))
             .Returns(AuthorizationResult.Failed());
 
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .WithBus(_bus)
             .WithAuthorizationService(authorizationService)
             .WithActingUser(_actingUser)

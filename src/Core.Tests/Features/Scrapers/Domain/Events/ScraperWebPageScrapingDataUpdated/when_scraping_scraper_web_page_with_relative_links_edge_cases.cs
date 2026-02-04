@@ -57,28 +57,28 @@ public class when_scraping_scraper_web_page_with_relative_links_edge_cases : Bas
     public void web_page_is_scraped_and_only_absolute_path_links_are_converted()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldNotBeEmpty();
-        var scrapingResult = webPage.ScrapingResults.First();
+        webPage.ScrapedResults.ShouldNotBeEmpty();
+        var scrapedResult = webPage.ScrapedResults.First();
         
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      href="https://example.com/absolute/path"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      href="relative/path"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      src="https://example.com/absolute_images/test.jpg"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      src="relative_images/test.jpg"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      href="https://other.com/external"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      href="//protocol-relative.com/path"
                                      """);
-        scrapingResult.ShouldContain("""
+        scrapedResult.ShouldContain("""
                                      href="#anchor"
                                      """);
     }

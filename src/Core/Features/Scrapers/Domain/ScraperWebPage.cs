@@ -16,7 +16,7 @@ namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
 public class ScraperWebPage : VersionedEntity
 {
-    private readonly IList<string> _scrapingResults = new List<string>();
+    private readonly IList<string> _scrapedResults = new List<string>();
     private readonly ISet<ScraperWebPageHttpHeader> _httpHeaders = new HashSet<ScraperWebPageHttpHeader>();
 
     protected ScraperWebPage() {}
@@ -37,7 +37,7 @@ public class ScraperWebPage : VersionedEntity
     public virtual bool ScrapeHtmlAsRenderedByBrowser { get; protected set; }
     public virtual ScrapingByBrowserWaitFor? ScrapingByBrowserWaitFor { get; protected set; }
     public virtual bool SelectText { get; protected set; }
-    public virtual IEnumerable<string> ScrapingResults => _scrapingResults;
+    public virtual IEnumerable<string> ScrapedResults => _scrapedResults;
     public virtual string? Name { get; protected set; }
     public virtual DateTime? ScrapedOn { get; protected set; }
     public virtual string? ScrapingErrorMessage { get; protected set; }
@@ -124,13 +124,13 @@ public class ScraperWebPage : VersionedEntity
 
     private void _ResetScrapingData()
     {
-        _scrapingResults.Clear();
+        _scrapedResults.Clear();
         ScrapedOn = null;
         ScrapingErrorMessage = null;
     }
 
-    public virtual void SetScrapingResults(
-        ICollection<string> scrapingResults,
+    public virtual void SetScrapedResults(
+        ICollection<string> scrapedResults,
         bool canRaiseScrapingFailedDomainEvent
     )
     {
@@ -140,12 +140,12 @@ public class ScraperWebPage : VersionedEntity
 
         if (SelectText)
         {
-            scrapingResults = scrapingResults
+            scrapedResults = scrapedResults
                 .Select(_getTextFromHtml)
                 .Where(text => !string.IsNullOrWhiteSpace(text))
                 .ToList();
 
-            if (scrapingResults.IsEmpty())
+            if (scrapedResults.IsEmpty())
             {
                 SetScrapingErrorMessage(
                     "All selected HTML results have empty text.",
@@ -156,12 +156,12 @@ public class ScraperWebPage : VersionedEntity
         }
         else
         {
-            var scrapingResultsWithNonEmptyText = scrapingResults
+            var scrapedResultsWithNonEmptyText = scrapedResults
                 .Select(html => sanitizer.Sanitize(html))
                 .Where(html => !string.IsNullOrWhiteSpace(_getTextFromHtml(html)))
                 .ToList();
             
-            if (scrapingResultsWithNonEmptyText.IsEmpty())
+            if (scrapedResultsWithNonEmptyText.IsEmpty())
             {
                 SetScrapingErrorMessage(
                     "All selected HTML results have empty text.",
@@ -170,10 +170,10 @@ public class ScraperWebPage : VersionedEntity
                 return;
             }            
             
-            scrapingResults = scrapingResultsWithNonEmptyText;
+            scrapedResults = scrapedResultsWithNonEmptyText;
         }
         
-        _scrapingResults.AddRange(scrapingResults);
+        _scrapedResults.AddRange(scrapedResults);
         ScrapedOn = DateTime.UtcNow;
         ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert();
         return;
@@ -222,21 +222,21 @@ public class ScraperWebPage : VersionedEntity
         Log.Information("Setting scraper web page scraping error message: {scrapingErrorMessage}", scrapingErrorMessage);
     }
     
-    public virtual ScraperWebPageScrapingResultsDto GetScraperWebPageScrapingResultsDto()
+    public virtual ScraperWebPageScrapedResultsDto GetScraperWebPageScrapedResultsDto()
     {
-        return new ScraperWebPageScrapingResultsDto(Scraper.Id, Id, _scrapingResults, ScrapedOn, ScrapingErrorMessage);
+        return new ScraperWebPageScrapedResultsDto(Scraper.Id, Id, _scrapedResults, ScrapedOn, ScrapingErrorMessage);
     }
 
-    public virtual ScraperWebPageScrapingResultsArgs? GetScraperWebPageScrapingResultsArgs()
+    public virtual ScraperWebPageScrapedResultsArgs? GetScraperWebPageScrapedResultsArgs()
     {
         return !string.IsNullOrWhiteSpace(Url) 
                && !string.IsNullOrWhiteSpace(Name)
                && string.IsNullOrWhiteSpace(ScrapingErrorMessage)
                && ScrapedOn != null
-            ? new ScraperWebPageScrapingResultsArgs
+            ? new ScraperWebPageScrapedResultsArgs
             {
                 Name = Name,
-                ScrapingResults = _scrapingResults.ToList(),
+                ScrapedResults = _scrapedResults.ToList(),
                 Url = Url
             }
             : null;
@@ -294,7 +294,7 @@ public class ScraperWebPage : VersionedEntity
             return;
         }
 
-        SetScrapingResults(
+        SetScrapedResults(
             selectedHtmlNodes.Select(x => x.OuterHtml).ToList(),
             canRaiseScrapingFailedDomainEvent
         );

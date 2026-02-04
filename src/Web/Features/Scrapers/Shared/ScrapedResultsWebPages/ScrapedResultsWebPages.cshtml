@@ -1,15 +1,15 @@
 ﻿@using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
-@model ScrapingResultsWebPages
+@model ScrapedResultsWebPages
 
-<div data-scrapers--scraping-results-web-pages-target="allResults">
-    <label class="form-label fw-bold" id="@OnboardingElementIdentifiers.ScrapersScrapingResultsWebPagesWatchedWebPagesId">
+<div data-scrapers--scraped-results-web-pages-target="allResults">
+    <label class="form-label fw-bold" id="@OnboardingElementIdentifiers.ScrapersScrapedResultsWebPagesWatchedWebPagesId">
         @Resource.WatchedWebPages
     </label>
-    @foreach (var scraperWebPageArgs in Model.ScraperScrapingResultsArgs.WebPages)
+    @foreach (var scraperWebPageArgs in Model.ScraperScrapedResultsArgs.WebPages)
     {
         <div class="card mb-1" 
-             data-scrapers--scraping-results-web-pages-target="webPage"
+             data-scrapers--scraped-results-web-pages-target="webPage"
              >
             <div class="card-header d-flex justify-content-between align-items-center text-wrap text-break">
                 <span><a href="@scraperWebPageArgs.Url" target="_blank">@scraperWebPageArgs.Name</a></span>
@@ -19,10 +19,10 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">@Resource.ScrapedResults</label>
                         <ul translate="no">
-                            @foreach (var scrapingResult in scraperWebPageArgs.ScrapingResults)
+                            @foreach (var scrapedResult in scraperWebPageArgs.ScrapedResults)
                             {
-                                <li data-scrapers--scraping-results-web-pages-target="scrapingResult">
-                                    @Html.Raw(scrapingResult)
+                                <li data-scrapers--scraped-results-web-pages-target="scrapingResult">
+                                    @Html.Raw(scrapedResult)
                                 </li>
                             }
                         </ul>
@@ -33,9 +33,9 @@
     }
 </div>
 <div class="col-md-6 mt-3" 
-     data-scrapers--scraping-results-web-pages-target="noResults" 
+     data-scrapers--scraped-results-web-pages-target="noResults" 
      style="display: none"
 >
     <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-    <span data-scrapers--scraping-results-web-pages-target="noResultsMessage" class="text-wrap text-break"></span>
+    <span data-scrapers--scraped-results-web-pages-target="noResultsMessage" class="text-wrap text-break"></span>
 </div>

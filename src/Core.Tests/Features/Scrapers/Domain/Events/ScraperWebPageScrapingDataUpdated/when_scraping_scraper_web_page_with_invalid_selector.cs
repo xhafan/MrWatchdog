@@ -54,7 +54,7 @@ public class when_scraping_scraper_web_page_with_invalid_selector : BaseDatabase
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe("Unexpected token {Eoi} where one of [Ident, Char: *] was expected.");
     }

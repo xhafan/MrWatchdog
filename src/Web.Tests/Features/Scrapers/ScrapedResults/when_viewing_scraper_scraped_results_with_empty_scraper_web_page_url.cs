@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
-public class when_viewing_scraper_scraping_results_with_empty_scraper_web_page_url : BaseDatabaseTest
+public class when_viewing_scraper_scraped_results_with_empty_scraper_web_page_url : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private IActionResult _actionResult = null!;
 
@@ -19,7 +19,7 @@ public class when_viewing_scraper_scraping_results_with_empty_scraper_web_page_u
     {
         _BuildEntities();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .Build();
         
         _actionResult = await _model.OnGet(_scraper.Id);
@@ -34,7 +34,7 @@ public class when_viewing_scraper_scraping_results_with_empty_scraper_web_page_u
     [Test]
     public void scraper_scraping_result_web_pages_are_empty()
     {
-        _model.ScraperScrapingResultsArgs.WebPages.ShouldBeEmpty();
+        _model.ScraperScrapedResultsArgs.WebPages.ShouldBeEmpty();
     }
 
     private void _BuildEntities()

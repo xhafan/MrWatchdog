@@ -21,7 +21,7 @@ public static class ScraperUrlConstants
     public const string ScrapersUserScrapersUrl = "/Scrapers/UserScrapers";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ScraperScrapingResultsUrlTemplate = $"/Scrapers/ScrapingResults/{ScraperIdVariable}";
+    public const string ScraperScrapedResultsUrlTemplate = $"/Scrapers/ScrapedResults/{ScraperIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScraperCreateUrl = "/Scrapers/Create";
@@ -48,8 +48,8 @@ public static class ScraperUrlConstants
         $"/Scrapers/Detail/WebPage/WebPageTurboFrame?scraperId={ScraperIdVariable}&scraperWebPageId={ScraperWebPageIdVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ScraperDetailWebPageScrapingResultsUrlTemplate = 
-        $"/Scrapers/Detail/WebPage/WebPageScrapingResults?scraperId={ScraperIdVariable}&scraperWebPageId={ScraperWebPageIdVariable}";
+    public const string ScraperDetailWebPageScrapedResultsUrlTemplate = 
+        $"/Scrapers/Detail/WebPage/WebPageScrapedResults?scraperId={ScraperIdVariable}&scraperWebPageId={ScraperWebPageIdVariable}";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScraperDetailBadgesUrlTemplate = $"/Scrapers/Detail/Badges/{ScraperIdVariable}";

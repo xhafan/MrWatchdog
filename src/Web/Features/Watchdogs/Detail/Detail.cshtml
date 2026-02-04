@@ -7,7 +7,7 @@
 
 @{
     var searchTermSuffix = $"{(!string.IsNullOrWhiteSpace(Model.WatchdogArgs.SearchTerm) ? $" - {Model.WatchdogArgs.SearchTerm}" : "")}";
-    ViewData["Title"] = $"{Model.ScraperScrapingResultsArgs.ScraperName}{searchTermSuffix}";
+    ViewData["Title"] = $"{Model.ScraperScrapedResultsArgs.ScraperName}{searchTermSuffix}";
 }
 
 @section Navigation {
@@ -20,7 +20,7 @@
                 <a asp-page="/Watchdogs/Index">@Resource.MyWatchdogs</a>
             </li>
             <li class="breadcrumb-item active text-wrap text-break" aria-current="page">
-                <span>@Model.ScraperScrapingResultsArgs.ScraperName</span>
+                <span>@Model.ScraperScrapedResultsArgs.ScraperName</span>
                 <span translate="no">@searchTermSuffix</span>
             </li>
         </ol>
@@ -33,7 +33,7 @@
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.WatchdogOnboardingIntroScrapedResults,
-                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.ScrapersScrapingResultsWebPagesWatchedWebPagesId}"
+                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.ScrapersScrapedResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.WatchdogOnboardingIntroSearchTerm,
@@ -55,9 +55,9 @@
     
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4 text-wrap text-break">
-            <a asp-page="/Scrapers/ScrapingResults/ScrapingResults" 
+            <a asp-page="/Scrapers/ScrapedResults/ScrapedResults" 
                asp-route-scraperId="@Model.WatchdogArgs.ScraperId">
-                @Model.ScraperScrapingResultsArgs.ScraperName
+                @Model.ScraperScrapedResultsArgs.ScraperName
             </a>
             <span data-watchdogs--detail-target="searchTermSuffix" translate="no">@searchTermSuffix</span>
         </h1>
@@ -107,6 +107,6 @@
             </div>
         </div>
 
-        <scraping-results-web-pages scraper-scraping-results-args="Model.ScraperScrapingResultsArgs" />
+        <scraped-results-web-pages scraper-scraped-results-args="Model.ScraperScrapedResultsArgs" />
     </div>
 </div>

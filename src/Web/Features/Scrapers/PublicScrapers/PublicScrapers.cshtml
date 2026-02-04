@@ -18,7 +18,7 @@
     @foreach (var scraper in Model.PublicScrapers)
     {
         <div>
-            <a asp-page="/Scrapers/ScrapingResults/ScrapingResults" 
+            <a asp-page="/Scrapers/ScrapedResults/ScrapedResults" 
                asp-route-scraperId="@scraper.ScraperId"
                data-turbo-frame="_top"
                class="text-wrap text-break"

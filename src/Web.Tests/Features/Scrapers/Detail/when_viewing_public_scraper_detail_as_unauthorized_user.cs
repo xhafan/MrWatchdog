@@ -43,7 +43,7 @@ public class when_viewing_public_scraper_detail_as_unauthorized_user : BaseDatab
     {
         _actionResult.ShouldBeOfType<RedirectResult>();
         var redirectResult = (RedirectResult)_actionResult;
-        redirectResult.Url.ShouldBe(ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(_scraper.Id));
+        redirectResult.Url.ShouldBe(ScraperUrlConstants.ScraperScrapedResultsUrlTemplate.WithScraperId(_scraper.Id));
     }
 
     private void _BuildEntities()

@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 import { formSubmitWithWaitForJobCompletion } from "../../../Jobs/jobCompletion";
 import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
-import { WebPageScrapingResultsStimulusModel } from "../../../Shared/Generated/WebPageScrapingResultsStimulusModel";
+import { WebPageScrapedResultsStimulusModel } from "../../../Shared/Generated/WebPageScrapedResultsStimulusModel";
 
 export const scraperWebPageScrapedEvent = "scraperWebPageScraped";
 
-export default class WebPageScrapingResultsController extends BaseStimulusModelController<WebPageScrapingResultsStimulusModel> {
+export default class WebPageScrapedResultsController extends BaseStimulusModelController<WebPageScrapedResultsStimulusModel> {
     static targets = [
         "scrapeWebPageForm",
         "scrapedOnInBrowserLocale"

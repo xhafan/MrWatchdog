@@ -20,10 +20,10 @@ public class when_refreshing_watchdog_with_disabled_scraper_web_page : BaseTest
     }
 
     [Test]
-    public void watchdog_search_is_refreshed()
+    public void watchdog_is_refreshed()
     {
-        _watchdog.CurrentScrapingResults.ShouldBe([]);
-        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe([]);
+        _watchdog.CurrentScrapedResults.ShouldBe([]);
+        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe([]);
     }
     
     private void _BuildEntities()
@@ -44,7 +44,7 @@ public class when_refreshing_watchdog_with_disabled_scraper_web_page : BaseTest
             .WithSearchTerm(null)
             .Build();
         
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
         return;
 
         void _updateScraperWebPageInOrderToDisableIt()

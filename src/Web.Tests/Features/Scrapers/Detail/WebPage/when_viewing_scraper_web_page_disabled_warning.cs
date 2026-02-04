@@ -55,7 +55,7 @@ public class when_viewing_scraper_web_page_disabled_warning : BaseDatabaseTest
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapingResults(_scraperWebPageId, ["Another World", "Doom 1"]);
+        _scraper.SetScrapedResults(_scraperWebPageId, ["Another World", "Doom 1"]);
         _scraper.EnableWebPage(_scraperWebPageId);
     }    
 }

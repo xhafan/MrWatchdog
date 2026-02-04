@@ -5,11 +5,11 @@ import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
-import { searchTermModifiedEventName } from "../Shared/ScrapingResultsWebPages/ScrapingResultsWebPagesController";
+import { searchTermModifiedEventName } from "../Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
 
-export const scraperScrapingResultsWebPagesInitializedEventName = "scraperScrapingResultsWebPagesInitialized";
+export const scraperScrapedResultsWebPagesInitializedEventName = "scraperScrapedResultsWebPagesInitialized";
 
-export default class ScrapingResultsController extends Controller {
+export default class ScrapedResultsController extends Controller {
     static targets = [
         "searchTerm",
         "createWatchdog",
@@ -23,7 +23,7 @@ export default class ScrapingResultsController extends Controller {
     declare createWatchdogFormTarget: HTMLFormElement;
 
     connect() {
-        this.registerScraperScrapingResultsWebPagesInitializedEventHandler();
+        this.registerScraperScrapedResultsWebPagesInitializedEventHandler();
 
         formSubmitWithWaitForJobCompletion(
             this.createWatchdogFormTarget, 
@@ -62,17 +62,17 @@ export default class ScrapingResultsController extends Controller {
         Turbo.visit(accountLoginUrl.toString());
     }
 
-    private registerScraperScrapingResultsWebPagesInitializedEventHandler() {
+    private registerScraperScrapedResultsWebPagesInitializedEventHandler() {
         this.dispatch(registerGlobalEventHandlerEventName, {
             prefix: "",
             detail: new EventHandlerRegistration<string>(
-                scraperScrapingResultsWebPagesInitializedEventName, 
-                this.handleScraperScrapingResultsWebPagesInitializedEvent.bind(this)
+                scraperScrapedResultsWebPagesInitializedEventName, 
+                this.handleScraperScrapedResultsWebPagesInitializedEvent.bind(this)
             )
         });
     }
 
-    private handleScraperScrapingResultsWebPagesInitializedEvent(event: CustomEventInit) {
+    private handleScraperScrapedResultsWebPagesInitializedEvent(event: CustomEventInit) {
         this.onSearchTermModified();
     }
 }

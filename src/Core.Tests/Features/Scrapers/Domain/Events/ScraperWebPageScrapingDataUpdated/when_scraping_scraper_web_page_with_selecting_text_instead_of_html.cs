@@ -50,10 +50,10 @@ public class when_scraping_scraper_web_page_with_selecting_text_instead_of_html 
     }
 
     [Test]
-    public void web_page_is_scraped_and_scraping_results_values_are_text_instead_of_html()
+    public void web_page_is_scraped_and_scraped_results_values_are_text_instead_of_html()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe(["One Two Point & Hospital Two"]);
+        webPage.ScrapedResults.ShouldBe(["One Two Point & Hospital Two"]);
     }
     
     private void _BuildEntities()

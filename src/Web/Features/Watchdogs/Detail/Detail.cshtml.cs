@@ -20,7 +20,7 @@ public class DetailModel(
 ) : BaseAuthorizationPageModel(authorizationService)
 {
     public WatchdogArgs WatchdogArgs { get; private set; } = null!;
-    public ScraperScrapingResultsArgs ScraperScrapingResultsArgs { get; private set; } = null!;
+    public ScraperScrapedResultsArgs ScraperScrapedResultsArgs { get; private set; } = null!;
 
     public async Task<IActionResult> OnGet(long watchdogId)
     {
@@ -34,7 +34,7 @@ public class DetailModel(
             if (WatchdogArgs.ScraperPublicStatus != PublicStatus.Public) return Forbid();
 
             var redirectUrl = QueryHelpers.AddQueryString(
-                ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(WatchdogArgs.ScraperId),
+                ScraperUrlConstants.ScraperScrapedResultsUrlTemplate.WithScraperId(WatchdogArgs.ScraperId),
                 new Dictionary<string, string?>
                 {
                     {"searchTerm", WatchdogArgs.SearchTerm}
@@ -43,9 +43,9 @@ public class DetailModel(
             return Redirect(redirectUrl);
         }
 
-        ScraperScrapingResultsArgs =
-            await queryExecutor.ExecuteSingleAsync<GetScraperScrapingResultsArgsQuery, ScraperScrapingResultsArgs>(
-                new GetScraperScrapingResultsArgsQuery(WatchdogArgs.ScraperId)
+        ScraperScrapedResultsArgs =
+            await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
+                new GetScraperScrapedResultsArgsQuery(WatchdogArgs.ScraperId)
             );
         
         return Page();

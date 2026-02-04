@@ -52,7 +52,7 @@ public class when_scraping_scraper_web_page_with_no_text_inside_selected_html : 
     public void web_page_scraping_error_message_is_set()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBeEmpty();
+        webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
         webPage.ScrapingErrorMessage.ShouldBe("All selected HTML results have empty text.");
     }

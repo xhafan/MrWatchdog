@@ -6,7 +6,7 @@ using MrWatchdog.TestsShared.Builders;
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdog;
 
 [TestFixture]
-public class when_refreshing_watchdog_with_new_scraping_results_already_in_scraping_results_to_notify_about : BaseTest
+public class when_refreshing_watchdog_with_new_scraped_results_already_in_scraped_results_to_notify_about : BaseTest
 {
     private Scraper _scraper = null!;
     private Watchdog _watchdog = null!;
@@ -20,9 +20,9 @@ public class when_refreshing_watchdog_with_new_scraping_results_already_in_scrap
     }
 
     [Test]
-    public void watchdog_search_scraping_results_to_notify_about_does_not_contain_duplicates()
+    public void watchdog_scraped_results_to_notify_about_does_not_contain_duplicates()
     {
-        _watchdog.ScrapingResultsToNotifyAbout.ShouldBe(["Doom 2"]);
+        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Doom 2"]);
     }
 
     private void _BuildEntities()
@@ -36,7 +36,7 @@ public class when_refreshing_watchdog_with_new_scraping_results_already_in_scrap
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1", "Another World"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
 
         _watchdog = new WatchdogBuilder()
@@ -44,10 +44,10 @@ public class when_refreshing_watchdog_with_new_scraping_results_already_in_scrap
             .WithSearchTerm(null)
             .Build();
         
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 1", "Doom 2", "Another World"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 1", "Doom 2", "Another World"]);
         _watchdog.Refresh();
-        _scraper.SetScrapingResults(scraperWebPage.Id, []);
+        _scraper.SetScrapedResults(scraperWebPage.Id, []);
         _watchdog.Refresh();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["Doom 2"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 2"]);
     }
 }

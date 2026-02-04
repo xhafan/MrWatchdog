@@ -6,9 +6,9 @@ using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_scraper_web_page_scraping_results_with_web_page_not_scraped : BaseDatabaseTest
+public class when_viewing_scraper_web_page_scraped_results_with_web_page_not_scraped : BaseDatabaseTest
 {
-    private WebPageScrapingResultsModel _model = null!;
+    private WebPageScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private long _scraperWebPageId;
 
@@ -19,7 +19,7 @@ public class when_viewing_scraper_web_page_scraping_results_with_web_page_not_sc
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
         
-        _model = new WebPageScrapingResultsModelBuilder(UnitOfWork)
+        _model = new WebPageScrapedResultsModelBuilder(UnitOfWork)
             .WithScraperId(_scraper.Id)
             .WithScraperWebPageId(_scraperWebPageId)
             .Build();
@@ -30,11 +30,11 @@ public class when_viewing_scraper_web_page_scraping_results_with_web_page_not_sc
     [Test]
     public void model_is_correct()
     {
-        _model.ScraperWebPageScrapingResults.ScraperId.ShouldBe(_scraper.Id);
-        _model.ScraperWebPageScrapingResults.ScraperWebPageId.ShouldBe(_scraperWebPageId);
-        _model.ScraperWebPageScrapingResults.ScrapingResults.ShouldBeEmpty();
-        _model.ScraperWebPageScrapingResults.ScrapedOn.ShouldBe(null);
-        _model.ScraperWebPageScrapingResults.ScrapingErrorMessage.ShouldBe(null);
+        _model.ScraperWebPageScrapedResults.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperWebPageScrapedResults.ScraperWebPageId.ShouldBe(_scraperWebPageId);
+        _model.ScraperWebPageScrapedResults.ScrapedResults.ShouldBeEmpty();
+        _model.ScraperWebPageScrapedResults.ScrapedOn.ShouldBe(null);
+        _model.ScraperWebPageScrapedResults.ScrapingErrorMessage.ShouldBe(null);
     }  
 
     private void _BuildEntities()

@@ -51,7 +51,7 @@ public class when_scraping_scraper_web_page_with_dangerous_html : BaseDatabaseTe
     public void dangerous_html_is_removed()
     {
         var webPage = _scraper.WebPages.Single();
-        webPage.ScrapingResults.ShouldBe([
+        webPage.ScrapedResults.ShouldBe([
             """
             <p>text one</p>
             """

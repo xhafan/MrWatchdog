@@ -5,7 +5,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
-using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapingResultsUpdated;
+using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -18,9 +18,9 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
 public class Watchdog : VersionedEntity, IAggregateRoot
 {
-    private readonly IList<string> _currentScrapingResults = new List<string>();
-    private readonly IList<string> _scrapingResultsToNotifyAbout = new List<string>();
-    private readonly ISet<ScrapingResultHistory> _scrapingResultsHistory = new HashSet<ScrapingResultHistory>();
+    private readonly IList<string> _currentScrapedResults = new List<string>();
+    private readonly IList<string> _scrapedResultsToNotifyAbout = new List<string>();
+    private readonly ISet<ScrapedResultHistory> _scrapedResultsHistory = new HashSet<ScrapedResultHistory>();
     
     protected Watchdog() {}
 
@@ -35,26 +35,26 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         ReceiveNotification = true;
         SearchTerm = searchTerm;
 
-        var scrapingResults = _GetScraperScrapingResults();
+        var scrapedResults = _GetScraperScrapedResults();
         
-        _currentScrapingResults.AddRange(scrapingResults);
+        _currentScrapedResults.AddRange(scrapedResults);
     }
 
     public virtual Scraper Scraper { get; } = null!;
     public virtual User User { get; } = null!;
     public virtual bool ReceiveNotification { get; protected set; }
     public virtual string? SearchTerm { get; protected set; }
-    public virtual IEnumerable<string> CurrentScrapingResults => _currentScrapingResults;
-    public virtual IEnumerable<string> ScrapingResultsToNotifyAbout => _scrapingResultsToNotifyAbout;
-    public virtual IEnumerable<ScrapingResultHistory> ScrapingResultsHistory => _scrapingResultsHistory;
+    public virtual IEnumerable<string> CurrentScrapedResults => _currentScrapedResults;
+    public virtual IEnumerable<string> ScrapedResultsToNotifyAbout => _scrapedResultsToNotifyAbout;
+    public virtual IEnumerable<ScrapedResultHistory> ScrapedResultsHistory => _scrapedResultsHistory;
     public virtual bool IsArchived { get; protected set; }
 
 
-    private IEnumerable<string> _GetScraperScrapingResults()
+    private IEnumerable<string> _GetScraperScrapedResults()
     {
         return Scraper.WebPages
             .Where(x => x.IsEnabled)
-            .SelectMany(x => x.ScrapingResults)
+            .SelectMany(x => x.ScrapedResults)
             .Where(x => string.IsNullOrWhiteSpace(SearchTerm) || x.ContainsIgnoringDiacritics(SearchTerm));
     }
     
@@ -88,62 +88,62 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     public virtual void Refresh()
     {
-        var previousScrapingResults = _currentScrapingResults.ToList();
+        var previousScrapedResults = _currentScrapedResults.ToList();
         
-        _currentScrapingResults.Clear();
-        _currentScrapingResults.AddRange(_GetScraperScrapingResults());
-        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _currentScrapingResults: {_currentScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(_currentScrapingResults));
+        _currentScrapedResults.Clear();
+        _currentScrapedResults.AddRange(_GetScraperScrapedResults());
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _currentScrapedResults: {_currentScrapedResults}", Id, SearchTerm, JsonHelper.Serialize(_currentScrapedResults));
         
-        var newScrapingResultsSincePreviousScrapingResults = _currentScrapingResults.Except(previousScrapingResults).ToList();
-        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsSincePreviousScrapingResults: {newScrapingResultsSincePreviousScrapingResults}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsSincePreviousScrapingResults));
-        var newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout = newScrapingResultsSincePreviousScrapingResults.Except(_scrapingResultsToNotifyAbout).ToList();
-        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout: {newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout));
+        var newScrapedResultsSincePreviousScrapedResults = _currentScrapedResults.Except(previousScrapedResults).ToList();
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapedResultsSincePreviousScrapedResults: {newScrapedResultsSincePreviousScrapedResults}", Id, SearchTerm, JsonHelper.Serialize(newScrapedResultsSincePreviousScrapedResults));
+        var newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout = newScrapedResultsSincePreviousScrapedResults.Except(_scrapedResultsToNotifyAbout).ToList();
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout: {newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout));
        
-        _addNewScrapingResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently();
+        _addNewScrapedResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently();
         
-        if (_scrapingResultsToNotifyAbout.Any())
+        if (_scrapedResultsToNotifyAbout.Any())
         {
-            DomainEvents.RaiseEvent(new WatchdogScrapingResultsUpdatedDomainEvent(Id));
+            DomainEvents.RaiseEvent(new WatchdogScrapedResultsUpdatedDomainEvent(Id));
         } 
 
-        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _scrapingResultsToNotifyAbout: {_scrapingResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(_scrapingResultsToNotifyAbout));
+        Log.Information("Watchdog refresh, Id {Id}, SearchTerm {SearchTerm}, _scrapedResultsToNotifyAbout: {_scrapedResultsToNotifyAbout}", Id, SearchTerm, JsonHelper.Serialize(_scrapedResultsToNotifyAbout));
         return;
 
-        void _addNewScrapingResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently()
+        void _addNewScrapedResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently()
         {
-            _clearOldItemsInScrapingResultsHistory();
+            _clearOldItemsInScrapedResultsHistory();
             
-            foreach (var newScrapingResultNotAlreadyInScrapingResultsToNotifyAbout in newScrapingResultsNotAlreadyInScrapingResultsToNotifyAbout)
+            foreach (var newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout in newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout)
             {
-                if (_scrapingResultsHistory.All(x => x.Result != newScrapingResultNotAlreadyInScrapingResultsToNotifyAbout))
+                if (_scrapedResultsHistory.All(x => x.Result != newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout))
                 {
-                    _scrapingResultsToNotifyAbout.Add(newScrapingResultNotAlreadyInScrapingResultsToNotifyAbout);
+                    _scrapedResultsToNotifyAbout.Add(newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout);
                 }
             }
         }
         
-        void _clearOldItemsInScrapingResultsHistory()
+        void _clearOldItemsInScrapedResultsHistory()
         {
             var historyExpiresOn = Clock.UtcNow.AddDays(-Scraper.IntervalBetweenSameResultNotificationsInDays);
-            foreach (var scrapingResultHistory in _scrapingResultsHistory.ToList())
+            foreach (var scrapedResultHistory in _scrapedResultsHistory.ToList())
             {
-                var isHistoryRecordExpired = scrapingResultHistory.NotifiedOn < historyExpiresOn;
+                var isHistoryRecordExpired = scrapedResultHistory.NotifiedOn < historyExpiresOn;
                 if (isHistoryRecordExpired)
                 {
-                    _scrapingResultsHistory.Remove(scrapingResultHistory);
+                    _scrapedResultsHistory.Remove(scrapedResultHistory);
                 }
             }
         }  
     }
 
-    public virtual async Task NotifyUserAboutNewScrapingResults(
+    public virtual async Task NotifyUserAboutNewScrapedResults(
         ICoreBus bus,
         RuntimeOptions runtimeOptions
     )
     {
-        var newScrapingResults = _scrapingResultsToNotifyAbout.ToList();
+        var newScrapedResults = _scrapedResultsToNotifyAbout.ToList();
         
-        if (newScrapingResults.IsEmpty()) return;
+        if (newScrapedResults.IsEmpty()) return;
 
         var mrWatchdogResource = Resource.MrWatchdog;
         var searchTermSuffix = !string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "";
@@ -167,7 +167,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                      </a>:
                  </p>
                  <ul>
-                     {string.Join("\n    ", _scrapingResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
+                     {string.Join("\n    ", _scrapedResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
                  </ul>
                  <p>
                      Kind regards,<br>
@@ -179,13 +179,13 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                 UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithWatchdogId(Id)}"
             ));
 
-            foreach (var scrapingResult in _scrapingResultsToNotifyAbout)
+            foreach (var scrapedResult in _scrapedResultsToNotifyAbout)
             {
-                _scrapingResultsHistory.Add(new ScrapingResultHistory(scrapingResult, Clock.UtcNow));
+                _scrapedResultsHistory.Add(new ScrapedResultHistory(scrapedResult, Clock.UtcNow));
             }
         }
 
-        _scrapingResultsToNotifyAbout.Clear();
+        _scrapedResultsToNotifyAbout.Clear();
     }
 
     public virtual void Archive(User? actingUser = null)

@@ -9,7 +9,7 @@ export abstract class ScraperUrlConstants
 	public static scrapersUrl: string = `/Scrapers`;
 	public static scrapersPublicScrapersUrl: string = `/Scrapers/PublicScrapers`;
 	public static scrapersUserScrapersUrl: string = `/Scrapers/UserScrapers`;
-	public static scraperScrapingResultsUrlTemplate: string = `/Scrapers/ScrapingResults/$scraperId`;
+	public static scraperScrapedResultsUrlTemplate: string = `/Scrapers/ScrapedResults/$scraperId`;
 	public static scraperCreateUrl: string = `/Scrapers/Create`;
 	public static scraperDetailUrlTemplate: string = `/Scrapers/Detail/$scraperId`;
 	public static scraperDetailOverviewUrlTemplate: string = `/Scrapers/Detail/Overview/$scraperId`;
@@ -17,7 +17,7 @@ export abstract class ScraperUrlConstants
 	public static scraperDetailWebPageUrlTemplate: string = `/Scrapers/Detail/WebPage?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
 	public static scraperDetailWebPageOverviewUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageOverview?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
 	public static scraperDetailWebPageTurboFrameUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageTurboFrame?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
-	public static scraperDetailWebPageScrapingResultsUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageScrapingResults?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
+	public static scraperDetailWebPageScrapedResultsUrlTemplate: string = `/Scrapers/Detail/WebPage/WebPageScrapedResults?scraperId=$scraperId&scraperWebPageId=$scraperWebPageId`;
 	public static scraperDetailBadgesUrlTemplate: string = `/Scrapers/Detail/Badges/$scraperId`;
 	public static scraperDetailActionsUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId`;
 	public static scraperDetailActionsMakePublicUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId?handler=MakePublic`;

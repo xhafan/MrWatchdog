@@ -39,12 +39,12 @@ public class when_viewing_watchdog : BaseDatabaseTest
         _model.WatchdogArgs.ScraperId.ShouldBe(_scraper.Id);
         _model.WatchdogArgs.SearchTerm.ShouldBe("text");
         
-        _model.ScraperScrapingResultsArgs.ScraperId.ShouldBe(_scraper.Id);
-        _model.ScraperScrapingResultsArgs.ScraperName.ShouldBe("scraper name");
+        _model.ScraperScrapedResultsArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperScrapedResultsArgs.ScraperName.ShouldBe("scraper name");
         
-        var webPageArgs = _model.ScraperScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        var webPageArgs = _model.ScraperScrapedResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>"]);
+        webPageArgs.ScrapedResults.ShouldBe(["<div>text 1</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");        
     }
 
@@ -60,7 +60,7 @@ public class when_viewing_watchdog : BaseDatabaseTest
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
         _watchdog = new WatchdogBuilder(UnitOfWork)

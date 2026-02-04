@@ -7,15 +7,15 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
-public class when_viewing_scraper_scraping_results_for_private_scraper_as_authenticated_owner : BaseDatabaseTest
+public class when_viewing_scraper_scraped_results_for_private_scraper_as_authenticated_owner : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
@@ -33,7 +33,7 @@ public class when_viewing_scraper_scraping_results_for_private_scraper_as_authen
             ))
             .Returns(AuthorizationResult.Success());
 
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .WithAuthorizationService(authorizationService)
             .WithActingUser(_user)
             .Build();
@@ -50,16 +50,16 @@ public class when_viewing_scraper_scraping_results_for_private_scraper_as_authen
     [Test]
     public void model_is_correct()
     {
-        _model.ScraperScrapingResultsArgs.ScraperId.ShouldBe(_scraper.Id);
-        _model.ScraperScrapingResultsArgs.ScraperName.ShouldBe("scraper name");
+        _model.ScraperScrapedResultsArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperScrapedResultsArgs.ScraperName.ShouldBe("scraper name");
         
-        var webPageArgs = _model.ScraperScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        var webPageArgs = _model.ScraperScrapedResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.ScrapedResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");
         
-        _model.ScraperScrapingResultsArgs.UserId.ShouldBe(_user.Id);
-        _model.ScraperScrapingResultsArgs.PublicStatus.ShouldBe(PublicStatus.Private);
+        _model.ScraperScrapedResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.ScraperScrapedResultsArgs.PublicStatus.ShouldBe(PublicStatus.Private);
     }
 
     private void _BuildEntities()
@@ -77,7 +77,7 @@ public class when_viewing_scraper_scraping_results_for_private_scraper_as_authen
             .WithUser(_user)
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         
         UnitOfWork.Flush();

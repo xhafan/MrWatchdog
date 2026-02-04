@@ -18,12 +18,12 @@ public class when_completing_onboarding : BaseDatabaseTest
 
         var handler = new CompleteOnboardingCommandMessageHandler(new UserRepository(UnitOfWork));
 
-        await handler.Handle(new CompleteOnboardingCommand(OnboardingIdentifiers.ScraperScrapingResults) {ActingUserId = _user.Id});
+        await handler.Handle(new CompleteOnboardingCommand(OnboardingIdentifiers.ScraperScrapedResults) {ActingUserId = _user.Id});
     }
 
     [Test]
     public void user_onboarding_is_complete()
     {
-        _user.CompleteOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapingResults]);
+        _user.CompleteOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapedResults]);
     }
 }

@@ -37,13 +37,13 @@ public class when_creating_watchdog : BaseDatabaseTest
     }
 
     [Test]
-    public void new_watchdog_search_is_created_with_matching_current_scraping_results()
+    public void new_watchdog_is_created_with_matching_current_scraped_results()
     {
         _watchdog.ShouldNotBeNull();
         _watchdog.User.ShouldBe(_user);
         _watchdog.ReceiveNotification.ShouldBe(true);
         _watchdog.SearchTerm.ShouldBe("text");
-        _watchdog.CurrentScrapingResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
+        _watchdog.CurrentScrapedResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
     }
     
     private void _BuildEntities()
@@ -59,7 +59,7 @@ public class when_creating_watchdog : BaseDatabaseTest
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>tÉxt 1</div>", "<div>string 2</div>", "<div>texŤ 3</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
     }
 }

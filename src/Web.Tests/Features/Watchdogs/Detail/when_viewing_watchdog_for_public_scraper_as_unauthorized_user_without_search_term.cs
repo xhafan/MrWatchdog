@@ -45,7 +45,7 @@ public class when_viewing_watchdog_for_public_scraper_as_unauthorized_user_witho
     {
         _actionResult.ShouldBeOfType<RedirectResult>();
         var redirectResult = (RedirectResult)_actionResult;
-        redirectResult.Url.ShouldBe(ScraperUrlConstants.ScraperScrapingResultsUrlTemplate.WithScraperId(_scraper.Id));
+        redirectResult.Url.ShouldBe(ScraperUrlConstants.ScraperScrapedResultsUrlTemplate.WithScraperId(_scraper.Id));
     }
 
     private void _BuildEntities()
@@ -60,7 +60,7 @@ public class when_viewing_watchdog_for_public_scraper_as_unauthorized_user_witho
             })
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         _scraper.MakePublic();
         

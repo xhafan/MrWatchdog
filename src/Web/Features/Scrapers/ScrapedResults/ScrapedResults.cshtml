@@ -6,11 +6,11 @@
 @using MrWatchdog.Web.Features.Shared
 @using MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding
 @using MrWatchdog.Web.Infrastructure.Authorizations
-@model ScrapingResultsModel
+@model ScrapedResultsModel
 @inject IUserRepository UserRepository
 
 @{
-    var title = Model.ScraperScrapingResultsArgs.ScraperName;
+    var title = Model.ScraperScrapedResultsArgs.ScraperName;
     ViewData["Title"] = title;
 }
 
@@ -27,26 +27,26 @@
         </ol>
     </nav>
     <onboarding id="@OnboardingElementIdentifiers.OnboardingId"
-                identifier="@OnboardingIdentifiers.ScraperScrapingResults"
+                identifier="@OnboardingIdentifiers.ScraperScrapedResults"
                 steps="@([
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingIntro
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingWatchedWebPages,
-                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.ScrapersScrapingResultsWebPagesWatchedWebPagesId}"
+                               ElementIdentifier: $"#{@OnboardingElementIdentifiers.ScrapersScrapedResultsWebPagesWatchedWebPagesId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingSearchTerm,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsSearchTermInputGroupId}"
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapedResultsSearchTermInputGroupId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingCreateWatchdog,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogId}"
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapedResultsCreateWatchdogId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.ScraperResultsOnboardingLoginOrRegisterToCreateWatchdog,
-                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogId}"
+                               ElementIdentifier: $"#{OnboardingElementIdentifiers.ScrapersScrapedResultsLoginToCreateWatchdogId}"
                            ),
                            new OnboardingStepStimulusModel(
                                Text: Resource.OnboardingViewAgainStep,
@@ -58,7 +58,7 @@
 
 <div class="d-flex justify-content-between align-items-center">
     <h1 class="display-4 text-wrap text-break">@title</h1>
-    @if (Model.ScraperScrapingResultsArgs.IsArchived)
+    @if (Model.ScraperScrapedResultsArgs.IsArchived)
     {
         <span class="badge text-bg-warning">
             @Resource.Archived
@@ -66,55 +66,55 @@
     }
 </div>
 
-@if (!string.IsNullOrWhiteSpace(Model.ScraperScrapingResultsArgs.ScraperDescription))
+@if (!string.IsNullOrWhiteSpace(Model.ScraperScrapedResultsArgs.ScraperDescription))
 {
     <p class="text-muted">
-        @Model.ScraperScrapingResultsArgs.ScraperDescription
+        @Model.ScraperScrapedResultsArgs.ScraperDescription
     </p>
 }
 
-<div @Stimulus.Controller(StimulusControllers.ScrapersScrapingResults)>
+<div @Stimulus.Controller(StimulusControllers.ScrapersScrapedResults)>
     <form asp-page-handler="CreateWatchdog"
-          asp-route-scraperId="@Model.ScraperScrapingResultsArgs.ScraperId"
-          data-scrapers--scraping-results-target="createWatchdogForm"
+          asp-route-scraperId="@Model.ScraperScrapedResultsArgs.ScraperId"
+          data-scrapers--scraped-results-target="createWatchdogForm"
     >
         <!-- Prevent implicit submission of the form by hitting enter on inputs -->
         <button type="submit" disabled style="display: none"></button>
 
         <div class="my-3">
-            <div class="input-group" id="@OnboardingElementIdentifiers.ScrapersScrapingResultsSearchTermInputGroupId">
+            <div class="input-group" id="@OnboardingElementIdentifiers.ScrapersScrapedResultsSearchTermInputGroupId">
                 <span class="input-group-text">
                     <i class="fas fa-search"></i>
                 </span>
                 <input asp-for="SearchTerm" 
                        class="form-control" 
-                       data-scrapers--scraping-results-target="searchTerm"
-                       data-action="input->@StimulusControllers.ScrapersScrapingResults#onSearchTermModified"
+                       data-scrapers--scraped-results-target="searchTerm"
+                       data-action="input->@StimulusControllers.ScrapersScrapedResults#onSearchTermModified"
                        placeholder="@Resource.FilterResults"
                 />
             </div>
             <span asp-validation-for="SearchTerm" class="text-danger"></span>
             <div class="mt-3">
                 <button class="btn btn-primary text-wrap text-break"
-                        data-scrapers--scraping-results-target="createWatchdog"
+                        data-scrapers--scraped-results-target="createWatchdog"
                         type="submit"
                         style="display:@(User.IsAuthenticated() ? "" : "none")"
-                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsCreateWatchdogId"
+                        id="@OnboardingElementIdentifiers.ScrapersScrapedResultsCreateWatchdogId"
                         >
                     @Resource.CreateWatchdog
                 </button> 
                 <button class="btn btn-primary"
-                        data-scrapers--scraping-results-target="loginToCreateWatchdog"
+                        data-scrapers--scraped-results-target="loginToCreateWatchdog"
                         type="button"
-                        data-action="@StimulusControllers.ScrapersScrapingResults#loginToNotifyAboutNewResults"
+                        data-action="@StimulusControllers.ScrapersScrapedResults#loginToNotifyAboutNewResults"
                         style="display:@(User.IsAuthenticated() ? "none" : "")"
-                        id="@OnboardingElementIdentifiers.ScrapersScrapingResultsLoginToCreateWatchdogId"
+                        id="@OnboardingElementIdentifiers.ScrapersScrapedResultsLoginToCreateWatchdogId"
                         >
                     @Resource.LoginOrRegisterToCreateWatchdog
                 </button>
-                @if (User.GetUserId() == Model.ScraperScrapingResultsArgs.UserId || await User.IsSuperAdmin(UserRepository))
+                @if (User.GetUserId() == Model.ScraperScrapedResultsArgs.UserId || await User.IsSuperAdmin(UserRepository))
                 {
-                    <a href="@ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(Model.ScraperScrapingResultsArgs.ScraperId)"
+                    <a href="@ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(Model.ScraperScrapedResultsArgs.ScraperId)"
                        class="btn btn-outline-primary text-decoration-none">
                         @Resource.ManageScraper
                     </a>
@@ -123,5 +123,5 @@
         </div>
     </form>
 
-    <scraping-results-web-pages scraper-scraping-results-args="Model.ScraperScrapingResultsArgs" />
+    <scraped-results-web-pages scraper-scraped-results-args="Model.ScraperScrapedResultsArgs" />
 </div>

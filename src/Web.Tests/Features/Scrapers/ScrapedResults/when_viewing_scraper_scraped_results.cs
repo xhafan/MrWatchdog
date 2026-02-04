@@ -4,14 +4,14 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Scrapers.ScrapingResults;
+using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
-namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapingResults;
+namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;
 
 [TestFixture]
-public class when_viewing_scraper_scraping_results : BaseDatabaseTest
+public class when_viewing_scraper_scraped_results : BaseDatabaseTest
 {
-    private ScrapingResultsModel _model = null!;
+    private ScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
     private User _user = null!;
     private IActionResult _actionResult = null!;
@@ -21,7 +21,7 @@ public class when_viewing_scraper_scraping_results : BaseDatabaseTest
     {
         _BuildEntities();
         
-        _model = new ScrapingResultsModelBuilder(UnitOfWork)
+        _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .Build();
         
         _actionResult = await _model.OnGet(_scraper.Id);
@@ -36,17 +36,17 @@ public class when_viewing_scraper_scraping_results : BaseDatabaseTest
     [Test]
     public void model_is_correct()
     {
-        _model.ScraperScrapingResultsArgs.ScraperId.ShouldBe(_scraper.Id);
-        _model.ScraperScrapingResultsArgs.ScraperName.ShouldBe("scraper name");
-        _model.ScraperScrapingResultsArgs.ScraperDescription.ShouldBe("scraper description");
+        _model.ScraperScrapedResultsArgs.ScraperId.ShouldBe(_scraper.Id);
+        _model.ScraperScrapedResultsArgs.ScraperName.ShouldBe("scraper name");
+        _model.ScraperScrapedResultsArgs.ScraperDescription.ShouldBe("scraper description");
         
-        var webPageArgs = _model.ScraperScrapingResultsArgs.WebPages.ShouldHaveSingleItem();
+        var webPageArgs = _model.ScraperScrapedResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapingResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.ScrapedResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
         webPageArgs.Url.ShouldBe("http://url.com/page");
         
-        _model.ScraperScrapingResultsArgs.UserId.ShouldBe(_user.Id);
-        _model.ScraperScrapingResultsArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _model.ScraperScrapedResultsArgs.UserId.ShouldBe(_user.Id);
+        _model.ScraperScrapedResultsArgs.PublicStatus.ShouldBe(PublicStatus.Public);
     }
 
     private void _BuildEntities()
@@ -65,7 +65,7 @@ public class when_viewing_scraper_scraping_results : BaseDatabaseTest
             .WithUser(_user)
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapingResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         _scraper.MakePublic();
         

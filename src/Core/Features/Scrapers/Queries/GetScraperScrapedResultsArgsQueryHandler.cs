@@ -5,14 +5,14 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public class GetScraperScrapingResultsArgsQueryHandler(
+public class GetScraperScrapedResultsArgsQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
     IRepository<Scraper> scraperRepository
-) : BaseNhibernateQueryHandler<GetScraperScrapingResultsArgsQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetScraperScrapedResultsArgsQuery>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetScraperScrapingResultsArgsQuery query)
+    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetScraperScrapedResultsArgsQuery query)
     {
         var scraper = await scraperRepository.LoadByIdAsync(query.ScraperId);
-        return (TResult)(object)scraper.GetScraperScrapingResultsArgs();
+        return (TResult)(object)scraper.GetScraperScrapedResultsArgs();
     }
 }

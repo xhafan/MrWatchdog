@@ -436,6 +436,8 @@ public class Program
             });            
         }
 
+        app.UseStatusCodePagesWithReExecute("/Error", "?httpStatusCode={0}");
+
         var getOrHeadRequestPathsWithoutDefaultDatabaseTransaction = new List<Regex>
         {
             new("^/assets/.*", RegexOptions.IgnoreCase),

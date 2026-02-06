@@ -2,11 +2,11 @@
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
-public class ScrapedResultHistory : VersionedEntity // todo: rename file once committed
+public class WatchdogScrapedResultHistory : VersionedEntity
 {
-    protected ScrapedResultHistory() {}
+    protected WatchdogScrapedResultHistory() {}
     
-    public ScrapedResultHistory(string result, DateTime notifiedOn)
+    public WatchdogScrapedResultHistory(string result, DateTime notifiedOn)
     {
         Result = result;
         NotifiedOn = notifiedOn;

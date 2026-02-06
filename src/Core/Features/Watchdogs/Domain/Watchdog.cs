@@ -20,7 +20,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 {
     private readonly IList<string> _currentScrapedResults = new List<string>();
     private readonly IList<string> _scrapedResultsToNotifyAbout = new List<string>();
-    private readonly ISet<ScrapedResultHistory> _scrapedResultsHistory = new HashSet<ScrapedResultHistory>();
+    private readonly ISet<WatchdogScrapedResultHistory> _scrapedResultsHistory = new HashSet<WatchdogScrapedResultHistory>();
     
     protected Watchdog() {}
 
@@ -46,7 +46,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     public virtual string? SearchTerm { get; protected set; }
     public virtual IEnumerable<string> CurrentScrapedResults => _currentScrapedResults;
     public virtual IEnumerable<string> ScrapedResultsToNotifyAbout => _scrapedResultsToNotifyAbout;
-    public virtual IEnumerable<ScrapedResultHistory> ScrapedResultsHistory => _scrapedResultsHistory;
+    public virtual IEnumerable<WatchdogScrapedResultHistory> ScrapedResultsHistory => _scrapedResultsHistory;
     public virtual bool IsArchived { get; protected set; }
 
 
@@ -181,7 +181,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
             foreach (var scrapedResult in _scrapedResultsToNotifyAbout)
             {
-                _scrapedResultsHistory.Add(new ScrapedResultHistory(scrapedResult, Clock.UtcNow));
+                _scrapedResultsHistory.Add(new WatchdogScrapedResultHistory(scrapedResult, Clock.UtcNow));
             }
         }
 

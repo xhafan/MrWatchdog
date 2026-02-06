@@ -34,18 +34,7 @@
             }
         </div>
     }
-        
-    @if (Model.PublicScrapers.IsEmpty())
-    {
-        <i class="fa-solid fa-triangle-exclamation text-warning"></i> 
-        @Html.Raw(
-            Localizer[
-                Resource.ThereAreNoPublicScrapers, 
-                $"<a href=\"{ScraperUrlConstants.ScraperCreateUrl}\" data-turbo-frame=\"_top\">{Resource.Here}</a>"
-            ]
-        )
-    }
-    
+
     <p class="pt-4">
         @if (Model.PublicScrapers.IsEmpty())
         {

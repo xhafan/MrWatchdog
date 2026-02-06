@@ -381,7 +381,7 @@
 		<value>Pošlete žádost o zveřejnění scraperu a jeho zpřístupnění ostatním uživatelům, kteří si pak budou moci vytvořit hlídacího psa s emailovým upozorněním na nové výsledky scrapování.</value>
 	</data>
 	<data name="ThereAreNoPublicScrapers" xml:space="preserve">
-		<value>Ještě neexistují žádné veřejné scrapery. Můžete vytvořit scraper {0} a později jej zveřejnit.</value>
+		<value>Ještě neexistují žádné veřejné scrapery.</value>
 	</data>
 	<data name="Here" xml:space="preserve">
 		<value>zde</value>
@@ -427,5 +427,8 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 	</data>
 	<data name="AddNewScraperRecommendation" xml:space="preserve">
 		<value>Vytvořit nový scraper můžete {0}.</value>
+	</data>
+	<data name="YouCanCreateScraperAndLaterMakeItPublic" xml:space="preserve">
+		<value>Nový scraper můžete vytvořit {0} a později jej zveřejnit.</value>
 	</data>
 </root>

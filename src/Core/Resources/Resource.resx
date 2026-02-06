@@ -500,7 +500,7 @@
 	  <value>Request to make the scraper public and discoverable by other users who will then be able to create a watchdog with email notification about its new scraped results.</value>
   </data>
   <data name="ThereAreNoPublicScrapers" xml:space="preserve">
-	  <value>There are no public scrapers. You can create a scraper {0} and later make it public.</value>
+	  <value>There are no public scrapers.</value>
   </data>
   <data name="Here" xml:space="preserve">
 	  <value>here</value>
@@ -545,5 +545,8 @@ This watchdog emails you notification about new results of the related scraper.<
   </data>
   <data name="AddNewScraperRecommendation" xml:space="preserve">
 	  <value>You can create a new scraper {0}.</value>
+  </data>
+  <data name="YouCanCreateScraperAndLaterMakeItPublic" xml:space="preserve">
+	  <value>You can create a new scraper {0} and later make it public.</value>
   </data>
 </root>

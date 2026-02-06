@@ -1124,7 +1124,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no public scrapers. You can create a scraper {0} and later make it public..
+        ///   Looks up a localized string similar to There are no public scrapers..
         /// </summary>
         public static string ThereAreNoPublicScrapers {
             get {
@@ -1237,6 +1237,15 @@ namespace MrWatchdog.Core.Resources {
         public static string WebPageNotScrapedYet {
             get {
                 return ResourceManager.GetString("WebPageNotScrapedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can create a new scraper {0} and later make it public..
+        /// </summary>
+        public static string YouCanCreateScraperAndLaterMakeItPublic {
+            get {
+                return ResourceManager.GetString("YouCanCreateScraperAndLaterMakeItPublic", resourceCulture);
             }
         }
         

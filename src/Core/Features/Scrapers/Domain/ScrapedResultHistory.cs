@@ -1,6 +1,8 @@
-﻿namespace MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using MrWatchdog.Core.Features.Shared.Domain;
 
-public record ScrapedResultHistory
+namespace MrWatchdog.Core.Features.Scrapers.Domain;
+
+public class ScrapedResultHistory : VersionedEntity // todo: rename file once committed
 {
     protected ScrapedResultHistory() {}
     
@@ -10,6 +12,6 @@ public record ScrapedResultHistory
         NotifiedOn = notifiedOn;
     }
 
-    public string Result { get; } = null!;
-    public DateTime NotifiedOn { get; }
+    public virtual string Result { get; } = null!;
+    public virtual DateTime NotifiedOn { get; }
 }

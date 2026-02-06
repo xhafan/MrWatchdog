@@ -1,8 +1,10 @@
 ﻿@page
+@using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @model IndexModel
+@inject IStringLocalizer<Resource> Localizer
 
 @{
     var title = Resource.Scrapers;
@@ -35,4 +37,15 @@
         }
     </div>
 </div>
+
+<p class="pt-3">
+    <i class="fa-solid fa-circle-info text-primary"></i>
+
+    @Html.Raw(
+        Localizer[
+            Resource.AddNewScraperRecommendation,
+            $"<a href=\"{ScraperUrlConstants.ScraperCreateUrl}\">{Resource.Here}</a>"
+        ]
+    )
+</p>
 

@@ -96,6 +96,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can create a new scraper {0}..
+        /// </summary>
+        public static string AddNewScraperRecommendation {
+            get {
+                return ResourceManager.GetString("AddNewScraperRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To add a new watchdog, go to the list of {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;..
         /// </summary>
         public static string AddNewWatchdogRecommendation {

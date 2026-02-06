@@ -543,4 +543,7 @@ This watchdog emails you notification about new results of the related scraper.<
   <data name="ScrapingByBrowserWaitForLoad" xml:space="preserve">
 	  <value>HTML, images and CSS loaded</value>
   </data>
+  <data name="AddNewScraperRecommendation" xml:space="preserve">
+	  <value>You can create a new scraper {0}.</value>
+  </data>
 </root>

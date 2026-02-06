@@ -425,4 +425,7 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 	<data name="ScrapingByBrowserWaitForLoad" xml:space="preserve">
 		<value>Načtení HTML, obrázků a CSS</value>
 	</data>
+	<data name="AddNewScraperRecommendation" xml:space="preserve">
+		<value>Vytvořit nový scraper můžete {0}.</value>
+	</data>
 </root>

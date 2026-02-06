@@ -68,30 +68,12 @@ namespace MrWatchdog.Core.Resources {
         ///    Keep track of changes and get notified by email the moment a page updates or your search term appears.
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///    View public {0} and create a watchdog.
+        ///    View public {0} or create your own scraper, and create a watchdog.
         ///&lt;/p&gt;.
         /// </summary>
         public static string About {
             get {
                 return ResourceManager.GetString("About", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create.
-        /// </summary>
-        public static string AboutCreate {
-            get {
-                return ResourceManager.GetString("AboutCreate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Manage.
-        /// </summary>
-        public static string AboutManage {
-            get {
-                return ResourceManager.GetString("AboutManage", resourceCulture);
             }
         }
         

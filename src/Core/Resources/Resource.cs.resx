@@ -74,17 +74,11 @@
     Sledujte změny a nechte si zasílat emailová upozornění v okamžiku, kdy dojde k aktualizaci stránky nebo se objeví váš vyhledávaný termín.    
 &lt;/p&gt;
 &lt;p&gt;
-    Prohlédněte si veřejné {0} a vytvořte si hlídacího psa.
+    Prohlédněte si veřejné {0} nebo si vytvořte svůj vlastní scraper, a vytvořte si hlídacího psa.
 &lt;/p&gt;</value>
 	</data>
 	<data name="AboutScrapers" xml:space="preserve">
 		<value>scrapery</value>
-	</data>
-	<data name="AboutCreate" xml:space="preserve">
-		<value>Vytvořte</value>
-	</data>
-	<data name="AboutManage" xml:space="preserve">
-		<value>Spravujte</value>
 	</data>
 	<data name="LoginOrRegister" xml:space="preserve">
 		<value>Přihlásit / zaregistrovat</value>

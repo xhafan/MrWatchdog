@@ -183,17 +183,11 @@
     Keep track of changes and get notified by email the moment a page updates or your search term appears.
 &lt;/p&gt;
 &lt;p&gt;
-    View public {0} and create a watchdog.
+    View public {0} or create your own scraper, and create a watchdog.
 &lt;/p&gt;</value>
   </data>
   <data name="AboutScrapers" xml:space="preserve">
 	  <value>scrapers</value>
-  </data>
-  <data name="AboutCreate" xml:space="preserve">
-	  <value>Create</value>
-  </data>
-  <data name="AboutManage" xml:space="preserve">
-	  <value>Manage</value>
   </data>
   <data name="LoginOrRegister" xml:space="preserve">
 	  <value>Log in / register</value>

@@ -41,7 +41,7 @@
 &lt;/p&gt;
 &lt;div class="alert alert-info mb-3"&gt;    
     &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt; Emailová oznámení o nových výsledcích jsou v současné době zdarma.
-    V budoucnu bude tato funkce k dispozici pouze pro předplatitele prémiového účtu.
+    Bez prémiového předplatného budou v budoucnu bezplatná oznámení o nových výsledcích k dispozici pouze pro omezený počet hlídacích psů.
     Prémiové předplatné zatím není implementováno.
 &lt;/div&gt;</value>
 	</data>
@@ -64,20 +64,17 @@
 		<value>Potřebujete poradit?</value>
 	</data>
 	<data name="ContactSupport" xml:space="preserve">
-		<value>Potřebujete poradit? Kontaktujte náš tým podpory na</value>
+		<value>Potřebujete poradit? Kontaktujte tým podpory na</value>
 	</data>
 	<data name="About" xml:space="preserve">
 		<value>&lt;p&gt;
-    Platforma pro sledování jakékoli veřejně přístupné webové stránky na internetu.
+    Hlídací pes pro jakoukoli veřejně přístupnou webovou stránku.
 &lt;/p&gt;
 &lt;p&gt;
-    Použijte ji ke sledování změn na jakékoli veřejně přístupné webové stránce a nechte si zasílat emailová oznámení, když dojde ke změně nebo když je nalezen váš vyhledávací výraz.
+    Sledujte změny a nechte si zasílat emailová upozornění v okamžiku, kdy dojde k aktualizaci stránky nebo se objeví váš vyhledávaný termín.    
 &lt;/p&gt;
 &lt;p&gt;
-    Prohlédněte si existující veřejné {0} a vytvořte hlídacího psa s emailovým oznámením o nových výsledcích scrapování.
-&lt;/p&gt;
-&lt;p&gt;
-    {1} si vlastní scraper. {2} své stávající scrapery.
+    Prohlédněte si veřejné {0} a vytvořte si hlídacího psa.
 &lt;/p&gt;</value>
 	</data>
 	<data name="AboutScrapers" xml:space="preserve">
@@ -222,7 +219,7 @@
 		<value>Editovat</value>
 	</data>
 	<data name="ScraperResultsOnboardingIntro" xml:space="preserve">
-		<value>Jste na stránce zobrazující &lt;b&gt;výsledky scrapování&lt;/b&gt; scraperu.</value>
+		<value>Jste na stránce zobrazující &lt;b&gt;výsledky scrapování scraperu&lt;/b&gt;.</value>
 	</data>
 	<data name="ScraperResultsOnboardingWatchedWebPages" xml:space="preserve">
 		<value>Tento scraper pravidelně prochází webové stránky a vybírá z nich výsledky.</value>
@@ -375,7 +372,7 @@
 		<value>Neplatný HTTP formát hlavičky: "{0}“. Očekávaný formát je "název hlavičky: hodnota“.</value>
 	</data>
 	<data name="ScraperDetailOnboardingIntro" xml:space="preserve">
-		<value>Jste na stánce pro &lt;b&gt;správu&lt;/b&gt; scraperu.&lt;br/&gt;&lt;br/&gt;Tento scraper bude procházet webové stránky a vybírat výsledky na základě CSS selektoru.</value>
+		<value>Jste na stánce pro &lt;b&gt;správu&lt;/b&gt; scraperu.&lt;br/&gt;&lt;br/&gt;Tento scraper bude scrapovat webové stránky a vybírat výsledky na základě CSS selektoru.</value>
 	</data>
 	<data name="ScraperDetailOnboardingAddWebPage" xml:space="preserve">
 		<value>Přidejte webovou stránku pro scrapování.</value>
@@ -396,7 +393,9 @@
 		<value>zde</value>
 	</data>
 	<data name="WatchdogOnboardingIntro" xml:space="preserve">
-		<value>Jste na stránce svého &lt;b&gt;hlídacího psa&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky.</value>
+		<value>Jste na stránce svého &lt;b&gt;hlídacího psa&lt;/b&gt;.&lt;br/&gt;
+&lt;br/&gt;
+Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky daného scraperu.</value>
 	</data>
 	<data name="WatchdogOnboardingIntroScrapedResults" xml:space="preserve">
 		<value>Pravidelně sleduje výsledky souvisejícího scraperu.</value>

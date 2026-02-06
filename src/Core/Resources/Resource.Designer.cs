@@ -62,16 +62,13 @@ namespace MrWatchdog.Core.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
-        ///    A watchdog platform for any publicly accessible web page on the internet.
+        ///    A watchdog for any publicly accessible web page.
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///    Use it to watch any publicly accessible web page for changes and get notified by email when it changes or your search term is found.
+        ///    Keep track of changes and get notified by email the moment a page updates or your search term appears.
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///    View existing public {0} and create a watchdog with email notification about new scraped results.
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
-        ///    {1} your own scraper. {2} your existing scrapers.
+        ///    View public {0} and create a watchdog.
         ///&lt;/p&gt;.
         /// </summary>
         public static string About {
@@ -189,7 +186,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Need help? Contact our support team at.
+        ///   Looks up a localized string similar to Need help? Contact support team at.
         /// </summary>
         public static string ContactSupport {
             get {
@@ -965,7 +962,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View scraped results to be able to create a watchdog with email notification about new scraped results..
+        ///   Looks up a localized string similar to View scraped results to be able to create a watchdog with an email notification about new scraped results..
         /// </summary>
         public static string ScraperDetailOnboardingViewScrapedResults {
             get {
@@ -992,7 +989,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a scraper..
+        ///   Looks up a localized string similar to You are on a page showing &lt;b&gt;scraped results&lt;/b&gt; of a &lt;b&gt;scraper&lt;/b&gt;..
         /// </summary>
         public static string ScraperResultsOnboardingIntro {
             get {
@@ -1190,7 +1187,9 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;&lt;br/&gt;This watchdog emails you notification about new results..
+        ///   Looks up a localized string similar to You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;
+        ///&lt;br/&gt;
+        ///This watchdog emails you notification about new results of the related scraper..
         /// </summary>
         public static string WatchdogOnboardingIntro {
             get {
@@ -1222,7 +1221,7 @@ namespace MrWatchdog.Core.Resources {
         ///&lt;/p&gt;
         ///&lt;div class=&quot;alert alert-info mb-3&quot;&gt;    
         ///    &lt;i class=&quot;fa-solid fa-circle-info&quot;&gt;&lt;/i&gt; Email notifications about new results are currently free.
-        ///    In the future, this feature will be available only to premium subscribers.
+        ///    In the future, free notifications about new results will be available only to a limited number of watchdogs without premium subscription.
         ///    The premium subscription is not yet implemented.
         ///&lt;/div&gt;.
         /// </summary>

@@ -31,7 +31,7 @@ export default class OnboardingController extends BaseStimulusModelController<On
 
         this.onboardingLocalStorageKey = `${onboardingLocalStorageKeyPrefix}${this.modelValue.onboardingIdentifier}`;
 
-        if (this.modelValue.enableOnboarding && !this.isOnboardingComplete()) {
+        if (this.modelValue.autoStartOnboarding && !this.isOnboardingComplete()) {
             await this.startOnboarding();
         }
     }

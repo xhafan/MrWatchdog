@@ -6,7 +6,7 @@ import { OnboardingStepStimulusModel } from './OnboardingStepStimulusModel';
 
 export interface OnboardingStimulusModel
 {
-	enableOnboarding: boolean;
+	autoStartOnboarding: boolean;
 	onboardingIdentifier: string;
 	steps: OnboardingStepStimulusModel[];
 	isUserAuthenticated: boolean;

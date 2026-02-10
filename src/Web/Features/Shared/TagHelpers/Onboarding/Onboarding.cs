@@ -17,6 +17,7 @@ public class Onboarding(
 {
     public string Identifier { get; set; } = null!;
     public IEnumerable<OnboardingStepStimulusModel> Steps { get; set; } = null!;
+    public bool AutoStartOnboarding { get; set; }
 
     protected override string GetStimulusControllerName()
     {
@@ -28,7 +29,7 @@ public class Onboarding(
         var userCompletedOnboardings = await GetUserCompleteOnboardings();
 
         return new OnboardingStimulusModel(
-            EnableOnboarding: !userCompletedOnboardings.Contains(Identifier),
+            AutoStartOnboarding: AutoStartOnboarding && !userCompletedOnboardings.Contains(Identifier),
             OnboardingIdentifier: Identifier,
             Steps.WhereNotNull(),
             IsUserAuthenticated: actingUserAccessor.GetActingUserId() != 0

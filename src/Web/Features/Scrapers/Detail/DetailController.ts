@@ -20,6 +20,8 @@ export default class DetailController extends BaseStimulusModelController<Scrape
     declare webPageTurboFrameTargets: HTMLFormElement[];
     declare archiveScraperFormTarget: HTMLFormElement;
 
+    declare boundOnScraperWebPageRemoved: (event: CustomEventInit) => void;
+
     connect() {
         formSubmitWithWaitForJobCompletion(
             this.addWebPageFormTarget, 
@@ -50,7 +52,20 @@ export default class DetailController extends BaseStimulusModelController<Scrape
             this.modelValue.deleteScraperConfirmationMessageResource
         );
 
-        this.element.addEventListener(scraperWebPageRemovedEvent, this.onScraperWebPageRemoved.bind(this));
+        this.attachEventListeners();
+    }
+
+    disconnect() {
+        this.removeEventListeners();
+    }
+
+    private attachEventListeners() {
+        this.boundOnScraperWebPageRemoved = this.onScraperWebPageRemoved.bind(this);
+        this.element.addEventListener(scraperWebPageRemovedEvent, this.boundOnScraperWebPageRemoved);
+    }
+
+    private removeEventListeners() {
+        this.element.removeEventListener(scraperWebPageRemovedEvent, this.boundOnScraperWebPageRemoved);
     }
 
     private onScraperWebPageRemoved(event: CustomEventInit) {

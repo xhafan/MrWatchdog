@@ -26,6 +26,10 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
     declare webPageNameTarget: HTMLSpanElement;
     declare webPageDisabledWarningTarget: FrameElement;
 
+    declare boundOnUpdateScraperWebPageJobCompleted: (event: CustomEventInit<JobDto>) => Promise<void>;
+    declare boundOnScraperWebPageNameModified: (event: CustomEventInit<string>) => void;
+    declare boundOnScraperWebPageScraped: (event: CustomEventInit<string>) => void;
+
     connect() {
         formSubmitWithWaitForJobCompletion(
             this.removeWebPageFormTarget, 
@@ -35,9 +39,27 @@ export default class WebPageController extends BaseStimulusModelController<WebPa
             this.modelValue.removeWebPageConfirmationMessageResource
         );
 
-        this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.onUpdateScraperWebPageJobCompleted.bind(this), {});
-        this.webPageOverviewTarget.addEventListener(scraperWebPageNameModifiedEventName, this.onScraperWebPageNameModified.bind(this), {});
-        this.element.addEventListener(scraperWebPageScrapedEvent, this.onScraperWebPageScraped.bind(this), {});
+        this.attachEventListeners();
+    }
+
+    disconnect() {
+        this.removeEventListeners();
+    }
+
+    private attachEventListeners() {
+        this.boundOnUpdateScraperWebPageJobCompleted = this.onUpdateScraperWebPageJobCompleted.bind(this);
+        this.boundOnScraperWebPageNameModified = this.onScraperWebPageNameModified.bind(this);
+        this.boundOnScraperWebPageScraped = this.onScraperWebPageScraped.bind(this);
+
+        this.webPageOverviewTarget.addEventListener(formSubmitJobCompletedEventName, this.boundOnUpdateScraperWebPageJobCompleted);
+        this.webPageOverviewTarget.addEventListener(scraperWebPageNameModifiedEventName, this.boundOnScraperWebPageNameModified);
+        this.element.addEventListener(scraperWebPageScrapedEvent, this.boundOnScraperWebPageScraped);
+    }
+
+    private removeEventListeners() {
+        this.webPageOverviewTarget.removeEventListener(formSubmitJobCompletedEventName, this.boundOnUpdateScraperWebPageJobCompleted);
+        this.webPageOverviewTarget.removeEventListener(scraperWebPageNameModifiedEventName, this.boundOnScraperWebPageNameModified);
+        this.element.removeEventListener(scraperWebPageScrapedEvent, this.boundOnScraperWebPageScraped);
     }
 
     private async onUpdateScraperWebPageJobCompleted(event: CustomEventInit<JobDto>) {

@@ -11,6 +11,9 @@ export default class TurboFrameController extends Controller {
 
     declare reloadOnEventValue?: string;
 
+    declare boundOnFormSubmitJobCompleted: (event: Event) => void;
+    declare boundOnFormEditingCancelled: (event: Event) => void;
+
     connect() {
         this.attachEventListeners();
 
@@ -24,9 +27,21 @@ export default class TurboFrameController extends Controller {
         }
     }
 
+    disconnect() {
+        this.removeEventListeners();
+    }
+
     private attachEventListeners() {
-        this.element.addEventListener(formSubmitJobCompletedEventName, this.onFormSubmitJobCompleted.bind(this), {});
-        this.element.addEventListener(formEditingCancelledEventName, this.onFormEditingCancelled.bind(this), {});
+        this.boundOnFormSubmitJobCompleted = this.onFormSubmitJobCompleted.bind(this);
+        this.boundOnFormEditingCancelled = this.onFormEditingCancelled.bind(this);
+        
+        this.element.addEventListener(formSubmitJobCompletedEventName, this.boundOnFormSubmitJobCompleted);
+        this.element.addEventListener(formEditingCancelledEventName, this.boundOnFormEditingCancelled);
+    }
+
+    private removeEventListeners() {
+        this.element.removeEventListener(formSubmitJobCompletedEventName, this.boundOnFormSubmitJobCompleted);
+        this.element.removeEventListener(formEditingCancelledEventName, this.boundOnFormEditingCancelled);
     }
 
     private onFormSubmitJobCompleted(event: Event) {

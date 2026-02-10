@@ -1,11 +1,26 @@
-﻿import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus";
 import { removeOnboardingKeysFromLocalStorage } from "./TagHelpers/Onboarding/OnboardingController";
 
 export const registerGlobalEventHandlerEventName = "body:registerGlobalEventHandler";
 
 export default class BodyController extends Controller {
+    declare boundRegisterGlobalEventHandler: (event: CustomEventInit<EventHandlerRegistration<any>>) => void;
+
     connect() {
-        this.element.addEventListener(registerGlobalEventHandlerEventName, this.registerGlobalEventHandler.bind(this), {});
+        this.attachEventListeners();
+    }
+
+    disconnect() {
+        this.removeEventListeners();
+    }
+
+    private attachEventListeners() {
+        this.boundRegisterGlobalEventHandler = this.registerGlobalEventHandler.bind(this);
+        this.element.addEventListener(registerGlobalEventHandlerEventName, this.boundRegisterGlobalEventHandler);
+    }
+
+    private removeEventListeners() {
+        this.element.removeEventListener(registerGlobalEventHandlerEventName, this.boundRegisterGlobalEventHandler);
     }
     
     registerGlobalEventHandler<T>(event: CustomEventInit<EventHandlerRegistration<T>>) {

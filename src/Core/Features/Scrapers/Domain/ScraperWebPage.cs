@@ -224,7 +224,13 @@ public class ScraperWebPage : VersionedEntity
     
     public virtual ScraperWebPageScrapedResultsDto GetScraperWebPageScrapedResultsDto()
     {
-        return new ScraperWebPageScrapedResultsDto(Scraper.Id, Id, _scrapedResults, ScrapedOn, ScrapingErrorMessage);
+        return new ScraperWebPageScrapedResultsDto(
+            Scraper.Id, Id,
+            _scrapedResults,
+            ScrapedOn,
+            ScrapingErrorMessage,
+            IsEmptyWebPage: string.IsNullOrWhiteSpace(Url)
+        );
     }
 
     public virtual ScraperWebPageScrapedResultsArgs? GetScraperWebPageScrapedResultsArgs()

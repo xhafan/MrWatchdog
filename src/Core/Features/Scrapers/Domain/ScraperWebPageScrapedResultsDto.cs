@@ -5,5 +5,6 @@ public record ScraperWebPageScrapedResultsDto(
     long ScraperWebPageId,
     IEnumerable<string> ScrapedResults,
     DateTime? ScrapedOn,
-    string? ScrapingErrorMessage
+    string? ScrapingErrorMessage,
+    bool IsEmptyWebPage
 );

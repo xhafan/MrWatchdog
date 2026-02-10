@@ -8,7 +8,7 @@ using MrWatchdog.Web.Features.Scrapers.Detail.WebPage;
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.WebPage;
 
 [TestFixture]
-public class when_viewing_scraper_web_page_scraped_results : BaseDatabaseTest
+public class when_viewing_scraper_web_page_scraped_results_for_empty_scraper_web_page : BaseDatabaseTest
 {
     private WebPageScrapedResultsModel _model = null!;
     private Scraper _scraper = null!;
@@ -41,11 +41,10 @@ public class when_viewing_scraper_web_page_scraped_results : BaseDatabaseTest
     {
         _model.ScraperWebPageScrapedResults.ScraperId.ShouldBe(_scraper.Id);
         _model.ScraperWebPageScrapedResults.ScraperWebPageId.ShouldBe(_scraperWebPageId);
-        _model.ScraperWebPageScrapedResults.ScrapedResults.ShouldBe(["<div>text</div>"]);
-        _model.ScraperWebPageScrapedResults.ScrapedOn.ShouldNotBeNull();
-        _model.ScraperWebPageScrapedResults.ScrapedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
+        _model.ScraperWebPageScrapedResults.ScrapedResults.ShouldBeEmpty();
+        _model.ScraperWebPageScrapedResults.ScrapedOn.ShouldBe(null);
         _model.ScraperWebPageScrapedResults.ScrapingErrorMessage.ShouldBe(null);
-        _model.ScraperWebPageScrapedResults.IsEmptyWebPage.ShouldBe(false);
+        _model.ScraperWebPageScrapedResults.IsEmptyWebPage.ShouldBe(true);
     }  
 
     private void _BuildEntities()
@@ -53,12 +52,11 @@ public class when_viewing_scraper_web_page_scraped_results : BaseDatabaseTest
         _scraper = new ScraperBuilder(UnitOfWork)
             .WithWebPage(new ScraperWebPageArgs
             {
-                Url = "http://url.com/page",
-                Selector = ".selector",
-                Name = "url.com/page"
+                Url = null,
+                Selector = null,
+                Name = null
             })
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
-        _scraper.SetScrapedResults(_scraperWebPageId, ["<div>text</div>"]);
     }    
 }

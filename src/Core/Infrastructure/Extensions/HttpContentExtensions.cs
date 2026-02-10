@@ -1,4 +1,6 @@
-﻿using System.Text;
+using System.IO.Compression;
+using System.Text;
+using CoreUtils.Extensions;
 
 namespace MrWatchdog.Core.Infrastructure.Extensions;
 
@@ -17,10 +19,11 @@ public static class HttpContentExtensions
             throw new HttpResponseTooLargeException(largeResponseErrorMessage);
         }
 
-        var encoding = GetEncodingFromHeaders(content);
+        var encoding = _GetEncodingFromHeaders(content);
 
-        await using var stream = await content.ReadAsStreamAsync();
-        using var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true);
+        await using var contentStream = await content.ReadAsStreamAsync();
+        await using var decompressedStream = _GetDecompressedStream(contentStream, content);
+        using var reader = new StreamReader(decompressedStream, encoding, detectEncodingFromByteOrderMarks: true);
 
         var buffer = new char[8192];
         var sb = new StringBuilder();
@@ -44,7 +47,7 @@ public static class HttpContentExtensions
         return sb.ToString();
     }
 
-    private static Encoding GetEncodingFromHeaders(HttpContent content)
+    private static Encoding _GetEncodingFromHeaders(HttpContent content)
     {
         var contentTypeCharSet = content.Headers.ContentType?.CharSet;
         if (!string.IsNullOrWhiteSpace(contentTypeCharSet))
@@ -60,5 +63,25 @@ public static class HttpContentExtensions
         }
 
         return Encoding.UTF8;
+    }
+
+    private static Stream _GetDecompressedStream(Stream contentStream, HttpContent content)
+    {
+        var contentEncoding = content.Headers.ContentEncoding;
+        
+        if (contentEncoding.IsEmpty())
+        {
+            return contentStream;
+        }
+
+        var encoding = contentEncoding.FirstOrDefault()?.ToLowerInvariant();
+        
+        return encoding switch
+        {
+            "gzip" => new GZipStream(contentStream, CompressionMode.Decompress),
+            "deflate" => new DeflateStream(contentStream, CompressionMode.Decompress),
+            "br" => new BrotliStream(contentStream, CompressionMode.Decompress),
+            _ => contentStream
+        };
     }
 }

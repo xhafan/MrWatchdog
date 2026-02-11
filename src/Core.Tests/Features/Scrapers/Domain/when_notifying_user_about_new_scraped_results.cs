@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿using System.Globalization;
+using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -18,8 +19,12 @@ public class when_notifying_user_about_new_scraped_results : BaseTest
     public async Task Context()
     {
         _BuildEntities();
-        
-        await _watchdog.NotifyUserAboutNewScrapedResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+
+        await _watchdog.NotifyUserAboutNewScrapedResults(
+            CultureInfo.GetCultureInfo("en"),
+            A.Fake<ICoreBus>(),
+            OptionsTestRetriever.Retrieve<RuntimeOptions>().Value
+        );
     }
 
     [Test]

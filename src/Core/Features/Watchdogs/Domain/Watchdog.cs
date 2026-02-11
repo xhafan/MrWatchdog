@@ -1,4 +1,5 @@
-﻿using CoreDdd.Domain;
+﻿using System.Globalization;
+using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
@@ -146,6 +147,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyUserAboutNewScrapedResults(
+        CultureInfo culture,
         ICoreBus bus,
         RuntimeOptions runtimeOptions
     )
@@ -159,9 +161,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
         if (ReceiveNotification)
         {
+            var localizedScraperName = Scraper.GetLocalizedName(culture);
             await bus.Send(new SendEmailCommand(
                 User.Email,
-                Subject: $"{mrWatchdogResource}: new results for {Scraper.Name}{searchTermSuffix}",
+                Subject: $"{mrWatchdogResource}: new results for {localizedScraperName}{searchTermSuffix}",
                 HtmlMessage:
                 $"""
                  <html>
@@ -172,7 +175,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                  <p>
                      New results have been found for 
                      <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">
-                        <span>{Scraper.Name}</span><span translate="no">{searchTermSuffix}</span>
+                        <span>{localizedScraperName}</span><span translate="no">{searchTermSuffix}</span>
                      </a>:
                  </p>
                  <ul>

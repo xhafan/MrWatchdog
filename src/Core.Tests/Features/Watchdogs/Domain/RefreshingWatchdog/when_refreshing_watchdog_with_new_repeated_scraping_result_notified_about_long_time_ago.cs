@@ -6,6 +6,7 @@ using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
+using System.Globalization;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdog;
 
@@ -56,7 +57,11 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
         async Task _simulateNotifyingUserAboutTheSameScrapingResultLongTimeAgo()
         {
             Clock.CurrentDateTimeProvider.Value = () => DateTime.Now.AddDays(-31);
-            await _watchdog.NotifyUserAboutNewScrapedResults(A.Fake<ICoreBus>(), OptionsTestRetriever.Retrieve<RuntimeOptions>().Value);
+            await _watchdog.NotifyUserAboutNewScrapedResults(
+                CultureInfo.GetCultureInfo("en"),
+                A.Fake<ICoreBus>(),
+                OptionsTestRetriever.Retrieve<RuntimeOptions>().Value
+            );
             Clock.CurrentDateTimeProvider.Value = null;
         }
 

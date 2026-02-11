@@ -48,6 +48,11 @@ public class when_notifying_user_about_new_watchdog_scraped_results_with_search_
         command.RecipientEmail.ShouldBe( _user.Email);
         command.Subject.ShouldContain("new results for");
         command.Subject.ShouldContain("Epic Games store free game - Ma");
+        command.Subject.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );
         command.HtmlMessage.ShouldContain("New results have been found for");
         command.HtmlMessage.ShouldContain(
             $"""
@@ -55,6 +60,11 @@ public class when_notifying_user_about_new_watchdog_scraped_results_with_search_
              """
         );
         command.HtmlMessage.ShouldContain(">Epic Games store free game<");
+        command.HtmlMessage.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );
         command.HtmlMessage.ShouldContain("> - Ma<");
         command.HtmlMessage.ShouldContain(
             """
@@ -72,7 +82,11 @@ public class when_notifying_user_about_new_watchdog_scraped_results_with_search_
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder(UnitOfWork)
-            .WithName("Epic Games store free game")
+            .WithName(
+                """
+                { "en": "Epic Games store free game" }
+                """
+            )
             .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "https://www.pcgamer.com/epic-games-store-free-games-list/",

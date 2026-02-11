@@ -257,20 +257,22 @@ public class Scraper : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyAdminAboutScraperRequestedToBeMadePublic(
+        CultureInfo culture,
         ICoreBus bus,
         RuntimeOptions runtimeOptions,
         EmailAddressesOptions emailAddressesOptions
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
+        var localizedName = GetLocalizedName(culture);
         await bus.Send(new SendEmailCommand(
             emailAddressesOptions.Admin,
-            $"{mrWatchdogResource}: scraper {Name} requested to be made public",
+            $"{mrWatchdogResource}: scraper {localizedName} requested to be made public",
             $"""
              <html>
              <body>
              <p>
-                 Scraper <a href="{runtimeOptions.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(Id)}">{Name}</a> has been requested to be made public by user {User.Email}.
+                 Scraper <a href="{runtimeOptions.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(Id)}">{localizedName}</a> has been requested to be made public by user {User.Email}.
              </p>
              <p>
                  Kind regards,<br>
@@ -280,6 +282,11 @@ public class Scraper : VersionedEntity, IAggregateRoot
              </html>
              """
         ));
+    }
+
+    public virtual string GetLocalizedName(CultureInfo culture)
+    {
+        return LocalizedTextResolver.ResolveLocalizedText(Name, culture);
     }
 
     public virtual void DisableNotifyingAboutFailedScraping()

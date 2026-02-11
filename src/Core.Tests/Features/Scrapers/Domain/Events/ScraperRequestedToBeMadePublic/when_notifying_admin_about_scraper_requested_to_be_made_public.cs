@@ -47,16 +47,29 @@ public class when_notifying_admin_about_scraper_requested_to_be_made_public : Ba
     {
         command.RecipientEmail.ShouldBe(_emailAddressesOptions.Value.Admin);
         command.Subject.ShouldContain("Epic Games store free game");
+        command.Subject.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );
         command.Subject.ShouldContain("requested to be made public");
         command.HtmlMessage.ShouldContain("has been requested to be made public");
         command.HtmlMessage.ShouldContain("Epic Games store free game");
+        command.HtmlMessage.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );
         return true;
     }
     
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder(UnitOfWork)
-            .WithName("Epic Games store free game")
+            .WithName(
+                """
+                { "en": "Epic Games store free game" }
+                """)
             .Build();
     }
 }

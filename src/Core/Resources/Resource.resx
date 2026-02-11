@@ -338,7 +338,7 @@
 	  <value>You can enter a search term to filter the scraped results.</value>
   </data>
   <data name="ScraperResultsOnboardingCreateWatchdog" xml:space="preserve">
-	  <value>Create a watchdog with email notification about new scraped results or new scraped results matching the search term.</value>
+	  <value>Create a watchdog with email notification about new scraped results (or new scraped results matching a search term if supported).</value>
   </data>
   <data name="Back" xml:space="preserve">
 	  <value>Back</value>

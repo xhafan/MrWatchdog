@@ -989,7 +989,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a watchdog with email notification about new scraped results or new scraped results matching the search term..
+        ///   Looks up a localized string similar to Create a watchdog with email notification about new scraped results (or new scraped results matching a search term if supported)..
         /// </summary>
         public static string ScraperResultsOnboardingCreateWatchdog {
             get {

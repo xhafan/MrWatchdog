@@ -222,7 +222,7 @@
 		<value>Můžete zadat hledaný výraz pro filtrování výsledků scrapování.</value>
 	</data>
 	<data name="ScraperResultsOnboardingCreateWatchdog" xml:space="preserve">
-		<value>Vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování nebo nové výsledky scrapování odpovídající vyhledávanému termínu.</value>
+		<value>Vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování (nebo nové výsledky scrapování odpovídající vyhledávanému termínu je-li podporován).</value>
 	</data>
 	<data name="Back" xml:space="preserve">
 		<value>Zpět</value>

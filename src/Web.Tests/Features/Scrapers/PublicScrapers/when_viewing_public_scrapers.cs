@@ -50,7 +50,9 @@ public class when_viewing_public_scrapers : BaseDatabaseTest
     private void _BuildEntities()
     {
         _publicScraper = new ScraperBuilder(UnitOfWork)
-            .WithName("public scraper")
+            .WithName("""
+                      { "en": "public scraper" }
+                      """)
             .Build();
         _publicScraper.MakePublic();
         

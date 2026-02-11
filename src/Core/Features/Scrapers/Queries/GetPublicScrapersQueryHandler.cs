@@ -2,23 +2,23 @@
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using NHibernate;
+using MrWatchdog.Core.Infrastructure.Localization;
 using NHibernate.Transform;
 
 namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
 public class GetPublicScrapersQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetPublicScrapersQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetPublicScrapersQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    protected override IQueryOver GetQueryOver<TResult>(GetPublicScrapersQuery query)
+    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetPublicScrapersQuery query)
     {
         User userAlias = null!;
         GetPublicScrapersQueryResult result = null!;
 
-        return _unitOfWork.Session!.QueryOver<Scraper>()
+        var results = await _unitOfWork.Session!.QueryOver<Scraper>()
             .JoinAlias(x => x.User, () => userAlias)
             .Where(x => x.PublicStatus == PublicStatus.Public
                         && !x.IsArchived)
@@ -28,6 +28,15 @@ public class GetPublicScrapersQueryHandler(
                 .Select(() => userAlias.Id).WithAlias(() => result.UserId)
             )
             .OrderByAlias(() => result.ScraperName).Asc
-            .TransformUsing(Transformers.AliasToBean<GetPublicScrapersQueryResult>());
+            .TransformUsing(Transformers.AliasToBean<GetPublicScrapersQueryResult>())
+            .ListAsync<GetPublicScrapersQueryResult>();;
+        
+        var localizedResults = results.Select(x => x with
+            {
+                ScraperName = LocalizedTextResolver.ResolveLocalizedText(x.ScraperName, query.Culture)
+            })
+            .ToList();
+        
+        return (IEnumerable<TResult>) localizedResults;
     }
 }

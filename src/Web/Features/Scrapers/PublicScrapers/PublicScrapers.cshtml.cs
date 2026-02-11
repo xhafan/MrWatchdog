@@ -1,3 +1,4 @@
+using System.Globalization;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Scrapers.Queries;
@@ -15,7 +16,7 @@ public class PublicScrapersModel(
     public async Task OnGet()
     {
         PublicScrapers = await queryExecutor.ExecuteAsync<GetPublicScrapersQuery, GetPublicScrapersQueryResult>(
-            new GetPublicScrapersQuery()
+            new GetPublicScrapersQuery(CultureInfo.CurrentUICulture)
         );
     }
 }

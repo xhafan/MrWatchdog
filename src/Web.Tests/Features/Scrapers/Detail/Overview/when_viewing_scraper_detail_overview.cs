@@ -38,12 +38,15 @@ public class when_viewing_scraper_detail_overview : BaseDatabaseTest
         _model.ScraperOverviewArgs.Name.ShouldBe(ScraperBuilder.Name);
         _model.ScraperOverviewArgs.Description.ShouldBe(ScraperBuilder.Description);
         _model.ScraperOverviewArgs.ScrapingIntervalInSeconds.ShouldBe(ScraperBuilder.ScrapingIntervalInSeconds);
+        _model.ScraperOverviewArgs.ScrapedResultsFilteringNotSupported.ShouldBe(true);
         _model.ScraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays.ShouldBe(ScraperBuilder.IntervalBetweenSameResultNotificationsInDays);
         _model.ScraperOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(ScraperBuilder.NumberOfFailedScrapingAttemptsBeforeAlerting);
     }
 
     private void _BuildEntities()
     {
-        _scraper = new ScraperBuilder(UnitOfWork).Build();
+        _scraper = new ScraperBuilder(UnitOfWork)
+            .WithScrapedResultsFilteringNotSupported(true)
+            .Build();
     }    
 }

@@ -10,6 +10,7 @@ public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
     public const string Name = "scraper name";
     public const string Description = "scraper description";
     public const int ScrapingIntervalInSeconds = 60;
+    public const bool ScrapedResultsFilteringNotSupported = false;
     public const double IntervalBetweenSameResultNotificationsInDays = 20;
     public const int NumberOfFailedScrapingAttemptsBeforeAlerting = 5;
 
@@ -17,6 +18,7 @@ public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
     private string _name = Name;
     private string _description = Description;
     private int _scrapingIntervalInSeconds = ScrapingIntervalInSeconds;
+    private bool _scrapedResultsFilteringNotSupported = ScrapedResultsFilteringNotSupported;
     private double _intervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays;
 
     private ScraperWebPageArgs[]? _scraperWebPageArgses;
@@ -71,6 +73,13 @@ public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
         return this;
     }
     
+    public ScraperBuilder WithScrapedResultsFilteringNotSupported(bool scrapedResultsFilteringNotSupported)
+    {
+        _scrapedResultsFilteringNotSupported = scrapedResultsFilteringNotSupported;
+        return this;
+    }
+    
+    
     public Scraper Build()
     {
         _user ??= new UserBuilder(unitOfWork).Build();
@@ -102,6 +111,7 @@ public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
             Name = _name, 
             Description = _description,
             ScrapingIntervalInSeconds = _scrapingIntervalInSeconds,
+            ScrapedResultsFilteringNotSupported = _scrapedResultsFilteringNotSupported,
             IntervalBetweenSameResultNotificationsInDays = _intervalBetweenSameResultNotificationsInDays,
             NumberOfFailedScrapingAttemptsBeforeAlerting = _numberOfFailedScrapingAttemptsBeforeAlerting
         });

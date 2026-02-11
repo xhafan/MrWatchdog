@@ -79,6 +79,15 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             SearchTerm = SearchTerm
         };
     }
+    
+    public virtual WatchdogScraperDto GetWatchdogScraperDto()
+    {
+        return new WatchdogScraperDto
+        {
+            WatchdogId = Id,
+            ScrapedResultsFilteringNotSupported = Scraper.ScrapedResultsFilteringNotSupported
+        };
+    }    
 
     public virtual void UpdateOverview(WatchdogOverviewArgs args)
     {

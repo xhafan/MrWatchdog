@@ -82,7 +82,10 @@
         <button type="submit" disabled style="display: none"></button>
 
         <div class="my-3">
-            <div class="input-group" id="@OnboardingElementIdentifiers.ScrapersScrapedResultsSearchTermInputGroupId">
+            <div class="input-group" 
+                 id="@OnboardingElementIdentifiers.ScrapersScrapedResultsSearchTermInputGroupId"
+                 style="display:@(Model.ScraperScrapedResultsArgs.ScrapedResultsFilteringNotSupported ? "none" : "")"
+                 >
                 <span class="input-group-text">
                     <i class="fas fa-search"></i>
                 </span>

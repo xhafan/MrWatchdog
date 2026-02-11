@@ -552,4 +552,7 @@ This watchdog emails you notification about new results of the related scraper.<
   <data name="OptionalLocalizationJsonFormat" xml:space="preserve">
 	  <value>Optional localization JSON format: { "en": "English text", "cs": "Český text" }</value>
   </data>
+  <data name="ScrapedResultsFilteringNotSupported" xml:space="preserve">
+	  <value>Scraped results filtering not supported</value>
+  </data>
 </root>

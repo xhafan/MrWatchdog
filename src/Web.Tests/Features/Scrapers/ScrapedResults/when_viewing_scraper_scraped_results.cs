@@ -47,6 +47,7 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
         
         _model.ScraperScrapedResultsArgs.UserId.ShouldBe(_user.Id);
         _model.ScraperScrapedResultsArgs.PublicStatus.ShouldBe(PublicStatus.Public);
+        _model.ScraperScrapedResultsArgs.ScrapedResultsFilteringNotSupported.ShouldBe(true);
     }
 
     private void _BuildEntities()
@@ -63,6 +64,7 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
                 Name = "url.com/page"
             })
             .WithUser(_user)
+            .WithScrapedResultsFilteringNotSupported(true)
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
         _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);

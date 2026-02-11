@@ -22,6 +22,9 @@ public record ScraperOverviewArgs
     [Display(Name = nameof(Resource.ScrapingIntervalInSeconds), ResourceType = typeof(Resource))]
     public required int ScrapingIntervalInSeconds { get; set; }
     
+    [Display(Name = nameof(Resource.ScrapedResultsFilteringNotSupported), ResourceType = typeof(Resource))]
+    public bool ScrapedResultsFilteringNotSupported { get; set; }    
+    
     [Range(0, double.MaxValue)]
     [Display(Name = nameof(Resource.NumberOfDaysBetweenNotificationsForTheSameScrapedResult), ResourceType = typeof(Resource))]
     public required double IntervalBetweenSameResultNotificationsInDays { get; set; }

@@ -52,7 +52,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
     public virtual bool CanNotifyAboutFailedScraping { get; protected set; }
     public virtual int NumberOfFailedScrapingAttemptsBeforeAlerting { get; protected set; }
     public virtual bool IsArchived { get; protected set; }
-    
+    public virtual bool ScrapedResultsFilteringNotSupported { get; protected set; }
     
     public virtual ScraperDetailArgs GetScraperDetailArgs(CultureInfo culture)
     {
@@ -77,6 +77,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
             Name = Name,
             Description = Description,
             ScrapingIntervalInSeconds = ScrapingIntervalInSeconds,
+            ScrapedResultsFilteringNotSupported = ScrapedResultsFilteringNotSupported,
             IntervalBetweenSameResultNotificationsInDays = IntervalBetweenSameResultNotificationsInDays,
             NumberOfFailedScrapingAttemptsBeforeAlerting = NumberOfFailedScrapingAttemptsBeforeAlerting
         };
@@ -93,6 +94,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
             .AddSeconds(-ScrapingIntervalInSeconds + scraperOverviewArgs.ScrapingIntervalInSeconds);
 
         ScrapingIntervalInSeconds = scraperOverviewArgs.ScrapingIntervalInSeconds;
+        ScrapedResultsFilteringNotSupported = scraperOverviewArgs.ScrapedResultsFilteringNotSupported;
         IntervalBetweenSameResultNotificationsInDays = scraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays;
         NumberOfFailedScrapingAttemptsBeforeAlerting = scraperOverviewArgs.NumberOfFailedScrapingAttemptsBeforeAlerting;
     }
@@ -166,7 +168,8 @@ public class Scraper : VersionedEntity, IAggregateRoot
                 .ToList(),
             UserId = User.Id,
             PublicStatus = PublicStatus,
-            IsArchived = IsArchived
+            IsArchived = IsArchived,
+            ScrapedResultsFilteringNotSupported = ScrapedResultsFilteringNotSupported
         };
     }
 

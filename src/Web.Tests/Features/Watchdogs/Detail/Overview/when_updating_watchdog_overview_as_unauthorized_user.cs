@@ -42,7 +42,7 @@ public class when_updating_watchdog_overview_as_unauthorized_user : BaseDatabase
                 {
                     WatchdogId = _watchdog.Id,
                     ReceiveNotification = true,
-                    SearchTerm = "new search term",
+                    SearchTerm = "new search term"
                 }
             )
             .Build();

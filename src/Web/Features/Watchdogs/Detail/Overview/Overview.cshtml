@@ -11,7 +11,9 @@
         <view-or-edit-form action="@Url.Page("Overview")">
         
             <view-mode-item>
-                <div class="mb-3">
+                <div class="mb-3"
+                     style="display:@(Model.WatchdogScraperDto.ScrapedResultsFilteringNotSupported ? "none" : "")"
+                     >
                     <div class="input-group @OnboardingElementIdentifiers.WatchdogsDetailSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>
@@ -35,7 +37,9 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="WatchdogOverviewArgs.WatchdogId" type="hidden" />
                 
-                <div class="mb-3">
+                <div class="mb-3"
+                     style="display:@(Model.WatchdogScraperDto.ScrapedResultsFilteringNotSupported ? "none" : "")"
+                     >
                     <div class="input-group @OnboardingElementIdentifiers.WatchdogsDetailSearchTermInputGroupCssClass">
                         <span class="input-group-text">
                             <i class="fas fa-search"></i>

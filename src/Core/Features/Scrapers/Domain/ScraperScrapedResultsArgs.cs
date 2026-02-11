@@ -12,4 +12,5 @@ public record ScraperScrapedResultsArgs
     public required long UserId { get; set; }
     public required PublicStatus PublicStatus { get; set; }
     public required bool IsArchived { get; set; }
+    public required bool ScrapedResultsFilteringNotSupported { get; set; }
 }

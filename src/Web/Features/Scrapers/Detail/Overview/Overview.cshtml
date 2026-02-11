@@ -66,6 +66,10 @@
                 <a data-bs-toggle="collapse" href="#@advancedCollapsibleSectionId">@Resource.Advanced</a>
                 <div class="collapse" id="@advancedCollapsibleSectionId">
                     <view-mode-item>
+                        <div class="my-3">
+                            <input type="checkbox" checked="@Model.ScraperOverviewArgs.ScrapedResultsFilteringNotSupported" disabled/>
+                            <label asp-for="ScraperOverviewArgs.ScrapedResultsFilteringNotSupported" class="form-check-label fw-bold"></label>
+                        </div>
                         <div class="mb-3">
                             <label asp-for="ScraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
                             <div>@Model.ScraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays</div>
@@ -77,6 +81,14 @@
                     </view-mode-item>
                     
                     <edit-mode-item>
+                        <div class="my-3">
+                            <input asp-for="ScraperOverviewArgs.ScrapedResultsFilteringNotSupported"
+                                   type="checkbox" 
+                                   checked="@Model.ScraperOverviewArgs.ScrapedResultsFilteringNotSupported" 
+                            />
+                            <label asp-for="ScraperOverviewArgs.ScrapedResultsFilteringNotSupported" class="form-check-label fw-bold">
+                            </label>
+                        </div>
                         <div class="mb-3">
                             <label asp-for="ScraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-label fw-bold"></label>
                             <input asp-for="ScraperOverviewArgs.IntervalBetweenSameResultNotificationsInDays" class="form-control" />

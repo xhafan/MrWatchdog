@@ -36,11 +36,19 @@ public class when_viewing_watchdog_detail_overview : BaseDatabaseTest
         _model.WatchdogOverviewArgs.WatchdogId.ShouldBe(_watchdog.Id);
         _model.WatchdogOverviewArgs.ReceiveNotification.ShouldBe(true);
         _model.WatchdogOverviewArgs.SearchTerm.ShouldBe(WatchdogBuilder.SearchTerm);
+        
+        _model.WatchdogScraperDto.WatchdogId.ShouldBe(_watchdog.Id);
+        _model.WatchdogScraperDto.ScrapedResultsFilteringNotSupported.ShouldBe(true);
     }
 
     private void _BuildEntities()
     {
+        var scraper = new ScraperBuilder(UnitOfWork)
+            .WithScrapedResultsFilteringNotSupported(true)
+            .Build();
+        
         _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithScraper(scraper)
             .WithReceiveNotification(true)
             .Build();
     }    

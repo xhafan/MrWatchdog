@@ -908,6 +908,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scraped results filtering not supported.
+        /// </summary>
+        public static string ScrapedResultsFilteringNotSupported {
+            get {
+                return ResourceManager.GetString("ScrapedResultsFilteringNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scrape HTML as rendered by a browser.
         /// </summary>
         public static string ScrapeHtmlAsRenderedByBrowser {

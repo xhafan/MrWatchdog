@@ -79,7 +79,7 @@ public class ScraperWebPage : VersionedEntity
     {
         var httpHeaders = _getHttpHeaders().ToList();
         
-        var hasScrapingDataUpdated =
+        var hasDataAffectingScrapingUpdated =
             Url != scraperWebPageArgs.Url
             || Selector != scraperWebPageArgs.Selector
             || ScrapeHtmlAsRenderedByBrowser != scraperWebPageArgs.ScrapeHtmlAsRenderedByBrowser
@@ -96,10 +96,10 @@ public class ScraperWebPage : VersionedEntity
         
         _httpHeaders.Clear();
         _httpHeaders.UnionWith(httpHeaders);
-
+        
         if (!raiseScraperWebPageScrapingDataUpdatedDomainEvent) return;
 
-        if (!hasScrapingDataUpdated) return;
+        if (!hasDataAffectingScrapingUpdated) return;
         
         _ResetScrapingData();
         _Disable();

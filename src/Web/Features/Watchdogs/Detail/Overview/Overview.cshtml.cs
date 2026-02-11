@@ -18,6 +18,8 @@ public class OverviewModel(
     [BindProperty]
     public WatchdogOverviewArgs WatchdogOverviewArgs { get; set; } = null!;
 
+    public WatchdogScraperDto WatchdogScraperDto { get; set; } = null!;
+
     public async Task<IActionResult> OnGet(long watchdogId)
     {
         if (!await IsAuthorizedAsWatchdogOwnerOrSuperAdmin(watchdogId)) return Forbid();
@@ -25,6 +27,10 @@ public class OverviewModel(
         WatchdogOverviewArgs =
             await queryExecutor.ExecuteSingleAsync<GetWatchdogOverviewArgsQuery, WatchdogOverviewArgs>(
                 new GetWatchdogOverviewArgsQuery(watchdogId));
+
+        WatchdogScraperDto =
+            await queryExecutor.ExecuteSingleAsync<GetWatchdogScraperArgsQuery, WatchdogScraperDto>(
+                new GetWatchdogScraperArgsQuery(watchdogId));
 
         return Page();
     }

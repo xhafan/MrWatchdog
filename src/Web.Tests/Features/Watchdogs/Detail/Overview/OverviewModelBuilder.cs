@@ -48,6 +48,11 @@ public class OverviewModelBuilder(NhibernateUnitOfWork unitOfWork)
             new NhibernateRepository<Watchdog>(unitOfWork)
         ));
 
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogScraperArgsQueryHandler(
+            unitOfWork,
+            new NhibernateRepository<Watchdog>(unitOfWork)
+        ));
+
         if (_authorizationService == null)
         {
             _authorizationService = A.Fake<IAuthorizationService>();

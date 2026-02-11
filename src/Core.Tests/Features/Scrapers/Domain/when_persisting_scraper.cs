@@ -14,7 +14,9 @@ public class when_persisting_scraper : BaseDatabaseTest
     [SetUp]
     public void Context()
     {
-        _newScraper = new ScraperBuilder(UnitOfWork).Build();
+        _newScraper = new ScraperBuilder(UnitOfWork)
+            .WithScrapedResultsFilteringNotSupported(true)
+            .Build();
         
         UnitOfWork.Flush();
         UnitOfWork.Clear();
@@ -37,5 +39,6 @@ public class when_persisting_scraper : BaseDatabaseTest
         _persistedScraper.CanNotifyAboutFailedScraping.ShouldBe(false);
         _persistedScraper.NumberOfFailedScrapingAttemptsBeforeAlerting.ShouldBe(5);
         _persistedScraper.IsArchived.ShouldBe(false);
+        _persistedScraper.ScrapedResultsFilteringNotSupported.ShouldBe(true);
     }
 }

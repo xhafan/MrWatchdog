@@ -434,4 +434,7 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 	<data name="OptionalLocalizationJsonFormat" xml:space="preserve">
 		<value>Volitelný lokalizační JSON formát: { "en": "English text", "cs": "Český text" }</value>
 	</data>
+	<data name="ScrapedResultsFilteringNotSupported" xml:space="preserve">
+		<value>Filtrování scrapovaných výsledků nepodporováno</value>
+	</data>
 </root>

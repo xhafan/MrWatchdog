@@ -66,7 +66,9 @@ public class when_viewing_user_scrapers : BaseDatabaseTest
         _user = new UserBuilder(UnitOfWork).Build();
         
         _privateUserScraper = new ScraperBuilder(UnitOfWork)
-            .WithName("private user scraper")
+            .WithName("""
+                      { "en": "private user scraper" }
+                      """)
             .WithUser(_user)
             .Build();
         

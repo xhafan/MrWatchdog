@@ -7,6 +7,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
+using System.Globalization;
 
 namespace MrWatchdog.Web.Features.Scrapers.Detail;
 
@@ -21,7 +22,7 @@ public class DetailModel(
     public async Task<IActionResult> OnGet(long scraperId)
     {
         ScraperDetailArgs = await queryExecutor.ExecuteSingleAsync<GetScraperDetailArgsQuery, ScraperDetailArgs>(
-            new GetScraperDetailArgsQuery(scraperId)
+            new GetScraperDetailArgsQuery(scraperId, CultureInfo.CurrentUICulture)
         );
 
         if (!await IsAuthorizedAsScraperOwnerOrSuperAdmin(scraperId))

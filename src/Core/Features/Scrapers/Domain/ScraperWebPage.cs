@@ -1,3 +1,4 @@
+using System.Globalization;
 using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
@@ -9,6 +10,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFail
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Infrastructure.Localization;
 using Serilog;
 using System.Web;
 
@@ -233,7 +235,7 @@ public class ScraperWebPage : VersionedEntity
         );
     }
 
-    public virtual ScraperWebPageScrapedResultsArgs? GetScraperWebPageScrapedResultsArgs()
+    public virtual ScraperWebPageScrapedResultsArgs? GetScraperWebPageScrapedResultsArgs(CultureInfo culture)
     {
         return !string.IsNullOrWhiteSpace(Url) 
                && !string.IsNullOrWhiteSpace(Name)
@@ -241,7 +243,7 @@ public class ScraperWebPage : VersionedEntity
                && ScrapedOn != null
             ? new ScraperWebPageScrapedResultsArgs
             {
-                Name = Name,
+                Name = LocalizedTextResolver.ResolveLocalizedText(Name, culture),
                 ScrapedResults = _scrapedResults.ToList(),
                 Url = Url
             }

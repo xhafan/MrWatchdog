@@ -728,6 +728,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optional localization JSON format: { &quot;en&quot;: &quot;English text&quot;, &quot;cs&quot;: &quot;Český text&quot; }.
+        /// </summary>
+        public static string OptionalLocalizationJsonFormat {
+            get {
+                return ResourceManager.GetString("OptionalLocalizationJsonFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enable it once your edits are complete so that watchdogs can continue watching it..
         /// </summary>
         public static string PleaseEnableItOnceYourEditsAreComplete {

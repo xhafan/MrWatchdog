@@ -51,7 +51,9 @@ public class when_viewing_watchdog : BaseDatabaseTest
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder(UnitOfWork)
-            .WithName("scraper name")
+            .WithName("""
+                      { "en": "scraper name" }
+                      """)
             .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",

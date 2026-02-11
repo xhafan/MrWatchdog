@@ -44,7 +44,9 @@ public class when_viewing_scraper_detail : BaseDatabaseTest
     private void _BuildEntities()
     {
         _scraper = new ScraperBuilder(UnitOfWork)
-            .WithName("scraper name")
+            .WithName("""
+                      { "en": "scraper name" }
+                      """)
             .Build();
         _scraper.RequestToMakePublic();
     }    

@@ -1,3 +1,4 @@
+using System.Globalization;
 using CoreDdd.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
@@ -15,7 +16,7 @@ public class IndexModel(
     public async Task OnGet()
     {
         Watchdogs = await queryExecutor.ExecuteAsync<GetWatchdogsQuery, GetWatchdogsQueryResult>(
-            new GetWatchdogsQuery(actingUserAccessor.GetActingUserId())
+            new GetWatchdogsQuery(actingUserAccessor.GetActingUserId(), CultureInfo.CurrentUICulture)
         );
     }
 }

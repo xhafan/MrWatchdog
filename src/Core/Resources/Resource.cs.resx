@@ -431,4 +431,7 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 	<data name="YouCanCreateScraperAndLaterMakeItPublic" xml:space="preserve">
 		<value>Nový scraper můžete vytvořit {0} a později jej zveřejnit.</value>
 	</data>
+	<data name="OptionalLocalizationJsonFormat" xml:space="preserve">
+		<value>Volitelný lokalizační JSON formát: { "en": "English text", "cs": "Český text" }</value>
+	</data>
 </root>

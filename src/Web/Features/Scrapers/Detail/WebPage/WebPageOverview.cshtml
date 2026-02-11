@@ -59,7 +59,7 @@
                     <textarea asp-for="ScraperWebPageArgs.Selector" 
                               class="form-control"
                               style="width:100%" 
-                              rows="2"
+                              rows="3"
                               >
                     </textarea>
                     <span asp-validation-for="ScraperWebPageArgs.Selector" class="text-danger"></span>
@@ -110,11 +110,15 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="ScraperWebPageArgs.Name" class="form-label fw-bold"></label>
-                    <input asp-for="ScraperWebPageArgs.Name" 
-                           class="form-control" 
-                           data-scrapers--detail-web-page-overview-target="name" 
-                           data-action="input->@StimulusControllers.ScrapersDetailWebPageOverview#onNameModified"
-                           />
+                    <localization-json-format-hint />
+                    <textarea asp-for="ScraperWebPageArgs.Name" 
+                              class="form-control"
+                              style="width:100%" 
+                              rows="3"
+                              data-scrapers--detail-web-page-overview-target="name" 
+                              data-action="input->@StimulusControllers.ScrapersDetailWebPageOverview#onNameModified"
+                              >
+                    </textarea>
                     <span asp-validation-for="ScraperWebPageArgs.Name" class="text-danger"></span>
                 </div>
             </edit-mode-item>

@@ -549,4 +549,7 @@ This watchdog emails you notification about new results of the related scraper.<
   <data name="YouCanCreateScraperAndLaterMakeItPublic" xml:space="preserve">
 	  <value>You can create a new scraper {0} and later make it public.</value>
   </data>
+  <data name="OptionalLocalizationJsonFormat" xml:space="preserve">
+	  <value>Optional localization JSON format: { "en": "English text", "cs": "Český text" }</value>
+  </data>
 </root>

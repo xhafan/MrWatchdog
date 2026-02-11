@@ -3,24 +3,24 @@ using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using NHibernate;
+using MrWatchdog.Core.Infrastructure.Localization;
 using NHibernate.Transform;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
 public class GetWatchdogsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetWatchdogsQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetWatchdogsQuery>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    protected override IQueryOver GetQueryOver<TResult>(GetWatchdogsQuery query)
+    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogsQuery query)
     {
         Scraper scraper = null!;
         User user = null!;
         GetWatchdogsQueryResult result = null!;
 
-        return _unitOfWork.Session!.QueryOver<Watchdog>()
+        var results = await  _unitOfWork.Session!.QueryOver<Watchdog>()
             .JoinAlias(x => x.Scraper, () => scraper)
             .JoinAlias(x => x.User, () => user)
             .Where(x => user.Id == query.UserId
@@ -34,6 +34,15 @@ public class GetWatchdogsQueryHandler(
             )
             .OrderBy(() => scraper.Name).Asc
             .ThenBy(x => x.SearchTerm).Asc
-            .TransformUsing(Transformers.AliasToBean<GetWatchdogsQueryResult>());
+            .TransformUsing(Transformers.AliasToBean<GetWatchdogsQueryResult>())
+            .ListAsync<GetWatchdogsQueryResult>();
+        
+        var localizedResults = results.Select(x => x with
+            {
+                ScraperName = LocalizedTextResolver.ResolveLocalizedText(x.ScraperName, query.Culture)
+            })
+            .ToList();
+        
+        return (IEnumerable<TResult>) localizedResults;        
     }
 }

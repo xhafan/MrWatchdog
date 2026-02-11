@@ -10,6 +10,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
+using System.Globalization;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 
@@ -45,7 +46,7 @@ public class DetailModel(
 
         ScraperScrapedResultsArgs =
             await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
-                new GetScraperScrapedResultsArgsQuery(WatchdogArgs.ScraperId)
+                new GetScraperScrapedResultsArgsQuery(WatchdogArgs.ScraperId, CultureInfo.CurrentUICulture)
             );
         
         return Page();

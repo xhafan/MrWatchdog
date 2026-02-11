@@ -54,7 +54,9 @@ public class when_viewing_watchdogs : BaseDatabaseTest
         _userTwo = new UserBuilder(UnitOfWork).Build();
         
         var scraper = new ScraperBuilder(UnitOfWork)
-            .WithName("scraper name")
+            .WithName("""
+                      { "en": "scraper name" }
+                      """)
             .Build();
 
         _watchdogForUserOne = new WatchdogBuilder(UnitOfWork)

@@ -13,6 +13,6 @@ public class GetScraperScrapedResultsArgsQueryHandler(
     public override async Task<TResult> ExecuteSingleAsync<TResult>(GetScraperScrapedResultsArgsQuery query)
     {
         var scraper = await scraperRepository.LoadByIdAsync(query.ScraperId);
-        return (TResult)(object)scraper.GetScraperScrapedResultsArgs();
+        return (TResult)(object)scraper.GetScraperScrapedResultsArgs(query.Culture);
     }
 }

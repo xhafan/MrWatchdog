@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ public class ScrapedResultsModel(
     {
         ScraperScrapedResultsArgs =
             await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
-                new GetScraperScrapedResultsArgsQuery(scraperId)
+                new GetScraperScrapedResultsArgsQuery(scraperId, CultureInfo.CurrentUICulture)
             );
 
         if (ScraperScrapedResultsArgs.PublicStatus == PublicStatus.Public)
@@ -51,7 +52,7 @@ public class ScrapedResultsModel(
 
         ScraperScrapedResultsArgs =
             await queryExecutor.ExecuteSingleAsync<GetScraperScrapedResultsArgsQuery, ScraperScrapedResultsArgs>(
-                new GetScraperScrapedResultsArgsQuery(scraperId)
+                new GetScraperScrapedResultsArgsQuery(scraperId, CultureInfo.CurrentUICulture)
             );
 
         if (!ModelState.IsValid)

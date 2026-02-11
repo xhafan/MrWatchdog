@@ -1,3 +1,4 @@
+using System.Globalization;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ public class BadgesModel(
 
         ScraperDetailArgs =
             await queryExecutor.ExecuteSingleAsync<GetScraperDetailArgsQuery, ScraperDetailArgs>(
-                new GetScraperDetailArgsQuery(scraperId));
+                new GetScraperDetailArgsQuery(scraperId, CultureInfo.CurrentUICulture));
 
         return Page();
     }

@@ -13,6 +13,8 @@ using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
+using System.Globalization;
+using MrWatchdog.Core.Infrastructure.Localization;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
@@ -52,13 +54,13 @@ public class Scraper : VersionedEntity, IAggregateRoot
     public virtual bool IsArchived { get; protected set; }
     
     
-    public virtual ScraperDetailArgs GetScraperDetailArgs()
+    public virtual ScraperDetailArgs GetScraperDetailArgs(CultureInfo culture)
     {
         return new ScraperDetailArgs
         {
             ScraperId = Id, 
             WebPageIds = WebPages.Select(x => x.Id).ToList(),
-            Name = Name,
+            Name = LocalizedTextResolver.ResolveLocalizedText(Name, culture),
             PublicStatus = PublicStatus,
             IsArchived = IsArchived,
 
@@ -150,16 +152,16 @@ public class Scraper : VersionedEntity, IAggregateRoot
         return webPage.GetScraperWebPageScrapedResultsDto();
     }
     
-    public virtual ScraperScrapedResultsArgs GetScraperScrapedResultsArgs()
+    public virtual ScraperScrapedResultsArgs GetScraperScrapedResultsArgs(CultureInfo culture)
     {
         return new ScraperScrapedResultsArgs
         {
             ScraperId = Id,
-            ScraperName = Name,
-            ScraperDescription = Description,
+            ScraperName = LocalizedTextResolver.ResolveLocalizedText(Name, culture),
+            ScraperDescription = LocalizedTextResolver.ResolveLocalizedText(Description, culture),
             WebPages = _webPages
                 .Where(x => x.IsEnabled)
-                .Select(x => x.GetScraperWebPageScrapedResultsArgs())
+                .Select(x => x.GetScraperWebPageScrapedResultsArgs(culture))
                 .WhereNotNull()
                 .ToList(),
             UserId = User.Id,

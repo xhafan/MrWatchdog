@@ -17,7 +17,11 @@ public static class LocalizedTextResolver
         Dictionary<string, string>? map = null;
         try
         {
-            using var doc = JsonDocument.Parse(text);
+            using var doc = JsonDocument.Parse(text, new JsonDocumentOptions
+            {
+                AllowTrailingCommas = true,
+                CommentHandling = JsonCommentHandling.Skip
+            });
             if (doc.RootElement.ValueKind == JsonValueKind.Object)
             {
                 map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

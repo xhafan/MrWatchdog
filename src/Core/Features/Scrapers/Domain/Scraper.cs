@@ -156,11 +156,14 @@ public class Scraper : VersionedEntity, IAggregateRoot
     
     public virtual ScraperScrapedResultsArgs GetScraperScrapedResultsArgs(CultureInfo culture)
     {
+        var localizedDescription = LocalizedTextResolver.ResolveLocalizedText(Description, culture);
+        var localizedDescriptionWithReplacedResourceVariables = TextWithResourceVariablesReplacer.ReplaceResourceVariables(localizedDescription, culture);
+        
         return new ScraperScrapedResultsArgs
         {
             ScraperId = Id,
             ScraperName = LocalizedTextResolver.ResolveLocalizedText(Name, culture),
-            ScraperDescription = LocalizedTextResolver.ResolveLocalizedText(Description, culture),
+            ScraperDescription = localizedDescriptionWithReplacedResourceVariables,
             WebPages = _webPages
                 .Where(x => x.IsEnabled)
                 .Select(x => x.GetScraperWebPageScrapedResultsArgs(culture))

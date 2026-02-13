@@ -38,7 +38,7 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
     {
         _model.ScraperScrapedResultsArgs.ScraperId.ShouldBe(_scraper.Id);
         _model.ScraperScrapedResultsArgs.ScraperName.ShouldBe("scraper name");
-        _model.ScraperScrapedResultsArgs.ScraperDescription.ShouldBe("scraper description");
+        _model.ScraperScrapedResultsArgs.ScraperDescription.ShouldBe("Scraper description. Choose 'Create watchdog' to receive email notification.");
         
         var webPageArgs = _model.ScraperScrapedResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
@@ -53,10 +53,16 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
     private void _BuildEntities()
     {
         _user = new UserBuilder(UnitOfWork).Build();
-        
+
         _scraper = new ScraperBuilder(UnitOfWork)
             .WithName("scraper name")
-            .WithDescription("scraper description")
+            .WithDescription(
+                """
+                {
+                  "en": "Scraper description. Choose '$Resource_CreateWatchdog' to receive email notification.", // a comment after trailing comma
+                }
+                """
+            )
             .WithWebPage(new ScraperWebPageArgs
             {
                 Url = "http://url.com/page",

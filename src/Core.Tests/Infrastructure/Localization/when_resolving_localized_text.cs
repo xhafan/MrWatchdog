@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using MrWatchdog.Core.Infrastructure.Localization;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Localization.LocalizedStringResolvers;
+namespace MrWatchdog.Core.Tests.Infrastructure.Localization;
 
 [TestFixture]
 public class when_resolving_localized_text

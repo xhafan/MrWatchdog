@@ -59,7 +59,7 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
             .WithDescription(
                 """
                 {
-                  "en": "Scraper description. Choose '$Resource_CreateWatchdog' to receive email notification.", // a comment after trailing comma
+                  "en": "Scraper description. Choose '${Resource_CreateWatchdog}' to receive email notification.", // a comment after trailing comma
                 }
                 """
             )

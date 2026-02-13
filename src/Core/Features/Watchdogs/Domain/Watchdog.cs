@@ -211,11 +211,13 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyUserAboutWatchdogArchived(
+        CultureInfo culture,
         ICoreBus bus
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
-        var watchdogName = $"{Scraper.Name}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
+        var scraperLocalizedName = Scraper.GetLocalizedName(culture);
+        var watchdogName = $"{scraperLocalizedName}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
 
         await bus.Send(new SendEmailCommand(
             User.Email,
@@ -227,7 +229,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                  Hello,
              </p>
              <p>
-                 Your watchdog <b>{watchdogName}</b> has been deleted due to scraper <b>{Scraper.Name}</b> deletion.
+                 Your watchdog <b>{watchdogName}</b> has been deleted due to scraper <b>{scraperLocalizedName}</b> deletion.
              </p>
              <p>
                  Kind regards,<br>

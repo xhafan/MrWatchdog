@@ -40,13 +40,29 @@ public class when_notifying_user_about_watchdog_archived : BaseDatabaseTest
     {
         command.RecipientEmail.ShouldBe(_watchdog.User.Email);
         command.Subject.ShouldContain("watchdog");
+        command.Subject.ShouldContain("scraper name");
+        command.Subject.ShouldNotContain("""
+                                         { "en": "scraper name" }
+                                         """);
         command.Subject.ShouldContain("has been deleted");
         command.HtmlMessage.ShouldContain("has been deleted");
+        command.HtmlMessage.ShouldContain("scraper name");
+        command.HtmlMessage.ShouldNotContain("""
+                                             { "en": "scraper name" }
+                                             """);
         return true;
     }
     
     private void _BuildEntities()
     {
-        _watchdog = new WatchdogBuilder(UnitOfWork).Build();
+        var scraper = new ScraperBuilder(UnitOfWork)
+            .WithName("""
+                      { "en": "scraper name" }
+                      """)
+            .Build();
+        
+        _watchdog = new WatchdogBuilder(UnitOfWork)
+            .WithScraper(scraper)
+            .Build();
     }
 }

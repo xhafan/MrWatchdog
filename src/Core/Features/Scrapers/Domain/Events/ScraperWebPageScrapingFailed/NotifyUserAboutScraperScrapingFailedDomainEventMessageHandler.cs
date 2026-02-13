@@ -1,4 +1,5 @@
-﻿using CoreUtils.Extensions;
+﻿using System.Globalization;
+using CoreUtils.Extensions;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -25,10 +26,13 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
         
         var mrWatchdogResource = Resource.MrWatchdog;
         var scraperDetailUrl = $"{iRuntimeOptions.Value.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(scraper.Id)}";
+
+        var culture = CultureInfo.GetCultureInfo("en"); // todo: user users saved culture later
+        var localizedScraperName = scraper.GetLocalizedName(culture); 
         
         await bus.Send(new SendEmailCommand(
             scraper.User.Email,
-            $"{mrWatchdogResource}: web scraping failed for the scraper {scraper.Name}",
+            $"{mrWatchdogResource}: web scraping failed for the scraper {localizedScraperName}",
             $"""
              <html>
              <body>
@@ -36,12 +40,15 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
                  Hello,
              </p>
              <p>
-                 Web scraping failed for the scraper <a href="{scraperDetailUrl}">{scraper.Name}</a>.<br>
+                 Web scraping failed for the scraper <a href="{scraperDetailUrl}">{localizedScraperName}</a>.<br>
                  Failed scraper web pages:
                  <ul>
                      {string.Join("\n", scraperWebPagesWithError
                          .Select(webPage =>
-                             $"""<li><a href="{scraperDetailUrl}#scraper_web_page_{webPage.Id}">{webPage.Name}</a>, error message: {webPage.ScrapingErrorMessage}</li>""")
+                         {
+                             var webPageLocalizedName = webPage.GetLocalizedName(culture);
+                             return $"""<li><a href="{scraperDetailUrl}#scraper_web_page_{webPage.Id}">{webPageLocalizedName}</a>, error message: {webPage.ScrapingErrorMessage}</li>""";
+                         })
                      )}
                  </ul>
              </p>

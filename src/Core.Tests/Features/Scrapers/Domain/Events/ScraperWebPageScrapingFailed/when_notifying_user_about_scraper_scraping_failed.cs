@@ -46,15 +46,25 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
         command.RecipientEmail.ShouldBe(_user.Email);
         command.Subject.ShouldContain("web scraping failed");
         command.Subject.ShouldContain("Epic Games store free game");
+        command.Subject.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );
         command.HtmlMessage.ShouldContain("Web scraping failed");
         command.HtmlMessage.ShouldContain(
             $"""
              <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}">Epic Games store free game</a>
              """
         );
+        command.HtmlMessage.ShouldNotContain(
+            """
+            { "en": "Epic Games store free game" }
+            """
+        );        
         command.HtmlMessage.ShouldContain(
             $"""
-             <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}#scraper_web_page_{_scraperWebPageId}">www.pcgamer.com/epic-games-store-free-games-list/</a>
+             <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}#scraper_web_page_{_scraperWebPageId}">epic games store free games list</a>
              """
         );
         command.HtmlMessage.ShouldContain(
@@ -76,9 +86,13 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
                 Selector = """
                            div#article-body p.infoUpdate-log a[href^="https://store.epicgames.com/"]
                            """,
-                Name = "www.pcgamer.com/epic-games-store-free-games-list/"
+                Name = """
+                       { "en": "epic games store free games list" }
+                       """
             })
-            .WithName("Epic Games store free game")
+            .WithName("""
+                      { "en": "Epic Games store free game" }
+                      """)
             .WithUser(_user)
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;

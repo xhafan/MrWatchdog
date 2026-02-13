@@ -41,7 +41,7 @@ public class Scraper : VersionedEntity, IAggregateRoot
         NumberOfFailedScrapingAttemptsBeforeAlerting = DefaultNumberOfFailedScrapingAttemptsBeforeAlerting;
     }
     
-    public virtual User User { get; protected set; } = null!;
+    public virtual User User { get; } = null!;
     public virtual string Name { get; protected set; } = null!;
     public virtual string? Description { get; protected set; }
     public virtual int ScrapingIntervalInSeconds { get; protected set; }

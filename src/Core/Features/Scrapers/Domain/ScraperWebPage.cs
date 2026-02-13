@@ -350,4 +350,9 @@ public class ScraperWebPage : VersionedEntity
     {
         IsEnabled = false;
     }
+    
+    public virtual string? GetLocalizedName(CultureInfo culture)
+    {
+        return LocalizedTextResolver.ResolveLocalizedText(Name, culture);
+    }
 }

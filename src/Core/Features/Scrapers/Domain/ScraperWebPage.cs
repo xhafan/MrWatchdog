@@ -244,10 +244,27 @@ public class ScraperWebPage : VersionedEntity
             ? new ScraperWebPageScrapedResultsArgs
             {
                 Name = LocalizedTextResolver.ResolveLocalizedText(Name, culture),
-                ScrapedResults = _scrapedResults.ToList(),
+                ScrapedResults = _scrapedResults.Select(_ProcessLinksToOpenInNewTab).ToList(),
                 Url = Url
             }
             : null;
+    }
+
+    private string _ProcessLinksToOpenInNewTab(string htmlContent)
+    {
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(htmlContent);
+
+        var linkNodes = htmlDoc.DocumentNode.SelectNodes("//a[@href]");
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (linkNodes == null) return htmlContent;
+
+        foreach (var node in linkNodes)
+        {
+            node.SetAttributeValue("target", "_blank");
+        }
+            
+        return htmlDoc.DocumentNode.OuterHtml;
     }
     
     public virtual async Task Scrape(
@@ -315,7 +332,7 @@ public class ScraperWebPage : VersionedEntity
         IsEnabled = true;
     }
 
-	private string _ProcessAbsolutePathLinks(string htmlContent) // Does not handle relative path links, e.g. <a href="relative/path">Relative path</a>
+	private string _ProcessAbsolutePathLinks(string htmlContent) // note: does not handle relative path links, e.g. <a href="relative/path">Relative path</a>
     {
         if (string.IsNullOrWhiteSpace(htmlContent) || string.IsNullOrWhiteSpace(Url))
             return htmlContent;

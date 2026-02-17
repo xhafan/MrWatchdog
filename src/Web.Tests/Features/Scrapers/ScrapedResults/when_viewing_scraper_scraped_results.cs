@@ -42,7 +42,18 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
         
         var webPageArgs = _model.ScraperScrapedResultsArgs.WebPages.ShouldHaveSingleItem();
         webPageArgs.Name.ShouldBe("url.com/page");
-        webPageArgs.ScrapedResults.ShouldBe(["<div>text 1</div>", "<div>text 2</div>"]);
+        webPageArgs.ScrapedResults.ShouldBe([
+            """
+            <a href="https://www.csfd.cz/film/2294-vykoupeni-z-veznice-shawshank/prehled/" title="Vykoupení z věznice Shawshank" target="_blank">
+                Vykoupení z věznice Shawshank
+            </a>
+            """, 
+            """
+            <a href="https://www.csfd.cz/film/10135-forrest-gump/prehled/" title="Forrest Gump" target="_blank">
+                Forrest Gump
+            </a>
+            """
+        ]);
         webPageArgs.Url.ShouldBe("http://url.com/page");
         
         _model.ScraperScrapedResultsArgs.UserId.ShouldBe(_user.Id);
@@ -73,7 +84,18 @@ public class when_viewing_scraper_scraped_results : BaseDatabaseTest
             .WithScrapedResultsFilteringNotSupported(true)
             .Build();
         var scraperWebPage = _scraper.WebPages.Single();
-        _scraper.SetScrapedResults(scraperWebPage.Id, ["<div>text 1</div>", "<div>text 2</div>"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, [
+            """
+            <a href="https://www.csfd.cz/film/2294-vykoupeni-z-veznice-shawshank/prehled/" title="Vykoupení z věznice Shawshank">
+                Vykoupení z věznice Shawshank
+            </a>
+            """, 
+            """
+            <a href="https://www.csfd.cz/film/10135-forrest-gump/prehled/" title="Forrest Gump">
+                Forrest Gump
+            </a>
+            """
+        ]);
         _scraper.EnableWebPage(scraperWebPage.Id);
         _scraper.MakePublic();
         

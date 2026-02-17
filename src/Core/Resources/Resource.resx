@@ -555,4 +555,87 @@ This watchdog emails you notification about new results of the related scraper.<
   <data name="ScrapedResultsFilteringNotSupported" xml:space="preserve">
 	  <value>Scraped results filtering not supported</value>
   </data>
+  <data name="LoginLinkEmailSubject" xml:space="preserve">
+	  <value>{0}: login link</value>
+  </data>
+  <data name="LoginLinkEmailBody" xml:space="preserve">
+	  <value>&lt;html&gt;
+&lt;body&gt;
+&lt;p&gt;
+   If you just requested to log in to &lt;a href="{0}"&gt;{1}&lt;/a&gt;, click the link below:
+&lt;/p&gt;
+&lt;p&gt;
+   &lt;a href="{2}"&gt;{3}&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;
+   This link expires in {4} minutes.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WebScrapingFailedEmailSubject" xml:space="preserve">
+	  <value>{0}: web scraping failed for the scraper {1}</value>
+  </data>
+  <data name="WebScrapingFailedEmailBody" xml:space="preserve">
+	  <value>&lt;html&gt;
+&lt;body&gt;
+&lt;p&gt;
+    Hello,
+&lt;/p&gt;
+&lt;p&gt;
+    Web scraping failed for the scraper &lt;a href="{0}"&gt;{1}&lt;/a&gt;.&lt;br&gt;
+    Failed scraper web pages:
+    &lt;ul&gt;
+        {2}
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    Kind regards,&lt;br&gt;
+    {3}
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WatchdogArchivedEmailSubject" xml:space="preserve">
+	  <value>{0}: your watchdog {1} has been deleted</value>
+  </data>
+  <data name="WatchdogArchivedEmailBody" xml:space="preserve">
+	  <value>&lt;html&gt;
+&lt;body&gt;
+&lt;p&gt;
+    Hello,
+&lt;/p&gt;
+&lt;p&gt;
+    Your watchdog &lt;b&gt;{0}&lt;/b&gt; has been deleted due to scraper &lt;b&gt;{1}&lt;/b&gt; deletion.
+&lt;/p&gt;
+&lt;p&gt;
+    Kind regards,&lt;br&gt;
+    {2}
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="NewScrapedResultsEmailSubject" xml:space="preserve">
+	  <value>{0}: new results for: {1}{2}</value>
+  </data>
+  <data name="NewScrapedResultsEmailBody" xml:space="preserve">
+	  <value>&lt;html&gt;
+&lt;body&gt;
+&lt;p&gt;
+    Hello,
+&lt;/p&gt;
+&lt;p&gt;
+    New results have been found for 
+    &lt;a href="{0}{1}"&gt;&lt;span&gt;{2}&lt;/span&gt;&lt;span translate="no"&gt;{3}&lt;/span&gt;&lt;/a&gt;:
+&lt;/p&gt;
+&lt;ul&gt;
+    {4}
+&lt;/ul&gt;
+&lt;p&gt;
+    Kind regards,&lt;br&gt;
+    {5}
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
 </root>

@@ -38,6 +38,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
     {
         yield return typeof(EnumConvention);
         yield return typeof(DateTimeConvention);
+        yield return typeof(CultureInfoConvention);
     } 
 
     protected override void AdditionalConfiguration(Configuration configuration)

@@ -1,5 +1,7 @@
-﻿using MrWatchdog.Core.Features.Account.Commands;
+﻿using System.Globalization;
+using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 
@@ -10,13 +12,14 @@ public class when_creating_user : BaseDatabaseTest
 {
     private readonly string _email = $"user+{Guid.NewGuid()}@email.com";
     private User? _user;
+    private readonly CultureInfo _culture = CultureConstants.En;
 
     [SetUp]
     public async Task Context()
     {
         var handler = new CreateUserCommandMessageHandler(new UserRepository(UnitOfWork));
 
-        await handler.Handle(new CreateUserCommand(_email));
+        await handler.Handle(new CreateUserCommand(_email, _culture));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -30,5 +33,6 @@ public class when_creating_user : BaseDatabaseTest
     {
         _user.ShouldNotBeNull();
         _user.Email.ShouldBe(_email);
+        _user.Culture.ShouldBe(_culture);
     }
 }

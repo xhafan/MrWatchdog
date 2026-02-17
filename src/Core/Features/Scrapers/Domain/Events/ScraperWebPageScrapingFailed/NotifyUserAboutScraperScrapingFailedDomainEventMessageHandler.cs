@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using CoreUtils.Extensions;
+﻿using CoreUtils.Extensions;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
@@ -24,41 +23,29 @@ public class NotifyUserAboutScraperScrapingFailedDomainEventMessageHandler(
 
         if (scraperWebPagesWithError.IsEmpty()) return;
         
-        var mrWatchdogResource = Resource.MrWatchdog;
+        var userCulture = scraper.User.Culture;
+
+        var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), userCulture);
         var scraperDetailUrl = $"{iRuntimeOptions.Value.Url}{ScraperUrlConstants.ScraperDetailUrlTemplate.WithScraperId(scraper.Id)}";
 
-        var culture = CultureInfo.GetCultureInfo("en"); // todo: user users saved culture later
-        var localizedScraperName = scraper.GetLocalizedName(culture); 
-        
+        var localizedScraperName = scraper.GetLocalizedName(userCulture);
+
         await bus.Send(new SendEmailCommand(
             scraper.User.Email,
-            $"{mrWatchdogResource}: web scraping failed for the scraper {localizedScraperName}",
-            $"""
-             <html>
-             <body>
-             <p>
-                 Hello,
-             </p>
-             <p>
-                 Web scraping failed for the scraper <a href="{scraperDetailUrl}">{localizedScraperName}</a>.<br>
-                 Failed scraper web pages:
-                 <ul>
-                     {string.Join("\n", scraperWebPagesWithError
-                         .Select(webPage =>
-                         {
-                             var webPageLocalizedName = webPage.GetLocalizedName(culture);
-                             return $"""<li><a href="{scraperDetailUrl}#scraper_web_page_{webPage.Id}">{webPageLocalizedName}</a>, error message: {webPage.ScrapingErrorMessage}</li>""";
-                         })
-                     )}
-                 </ul>
-             </p>
-             <p>
-                 Kind regards,<br>
-                 {mrWatchdogResource}
-             </p>
-             </body>
-             </html>
-             """
+            string.Format(ResourceHelper.GetString(nameof(Resource.WebScrapingFailedEmailSubject), userCulture), mrWatchdogResource, localizedScraperName),
+            string.Format(
+                ResourceHelper.GetString(nameof(Resource.WebScrapingFailedEmailBody), userCulture), 
+                scraperDetailUrl, 
+                localizedScraperName,
+                string.Join("\n", scraperWebPagesWithError
+                    .Select(webPage =>
+                    {
+                        var webPageLocalizedName = webPage.GetLocalizedName(userCulture);
+                        return $"""<li><a href="{scraperDetailUrl}#scraper_web_page_{webPage.Id}">{webPageLocalizedName}</a>: {webPage.ScrapingErrorMessage}</li>""";
+                    })
+                ),
+                mrWatchdogResource
+            )
         ));
     }
 }

@@ -36,6 +36,8 @@ using Rebus.Retry.Simple;
 using Rebus.Serialization;
 using Rebus.Transport.InMem;
 using System.Data;
+using MrWatchdog.Core.Infrastructure.Jsons;
+using Rebus.Serialization.Json;
 
 namespace MrWatchdog.Web.HostedServices;
 
@@ -195,6 +197,7 @@ public class RebusHostedService(
         }
 
         rebusConfigurer
+            .Serialization(x => x.UseSystemTextJson(JsonHelper.DefaultOptions))
             .Routing(configurer => MessageRoutingConfigurator.ConfigureMessageRouting(configurer, environmentName))
             .Options(x =>
                 {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using Rebus.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
+using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
+using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 
@@ -24,7 +24,13 @@ public class SendLoginLinkToUserCommandMessageHandler(
 
         var loginTokenGuid = Guid.NewGuid();
 
-        var tokenString = TokenGenerator.GenerateToken(loginTokenGuid, command.Email, command.ReturnUrl, jwtOptions);
+        var tokenString = TokenGenerator.GenerateToken(
+            loginTokenGuid,
+            command.Email,
+            command.Culture.Name,
+            command.ReturnUrl,
+            jwtOptions
+        );
 
         var loginToken = new LoginToken(loginTokenGuid, command.Email, tokenString);
         await loginTokenRepository.SaveAsync(loginToken);
@@ -32,25 +38,19 @@ public class SendLoginLinkToUserCommandMessageHandler(
         var tokenParam = Uri.EscapeDataString(tokenString);
         var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(tokenParam)}";
 
-        var mrWatchdogResource = Resource.MrWatchdog;
+        var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), command.Culture);
+
         await bus.Send(new SendEmailCommand(
             command.Email,
-            $"{mrWatchdogResource} login link",
-            $"""
-              <html>
-              <body>
-              <p>
-                 If you just requested to log in to <a href="{runtimeOptions.Url}">{mrWatchdogResource}</a>, click the link below:
-              </p>
-              <p>
-                 <a href="{accountConfirmLoginUrl}">{accountConfirmLoginUrl}</a>
-              </p>
-              <p>
-                 This link expires in {jwtOptions.ExpireMinutes} minutes.
-              </p>
-              </body>
-              </html>
-              """
+            string.Format(ResourceHelper.GetString(nameof(Resource.LoginLinkEmailSubject), command.Culture), mrWatchdogResource),
+            string.Format(
+                ResourceHelper.GetString(nameof(Resource.LoginLinkEmailBody), command.Culture),
+                runtimeOptions.Url,
+                mrWatchdogResource,
+                accountConfirmLoginUrl,
+                accountConfirmLoginUrl,
+                jwtOptions.ExpireMinutes
+            )
         ));
     }
 }

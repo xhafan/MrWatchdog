@@ -14,6 +14,7 @@ using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Validations;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
@@ -45,9 +46,12 @@ public class CompleteLoginController(
         await bus.Send(markLoginTokenAsUsedCommand);
         await jobCompletionAwaiter.WaitForJobCompletion(markLoginTokenAsUsedCommand.Guid);
 
-        var returnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
+        var cultureName = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.CultureName);
+        Guard.Hope(!string.IsNullOrWhiteSpace(cultureName), "Cannot get culture name from token.");
 
-        await _FetchOrCreateUserAndLogUserIn(email);
+        await _FetchOrCreateUserAndLogUserIn(email, CultureInfo.GetCultureInfo(cultureName));
+
+        var returnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
 
         return Ok(
             !string.IsNullOrWhiteSpace(returnUrl)
@@ -56,12 +60,12 @@ public class CompleteLoginController(
         );
     }
 
-    private async Task _FetchOrCreateUserAndLogUserIn(string email)
+    private async Task _FetchOrCreateUserAndLogUserIn(string email, CultureInfo culture)
     {
         var users = await queryExecutor.ExecuteAsync<GetUserByEmailQuery, UserDto>(new GetUserByEmailQuery(email));
         if (users.IsEmpty())
         {
-            var createUserCommand = new CreateUserCommand(email);
+            var createUserCommand = new CreateUserCommand(email, culture);
             await bus.Send(createUserCommand);
             await jobCompletionAwaiter.WaitForJobCompletion(createUserCommand.Guid);
         }
@@ -100,7 +104,7 @@ public class CompleteLoginController(
         var email = User.FindFirstValue(ClaimTypes.Email);
         Guard.Hope(!string.IsNullOrWhiteSpace(email), $"Cannot get email from the external provider {provider}.");
 
-        await _FetchOrCreateUserAndLogUserIn(email);
+        await _FetchOrCreateUserAndLogUserIn(email, CultureInfo.CurrentUICulture);
 
         return Redirect(
             !string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl)

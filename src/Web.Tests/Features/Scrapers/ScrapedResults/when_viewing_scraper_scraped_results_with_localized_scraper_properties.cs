@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
@@ -19,9 +20,10 @@ public class when_viewing_scraper_scraped_results_with_localized_scraper_propert
     public async Task Context()
     {
         _originalUiCulture = CultureInfo.CurrentUICulture;
+
+        CultureInfo.CurrentUICulture = CultureConstants.Cs;
         
         _BuildEntities();
-        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("cs");
         
         _model = new ScrapedResultsModelBuilder(UnitOfWork)
             .Build();

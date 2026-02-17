@@ -6,6 +6,7 @@ using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
@@ -34,7 +35,11 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
             OptionsTestRetriever.Retrieve<RuntimeOptions>()
         );
 
-        await handler.Handle(new SendLoginLinkToUserCommand(_email, ReturnUrl: "/Watchdogs"));
+        await handler.Handle(new SendLoginLinkToUserCommand(
+            _email,
+            CultureConstants.Cs,
+            ReturnUrl: "/Watchdogs"
+        ));
         
         await UnitOfWork.FlushAsync();
         UnitOfWork.Clear();
@@ -52,6 +57,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
         claimsPrincipal.FindFirstValue(ClaimTypes.Email).ShouldBe(_email);
         claimsPrincipal.FindFirstValue(CustomClaimTypes.Guid).ShouldBe(_loginToken.Guid.ToString());
         claimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl).ShouldBe("/Watchdogs");
+        claimsPrincipal.FindFirstValue(CustomClaimTypes.CultureName).ShouldBe("cs");
     }
 
     [Test]
@@ -65,8 +71,8 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
         _loginToken.ShouldNotBeNull();
 
         command.RecipientEmail.ShouldBe(_email);
-        command.Subject.ShouldContain("login link");
-        command.HtmlMessage.ShouldContain("log in");
+        command.Subject.ShouldContain("odkaz pro přihlášení");
+        command.HtmlMessage.ShouldContain("přihlášení");
         command.HtmlMessage.ShouldContain($"https://mrwatchdog_test/Account/ConfirmLogin?token={_loginToken.Token}");
         return true;
     }

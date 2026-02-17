@@ -2,7 +2,7 @@
 using CoreUtils;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Jsons;
 
 namespace MrWatchdog.Core.Features.Jobs.Domain;
 

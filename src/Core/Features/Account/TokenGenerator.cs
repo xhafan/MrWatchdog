@@ -10,6 +10,7 @@ public static class TokenGenerator
     public static string GenerateToken(
         Guid tokenGuid, 
         string email,
+        string cultureName,
         string? returnUrl,
         JwtOptions jwtOptions,
         DateTime? validFrom = null
@@ -21,7 +22,8 @@ public static class TokenGenerator
         var claims = new List<Claim>
         {
             new(ClaimTypes.Email, email),
-            new(CustomClaimTypes.Guid, tokenGuid.ToString())
+            new(CustomClaimTypes.Guid, tokenGuid.ToString()),
+            new(CustomClaimTypes.CultureName, cultureName)
         };
         
         if (!string.IsNullOrWhiteSpace(returnUrl))

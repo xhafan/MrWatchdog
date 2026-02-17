@@ -122,6 +122,7 @@ public class when_executing_scraper_scraping_scheduler_hosted_service : BaseData
                 await newUnitOfWork.DeleteScraperCascade(_scraperWithNextScrapingOnSetInTheFarPast);
                 await newUnitOfWork.DeleteScraperCascade(_scraperWithNextScrapingOnSetInTheFuture);
                 await newUnitOfWork.DeleteScraperCascade(_archivedScraperWithoutNextScrapingOnSet);
+                await newUnitOfWork.DeleteScraperCascade(_archivedScraperWithNextScrapingOnSetInThePast);
             }
         );
     }    

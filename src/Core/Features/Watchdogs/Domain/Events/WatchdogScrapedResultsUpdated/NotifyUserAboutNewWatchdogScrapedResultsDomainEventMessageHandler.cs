@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
@@ -19,7 +18,6 @@ public class NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
         var watchdog = await watchdogRepository.LoadByIdAsync(domainEvent.WatchdogId);
 
         await watchdog.NotifyUserAboutNewScrapedResults(
-            CultureInfo.GetCultureInfo("en"), // todo: load from user profile later
             bus,
             iRuntimeOptions.Value
         );

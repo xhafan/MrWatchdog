@@ -23,6 +23,7 @@ public static class NotDeletedRecordsChecker
                 || unitOfWork.Session.QueryOver<Watchdog>().List().Any()
                 || unitOfWork.Session.QueryOver<User>().List().Any()
                 || unitOfWork.Session.QueryOver<Job>().List().Any()
+                || unitOfWork.Session.QueryOver<LoginToken>().List().Any()
                )
             {
                 lock (_lock)

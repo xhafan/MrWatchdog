@@ -31,6 +31,7 @@ public class when_persisting_user : BaseDatabaseTest
 
         _persistedUser.Email.ShouldBe(_newUser.Email);
         _persistedUser.SuperAdmin.ShouldBe(false);
+        _persistedUser.Culture.ShouldBe(UserBuilder.Culture);
 
         _persistedUser.CompleteOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapedResults]);
     }

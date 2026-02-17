@@ -1,5 +1,6 @@
 ﻿using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
@@ -39,7 +40,8 @@ public class when_viewing_login_link_sent_page_with_expired_token : BaseDatabase
             .WithGuid(loginTokenGuid)
             .WithToken(TokenGenerator.GenerateToken(
                 loginTokenGuid, 
-                $"user+{Guid.NewGuid()}@email.com", 
+                $"user+{Guid.NewGuid()}@email.com",
+                CultureConstants.En.Name,
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)

@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -46,6 +47,7 @@ public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTe
             .WithToken(TokenGenerator.GenerateToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com", 
+                CultureConstants.En.Name,
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)

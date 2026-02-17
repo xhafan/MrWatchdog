@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
@@ -27,6 +28,7 @@ using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.HttpClients;
+using MrWatchdog.Core.Infrastructure.Jsons;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
 using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -49,6 +51,7 @@ using Polly.Extensions.Http;
 using Polly.Timeout;
 using Rebus.Config;
 using Rebus.Retry.Simple;
+using Rebus.Serialization.Json;
 using Rebus.Transport.InMem;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
@@ -57,7 +60,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Rewrite;
 
 namespace MrWatchdog.Web;
 
@@ -128,6 +130,9 @@ public class Program
                 .RequireAuthenticatedUser()
                 .Build();
             options.Filters.Add(new AuthorizeFilter(policy));
+        }).AddJsonOptions(opts =>
+        {
+            opts.JsonSerializerOptions.Converters.Add(new CultureInfoJsonConverter());
         });
 
         builder.Services.AddHealthChecks();
@@ -544,6 +549,7 @@ public class Program
                 }
 
                 return rebusConfigurer
+                    .Serialization(x => x.UseSystemTextJson(JsonHelper.DefaultOptions))
                     .Routing(configurer => MessageRoutingConfigurator.ConfigureMessageRouting(configurer, environmentName))
                     .Options(x =>
                     {

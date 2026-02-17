@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -79,6 +80,7 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
     public void user_is_created()
     {
         _user.ShouldNotBeNull();
+        _user.Culture.ShouldBe(CultureConstants.Cs);
     } 
     
     [Test]
@@ -132,6 +134,7 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
                 _bus.Send(
                     A<CreateUserCommand>.That.Matches(p =>
                         p.Email == _tokenEmail
+                        && p.Culture == CultureConstants.Cs
                     )
                 )
             )
@@ -144,6 +147,7 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
                     {
                         _user = new UserBuilder(newUnitOfWork)
                             .WithEmail(_tokenEmail)
+                            .WithCulture(CultureConstants.Cs)
                             .Build();
                     }
                 );
@@ -181,6 +185,7 @@ public class when_completing_login_for_non_existent_user : BaseDatabaseTest
             {
                 _loginToken = new LoginTokenBuilder(newUnitOfWork)
                     .WithEmail(_tokenEmail)
+                    .WithCulture(CultureConstants.Cs)
                     .Build();
                 _loginToken.Confirm();
             }

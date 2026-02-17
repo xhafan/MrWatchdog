@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
-using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Jsons;
 
 namespace MrWatchdog.Web.Features.Shared;
 

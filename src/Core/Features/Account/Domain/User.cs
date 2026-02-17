@@ -1,4 +1,5 @@
-﻿using CoreDdd.Domain;
+﻿using System.Globalization;
+using CoreDdd.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Account.Domain;
@@ -9,14 +10,19 @@ public class User : VersionedEntity, IAggregateRoot
 
     protected User() {}
 
-    public User(string email)
+    public User(
+        string email, 
+        CultureInfo culture
+    )
     {
         Email = email;
+        Culture = culture;
     }
 
-    public virtual string Email { get; protected set; } = null!;
+    public virtual string Email { get; } = null!;
     public virtual bool SuperAdmin { get; protected set; }
     public virtual IEnumerable<string> CompleteOnboardings => _completeOnboardings;
+    public virtual CultureInfo Culture { get; } = null!;
 
     public virtual UserDto GetDto()
     {

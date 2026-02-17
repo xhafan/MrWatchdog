@@ -2,6 +2,7 @@
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
@@ -39,16 +40,16 @@ public class when_notifying_user_about_watchdog_archived : BaseDatabaseTest
     private bool _MatchingCommand(SendEmailCommand command)
     {
         command.RecipientEmail.ShouldBe(_watchdog.User.Email);
-        command.Subject.ShouldContain("watchdog");
-        command.Subject.ShouldContain("scraper name");
+        command.Subject.ShouldContain("hlídací pes");
+        command.Subject.ShouldContain("jméno scraperu");
         command.Subject.ShouldNotContain("""
-                                         { "en": "scraper name" }
+                                         { "en": "scraper name", "cs": "jméno scraperu" }
                                          """);
-        command.Subject.ShouldContain("has been deleted");
-        command.HtmlMessage.ShouldContain("has been deleted");
-        command.HtmlMessage.ShouldContain("scraper name");
+        command.Subject.ShouldContain("byl smazán");
+        command.HtmlMessage.ShouldContain("byl smazán");
+        command.HtmlMessage.ShouldContain("jméno scraperu");
         command.HtmlMessage.ShouldNotContain("""
-                                             { "en": "scraper name" }
+                                             { "en": "scraper name", "cs": "jméno scraperu" }
                                              """);
         return true;
     }
@@ -57,12 +58,17 @@ public class when_notifying_user_about_watchdog_archived : BaseDatabaseTest
     {
         var scraper = new ScraperBuilder(UnitOfWork)
             .WithName("""
-                      { "en": "scraper name" }
+                      { "en": "scraper name", "cs": "jméno scraperu" }
                       """)
             .Build();
-        
+
+        var user = new UserBuilder(UnitOfWork)
+            .WithCulture(CultureConstants.Cs)
+            .Build();
+
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(scraper)
+            .WithUser(user)
             .Build();
     }
 }

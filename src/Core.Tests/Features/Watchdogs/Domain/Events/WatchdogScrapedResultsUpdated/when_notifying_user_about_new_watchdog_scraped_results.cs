@@ -5,6 +5,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
@@ -47,7 +48,7 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
     {
         command.RecipientEmail.ShouldBe(_user.Email);
         
-        command.Subject.ShouldContain("new results for");
+        command.Subject.ShouldContain("nové výsledky pro");
         command.Subject.ShouldContain("Epic Games store free game");
         command.Subject.ShouldNotContain(
             """
@@ -55,7 +56,7 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
             """
         );
         
-        command.HtmlMessage.ShouldContain("New results have been found for");
+        command.HtmlMessage.ShouldContain("Byly nalezeny nové výsledky pro");
         command.HtmlMessage.ShouldContain(
             $"""
              <a href="https://mrwatchdog_test/Watchdogs/Detail/{_watchdog.Id}">
@@ -107,7 +108,9 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
             .Build();
         _scraperWebPageId = _scraper.WebPages.Single().Id;
 
-        _user = new UserBuilder(UnitOfWork).Build();
+        _user = new UserBuilder(UnitOfWork)
+            .WithCulture(CultureConstants.Cs)
+            .Build();
         
         _watchdog = new WatchdogBuilder(UnitOfWork)
             .WithScraper(_scraper)

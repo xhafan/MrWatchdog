@@ -260,14 +260,13 @@ public class Scraper : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyAdminAboutScraperRequestedToBeMadePublic(
-        CultureInfo culture,
         ICoreBus bus,
         RuntimeOptions runtimeOptions,
         EmailAddressesOptions emailAddressesOptions
     )
     {
         var mrWatchdogResource = Resource.MrWatchdog;
-        var localizedName = GetLocalizedName(culture);
+        var localizedName = GetLocalizedName(CultureConstants.En);
         await bus.Send(new SendEmailCommand(
             emailAddressesOptions.Admin,
             $"{mrWatchdogResource}: scraper {localizedName} requested to be made public",

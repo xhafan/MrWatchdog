@@ -11,7 +11,7 @@ public class CreateUserCommandMessageHandler(
 {
     public async Task Handle(CreateUserCommand command)
     {
-        var user = new User(command.Email);
+        var user = new User(command.Email, command.Culture);
         await userRepository.SaveAsync(user);
     }
 }

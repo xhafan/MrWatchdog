@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using CoreDdd.Domain;
+﻿using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account.Domain;
@@ -11,6 +10,7 @@ using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Extensions;
+using MrWatchdog.Core.Infrastructure.Jsons;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using Serilog;
@@ -147,7 +147,6 @@ public class Watchdog : VersionedEntity, IAggregateRoot
     }
 
     public virtual async Task NotifyUserAboutNewScrapedResults(
-        CultureInfo culture,
         ICoreBus bus,
         RuntimeOptions runtimeOptions
     )
@@ -156,38 +155,32 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         
         if (newScrapedResults.IsEmpty()) return;
 
-        var mrWatchdogResource = Resource.MrWatchdog;
-        var searchTermSuffix = !string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "";
-
         if (ReceiveNotification)
         {
-            var localizedScraperName = Scraper.GetLocalizedName(culture);
+            var userCulture = User.Culture;
+
+            var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), userCulture);
+            var searchTermSuffix = !string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "";
+            
+            var localizedScraperName = Scraper.GetLocalizedName(userCulture);
+
             await bus.Send(new SendEmailCommand(
                 User.Email,
-                Subject: $"{mrWatchdogResource}: new results for {localizedScraperName}{searchTermSuffix}",
-                HtmlMessage:
-                $"""
-                 <html>
-                 <body>
-                 <p>
-                     Hello,
-                 </p>
-                 <p>
-                     New results have been found for 
-                     <a href="{runtimeOptions.Url}{WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id)}">
-                        <span>{localizedScraperName}</span><span translate="no">{searchTermSuffix}</span>
-                     </a>:
-                 </p>
-                 <ul>
-                     {string.Join("\n    ", _scrapedResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>"))}
-                 </ul>
-                 <p>
-                     Kind regards,<br>
-                     {mrWatchdogResource}
-                 </p>
-                 </body>
-                 </html>
-                 """,
+                string.Format(
+                    ResourceHelper.GetString(nameof(Resource.NewScrapedResultsEmailSubject), userCulture), 
+                    mrWatchdogResource, 
+                    localizedScraperName, 
+                    searchTermSuffix
+                ),
+                string.Format(
+                    ResourceHelper.GetString(nameof(Resource.NewScrapedResultsEmailBody), userCulture), 
+                    runtimeOptions.Url, 
+                    WatchdogUrlConstants.WatchdogDetailUrlTemplate.WithWatchdogId(Id),
+                    localizedScraperName,
+                    searchTermSuffix,
+                    string.Join("\n    ", _scrapedResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult}</li>")),
+                    mrWatchdogResource
+                ),
                 UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithWatchdogId(Id)}"
             ));
 
@@ -210,34 +203,23 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         }
     }
 
-    public virtual async Task NotifyUserAboutWatchdogArchived(
-        CultureInfo culture,
-        ICoreBus bus
-    )
+    public virtual async Task NotifyUserAboutWatchdogArchived(ICoreBus bus)
     {
-        var mrWatchdogResource = Resource.MrWatchdog;
-        var scraperLocalizedName = Scraper.GetLocalizedName(culture);
+        var userCulture = User.Culture;
+
+        var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), userCulture);
+        var scraperLocalizedName = Scraper.GetLocalizedName(userCulture);
         var watchdogName = $"{scraperLocalizedName}{(!string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "")}";
 
         await bus.Send(new SendEmailCommand(
             User.Email,
-            $"{mrWatchdogResource}: your watchdog {watchdogName} has been deleted",
-            $"""
-             <html>
-             <body>
-             <p>
-                 Hello,
-             </p>
-             <p>
-                 Your watchdog <b>{watchdogName}</b> has been deleted due to scraper <b>{scraperLocalizedName}</b> deletion.
-             </p>
-             <p>
-                 Kind regards,<br>
-                 {mrWatchdogResource}
-             </p>
-             </body>
-             </html>
-             """
+            string.Format(ResourceHelper.GetString(nameof(Resource.WatchdogArchivedEmailSubject), userCulture), mrWatchdogResource, watchdogName),
+            string.Format(
+                ResourceHelper.GetString(nameof(Resource.WatchdogArchivedEmailBody), userCulture), 
+                watchdogName,
+                scraperLocalizedName,
+                mrWatchdogResource
+            )
         ));
     }
 

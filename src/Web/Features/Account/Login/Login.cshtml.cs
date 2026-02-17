@@ -15,6 +15,7 @@ using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Validations;
 using MrWatchdog.Web.Features.Shared;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Web.Features.Account.Login;
@@ -50,7 +51,11 @@ public class LoginModel(
 
         Email = Email.Trim();
 
-        var command = new SendLoginLinkToUserCommand(Email, Url.IsLocalUrl(ReturnUrl) ? ReturnUrl : null);
+        var command = new SendLoginLinkToUserCommand(
+            Email,
+            CultureInfo.CurrentUICulture,
+            Url.IsLocalUrl(ReturnUrl) ? ReturnUrl : null
+        );
         await bus.Send(command);
         await jobCompletionAwaiter.WaitForJobCompletion(command.Guid);
 

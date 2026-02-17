@@ -4,6 +4,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
@@ -44,14 +45,14 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
     private bool _MatchingCommand(SendEmailCommand command)
     {
         command.RecipientEmail.ShouldBe(_user.Email);
-        command.Subject.ShouldContain("web scraping failed");
+        command.Subject.ShouldContain("webové scrapování selhalo");
         command.Subject.ShouldContain("Epic Games store free game");
         command.Subject.ShouldNotContain(
             """
             { "en": "Epic Games store free game" }
             """
         );
-        command.HtmlMessage.ShouldContain("Web scraping failed");
+        command.HtmlMessage.ShouldContain("Webové scrapování selhalo");
         command.HtmlMessage.ShouldContain(
             $"""
              <a href="https://mrwatchdog_test/Scrapers/Detail/{_scraper.Id}">Epic Games store free game</a>
@@ -77,7 +78,9 @@ public class when_notifying_user_about_scraper_scraping_failed : BaseDatabaseTes
     
     private void _BuildEntities()
     {
-        _user = new UserBuilder(UnitOfWork).Build();
+        _user = new UserBuilder(UnitOfWork)
+            .WithCulture(CultureConstants.Cs)
+            .Build();
         
         _scraper = new ScraperBuilder(UnitOfWork)
             .WithWebPage(new ScraperWebPageArgs

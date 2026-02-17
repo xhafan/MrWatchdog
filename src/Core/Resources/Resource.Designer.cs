@@ -402,6 +402,36 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;body&gt;
+        ///&lt;p&gt;
+        ///   If you just requested to log in to &lt;a href=&quot;{0}&quot;&gt;{1}&lt;/a&gt;, click the link below:
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///   &lt;a href=&quot;{2}&quot;&gt;{3}&lt;/a&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///   This link expires in {4} minutes.
+        ///&lt;/p&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        public static string LoginLinkEmailBody {
+            get {
+                return ResourceManager.GetString("LoginLinkEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: login link.
+        /// </summary>
+        public static string LoginLinkEmailSubject {
+            get {
+                return ResourceManager.GetString("LoginLinkEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login link sent.
         /// </summary>
         public static string LoginLinkSent {
@@ -643,6 +673,41 @@ namespace MrWatchdog.Core.Resources {
         public static string NeedHelp {
             get {
                 return ResourceManager.GetString("NeedHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;body&gt;
+        ///&lt;p&gt;
+        ///    Hello,
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    New results have been found for 
+        ///    &lt;a href=&quot;{0}{1}&quot;&gt;&lt;span&gt;{2}&lt;/span&gt;&lt;span translate=&quot;no&quot;&gt;{3}&lt;/span&gt;&lt;/a&gt;:
+        ///&lt;/p&gt;
+        ///&lt;ul&gt;
+        ///    {4}
+        ///&lt;/ul&gt;
+        ///&lt;p&gt;
+        ///    Kind regards,&lt;br&gt;
+        ///    {5}
+        ///&lt;/p&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        public static string NewScrapedResultsEmailBody {
+            get {
+                return ResourceManager.GetString("NewScrapedResultsEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: new results for: {1}{2}.
+        /// </summary>
+        public static string NewScrapedResultsEmailSubject {
+            get {
+                return ResourceManager.GetString("NewScrapedResultsEmailSubject", resourceCulture);
             }
         }
         
@@ -1196,6 +1261,37 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;body&gt;
+        ///&lt;p&gt;
+        ///    Hello,
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Your watchdog &lt;b&gt;{0}&lt;/b&gt; has been deleted due to scraper &lt;b&gt;{1}&lt;/b&gt; deletion.
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Kind regards,&lt;br&gt;
+        ///    {2}
+        ///&lt;/p&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        public static string WatchdogArchivedEmailBody {
+            get {
+                return ResourceManager.GetString("WatchdogArchivedEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: your watchdog {1} has been deleted.
+        /// </summary>
+        public static string WatchdogArchivedEmailSubject {
+            get {
+                return ResourceManager.GetString("WatchdogArchivedEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You navigated to your &lt;b&gt;watchdog&lt;/b&gt;.&lt;br/&gt;
         ///&lt;br/&gt;
         ///This watchdog emails you notification about new results of the related scraper..
@@ -1255,6 +1351,41 @@ namespace MrWatchdog.Core.Resources {
         public static string WebPageNotScrapedYet {
             get {
                 return ResourceManager.GetString("WebPageNotScrapedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;body&gt;
+        ///&lt;p&gt;
+        ///    Hello,
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Web scraping failed for the scraper &lt;a href=&quot;{0}&quot;&gt;{1}&lt;/a&gt;.&lt;br&gt;
+        ///    Failed scraper web pages:
+        ///    &lt;ul&gt;
+        ///        {2}
+        ///    &lt;/ul&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Kind regards,&lt;br&gt;
+        ///    {3}
+        ///&lt;/p&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        public static string WebScrapingFailedEmailBody {
+            get {
+                return ResourceManager.GetString("WebScrapingFailedEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: web scraping failed for the scraper {1}.
+        /// </summary>
+        public static string WebScrapingFailedEmailSubject {
+            get {
+                return ResourceManager.GetString("WebScrapingFailedEmailSubject", resourceCulture);
             }
         }
         

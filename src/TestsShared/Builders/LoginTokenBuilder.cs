@@ -1,6 +1,8 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Globalization;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
@@ -8,11 +10,13 @@ namespace MrWatchdog.TestsShared.Builders;
 public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
     public const string? TokenReturnUrl = "/Watchdogs";
+    public static readonly CultureInfo Culture = CultureConstants.En;
     
     private Guid _guid;
     private string _email = $"user+{Guid.NewGuid()}@email.com";
     private string? _token;
     private string? _tokenReturnUrl = TokenReturnUrl;
+    private CultureInfo _culture = Culture;
 
     public LoginTokenBuilder WithGuid(Guid guid)
     {
@@ -38,6 +42,12 @@ public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
         return this;
     }    
     
+    public LoginTokenBuilder WithCulture(CultureInfo culture)
+    {
+        _culture = culture;
+        return this;
+    }
+
     public LoginToken Build()
     {
         if (_guid == Guid.Empty)
@@ -50,6 +60,7 @@ public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
             _token = TokenGenerator.GenerateToken(
                 _guid, 
                 _email, 
+                _culture.Name,
                 _tokenReturnUrl, 
                 OptionsTestRetriever.Retrieve<JwtOptions>().Value
             );

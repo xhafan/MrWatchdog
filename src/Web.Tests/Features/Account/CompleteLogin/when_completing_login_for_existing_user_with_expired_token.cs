@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -66,7 +67,8 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
             .WithGuid(loginTokenGuid)
             .WithToken(TokenGenerator.GenerateToken(
                 loginTokenGuid, 
-                _user.Email, 
+                _user.Email,
+                CultureConstants.En.Name,
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)

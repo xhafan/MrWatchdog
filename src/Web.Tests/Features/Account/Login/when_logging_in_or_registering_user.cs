@@ -6,11 +6,13 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Jobs.Domain;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Account.Login;
+using System.Globalization;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 
@@ -22,10 +24,15 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
     private ICoreBus _bus = null!;
     private Job _job = null!;
     private LoginToken _loginToken = null!;
+    private CultureInfo _originalUiCulture = null!;
 
     [SetUp]
     public async Task Context()
     {
+        _originalUiCulture = CultureInfo.CurrentUICulture;
+        
+        CultureInfo.CurrentUICulture = CultureConstants.Cs;
+
         _bus = A.Fake<ICoreBus>();
         
         _SimulateLoginTokenAndJobCreationOnSendLoginLinkToUserCommand();
@@ -63,6 +70,8 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
                 await newUnitOfWork.DeleteLoginTokenCascade(_loginToken);
             }
         );
+        
+        CultureInfo.CurrentUICulture = _originalUiCulture;
     }
     
     private void _SimulateLoginTokenAndJobCreationOnSendLoginLinkToUserCommand()
@@ -71,6 +80,7 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
                 _bus.Send(
                     A<SendLoginLinkToUserCommand>.That.Matches(p =>
                         p.Email == "user@email.com"
+                        && p.Culture == CultureConstants.Cs
                         && p.ReturnUrl == LoginModelBuilder.ReturnUrl
                     )
                 )
@@ -82,7 +92,9 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
                     () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
                     newUnitOfWork =>
                     {
-                        _loginToken = new LoginTokenBuilder(newUnitOfWork).Build();
+                        _loginToken = new LoginTokenBuilder(newUnitOfWork)
+                            .WithCulture(CultureConstants.Cs)
+                            .Build();
                         newUnitOfWork.Save(_loginToken);
 
                         var command = (SendLoginLinkToUserCommand) call.Arguments.Single()!;

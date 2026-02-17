@@ -2,6 +2,7 @@
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
+using MrWatchdog.Core.Infrastructure.Jsons;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Logs;
 using System.Net;

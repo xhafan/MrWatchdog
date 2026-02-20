@@ -9,10 +9,10 @@ using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingData
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Shared.Domain;
+using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Extensions;
 using MrWatchdog.Core.Infrastructure.Localization;
 using Serilog;
-using System.Web;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
@@ -143,7 +143,7 @@ public class ScraperWebPage : VersionedEntity
         if (SelectText)
         {
             scrapedResults = scrapedResults
-                .Select(_getTextFromHtml)
+                .Select(HtmlExtractor.ExtractTextFromHtml)
                 .Where(text => !string.IsNullOrWhiteSpace(text))
                 .ToList();
 
@@ -160,7 +160,7 @@ public class ScraperWebPage : VersionedEntity
         {
             var scrapedResultsWithNonEmptyText = scrapedResults
                 .Select(html => sanitizer.Sanitize(html))
-                .Where(html => !string.IsNullOrWhiteSpace(_getTextFromHtml(html)))
+                .Where(html => !string.IsNullOrWhiteSpace(HtmlExtractor.ExtractTextFromHtml(html)))
                 .ToList();
             
             if (scrapedResultsWithNonEmptyText.IsEmpty())
@@ -178,20 +178,6 @@ public class ScraperWebPage : VersionedEntity
         _scrapedResults.AddRange(scrapedResults);
         ScrapedOn = DateTime.UtcNow;
         ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert();
-        return;
-
-        string _getTextFromHtml(string html)
-        {
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(html);
-            var textNodes = htmlDoc.DocumentNode
-                .DescendantsAndSelf()
-                .Where(x => x.NodeType == HtmlNodeType.Text)
-                .Select(x => x.InnerText.Trim())
-                .Where(x => !string.IsNullOrEmpty(x));
-            var joinedText = string.Join(" ", textNodes);
-            return HttpUtility.HtmlDecode(joinedText);
-        }
     }
 
     private void ResetNumberOfFailedScrapingAttemptsBeforeTheNextAlert()

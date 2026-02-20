@@ -34,8 +34,8 @@ public class when_refreshing_watchdog_with_search_term_empty : BaseDatabaseTest
     [Test]
     public void watchdog_is_refreshed()
     {
-        _watchdog.CurrentScrapedResults.ShouldBe(["Doom 1", "Prince Of Persia"]);
-        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Prince Of Persia"]);
+        _watchdog.CurrentScrapedResults.Select(x => x.Value).ShouldBe(["Doom 1", "Prince Of Persia"]);
+        _watchdog.ScrapedResultsToNotifyAbout.Select(x => x.Value).ShouldBe(["Prince Of Persia"]);
     }
     
     private void _BuildEntities()

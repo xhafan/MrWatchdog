@@ -23,6 +23,7 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.Core.Features.Jobs.Services;
 using MrWatchdog.Core.Features.Scrapers.Services;
+using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -413,6 +414,8 @@ public class Program
 
         _buildDatabase();
 
+        await _refreshScrapedResultsHashes();
+
         // Configure the HTTP request pipeline.
 
         // Temporarily redirect Scrapers/ScrapingResults/ to Scrapers/ScrapedResults/
@@ -607,6 +610,14 @@ public class Program
                 .CreateLogger();
 
             builder.Host.UseSerilog();
+        }
+
+        async Task _refreshScrapedResultsHashes()
+        {
+            if (builder.Configuration.GetValue<bool>("WatchdogScrapedResults:RefreshHashes"))
+            {
+                await WatchdogScrapedResultsHashRefresher.RefreshWatchdogScrapedResultsHashes(nhibernateConfigurator);
+            }
         }
     }
 }

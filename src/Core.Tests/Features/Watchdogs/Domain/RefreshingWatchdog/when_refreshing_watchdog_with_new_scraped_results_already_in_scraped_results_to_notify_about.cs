@@ -22,7 +22,7 @@ public class when_refreshing_watchdog_with_new_scraped_results_already_in_scrape
     [Test]
     public void watchdog_scraped_results_to_notify_about_does_not_contain_duplicates()
     {
-        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Doom 2"]);
+        _watchdog.ScrapedResultsToNotifyAbout.Select(x => x.Value).ShouldBe(["Doom 2"]);
     }
 
     private void _BuildEntities()
@@ -48,6 +48,6 @@ public class when_refreshing_watchdog_with_new_scraped_results_already_in_scrape
         _watchdog.Refresh();
         _scraper.SetScrapedResults(scraperWebPage.Id, []);
         _watchdog.Refresh();
-        _scraper.SetScrapedResults(scraperWebPage.Id, ["Doom 2"]);
+        _scraper.SetScrapedResults(scraperWebPage.Id, ["  Doom 2  "]);
     }
 }

@@ -23,8 +23,8 @@ public class when_refreshing_watchdog_with_search_term_set : BaseTest
     [Test]
     public void watchdog_is_refreshed()
     {
-        _watchdog.CurrentScrapedResults.ShouldBe(["Doom 1", "Doom 2"]);
-        _watchdog.ScrapedResultsToNotifyAbout.ShouldBe(["Doom 2"]);
+        _watchdog.CurrentScrapedResults.Select(x => x.Value).ShouldBe(["Doom 1", "Doom 2"]);
+        _watchdog.ScrapedResultsToNotifyAbout.Select(x => x.Value).ShouldBe(["Doom 2"]);
     }
 
     [Test]

@@ -43,7 +43,7 @@ public class when_creating_watchdog : BaseDatabaseTest
         _watchdog.User.ShouldBe(_user);
         _watchdog.ReceiveNotification.ShouldBe(true);
         _watchdog.SearchTerm.ShouldBe("text");
-        _watchdog.CurrentScrapedResults.ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
+        _watchdog.CurrentScrapedResults.Select(x => x.Value).ShouldBe(["<div>tÉxt 1</div>", "<div>texŤ 3</div>"]);
     }
     
     private void _BuildEntities()

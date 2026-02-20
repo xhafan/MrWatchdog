@@ -10,6 +10,6 @@ public record ScraperWebPageHttpHeader
         Value = value;
     }
 
-    public string Name { get; protected set; } = null!;
-    public string Value { get; protected set; } = null!;
+    public string Name { get; private set; } = null!;
+    public string Value { get; private set; } = null!;
 }

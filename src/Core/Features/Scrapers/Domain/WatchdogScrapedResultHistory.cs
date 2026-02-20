@@ -6,12 +6,12 @@ public class WatchdogScrapedResultHistory : VersionedEntity
 {
     protected WatchdogScrapedResultHistory() {}
     
-    public WatchdogScrapedResultHistory(string result, DateTime notifiedOn)
+    public WatchdogScrapedResultHistory(ScrapedResult scrapedResult, DateTime notifiedOn)
     {
-        Result = result;
+        ScrapedResult = scrapedResult;
         NotifiedOn = notifiedOn;
     }
 
-    public virtual string Result { get; } = null!;
+    public virtual ScrapedResult ScrapedResult { get; } = null!;
     public virtual DateTime NotifiedOn { get; }
 }

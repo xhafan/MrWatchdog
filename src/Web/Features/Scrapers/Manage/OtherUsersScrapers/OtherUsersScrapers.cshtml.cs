@@ -4,6 +4,7 @@ using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Web.Features.Shared;
 using MrWatchdog.Web.Infrastructure.Authorizations;
+using System.Globalization;
 
 namespace MrWatchdog.Web.Features.Scrapers.Manage.OtherUsersScrapers;
 
@@ -18,7 +19,7 @@ public class OtherUsersScrapersModel(
     public async Task OnGet()
     {
         OtherUsersScrapers = await queryExecutor.ExecuteAsync<GetOtherUsersScrapersQuery, GetOtherUsersScrapersQueryResult>(
-            new GetOtherUsersScrapersQuery(actingUserAccessor.GetActingUserId())
+            new GetOtherUsersScrapersQuery(actingUserAccessor.GetActingUserId(), CultureInfo.CurrentUICulture)
         );
     }
 }

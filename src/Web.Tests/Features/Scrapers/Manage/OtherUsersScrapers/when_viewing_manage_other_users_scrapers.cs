@@ -58,7 +58,9 @@ public class when_viewing_manage_other_users_scrapers : BaseDatabaseTest
 
         _scraperForUserTwo = new ScraperBuilder(UnitOfWork)
             .WithUser(_userTwo)
-            .WithName("scraper user two")
+            .WithName("""
+                      { "en": "scraper user two" }
+                      """)
             .Build();
         _scraperForUserTwo.MakePublic();
         

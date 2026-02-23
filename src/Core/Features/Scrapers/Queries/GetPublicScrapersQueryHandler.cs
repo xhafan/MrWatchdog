@@ -27,7 +27,6 @@ public class GetPublicScrapersQueryHandler(
                 .Select(x => x.Name).WithAlias(() => result.ScraperName)
                 .Select(() => userAlias.Id).WithAlias(() => result.UserId)
             )
-            .OrderByAlias(() => result.ScraperName).Asc
             .TransformUsing(Transformers.AliasToBean<GetPublicScrapersQueryResult>())
             .ListAsync<GetPublicScrapersQueryResult>();;
         
@@ -35,6 +34,7 @@ public class GetPublicScrapersQueryHandler(
             {
                 ScraperName = LocalizedTextResolver.ResolveLocalizedText(x.ScraperName, query.Culture)
             })
+            .OrderBy(x => x.ScraperName)
             .ToList();
         
         return (IEnumerable<TResult>) localizedResults;

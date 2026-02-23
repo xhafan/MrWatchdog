@@ -32,8 +32,6 @@ public class GetWatchdogsQueryHandler(
                 .Select(x => x.SearchTerm).WithAlias(() => result.SearchTerm)
                 .Select(x => x.ReceiveNotification).WithAlias(() => result.ReceiveNotification)
             )
-            .OrderBy(() => scraper.Name).Asc
-            .ThenBy(x => x.SearchTerm).Asc
             .TransformUsing(Transformers.AliasToBean<GetWatchdogsQueryResult>())
             .ListAsync<GetWatchdogsQueryResult>();
         
@@ -41,6 +39,8 @@ public class GetWatchdogsQueryHandler(
             {
                 ScraperName = LocalizedTextResolver.ResolveLocalizedText(x.ScraperName, query.Culture)
             })
+            .OrderBy(x => x.ScraperName)
+            .ThenBy(x => x.SearchTerm)
             .ToList();
         
         return (IEnumerable<TResult>) localizedResults;        

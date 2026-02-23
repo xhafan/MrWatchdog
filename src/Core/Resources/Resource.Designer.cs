@@ -1436,11 +1436,23 @@ namespace MrWatchdog.Core.Resources {
         ///&lt;/p&gt;
         ///&lt;p&gt;
         ///    &lt;b&gt;Close this page&lt;/b&gt; and return to your original session.
-        ///&lt;/p&gt;.
+        ///&lt;/p&gt;
+        ///.
         /// </summary>
         public static string YouHaveBeenLoggedInDescription {
             get {
                 return ResourceManager.GetString("YouHaveBeenLoggedInDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    If your original session is in this browser, you can continue &lt;a href=&quot;{0}&quot;&gt;here&lt;/a&gt;.
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string YouHaveBeenLoggedInDescriptionContinueHere {
+            get {
+                return ResourceManager.GetString("YouHaveBeenLoggedInDescriptionContinueHere", resourceCulture);
             }
         }
         

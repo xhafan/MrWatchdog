@@ -49,6 +49,7 @@ public class when_viewing_confirm_login_page : BaseDatabaseTest
     public void model_is_valid()
     {
         _model.ModelState.IsValid.ShouldBe(true);
+        _model.ReturnUrl.ShouldBe(LoginTokenBuilder.TokenReturnUrl);
     }
     
     private void _BuildEntities()

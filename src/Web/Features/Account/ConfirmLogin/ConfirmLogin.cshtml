@@ -10,4 +10,7 @@
 <h1 class="display-4">@title</h1>
 
 @Html.Raw(Resource.YouHaveBeenLoggedInDescription)
-
+@if (!string.IsNullOrWhiteSpace(Model.ReturnUrl))
+{
+    @Html.Raw(string.Format(Resource.YouHaveBeenLoggedInDescriptionContinueHere, Model.ReturnUrl))
+}

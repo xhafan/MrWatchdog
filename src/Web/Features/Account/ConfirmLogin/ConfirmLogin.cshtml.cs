@@ -27,6 +27,8 @@ public class ConfirmLoginModel(
     [Required]
     [StringLength(800)]
     public string Token { get; set; } = null!;    
+
+    public string? ReturnUrl { get; private set; }
     
     public async Task<IActionResult> OnGet()
     {
@@ -35,9 +37,9 @@ public class ConfirmLoginModel(
             return BadRequest(ModelState);
         }
         
-        var claimsPrincipal = TokenValidator.ValidateToken(Uri.UnescapeDataString(Token), iJwtOptions.Value);
+        var tokenClaimsPrincipal = TokenValidator.ValidateToken(Uri.UnescapeDataString(Token), iJwtOptions.Value);
 
-        var loginTokenGuidString = claimsPrincipal.FindFirstValue(CustomClaimTypes.Guid);
+        var loginTokenGuidString = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.Guid);
         Guard.Hope(!string.IsNullOrWhiteSpace(loginTokenGuidString), "Cannot get guid from token.");
         var loginTokenGuid = Guid.Parse(loginTokenGuidString);
         
@@ -47,6 +49,8 @@ public class ConfirmLoginModel(
         var command = new ConfirmLoginTokenCommand(loginTokenGuid);
         await bus.Send(command);
         await jobCompletionAwaiter.WaitForJobCompletion(command.Guid);
+
+        ReturnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
 
         return Page();
     }

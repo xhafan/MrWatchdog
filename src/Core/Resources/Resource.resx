@@ -649,4 +649,9 @@ This watchdog emails you notification about new results of the related scraper.<
   <data name="Unsubscribe" xml:space="preserve">
 	  <value>Unsubscribe</value>
   </data>
+  <data name="YouHaveBeenLoggedInDescriptionContinueHere" xml:space="preserve">
+	  <value>&lt;p&gt;
+    If your original session is in this browser, you can continue &lt;a href="{0}"&gt;here&lt;/a&gt;.
+&lt;/p&gt;</value>
+  </data>
 </root>

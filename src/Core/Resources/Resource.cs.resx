@@ -531,4 +531,9 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 	<data name="Unsubscribe" xml:space="preserve">
 		<value>Odhlásit</value>
 	</data>
+	<data name="YouHaveBeenLoggedInDescriptionContinueHere" xml:space="preserve">
+		<value>&lt;p&gt;
+    Pokud je vaše původní relace v tomto prohlížeči, můžete pokračovat &lt;a href="{0}"&gt;zde&lt;/a&gt;.
+&lt;/p&gt;</value>
+	</data>
 </root>

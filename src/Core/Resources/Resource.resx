@@ -616,7 +616,7 @@ This watchdog emails you notification about new results of the related scraper.<
 &lt;/html&gt;</value>
   </data>
   <data name="NewScrapedResultsEmailSubject" xml:space="preserve">
-	  <value>{0}: new results for: {1}{2}</value>
+	  <value>{0}: new results for {1}{2}</value>
   </data>
   <data name="NewScrapedResultsEmailBody" xml:space="preserve">
 	  <value>&lt;html&gt;

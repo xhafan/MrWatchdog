@@ -703,7 +703,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: new results for: {1}{2}.
+        ///   Looks up a localized string similar to {0}: new results for {1}{2}.
         /// </summary>
         public static string NewScrapedResultsEmailSubject {
             get {

@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -34,7 +35,8 @@ public class WatchdogsControllerBuilder(NhibernateUnitOfWork unitOfWork)
 
         return new WatchdogsController(
             _bus,
-            new QueryExecutor(queryHandlerFactory)
+            new QueryExecutor(queryHandlerFactory),
+            OptionsTestRetriever.Retrieve<JwtOptions>()
         );
     }
 }

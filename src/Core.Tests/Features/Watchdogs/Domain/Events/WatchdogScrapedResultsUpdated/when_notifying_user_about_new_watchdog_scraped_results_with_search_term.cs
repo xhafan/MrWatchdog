@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -31,7 +32,8 @@ public class when_notifying_user_about_new_watchdog_scraped_results_with_search_
         var handler = new NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             _bus,
-            OptionsTestRetriever.Retrieve<RuntimeOptions>()
+            OptionsTestRetriever.Retrieve<RuntimeOptions>(),
+            OptionsTestRetriever.Retrieve<JwtOptions>()
         );
 
         await handler.Handle(new WatchdogScrapedResultsUpdatedDomainEvent(_watchdog.Id));

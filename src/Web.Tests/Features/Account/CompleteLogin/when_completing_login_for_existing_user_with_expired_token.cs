@@ -65,7 +65,7 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
         var loginTokenGuid = Guid.NewGuid();
         _loginToken = new LoginTokenBuilder(UnitOfWork)
             .WithGuid(loginTokenGuid)
-            .WithToken(TokenGenerator.GenerateToken(
+            .WithToken(TokenGenerator.GenerateLoginToken(
                 loginTokenGuid, 
                 _user.Email,
                 CultureConstants.En.Name,

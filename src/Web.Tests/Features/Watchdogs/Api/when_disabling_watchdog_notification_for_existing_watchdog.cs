@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
@@ -28,7 +29,9 @@ public class when_disabling_watchdog_notification_for_existing_watchdog : BaseDa
             .WithBus(_bus)
             .Build();
         
-        _actionResult = await _controller.DisableNotification(_watchdog.Id);
+        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(_watchdog.Id, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
+
+        _actionResult = await _controller.DisableNotification(unsubscribeToken);
     }
 
     [Test]

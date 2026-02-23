@@ -1,6 +1,7 @@
 ﻿using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Shared.Domain;
@@ -149,7 +150,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
 
     public virtual async Task NotifyUserAboutNewScrapedResults(
         ICoreBus bus,
-        RuntimeOptions runtimeOptions
+        RuntimeOptions runtimeOptions,
+        JwtOptions jwtOptions
     )
     {
         var newScrapedResults = _scrapedResultsToNotifyAbout.ToList();
@@ -164,6 +166,8 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             var searchTermSuffix = !string.IsNullOrWhiteSpace(SearchTerm) ? $" - {SearchTerm}" : "";
             
             var localizedScraperName = Scraper.GetLocalizedName(userCulture);
+
+            var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(Id, jwtOptions);
 
             await bus.Send(new SendEmailCommand(
                 User.Email,
@@ -182,7 +186,7 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                     string.Join("\n    ", _scrapedResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult.Value}</li>")),
                     mrWatchdogResource
                 ),
-                UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithWatchdogId(Id)}"
+                UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithUnsubscribeToken(unsubscribeToken)}"
             ));
 
             foreach (var scrapedResult in _scrapedResultsToNotifyAbout)

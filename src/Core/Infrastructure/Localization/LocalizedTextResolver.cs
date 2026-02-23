@@ -17,7 +17,7 @@ public static class LocalizedTextResolver
         Dictionary<string, string>? map = null;
         try
         {
-            using var doc = JsonDocument.Parse(text, new JsonDocumentOptions
+                using var doc = JsonDocument.Parse(text, new JsonDocumentOptions
             {
                 AllowTrailingCommas = true,
                 CommentHandling = JsonCommentHandling.Skip

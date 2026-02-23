@@ -1,13 +1,13 @@
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MrWatchdog.Core.Features.Account;
 
 public static class TokenGenerator
 {
-    public static string GenerateToken(
+    public static string GenerateLoginToken(
         Guid tokenGuid, 
         string email,
         string cultureName,
@@ -37,6 +37,27 @@ public static class TokenGenerator
             claims: claims,
             notBefore: validFrom,
             expires: validFrom.Value.AddMinutes(jwtOptions.ExpireMinutes),
+            signingCredentials: signingCredentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public static string GenerateUnsubscribeToken(
+        long watchdogId,
+        JwtOptions jwtOptions
+    )
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+        {
+            new(CustomClaimTypes.WatchdogId, watchdogId.ToString())
+        };
+        
+        var token = new JwtSecurityToken(
+            claims: claims,
             signingCredentials: signingCredentials
         );
 

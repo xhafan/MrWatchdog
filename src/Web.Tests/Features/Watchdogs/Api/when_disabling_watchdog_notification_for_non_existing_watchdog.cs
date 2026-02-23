@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
@@ -22,8 +23,10 @@ public class when_disabling_watchdog_notification_for_non_existing_watchdog : Ba
         _controller = new WatchdogsControllerBuilder(UnitOfWork)
             .WithBus(_bus)
             .Build();
+
+        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(123, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
         
-        _actionResult = await _controller.DisableNotification(123);
+        _actionResult = await _controller.DisableNotification(unsubscribeToken);
     }
 
     [Test]

@@ -9,6 +9,9 @@ public static class WatchdogUrlConstants
     public const string WatchdogIdVariable = "$watchdogId";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string UnsubscribeTokenVariable = "$unsubscribeToken";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogDetailUrlTemplate = $"/Watchdogs/Detail/{WatchdogIdVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
@@ -18,13 +21,18 @@ public static class WatchdogUrlConstants
     public const string WatchdogsUrl = "/Watchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string DisableWatchdogNotificationsUrlTemplate = $"/api/Watchdogs/{WatchdogIdVariable}/DisableNotification";
+    public const string DisableWatchdogNotificationsUrlTemplate = $"/api/Watchdogs/DisableNotification?unsubscribeToken={UnsubscribeTokenVariable}";
 
     extension(string urlTemplate)
     {
         public string WithWatchdogId(long watchdogId)
         {
             return urlTemplate.WithVariable(WatchdogIdVariable, watchdogId.ToString());
+        }
+
+        public string WithUnsubscribeToken(string unsubscribeToken)
+        {
+            return urlTemplate.WithVariable(UnsubscribeTokenVariable, unsubscribeToken);
         }
     }
 }

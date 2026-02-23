@@ -24,7 +24,7 @@ public class SendLoginLinkToUserCommandMessageHandler(
 
         var loginTokenGuid = Guid.NewGuid();
 
-        var tokenString = TokenGenerator.GenerateToken(
+        var loginTokenString = TokenGenerator.GenerateLoginToken(
             loginTokenGuid,
             command.Email,
             command.Culture.Name,
@@ -32,10 +32,10 @@ public class SendLoginLinkToUserCommandMessageHandler(
             jwtOptions
         );
 
-        var loginToken = new LoginToken(loginTokenGuid, command.Email, tokenString);
+        var loginToken = new LoginToken(loginTokenGuid, command.Email, loginTokenString);
         await loginTokenRepository.SaveAsync(loginToken);
         
-        var tokenParam = Uri.EscapeDataString(tokenString);
+        var tokenParam = Uri.EscapeDataString(loginTokenString);
         var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(tokenParam)}";
 
         var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), command.Culture);

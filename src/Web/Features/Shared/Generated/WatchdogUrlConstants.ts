@@ -5,8 +5,9 @@
 export abstract class WatchdogUrlConstants
 {
 	public static watchdogIdVariable: string = `$watchdogId`;
+	public static unsubscribeTokenVariable: string = `$unsubscribeToken`;
 	public static watchdogDetailUrlTemplate: string = `/Watchdogs/Detail/$watchdogId`;
 	public static watchdogDetailOverviewUrlTemplate: string = `/Watchdogs/Detail/Overview/$watchdogId`;
 	public static watchdogsUrl: string = `/Watchdogs`;
-	public static disableWatchdogNotificationsUrlTemplate: string = `/api/Watchdogs/$watchdogId/DisableNotification`;
+	public static disableWatchdogNotificationsUrlTemplate: string = `/api/Watchdogs/DisableNotification?unsubscribeToken=$unsubscribeToken`;
 }

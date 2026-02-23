@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
@@ -21,6 +22,7 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
     private Watchdog _watchdog = null!;
     private ICoreBus _bus = null!;
     private User _user = null!;
+    private string _unsubscribeToken = null!;
 
     [SetUp]
     public async Task Context()
@@ -32,8 +34,11 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
         var handler = new NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
             new NhibernateRepository<Watchdog>(UnitOfWork),
             _bus,
-            OptionsTestRetriever.Retrieve<RuntimeOptions>()
+            OptionsTestRetriever.Retrieve<RuntimeOptions>(),
+            OptionsTestRetriever.Retrieve<JwtOptions>()
         );
+
+        _unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(_watchdog.Id, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
 
         await handler.Handle(new WatchdogScrapedResultsUpdatedDomainEvent(_watchdog.Id));
     }
@@ -79,7 +84,7 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
             """
         );
         
-        command.UnsubscribeUrl.ShouldBe($"https://mrwatchdog_test/api/Watchdogs/{_watchdog.Id}/DisableNotification");
+        command.UnsubscribeUrl.ShouldBe($"https://mrwatchdog_test/api/Watchdogs/DisableNotification?unsubscribeToken={_unsubscribeToken}");
         return true;
     }
 

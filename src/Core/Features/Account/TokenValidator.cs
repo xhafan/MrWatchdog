@@ -9,7 +9,8 @@ public static class TokenValidator
 {
     public static ClaimsPrincipal ValidateToken(
         string tokenString, 
-        JwtOptions jwtOptions
+        JwtOptions jwtOptions,
+        bool validateLifetime = true
     )
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -19,7 +20,7 @@ public static class TokenValidator
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
+            ValidateLifetime = validateLifetime,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.FromMinutes(1)

@@ -57,7 +57,7 @@ public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
 
         if (string.IsNullOrWhiteSpace(_token))
         {
-            _token = TokenGenerator.GenerateToken(
+            _token = TokenGenerator.GenerateLoginToken(
                 _guid, 
                 _email, 
                 _culture.Name,

@@ -44,7 +44,7 @@ public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTe
         var loginTokenGuid = Guid.NewGuid();
         _loginToken = new LoginTokenBuilder(UnitOfWork)
             .WithGuid(loginTokenGuid)
-            .WithToken(TokenGenerator.GenerateToken(
+            .WithToken(TokenGenerator.GenerateLoginToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com", 
                 CultureConstants.En.Name,

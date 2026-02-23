@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure;
@@ -61,7 +62,8 @@ public class when_refreshing_watchdog_with_new_repeated_scraping_result_notified
             Clock.CurrentDateTimeProvider.Value = () => DateTime.Now.AddDays(-31);
             await _watchdog.NotifyUserAboutNewScrapedResults(
                 A.Fake<ICoreBus>(),
-                OptionsTestRetriever.Retrieve<RuntimeOptions>().Value
+                OptionsTestRetriever.Retrieve<RuntimeOptions>().Value,
+                OptionsTestRetriever.Retrieve<JwtOptions>().Value
             );
             Clock.CurrentDateTimeProvider.Value = null;
         }

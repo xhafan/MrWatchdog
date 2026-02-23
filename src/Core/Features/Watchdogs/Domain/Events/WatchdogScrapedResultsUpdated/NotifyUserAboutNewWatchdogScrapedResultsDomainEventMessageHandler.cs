@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
@@ -9,7 +10,8 @@ namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResult
 public class NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
     IRepository<Watchdog> watchdogRepository,
     ICoreBus bus,
-    IOptions<RuntimeOptions> iRuntimeOptions
+    IOptions<RuntimeOptions> iRuntimeOptions,
+    IOptions<JwtOptions> iJwtOptions
 ) 
     : IHandleMessages<WatchdogScrapedResultsUpdatedDomainEvent>
 {
@@ -19,7 +21,8 @@ public class NotifyUserAboutNewWatchdogScrapedResultsDomainEventMessageHandler(
 
         await watchdog.NotifyUserAboutNewScrapedResults(
             bus,
-            iRuntimeOptions.Value
+            iRuntimeOptions.Value,
+            iJwtOptions.Value
         );
     }
 }

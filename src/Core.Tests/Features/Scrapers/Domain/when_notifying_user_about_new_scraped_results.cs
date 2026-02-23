@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
@@ -21,7 +22,8 @@ public class when_notifying_user_about_new_scraped_results : BaseTest
 
         await _watchdog.NotifyUserAboutNewScrapedResults(
             A.Fake<ICoreBus>(),
-            OptionsTestRetriever.Retrieve<RuntimeOptions>().Value
+            OptionsTestRetriever.Retrieve<RuntimeOptions>().Value,
+            OptionsTestRetriever.Retrieve<JwtOptions>().Value
         );
     }
 

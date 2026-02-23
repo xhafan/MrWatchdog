@@ -21,7 +21,10 @@ public static class WatchdogUrlConstants
     public const string WatchdogsUrl = "/Watchdogs";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string DisableWatchdogNotificationsUrlTemplate = $"/api/Watchdogs/DisableNotification?unsubscribeToken={UnsubscribeTokenVariable}";
+    public const string DisableWatchdogNotificationsPostUrlTemplate = $"/api/Watchdogs/DisableNotificationPost?unsubscribeToken={UnsubscribeTokenVariable}";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string DisableWatchdogNotificationsGetUrlTemplate = $"/api/Watchdogs/DisableNotificationGet?unsubscribeToken={UnsubscribeTokenVariable}";
 
     extension(string urlTemplate)
     {

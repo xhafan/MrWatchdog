@@ -1,0 +1,13 @@
+﻿@page
+@using MrWatchdog.Core.Resources
+@model UnsubscribedModel
+
+@{
+    var unsubscribedResource = Resource.UnsubscribedFromWatchdogEmailNotification;
+    ViewData["Title"] = unsubscribedResource;
+    ViewData["HideMenu"] = false;
+}
+
+<div>
+    @unsubscribedResource
+</div>

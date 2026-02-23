@@ -693,6 +693,11 @@ namespace MrWatchdog.Core.Resources {
         ///    Kind regards,&lt;br&gt;
         ///    {5}
         ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    &lt;small&gt;
+        ///        &lt;a href=&quot;{6}&quot;&gt;{7}&lt;/a&gt; from the watchdog email notification.
+        ///    &lt;/small&gt;
+        ///&lt;/p&gt;
         ///&lt;/body&gt;
         ///&lt;/html&gt;.
         /// </summary>
@@ -1230,6 +1235,24 @@ namespace MrWatchdog.Core.Resources {
         public static string ToEnableItMakeSureTheWebPageIsSuccessfullyScraped {
             get {
                 return ResourceManager.GetString("ToEnableItMakeSureTheWebPageIsSuccessfullyScraped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsubscribe.
+        /// </summary>
+        public static string Unsubscribe {
+            get {
+                return ResourceManager.GetString("Unsubscribe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have been unsubscribed from the watchdog email notification..
+        /// </summary>
+        public static string UnsubscribedFromWatchdogEmailNotification {
+            get {
+                return ResourceManager.GetString("UnsubscribedFromWatchdogEmailNotification", resourceCulture);
             }
         }
         

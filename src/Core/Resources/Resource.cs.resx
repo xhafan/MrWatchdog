@@ -517,7 +517,18 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
     S pozdravem,&lt;br&gt;
     {5}
 &lt;/p&gt;
+&lt;p&gt;
+    &lt;small&gt;
+        &lt;a href="{6}"&gt;{7}&lt;/a&gt; z emailové notifikace hlídacího psa.
+    &lt;/small&gt;
+&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</value>
+	</data>
+	<data name="UnsubscribedFromWatchdogEmailNotification" xml:space="preserve">
+		<value>Byli jste odhlášení z emailové notifikace hlídacího psa.</value>
+	</data>
+	<data name="Unsubscribe" xml:space="preserve">
+		<value>Odhlásit</value>
 	</data>
 </root>

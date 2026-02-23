@@ -84,7 +84,13 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
             """
         );
         
-        command.UnsubscribeUrl.ShouldBe($"https://mrwatchdog_test/api/Watchdogs/DisableNotification?unsubscribeToken={_unsubscribeToken}");
+        command.HtmlMessage.ShouldContain(
+            $"""
+            <a href="https://mrwatchdog_test/api/Watchdogs/DisableNotificationGet?unsubscribeToken={_unsubscribeToken}">Odhlásit</a>
+            """
+        );
+
+        command.UnsubscribeUrl.ShouldBe($"https://mrwatchdog_test/api/Watchdogs/DisableNotificationPost?unsubscribeToken={_unsubscribeToken}");
         return true;
     }
 

@@ -184,9 +184,11 @@ public class Watchdog : VersionedEntity, IAggregateRoot
                     localizedScraperName,
                     searchTermSuffix,
                     string.Join("\n    ", _scrapedResultsToNotifyAbout.Select(scrapingResult => $"<li>{scrapingResult.Value}</li>")),
-                    mrWatchdogResource
+                    mrWatchdogResource,
+                    $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsGetUrlTemplate.WithUnsubscribeToken(unsubscribeToken)}",
+                    ResourceHelper.GetString(nameof(Resource.Unsubscribe), userCulture)
                 ),
-                UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsUrlTemplate.WithUnsubscribeToken(unsubscribeToken)}"
+                UnsubscribeUrl: $"{runtimeOptions.Url}{WatchdogUrlConstants.DisableWatchdogNotificationsPostUrlTemplate.WithUnsubscribeToken(unsubscribeToken)}"
             ));
 
             foreach (var scrapedResult in _scrapedResultsToNotifyAbout)

@@ -9,7 +9,7 @@ using MrWatchdog.Web.Features.Watchdogs.Api;
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 
 [TestFixture]
-public class when_disabling_watchdog_notification_for_non_existing_watchdog : BaseDatabaseTest
+public class when_disabling_watchdog_notification_via_post_for_non_existing_watchdog : BaseDatabaseTest
 {
     private WatchdogsController _controller = null!;
     private ICoreBus _bus = null!;
@@ -26,7 +26,7 @@ public class when_disabling_watchdog_notification_for_non_existing_watchdog : Ba
 
         var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(123, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
         
-        _actionResult = await _controller.DisableNotification(unsubscribeToken);
+        _actionResult = await _controller.DisableNotificationPost(unsubscribeToken);
     }
 
     [Test]

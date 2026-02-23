@@ -26,9 +26,9 @@ public class ConfirmLoginModel(
     [BindProperty(SupportsGet = true)]
     [Required]
     [StringLength(800)]
-    public string Token { get; set; } = null!;    
+    public string Token { get; set; } = null!;
 
-    public string? ReturnUrl { get; private set; }
+    public string ReturnUrl { get; private set; } = null!;
     
     public async Task<IActionResult> OnGet()
     {
@@ -50,7 +50,7 @@ public class ConfirmLoginModel(
         await bus.Send(command);
         await jobCompletionAwaiter.WaitForJobCompletion(command.Guid);
 
-        ReturnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl);
+        ReturnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl) ?? "/";
 
         return Page();
     }

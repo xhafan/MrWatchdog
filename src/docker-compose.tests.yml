@@ -11,6 +11,17 @@ services:
       timeout: 2s
       retries: 25
 
+  rabbitmq:
+    image: rabbitmq:4.2.4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: mr_watchdog_test
+      RABBITMQ_DEFAULT_PASS: mr_watchdog_test_password
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 2s
+      timeout: 2s
+      retries: 25
+
   tests:
     build:
       context: .
@@ -30,6 +41,7 @@ services:
       Runtime__Environment: Test
       Jwt__Key: a-long-random-secret-at-least-32-chars
       ConnectionStrings__TestDatabase: Host=postgres;Database=mr_watchdog_test;Username=mr_watchdog_test;Password=mr_watchdog_test_password;Include Error Detail=true;
+      ConnectionStrings__RabbitMQ: amqp://mr_watchdog_test:mr_watchdog_test_password@rabbitmq
       EmailSender__Service: NullEmailSender
       KickOffDueWatchdogsScrapingHostedService__IsDisabled: true
       Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
@@ -41,4 +53,6 @@ services:
 
     depends_on:
       postgres:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy

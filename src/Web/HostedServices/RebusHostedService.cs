@@ -162,8 +162,9 @@ public class RebusHostedService(
 
         switch (configuration["Rebus:Transport"])
         {
-            case "RabbitMq":
-                rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", environmentInputQueueName));
+            case "RabbitMQ":
+                var rabbitMqConnectionString = configuration.GetConnectionString("RabbitMQ");
+                rebusConfigurer.Transport(x => x.UseRabbitMq(rabbitMqConnectionString, environmentInputQueueName));
                 break;
                 
             case "PostgreSql":

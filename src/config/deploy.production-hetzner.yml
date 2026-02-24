@@ -10,8 +10,3 @@ proxy:
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Production"
-
-accessories:
-  db:
-    host: 46.224.68.58
-

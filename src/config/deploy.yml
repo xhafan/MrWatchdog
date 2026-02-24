@@ -41,6 +41,7 @@ env:
     - Runtime__Url
     - Jwt__Key
     - ConnectionStrings__Database
+    - ConnectionStrings__RabbitMQ
 
 accessories:
   db:
@@ -53,4 +54,16 @@ accessories:
         - POSTGRES_USER
         - POSTGRES_PASSWORD
         - POSTGRES_DB
+
+  rabbitmq:
+    image: rabbitmq:4.2.4-management-alpine
+    port:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    env:
+      secret:
+        - RABBITMQ_DEFAULT_USER
+        - RABBITMQ_DEFAULT_PASS
 

@@ -10,7 +10,3 @@ proxy:
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Production"
-
-accessories:
-  db:
-    host: 192.168.0.200

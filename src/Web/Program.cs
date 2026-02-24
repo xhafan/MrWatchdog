@@ -530,8 +530,9 @@ public class Program
 
                 switch (builder.Configuration["Rebus:Transport"])
                 {
-                    case "RabbitMq":
-                        rebusConfigurer.Transport(x => x.UseRabbitMq("amqp://guest:guest@localhost", webEnvironmentInputQueueName));
+                    case "RabbitMQ":
+                        var rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMQ");
+                        rebusConfigurer.Transport(x => x.UseRabbitMq(rabbitMqConnectionString, webEnvironmentInputQueueName));
                         break;
                 
                     case "PostgreSql":

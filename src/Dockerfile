@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:d17d8d6511aee3dd54b4d9e8e03d867b1c3df28fb518ee9dd69e50305b7af4ee AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:9b4b31da5246f575086b1901e9871b189ae2a80eb42fe9234e9d000b51febd4b AS build
 WORKDIR /app
 
 # Install Node.js and npm
@@ -35,7 +35,7 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:8e21337e482e353c958681789872b3451e966e07c259b9a6f9a8b7902749a785
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:258b939d6d684ff05ad7ea16782b4bee55260de4acc6f99bec897fd11de7640c
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache icu-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl

@@ -57,10 +57,7 @@ accessories:
 
   rabbitmq:
     image: rabbitmq:4.2.4-management-alpine
-    options:
-      publish:
-        - "127.0.0.1:5672:5672"
-        - "127.0.0.1:15672:15672"
+    port: "127.0.0.1:5672:5672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     env:

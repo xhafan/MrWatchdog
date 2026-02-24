@@ -10,3 +10,9 @@ proxy:
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Production"
+
+accessories:
+  db:
+    host: 46.224.68.58
+  rabbitmq:
+    host: 46.224.68.58

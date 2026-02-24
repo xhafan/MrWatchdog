@@ -9,3 +9,9 @@ proxy:
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Staging"
+
+accessories:
+  db:
+    host: 192.168.0.190
+  rabbitmq:
+    host: 192.168.0.190

@@ -124,10 +124,12 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         void _addNewScrapedResultToNotifyAboutOnlyIfTheResultHasNotBeenNotifiedAboutRecently()
         {
             _clearOldItemsInScrapedResultsHistory();
-            
+
+            var scrapedResultsHistory = _scrapedResultsHistory.Select(x => x.ScrapedResult).ToHashSet();
+
             foreach (var newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout in newScrapedResultsNotAlreadyInScrapedResultsToNotifyAbout)
             {
-                if (_scrapedResultsHistory.All(x => x.ScrapedResult != newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout))
+                if (!scrapedResultsHistory.Contains(newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout))
                 {
                     _scrapedResultsToNotifyAbout.Add(newScrapedResultNotAlreadyInScrapedResultsToNotifyAbout);
                 }

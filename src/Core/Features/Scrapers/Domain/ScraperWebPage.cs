@@ -18,6 +18,7 @@ namespace MrWatchdog.Core.Features.Scrapers.Domain;
 
 public class ScraperWebPage : VersionedEntity
 {
+    private static readonly HtmlSanitizer HtmlSanitizerInstance = new();
     private readonly IList<string> _scrapedResults = new List<string>();
     private readonly ISet<ScraperWebPageHttpHeader> _httpHeaders = new HashSet<ScraperWebPageHttpHeader>();
 
@@ -138,8 +139,6 @@ public class ScraperWebPage : VersionedEntity
     {
         _ResetScrapingData();
 
-        var sanitizer = new HtmlSanitizer();
-
         if (SelectText)
         {
             scrapedResults = scrapedResults
@@ -159,7 +158,7 @@ public class ScraperWebPage : VersionedEntity
         else
         {
             var scrapedResultsWithNonEmptyText = scrapedResults
-                .Select(html => sanitizer.Sanitize(html))
+                .Select(html => HtmlSanitizerInstance.Sanitize(html))
                 .Where(html => !string.IsNullOrWhiteSpace(HtmlExtractor.ExtractTextFromHtml(html)))
                 .ToList();
             

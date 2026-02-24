@@ -1077,7 +1077,7 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in or register to create a watchdog with email notification about new scraped results or new scraped results matching the search term..
+        ///   Looks up a localized string similar to Log in or register to create a watchdog with email notification about new scraped results (or new scraped results matching a search term if supported)..
         /// </summary>
         public static string ScraperResultsOnboardingLoginOrRegisterToCreateWatchdog {
             get {
@@ -1436,8 +1436,7 @@ namespace MrWatchdog.Core.Resources {
         ///&lt;/p&gt;
         ///&lt;p&gt;
         ///    &lt;b&gt;Close this page&lt;/b&gt; and return to your original session.
-        ///&lt;/p&gt;
-        ///.
+        ///&lt;/p&gt;.
         /// </summary>
         public static string YouHaveBeenLoggedInDescription {
             get {

@@ -25,10 +25,10 @@
                         />
                     </div>
                 </div>
-                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
-                    <input type="checkbox" checked="@Model.WatchdogOverviewArgs.ReceiveNotification" disabled/>
-                    <label asp-for="WatchdogOverviewArgs.ReceiveNotification" class="form-check-label fw-bold">
-                        <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
+                <div class="mb-1 d-flex align-items-center @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
+                    <input type="checkbox" checked="@Model.WatchdogOverviewArgs.ReceiveNotification" disabled />
+                    <label asp-for="WatchdogOverviewArgs.ReceiveNotification" class="form-check-label fw-bold ms-2">
+                        <i class="fa-solid fa-bell"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
             </view-mode-item>
@@ -53,14 +53,14 @@
                     </div>
                     <span asp-validation-for="WatchdogOverviewArgs.SearchTerm" class="text-danger"></span>
                 </div>
-                <div class="mb-1 @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
+                <div class="mb-1 d-flex align-items-center @OnboardingElementIdentifiers.WatchdogsDetailReceiveNotificationCssClass">
                     <input asp-for="WatchdogOverviewArgs.ReceiveNotification"
                            type="checkbox" 
                            checked="@Model.WatchdogOverviewArgs.ReceiveNotification" 
                     />
                     <label asp-for="WatchdogOverviewArgs.ReceiveNotification" 
-                           class="form-check-label fw-bold">
-                        <i class="fa-solid fa-bell ms-2"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
+                           class="form-check-label fw-bold ms-2">
+                        <i class="fa-solid fa-bell"></i> @Html.Raw(Resource.ReceiveEmailNotificationAboutNewResults)
                     </label>
                 </div>
             </edit-mode-item>

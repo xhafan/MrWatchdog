@@ -350,7 +350,7 @@
 	  <value>Finish</value>
   </data>
   <data name="ScraperResultsOnboardingLoginOrRegisterToCreateWatchdog" xml:space="preserve">
-	  <value>Log in or register to create a watchdog with email notification about new scraped results or new scraped results matching the search term.</value>
+	  <value>Log in or register to create a watchdog with email notification about new scraped results (or new scraped results matching a search term if supported).</value>
   </data>
   <data name="Archived" xml:space="preserve">
 	  <value>Archived</value>

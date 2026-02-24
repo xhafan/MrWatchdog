@@ -234,7 +234,7 @@
 		<value>Ukončit</value>
 	</data>
 	<data name="ScraperResultsOnboardingLoginOrRegisterToCreateWatchdog" xml:space="preserve">
-		<value>Přihlaste se nebo se zaregistrujte a vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování nebo nové výsledky scrapování odpovídající vyhledávanému termínu.</value>
+		<value>Přihlaste se nebo se zaregistrujte a vytvořte hlídacího psa s emailovým upozorněním na nové výsledky scrapování (nebo nové výsledky scrapování odpovídající vyhledávanému termínu je-li podporován).</value>
 	</data>
 	<data name="Archived" xml:space="preserve">
 		<value>Archivován</value>

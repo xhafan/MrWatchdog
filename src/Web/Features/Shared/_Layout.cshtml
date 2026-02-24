@@ -63,7 +63,7 @@
                             ? new HtmlString("active")
                             : HtmlString.Empty;
                     }
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 flex-wrap">
                         <li class="nav-item">
                             <a class="nav-link @MarkIfActive("/Scrapers/Index")" asp-page="/Scrapers/Index">
                                 @Resource.Scrapers
@@ -84,30 +84,34 @@
                                 @Resource.Support
                             </a>
                         </li>
-                    </ul>
-                    @if (User.IsAuthenticated())
-                    {
-                        var isSuperAdmin = await User.IsSuperAdmin(UserRepository);
+                        <li class="nav-item ms-auto">
+                            @if (User.IsAuthenticated())
+                            {
+                                var isSuperAdmin = await User.IsSuperAdmin(UserRepository);
 
-                        <form asp-controller="Login"
-                              asp-action="Logout"
-                              class="d-flex align-items-center"
-                              >
-                            <span @(isSuperAdmin ? "title=superadmin" : "")>
-                                <i class="fas @(isSuperAdmin ? "fa-user-ninja" : "fa-user")"></i> @User.Identity?.Name
-                            </span>
-                            <button class="btn btn-link" 
-                                    type="submit"
-                                    data-action="@StimulusControllers.Body#logout"
+                                <form asp-controller="Login"
+                                      asp-action="Logout"
+                                      class="d-flex align-items-center"
+                                >
+                                    <span @(isSuperAdmin ? "title=superadmin" : "") class="d-flex align-items-center">
+                                        <i class="fas @(isSuperAdmin ? "fa-user-ninja" : "fa-user")"></i><span class="ms-1">@User.Identity?.Name</span>
+                                    </span>
+                                    <button class="btn btn-link" 
+                                            type="submit"
+                                            data-action="@StimulusControllers.Body#logout"
                                     >
-                                <span><i class="fas fa-sign-out"></i> @Resource.Logout</span>
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <a asp-page="/Account/Login/Login">@Resource.LoginOrRegister</a>
-                    }
+                                        <span class="d-flex align-items-center">
+                                            <i class="fas fa-sign-out"></i><span class="ms-1">@Resource.Logout</span>
+                                        </span>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a asp-page="/Account/Login/Login">@Resource.LoginOrRegister</a>
+                            }
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

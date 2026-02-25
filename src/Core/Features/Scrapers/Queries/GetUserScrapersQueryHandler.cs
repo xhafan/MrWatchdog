@@ -9,11 +9,11 @@ namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
 public class GetUserScrapersQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetUserScrapersQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetUserScrapersQuery, GetUserScrapersQueryResult>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetUserScrapersQuery query)
+    public override async Task<IEnumerable<GetUserScrapersQueryResult>> ExecuteAsync(GetUserScrapersQuery query)
     {
         GetUserScrapersQueryResult result = null!;
         User user = null!;
@@ -37,6 +37,6 @@ public class GetUserScrapersQueryHandler(
             .OrderBy(x => x.ScraperName)
             .ToList();
         
-        return (IEnumerable<TResult>) localizedResults;
+        return localizedResults;
     }
 }

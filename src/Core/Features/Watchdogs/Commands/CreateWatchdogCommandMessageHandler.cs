@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Domain.Repositories;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;

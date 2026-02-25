@@ -86,7 +86,7 @@ public class when_handling_domain_event : BaseDatabaseTest
     public async Task domain_event_job_is_created()
     {
         var jobDtos = await new GetRelatedDomainEventJobQueryHandler(UnitOfWork)
-            .ExecuteAsync<JobDto>(new GetRelatedDomainEventJobQuery(_commandGuid, nameof(TestDomainEvent)));
+            .ExecuteAsync(new GetRelatedDomainEventJobQuery(_commandGuid, nameof(TestDomainEvent)));
         var jobDto = jobDtos.ShouldHaveSingleItem();
         jobDto.HandlingAttempts.ShouldBeEmpty();
     }    

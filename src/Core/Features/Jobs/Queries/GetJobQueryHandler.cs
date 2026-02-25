@@ -7,13 +7,13 @@ namespace MrWatchdog.Core.Features.Jobs.Queries;
 public class GetJobQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
     IJobRepository jobRepository
-) : BaseNhibernateQueryHandler<GetJobQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetJobQuery, JobDto>(unitOfWork)
 {
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetJobQuery query)
+    public override async Task<IEnumerable<JobDto>> ExecuteAsync(GetJobQuery query)
     {
         var job = await jobRepository.GetByGuidAsync(query.JobGuid);
         return job == null
             ? []
-            : [(TResult) (object) job.GetDto()];
+            : [job.GetDto()];
     }
 }

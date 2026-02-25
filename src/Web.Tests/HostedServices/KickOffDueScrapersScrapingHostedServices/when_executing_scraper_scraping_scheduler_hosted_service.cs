@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.TestHelpers;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,6 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.HostedServices;
 
 namespace MrWatchdog.Web.Tests.HostedServices.KickOffDueScrapersScrapingHostedServices;

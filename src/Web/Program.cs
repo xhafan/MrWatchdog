@@ -61,6 +61,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using CoreDdd.Domain.Repositories;
 
 namespace MrWatchdog.Web;
 
@@ -106,7 +107,7 @@ public class Program
         // register query handlers
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<GetJobQueryHandler>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<>)))
+            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime()
         );

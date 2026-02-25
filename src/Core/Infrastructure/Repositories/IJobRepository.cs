@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Jobs.Domain;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Features.Jobs.Domain;
 
 namespace MrWatchdog.Core.Infrastructure.Repositories;
 

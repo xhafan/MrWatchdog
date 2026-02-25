@@ -26,7 +26,7 @@ public class when_archiving_watchdogs_after_scraper_is_archived : BaseDatabaseTe
         _bus = A.Fake<ICoreBus>();
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogsForScraperQueryHandler(UnitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogIdsForScraperQueryHandler(UnitOfWork));
         
         var handler = new ArchiveWatchdogsDomainEventMessageHandler(
             new QueryExecutor(queryHandlerFactory),

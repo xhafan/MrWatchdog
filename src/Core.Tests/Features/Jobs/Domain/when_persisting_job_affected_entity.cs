@@ -1,9 +1,9 @@
-﻿using MrWatchdog.Core.Features.Jobs.Domain;
+﻿using CoreDdd.Nhibernate.TestHelpers;
+using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Jobs.Domain;
 

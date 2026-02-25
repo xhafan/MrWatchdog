@@ -6,9 +6,9 @@ namespace MrWatchdog.Core.Features.Jobs.Queries;
 
 public class GetRelatedDomainEventJobQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetRelatedDomainEventJobQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetRelatedDomainEventJobQuery, JobDto>(unitOfWork)
 {
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetRelatedDomainEventJobQuery query)
+    public override async Task<IEnumerable<JobDto>> ExecuteAsync(GetRelatedDomainEventJobQuery query)
     {
         Job relatedCommandJob = null!;
         
@@ -19,6 +19,6 @@ public class GetRelatedDomainEventJobQueryHandler(
             .SingleOrDefaultAsync();
         return domainEventJob == null
             ? []
-            : [(TResult) (object) domainEventJob.GetDto()];
+            : [domainEventJob.GetDto()];
     }
 }

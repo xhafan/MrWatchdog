@@ -10,11 +10,11 @@ namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
 public class GetWatchdogsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseNhibernateQueryHandler<GetWatchdogsQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetWatchdogsQuery, GetWatchdogsQueryResult>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    public override async Task<IEnumerable<TResult>> ExecuteAsync<TResult>(GetWatchdogsQuery query)
+    public override async Task<IEnumerable<GetWatchdogsQueryResult>> ExecuteAsync(GetWatchdogsQuery query)
     {
         Scraper scraper = null!;
         User user = null!;
@@ -43,6 +43,6 @@ public class GetWatchdogsQueryHandler(
             .ThenBy(x => x.SearchTerm)
             .ToList();
         
-        return (IEnumerable<TResult>) localizedResults;        
+        return localizedResults;        
     }
 }

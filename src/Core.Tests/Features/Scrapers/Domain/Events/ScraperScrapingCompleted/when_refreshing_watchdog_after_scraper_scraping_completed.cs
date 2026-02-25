@@ -29,7 +29,7 @@ public class when_refreshing_watchdog_after_scraper_scraping_completed : BaseDat
         _bus = A.Fake<ICoreBus>();
         
         var queryHandlerFactory = new FakeQueryHandlerFactory();
-        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogsForScraperQueryHandler(UnitOfWork));
+        queryHandlerFactory.RegisterQueryHandler(new GetWatchdogIdsForScraperQueryHandler(UnitOfWork));
         
         var handler = new RefreshWatchdogsDomainEventMessageHandler(
             new QueryExecutor(queryHandlerFactory),

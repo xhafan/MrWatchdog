@@ -7,11 +7,11 @@ namespace MrWatchdog.Core.Features.Account.Queries;
 public class GetLoginTokenConfirmationQueryHandler(
     NhibernateUnitOfWork unitOfWork, 
     ILoginTokenRepository loginTokenRepository
-) : BaseNhibernateQueryHandler<GetLoginTokenConfirmationQuery>(unitOfWork)
+) : BaseNhibernateQueryHandler<GetLoginTokenConfirmationQuery, bool>(unitOfWork)
 {
-    public override async Task<TResult> ExecuteSingleAsync<TResult>(GetLoginTokenConfirmationQuery query)
+    public override async Task<bool> ExecuteSingleAsync(GetLoginTokenConfirmationQuery query)
     {
         var loginToken = await loginTokenRepository.LoadByGuidAsync(query.LoginTokenGuid);
-        return (TResult) (object) loginToken.Confirmed;
+        return loginToken.Confirmed;
     }
 }

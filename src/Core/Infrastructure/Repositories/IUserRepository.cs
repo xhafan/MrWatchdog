@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Core.Infrastructure.Repositories;
 

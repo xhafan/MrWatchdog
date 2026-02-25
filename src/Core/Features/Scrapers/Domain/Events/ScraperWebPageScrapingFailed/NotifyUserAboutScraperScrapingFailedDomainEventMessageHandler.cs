@@ -1,9 +1,9 @@
-﻿using CoreUtils.Extensions;
+﻿using CoreDdd.Domain.Repositories;
+using CoreUtils.Extensions;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
 

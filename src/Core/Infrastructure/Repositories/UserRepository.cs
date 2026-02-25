@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.Repositories;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Core.Infrastructure.Repositories;

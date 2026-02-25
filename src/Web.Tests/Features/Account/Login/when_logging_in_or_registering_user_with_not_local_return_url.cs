@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreDdd.Nhibernate.TestHelpers;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Account.Commands;
@@ -7,7 +8,6 @@ using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;

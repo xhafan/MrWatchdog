@@ -8,9 +8,9 @@ namespace MrWatchdog.Core.Features.Account.Queries;
 
 public class GetUserCompleteOnboardingsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetUserCompleteOnboardingsQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetUserCompleteOnboardingsQuery, string>(unitOfWork)
 {
-    protected override IQueryOver GetQueryOver<TResult>(GetUserCompleteOnboardingsQuery query)
+    protected override IQueryOver GetQueryOver(GetUserCompleteOnboardingsQuery query)
     {
         string completeOnboardingsAlias = null!;
 

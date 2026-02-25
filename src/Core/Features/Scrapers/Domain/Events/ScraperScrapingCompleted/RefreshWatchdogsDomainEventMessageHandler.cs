@@ -14,8 +14,8 @@ public class RefreshWatchdogsDomainEventMessageHandler(
 {
     public async Task Handle(ScraperScrapingCompletedDomainEvent domainEvent)
     {
-        var watchdogIds = await queryExecutor.ExecuteAsync<GetWatchdogsForScraperQuery, long>(
-            new GetWatchdogsForScraperQuery(domainEvent.ScraperId)
+        var watchdogIds = await queryExecutor.ExecuteAsync<GetWatchdogIdsForScraperQuery, long>(
+            new GetWatchdogIdsForScraperQuery(domainEvent.ScraperId)
         );
 
         foreach (var watchdogId in watchdogIds)

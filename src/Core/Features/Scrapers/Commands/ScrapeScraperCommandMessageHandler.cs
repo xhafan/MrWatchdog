@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Commands;

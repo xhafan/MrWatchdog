@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using CoreDdd.Domain.Repositories;
+using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;

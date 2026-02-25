@@ -36,6 +36,7 @@ using Rebus.Retry.Simple;
 using Rebus.Serialization;
 using Rebus.Transport.InMem;
 using System.Data;
+using CoreDdd.Domain.Repositories;
 using MrWatchdog.Core.Infrastructure.Jsons;
 using Rebus.Serialization.Json;
 
@@ -79,7 +80,7 @@ public class RebusHostedService(
                 .Configure(x => x.LifestyleTransient()),
             Classes
                 .FromAssemblyContaining<GetJobQueryHandler>()
-                .BasedOn(typeof(IQueryHandler<>))
+                .BasedOn(typeof(IQueryHandler<,>))
                 .WithService.AllInterfaces()
                 .Configure(x => x.LifestyleTransient()),
             Component.For<IJobRepositoryFactory>().AsFactory()

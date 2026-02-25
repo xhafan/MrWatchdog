@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public record GetPublicScraperStatisticsQuery(long ScraperId) : IQuery;
+public record GetPublicScraperStatisticsQuery(long ScraperId) : IQuery<GetPublicScraperStatisticsQueryResult>;

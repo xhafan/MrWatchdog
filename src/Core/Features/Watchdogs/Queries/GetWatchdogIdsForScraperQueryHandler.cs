@@ -6,11 +6,11 @@ using NHibernate;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public class GetWatchdogsForScraperQueryHandler(
+public class GetWatchdogIdsForScraperQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetWatchdogsForScraperQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetWatchdogIdsForScraperQuery, long>(unitOfWork)
 {
-    protected override IQueryOver GetQueryOver<TResult>(GetWatchdogsForScraperQuery query)
+    protected override IQueryOver GetQueryOver(GetWatchdogIdsForScraperQuery query)
     {
         Scraper scraper = null!;
 

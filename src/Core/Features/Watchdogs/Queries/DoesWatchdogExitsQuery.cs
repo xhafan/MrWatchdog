@@ -2,4 +2,4 @@
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public record DoesWatchdogExitsQuery(long WatchdogId) : IQuery;
+public record DoesWatchdogExitsQuery(long WatchdogId) : IQuery<bool>;

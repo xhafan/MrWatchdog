@@ -1,5 +1,6 @@
 ﻿using CoreDdd.Queries;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Queries;
 
-public record GetWatchdogArgsQuery(long WatchdogId) : IQuery;
+public record GetWatchdogArgsQuery(long WatchdogId) : IQuery<WatchdogArgs>;

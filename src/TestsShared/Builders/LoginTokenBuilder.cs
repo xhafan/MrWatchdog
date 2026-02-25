@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
+using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.TestsShared.Builders;
 

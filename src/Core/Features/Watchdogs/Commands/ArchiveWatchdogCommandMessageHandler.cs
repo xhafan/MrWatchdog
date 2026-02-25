@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using Rebus.Handlers;
 

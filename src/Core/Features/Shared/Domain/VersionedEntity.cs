@@ -11,7 +11,7 @@ namespace MrWatchdog.Core.Features.Shared.Domain;
 ///
 /// Has Id of type long.
 /// </summary>
-public abstract class VersionedEntity : Entity<long>
+public abstract class VersionedEntity : Entity
 {
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     public virtual long Version { get; protected set; }

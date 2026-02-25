@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 

@@ -1,5 +1,6 @@
 ﻿using Castle.Windsor;
 using CoreDdd.Domain.Events;
+using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Jobs.Domain;
@@ -10,7 +11,6 @@ using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;

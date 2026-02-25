@@ -1,7 +1,7 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using CoreDdd.Nhibernate.TestHelpers;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 

@@ -1,5 +1,6 @@
 ﻿using CoreDdd.Queries;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 
 namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
-public record GetScraperWebPageArgsQuery(long ScraperId, long ScraperWebPageId) : IQuery;
+public record GetScraperWebPageArgsQuery(long ScraperId, long ScraperWebPageId) : IQuery<ScraperWebPageArgs>;

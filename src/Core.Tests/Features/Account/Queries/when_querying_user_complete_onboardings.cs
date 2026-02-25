@@ -18,7 +18,7 @@ public class when_querying_user_complete_onboardings : BaseDatabaseTest
 
         var queryHandler = new GetUserCompleteOnboardingsQueryHandler(UnitOfWork);
 
-        _completeOnboardings = await queryHandler.ExecuteAsync<string>(new GetUserCompleteOnboardingsQuery(user.Id));
+        _completeOnboardings = await queryHandler.ExecuteAsync(new GetUserCompleteOnboardingsQuery(user.Id));
     }
 
     [Test]

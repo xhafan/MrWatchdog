@@ -9,11 +9,11 @@ namespace MrWatchdog.Core.Features.Scrapers.Queries;
 
 public class GetPublicScraperStatisticsQueryHandler(
     NhibernateUnitOfWork unitOfWork
-) : BaseQueryOverHandler<GetPublicScraperStatisticsQuery>(unitOfWork)
+) : BaseQueryOverHandler<GetPublicScraperStatisticsQuery, GetPublicScraperStatisticsQueryResult>(unitOfWork)
 {
     private readonly NhibernateUnitOfWork _unitOfWork = unitOfWork;
 
-    protected override IQueryOver GetQueryOver<TResult>(GetPublicScraperStatisticsQuery query)
+    protected override IQueryOver GetQueryOver(GetPublicScraperStatisticsQuery query)
     {
         Scraper scraperAlias = null!;
         GetPublicScraperStatisticsQueryResult result = null!;

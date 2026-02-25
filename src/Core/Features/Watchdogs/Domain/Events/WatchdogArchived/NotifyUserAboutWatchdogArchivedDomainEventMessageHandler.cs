@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;

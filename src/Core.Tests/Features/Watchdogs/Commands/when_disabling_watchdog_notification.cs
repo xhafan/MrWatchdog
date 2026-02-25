@@ -1,9 +1,9 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Commands;
+﻿using CoreDdd.Nhibernate.Repositories;
+using CoreDdd.Nhibernate.TestHelpers;
+using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Commands;
 

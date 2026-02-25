@@ -10,9 +10,9 @@ using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 using MrWatchdog.Web.Features.Account.Login;
 using System.Globalization;
+using CoreDdd.Nhibernate.TestHelpers;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 

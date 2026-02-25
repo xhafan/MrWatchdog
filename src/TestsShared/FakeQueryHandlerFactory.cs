@@ -7,21 +7,21 @@ public class FakeQueryHandlerFactory : IQueryHandlerFactory
 {
     private readonly ConcurrentDictionary<Type, object> _handlers = new();
 
-    public void RegisterQueryHandler<TQuery>(IQueryHandler<TQuery> queryHandler) where TQuery : IQuery
+    public void RegisterQueryHandler<TQuery, TResult>(IQueryHandler<TQuery, TResult> queryHandler) where TQuery : IQuery<TResult>
     {
         _handlers[typeof(TQuery)] = queryHandler;
     }
 
-    public IQueryHandler<TQuery> Create<TQuery>() where TQuery : IQuery
+    public IQueryHandler<TQuery, TResult> Create<TQuery, TResult>() where TQuery : IQuery<TResult>
     {
         if (_handlers.TryGetValue(typeof(TQuery), out var handler))
         {
-            return (IQueryHandler<TQuery>)handler;
+            return (IQueryHandler<TQuery, TResult>)handler;
         }
         throw new InvalidOperationException($"No query handler registered for query type {typeof(TQuery).FullName}");
     }
 
-    public void Release<TQuery>(IQueryHandler<TQuery> queryHandler) where TQuery : IQuery
+    public void Release<TQuery, TResult>(IQueryHandler<TQuery, TResult> queryHandler) where TQuery : IQuery<TResult>
     {
     }
 }

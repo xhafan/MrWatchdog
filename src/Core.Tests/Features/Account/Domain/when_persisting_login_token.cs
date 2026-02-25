@@ -1,7 +1,7 @@
-﻿using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreDdd.Nhibernate.TestHelpers;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.Extensions;
 
 namespace MrWatchdog.Core.Tests.Features.Account.Domain;
 

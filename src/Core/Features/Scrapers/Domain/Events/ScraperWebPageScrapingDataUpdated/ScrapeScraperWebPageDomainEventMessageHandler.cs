@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using CoreDdd.Domain.Repositories;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;

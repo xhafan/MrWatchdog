@@ -1,4 +1,5 @@
-﻿using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreDdd.Nhibernate.Repositories;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;

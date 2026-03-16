@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.Configurations;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using NHibernate;
 
 namespace MrWatchdog.Web.HostedServices;

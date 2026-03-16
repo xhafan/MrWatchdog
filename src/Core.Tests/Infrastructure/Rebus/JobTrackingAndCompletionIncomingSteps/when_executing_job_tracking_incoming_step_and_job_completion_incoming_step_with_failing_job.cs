@@ -1,7 +1,7 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.Infrastructure.Repositories;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;

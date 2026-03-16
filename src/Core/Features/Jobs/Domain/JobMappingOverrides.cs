@@ -1,18 +1,15 @@
-﻿using FluentNHibernate.Automapping;
-using FluentNHibernate.Automapping.Alterations;
+﻿using CoreBackend.Features.Jobs.Domain;
+using FluentNHibernate.Automapping;
 using MrWatchdog.Core.Infrastructure.UserTypes;
 
 namespace MrWatchdog.Core.Features.Jobs.Domain;
 
-public class JobMappingOverrides : IAutoMappingOverride<Job>
+public class JobMappingOverrides : BaseJobMappingOverrides
 {
-    public void Override(AutoMapping<Job> mapping)
+    public override void Override(AutoMapping<Job> mapping)
     {
-        mapping.HasMany(x => x.AffectedEntities).Not.OptimisticLock();
-        mapping.HasMany(x => x.HandlingAttempts).Not.OptimisticLock();
+        base.Override(mapping);
 
         mapping.Map(x => x.InputData).CustomSqlType("jsonb").CustomType<StringAsJsonb>();
-        
-        mapping.References(x => x.RelatedCommandJob, "RelatedCommandJobId");
     }
 }

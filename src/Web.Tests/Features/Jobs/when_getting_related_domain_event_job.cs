@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Jobs.Queries;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Infrastructure.Rebus;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

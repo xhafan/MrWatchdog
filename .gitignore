@@ -1,8 +1,10 @@
 .vs/
+.claude
 bin
 obj
 *.user
 *.bak
+/src/CoreWeb/node_modules
 /src/Web/node_modules
 /src/Web/wwwroot/assets/bundle.js
 /src/Web/wwwroot/assets/bundle.js.map

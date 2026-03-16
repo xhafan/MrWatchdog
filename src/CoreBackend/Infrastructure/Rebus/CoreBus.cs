@@ -1,12 +1,12 @@
-﻿using CoreUtils;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
-using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
+using CoreBackend.Infrastructure.RequestIdAccessors;
+using CoreBackend.Messages;
+using CoreUtils;
 using Rebus.Bus;
 using Rebus.Messages;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public class CoreBus(
     IBus bus, 

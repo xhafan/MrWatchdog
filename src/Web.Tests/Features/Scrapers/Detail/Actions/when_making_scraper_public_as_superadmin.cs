@@ -1,14 +1,14 @@
 ﻿using System.Security.Claims;
+using CoreBackend.Infrastructure.Rebus;
+using CoreWeb.Infrastructure.Authorizations;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Scrapers.Detail.Actions;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Actions;
 

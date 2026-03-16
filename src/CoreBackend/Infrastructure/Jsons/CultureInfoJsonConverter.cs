@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MrWatchdog.Core.Infrastructure.Jsons;
+namespace CoreBackend.Infrastructure.Jsons;
 
 public class CultureInfoJsonConverter : JsonConverter<CultureInfo>
 {

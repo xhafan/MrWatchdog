@@ -1,11 +1,11 @@
-﻿using CoreDdd.Nhibernate.TestHelpers;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.Login;

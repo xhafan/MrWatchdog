@@ -1,11 +1,11 @@
-﻿using CoreDdd.Domain;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Infrastructure.DataProtections;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.DataProtections;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Domain;
 using NHibernate;
 using NHibernate.Type;
 
-namespace MrWatchdog.Core.Infrastructure.Interceptors;
+namespace CoreBackend.Infrastructure.Interceptors;
 
 public class EntityJobTrackingInterceptor : EmptyInterceptor
 {

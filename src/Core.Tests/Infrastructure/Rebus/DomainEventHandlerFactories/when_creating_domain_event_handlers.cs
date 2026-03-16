@@ -1,8 +1,8 @@
-﻿using Castle.Windsor;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Messages;
 using CoreDdd.Domain.Events;
+using CoreIoC;
 using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Messages;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.DomainEventHandlerFactories;
 
@@ -17,9 +17,9 @@ public class when_creating_domain_event_handlers
     {
         _testDomainEventHandler = new TestDomainEventHandler();
 
-        var windsorContainer = A.Fake<IWindsorContainer>();
-        A.CallTo(() => windsorContainer.ResolveAll<IDomainEventHandler<TestDomainEvent>>()).Returns([_testDomainEventHandler]);
-        JobContext.WindsorContainer.Value = windsorContainer;
+        var ioCContainer = A.Fake<IContainer>();
+        A.CallTo(() => ioCContainer.ResolveAll<IDomainEventHandler<TestDomainEvent>>()).Returns([_testDomainEventHandler]);
+        JobContext.IoCContainer.Value = ioCContainer;
 
         var factory = new DomainEventHandlerFactory();
         

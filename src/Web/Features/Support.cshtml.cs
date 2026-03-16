@@ -1,5 +1,5 @@
+using CoreWeb.Features.Shared;
 using Microsoft.AspNetCore.Authorization;
-using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features;
 

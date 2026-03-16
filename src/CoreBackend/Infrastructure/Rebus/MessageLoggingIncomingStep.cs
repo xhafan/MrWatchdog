@@ -1,11 +1,11 @@
-﻿using MrWatchdog.Core.Messages;
+﻿using System.Diagnostics;
+using CoreBackend.Messages;
+using Microsoft.Extensions.Logging;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Serilog.Context;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public class MessageLoggingIncomingStep(ILogger<MessageLoggingIncomingStep> logger) : IIncomingStep
 {

@@ -1,14 +1,14 @@
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Web.Features.Shared;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Globalization;
+using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreWeb.Features.Shared;
+using CoreWeb.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Scrapers.Manage.OtherUsersScrapers;
 
-[Authorize(Policies.SuperAdmin)]
+[Authorize(CoreWebPolicies.SuperAdmin)]
 public class OtherUsersScrapersModel(
     IQueryExecutor queryExecutor,
     IActingUserAccessor actingUserAccessor

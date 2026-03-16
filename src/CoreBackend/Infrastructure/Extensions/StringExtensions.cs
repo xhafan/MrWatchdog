@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace MrWatchdog.Core.Infrastructure.Extensions;
+namespace CoreBackend.Infrastructure.Extensions;
 
 public static class StringExtensions
 {

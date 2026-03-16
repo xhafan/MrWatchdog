@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MrWatchdog.Core.Infrastructure.Validations;
+using CoreBackend.Infrastructure.Validations;
 using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;

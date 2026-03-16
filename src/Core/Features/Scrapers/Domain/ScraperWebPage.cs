@@ -1,4 +1,6 @@
 using System.Globalization;
+using CoreBackend.Features.Shared.Domain;
+using CoreBackend.Infrastructure.Extensions;
 using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
@@ -8,9 +10,7 @@ using HtmlAgilityPack;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.Extensions;
 using MrWatchdog.Core.Infrastructure.Localization;
 using Serilog;
 

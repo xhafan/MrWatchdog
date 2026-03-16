@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using System.Security.Claims;
+using CoreBackend.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Api;
 

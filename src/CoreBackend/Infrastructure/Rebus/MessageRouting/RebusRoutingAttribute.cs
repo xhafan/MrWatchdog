@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
+﻿namespace CoreBackend.Infrastructure.Rebus.MessageRouting;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class RebusRoutingAttribute(string queue) : Attribute

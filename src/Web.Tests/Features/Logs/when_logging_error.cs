@@ -1,15 +1,15 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Rebus;
+using CoreWeb.Features.Logs;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
-using MrWatchdog.Web.Features.Logs;
 
 namespace MrWatchdog.Web.Tests.Features.Logs;
 

@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.RequestIdAccessors;
+﻿namespace CoreBackend.Infrastructure.RequestIdAccessors;
 
 public interface IRequestIdAccessor
 {

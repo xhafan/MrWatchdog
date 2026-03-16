@@ -1,10 +1,10 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;

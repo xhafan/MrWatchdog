@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
-import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features/Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../Shared/BodyController";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
 import { searchTermModifiedEventName } from "../Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
 
 export const scraperScrapedResultsWebPagesInitializedEventName = "scraperScrapedResultsWebPagesInitialized";

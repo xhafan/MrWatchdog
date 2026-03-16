@@ -1,6 +1,6 @@
-﻿using CoreDdd.Domain;
+﻿using CoreBackend.Features.Shared.Domain;
+using CoreDdd.Domain;
 using CoreUtils;
-using MrWatchdog.Core.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Account.Domain;
 

@@ -1,8 +1,8 @@
 using System.Globalization;
 using CoreDdd.Queries;
+using CoreWeb.Features.Shared;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Scrapers.PublicScrapers;
 

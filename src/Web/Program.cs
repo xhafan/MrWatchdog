@@ -1,10 +1,37 @@
 using AspNetCore.ReCaptcha;
+using Castle.Windsor;
+using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure;
+using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Jsons;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.MessageRouting;
+using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Infrastructure.RequestIdAccessors;
+using CoreBackend.Resources;
 using CoreDdd.AspNetCore.Middlewares;
 using CoreDdd.Domain.Events;
+using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Queries;
 using CoreDdd.Register.DependencyInjection;
+using CoreIoC.Castle;
 using CoreUtils;
+using CoreWeb.Features.Jobs;
+using CoreWeb.Features.Logs;
+using CoreWeb.HostedServices;
+using CoreWeb.Infrastructure;
+using CoreWeb.Infrastructure.ActingUserAccessors;
+using CoreWeb.Infrastructure.Authorizations;
+using CoreWeb.Infrastructure.Middlewares;
+using CoreWeb.Infrastructure.PageFilters;
+using CoreWeb.Infrastructure.RateLimiting;
+using CoreWeb.Infrastructure.Rebus.RebusQueueRedirectors;
+using CoreWeb.Infrastructure.RequestIdAccessors;
+using CoreWeb.Infrastructure.Validations;
 using DatabaseBuilder;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -20,38 +47,27 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Jobs.Services;
+using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.HttpClients;
-using MrWatchdog.Core.Infrastructure.Jsons;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
-using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Account.Login;
-using MrWatchdog.Web.Features.Logs;
 using MrWatchdog.Web.HostedServices;
-using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Web.Infrastructure.Authorizations;
-using MrWatchdog.Web.Infrastructure.Middlewares;
-using MrWatchdog.Web.Infrastructure.PageFilters;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
-using MrWatchdog.Web.Infrastructure.Rebus.RebusQueueRedirectors;
-using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
-using MrWatchdog.Web.Infrastructure.Validations;
+using MrWatchdog.Web.Infrastructure.Rebus;
+using Npgsql;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 using Rebus.Config;
+using Rebus.Retry;
 using Rebus.Retry.Simple;
+using Rebus.Serialization;
 using Rebus.Serialization.Json;
 using Rebus.Transport.InMem;
 using Serilog;
@@ -61,7 +77,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using CoreDdd.Domain.Repositories;
 
 namespace MrWatchdog.Web;
 
@@ -96,17 +111,31 @@ public class Program
 
         // Add services to the container.
 
-        // register repositories
+        // register repositories from CoreBackend
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<JobRepository>()
             .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime()
         );
+        // register repositories from Core
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<UserRepository>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
+        );
 
-        // register query handlers
+        // register query handlers from CoreBackend
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<GetJobQueryHandler>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
+        );
+        // register query handlers from Core
+        builder.Services.Scan(scan => scan
+            .FromAssemblyOf<GetUserByEmailQueryHandler>()
             .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime()
@@ -123,7 +152,12 @@ public class Program
             })
             .AddMvcOptions(options =>
             {
-                options.ModelMetadataDetailsProviders.Add(new LocalizedValidationMetadataProvider());
+                options.ModelMetadataDetailsProviders.Add(
+                    new LocalizedValidationMetadataProvider(
+                        typeof(Resource),
+                        attributeTypeName => Resource.ResourceManager.GetString(attributeTypeName)
+                    )
+                );
             });
 
         builder.Services.AddControllers(options =>
@@ -163,26 +197,41 @@ public class Program
         foreach (var queue in RebusQueues.AllQueues.Value)
         {
             var inputQueueName = $"{queue}";
-
-            builder.Services.AddSingleton<IHostedService>(serviceProvider =>
-                new RebusHostedService(
-                    inputQueueName,
-                    environmentName,
-                    serviceProvider,
-                    connectionString
-                )
-            );
+            builder.Services.AddSingleton<IHostedService>(serviceProvider => _createRebusHostedService(serviceProvider, inputQueueName));
 
             var inputQueueNameForSending = $"{inputQueueName}{RebusConstants.RebusSendQueueSuffix}";
+            builder.Services.AddSingleton<IHostedService>(serviceProvider => _createRebusHostedService(serviceProvider, inputQueueNameForSending));
+            continue;
 
-            builder.Services.AddSingleton<IHostedService>(serviceProvider =>
-                new RebusHostedService(
-                    inputQueueNameForSending,
+            IHostedService _createRebusHostedService(
+                IServiceProvider serviceProvider,
+                string hostedServiceInputQueueName
+            )
+            {
+                var hostedServiceWindsorContainer = new WindsorContainer(); // Rebus hosted service instance needs its own Windsor container instance
+                RebusHostedServiceWindsorContainerRegistrator.RegisterServices(hostedServiceWindsorContainer, serviceProvider);
+
+                return new RebusHostedService(
+                    () => Configure.With(new CastleWindsorContainerAdapter(hostedServiceWindsorContainer)),
+                    new CastleContainer(hostedServiceWindsorContainer),
+                    hostedServiceInputQueueName,
                     environmentName,
-                    serviceProvider,
-                    connectionString
-                )
-            );
+                    connectionString,
+                    RebusAssembliesHelper.GetAssembliesWithTypesDerivedFromBaseMessage,
+                    resolutionContext => new ReportFailedMessageErrorHandler(
+                        resolutionContext.Get<IErrorHandler>(),
+                        resolutionContext.Get<ISerializer>(),
+                        hostedServiceWindsorContainer.Resolve<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
+                        hostedServiceWindsorContainer.Resolve<IOptions<RuntimeOptions>>(),
+                        hostedServiceWindsorContainer.Resolve<IOptions<EmailAddressesOptions>>()
+                    ),
+                    onServiceStopped: () =>
+                    {
+                        hostedServiceWindsorContainer.Dispose();
+                        return Task.CompletedTask;
+                    }
+                );
+            }
         }
 
         builder.Services.Configure<KickOffDueScrapersScrapingHostedServiceOptions>(
@@ -312,7 +361,7 @@ public class Program
 
         builder.Services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.SuperAdmin, policy => policy.Requirements.Add(new SuperAdminRequirement()));
+            options.AddPolicy(CoreWebPolicies.SuperAdmin, policy => policy.Requirements.Add(new SuperAdminRequirement()));
         });
 
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
@@ -410,6 +459,10 @@ public class Program
         });
         
         builder.Services.AddHybridCache();
+
+        builder.Services.AddSingleton<IMessageTypeGetter>(new MessageTypeGetter(RebusAssembliesHelper.GetAssembliesWithTypesDerivedFromBaseMessage));
+
+        builder.Services.AddSingleton<ISharedTranslationsGetter>(new SharedTranslationsGetter());
 
         var app = builder.Build();
 
@@ -555,7 +608,13 @@ public class Program
 
                 return rebusConfigurer
                     .Serialization(x => x.UseSystemTextJson(JsonHelper.DefaultOptions))
-                    .Routing(configurer => MessageRoutingConfigurator.ConfigureMessageRouting(configurer, environmentName))
+                    .Routing(configurer =>
+                        MessageRoutingConfigurator.ConfigureMessageRouting(
+                            configurer,
+                            environmentName,
+                            RebusAssembliesHelper.GetAssembliesWithTypesDerivedFromBaseMessage
+                        )
+                    )
                     .Options(x =>
                     {
                         x.RetryStrategy(errorQueueName: $"{webEnvironmentInputQueueName}Error");
@@ -571,7 +630,7 @@ public class Program
             var configuration = app.Services.GetRequiredService<IConfiguration>();
             var connectionStringWithTimeout = $"{connectionString}CommandTimeout=120;";
             var databaseScriptsDirectoryPath = configuration["DatabaseScriptsDirectoryPath"]!;
-            DatabaseBuilderHelper.BuildDatabase(connectionStringWithTimeout, databaseScriptsDirectoryPath, logger, environmentName);
+            DatabaseBuilderHelper.BuildDatabase(() => new NpgsqlConnection(connectionStringWithTimeout), databaseScriptsDirectoryPath, logger, environmentName);
         }
 
         void _configureLogging()

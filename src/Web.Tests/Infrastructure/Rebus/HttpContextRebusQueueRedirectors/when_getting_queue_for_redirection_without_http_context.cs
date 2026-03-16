@@ -1,7 +1,7 @@
-﻿using FakeItEasy;
+﻿using CoreWeb.Infrastructure.Rebus.RebusQueueRedirectors;
+using FakeItEasy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using MrWatchdog.Web.Infrastructure.Rebus.RebusQueueRedirectors;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Rebus.HttpContextRebusQueueRedirectors;
 

@@ -1,10 +1,8 @@
 ﻿@page
-@using Microsoft.Extensions.Localization
+@using CoreWeb.Infrastructure.Authorizations
 @using MrWatchdog.Core.Features.Scrapers
 @using MrWatchdog.Core.Resources
-@using MrWatchdog.Web.Infrastructure.Authorizations
 @model IndexModel
-@inject IStringLocalizer<Resource> Localizer
 
 @{
     var title = Resource.Scrapers;

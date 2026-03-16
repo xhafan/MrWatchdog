@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Features.Shared.Domain;
+﻿using CoreBackend.Features.Shared.Domain;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 

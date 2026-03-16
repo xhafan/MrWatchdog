@@ -1,5 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Services;
+﻿using CoreBackend.Features.Jobs.Services;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

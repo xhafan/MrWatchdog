@@ -1,8 +1,8 @@
-﻿using CoreDdd.Nhibernate.Queries;
+﻿using CoreBackend.Infrastructure.Repositories;
+using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Features.Jobs.Queries;
+namespace CoreBackend.Features.Jobs.Queries;
 
 public class GetJobQueryHandler(
     NhibernateUnitOfWork unitOfWork, 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Core.Infrastructure.Validations;
+namespace CoreBackend.Infrastructure.Validations;
 
 public class EmailAddressRegexAttribute : RegularExpressionAttribute
 {

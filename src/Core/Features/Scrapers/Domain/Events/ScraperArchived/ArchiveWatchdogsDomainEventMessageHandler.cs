@@ -1,7 +1,7 @@
-﻿using CoreDdd.Queries;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;

@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Features.Jobs.Services;
+﻿namespace CoreBackend.Features.Jobs.Services;
 
 public interface IJobCompletionAwaiter
 {

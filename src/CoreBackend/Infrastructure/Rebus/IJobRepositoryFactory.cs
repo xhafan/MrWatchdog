@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using CoreBackend.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public interface IJobRepositoryFactory
 {

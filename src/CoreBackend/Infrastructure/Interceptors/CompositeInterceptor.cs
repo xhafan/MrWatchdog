@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using NHibernate.Type;
 using NHibernate;
 using NHibernate.SqlCommand;
+using NHibernate.Type;
 
-namespace MrWatchdog.Core.Infrastructure.Interceptors;
+namespace CoreBackend.Infrastructure.Interceptors;
 
 // taken from https://stackoverflow.com/a/33289268/379279 and modified for nullable 
 public class CompositeInterceptor(IEnumerable<IInterceptor> interceptors) : IInterceptor

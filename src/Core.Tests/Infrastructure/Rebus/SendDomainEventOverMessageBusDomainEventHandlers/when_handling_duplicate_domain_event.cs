@@ -1,7 +1,7 @@
-﻿using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
+using CoreBackend.Messages;
+using FakeItEasy;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Bus.Advanced;

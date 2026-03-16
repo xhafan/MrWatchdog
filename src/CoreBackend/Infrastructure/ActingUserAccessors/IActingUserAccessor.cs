@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+﻿namespace CoreBackend.Infrastructure.ActingUserAccessors;
 
 public interface IActingUserAccessor
 {

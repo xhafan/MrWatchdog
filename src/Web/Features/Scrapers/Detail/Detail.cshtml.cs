@@ -5,9 +5,9 @@ using MrWatchdog.Core.Features.Scrapers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using System.Globalization;
+using CoreBackend.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Scrapers.Detail;
 

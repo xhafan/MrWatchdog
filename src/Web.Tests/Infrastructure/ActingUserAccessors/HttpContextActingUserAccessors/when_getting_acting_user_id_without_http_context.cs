@@ -1,6 +1,6 @@
-﻿using FakeItEasy;
+﻿using CoreWeb.Infrastructure.ActingUserAccessors;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
-using MrWatchdog.Web.Infrastructure.ActingUserAccessors;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.ActingUserAccessors.HttpContextActingUserAccessors;
 

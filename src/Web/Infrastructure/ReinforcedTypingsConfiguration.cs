@@ -1,6 +1,4 @@
-﻿using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using MrWatchdog.Core.Features;
 using Reinforced.Typings.Attributes;
 using Reinforced.Typings.Fluent;
 using ConfigurationBuilder = Reinforced.Typings.Fluent.ConfigurationBuilder;
@@ -16,8 +14,9 @@ public static class ReinforcedTypingsConfiguration
             .CamelCaseForProperties()
         );
 
-        var typesAsTsInterface = typeof(JobDto).Assembly.GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(TsInterfaceAttribute), inherit: false).Any());
+        var coreTypes = typeof(DomainConstants).Assembly.GetTypes();
+
+        var typesAsTsInterface = coreTypes.Where(x => x.GetCustomAttributes(typeof(TsInterfaceAttribute), inherit: false).Any());
 
         builder.ExportAsInterfaces(typesAsTsInterface, config => config
             .WithPublicProperties()
@@ -25,15 +24,14 @@ public static class ReinforcedTypingsConfiguration
             .DontIncludeToNamespace()
         );
         
-        var typesAsTsClass = typeof(RebusConstants).Assembly.GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(TsClassAttribute), inherit: false).Any());
+        var typesAsTsClass = coreTypes.Where(x => x.GetCustomAttributes(typeof(TsClassAttribute), inherit: false).Any());
         
         builder.ExportAsClasses(typesAsTsClass, config => config
             .WithPublicProperties()
             .DontIncludeToNamespace()
         );
 
-        var enumTypes = typeof(JobKind).Assembly.GetTypes().Where(x => x.IsEnum && x.IsPublic).ToList();
+        var enumTypes = coreTypes.Where(x => x.IsEnum && x.IsPublic);
 
         builder.ExportAsEnums(enumTypes, config => config
             .DontIncludeToNamespace()

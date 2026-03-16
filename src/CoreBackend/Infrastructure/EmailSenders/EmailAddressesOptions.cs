@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+﻿namespace CoreBackend.Infrastructure.EmailSenders;
 
 public class EmailAddressesOptions
 {

@@ -1,7 +1,7 @@
-﻿using CoreDdd.Domain.Repositories;
-using MrWatchdog.Core.Features.Jobs.Domain;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreDdd.Domain.Repositories;
 
-namespace MrWatchdog.Core.Infrastructure.Repositories;
+namespace CoreBackend.Infrastructure.Repositories;
 
 public interface IJobRepository : IRepository<Job>
 {

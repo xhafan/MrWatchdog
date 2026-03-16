@@ -1,7 +1,7 @@
 ﻿using System.Net;
+using CoreBackend.Features.Jobs;
+using CoreBackend.Features.Jobs.Domain;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs;
-using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

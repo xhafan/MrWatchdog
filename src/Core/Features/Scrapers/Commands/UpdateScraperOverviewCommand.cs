@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Messages;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 
 namespace MrWatchdog.Core.Features.Scrapers.Commands;
 

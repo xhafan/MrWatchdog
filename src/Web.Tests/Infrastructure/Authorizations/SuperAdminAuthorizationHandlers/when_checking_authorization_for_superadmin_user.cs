@@ -5,6 +5,7 @@ using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Security.Claims;
+using CoreWeb.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.SuperAdminAuthorizationHandlers;
 

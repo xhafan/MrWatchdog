@@ -1,4 +1,6 @@
-﻿using CoreUtils;
+﻿using System.Net.Security;
+using System.Text;
+using CoreUtils;
 using DnsClient;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -7,10 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Cryptography;
-using System.Net.Security;
-using System.Text;
 
-namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+namespace CoreBackend.Infrastructure.EmailSenders;
 
 public class SmtpClientDirectlyToRecipientMailServerEmailSender(
     IOptions<SmtpClientDirectlyToRecipientMailServerEmailSenderOptions> iSmtpClientDirectlyToRecipientMailServerEmailSenderOptions,

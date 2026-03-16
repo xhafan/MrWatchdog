@@ -1,7 +1,7 @@
-﻿using CoreDdd.Domain.Events;
-using MrWatchdog.Core.Infrastructure.Validations;
+﻿using CoreBackend.Infrastructure.Validations;
+using CoreDdd.Domain.Events;
 
-namespace MrWatchdog.Core.Messages;
+namespace CoreBackend.Messages;
 
 public abstract record DomainEvent : BaseMessage, IDomainEvent
 {

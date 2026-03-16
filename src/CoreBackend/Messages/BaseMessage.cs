@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Messages;
+﻿namespace CoreBackend.Messages;
 
 public abstract record BaseMessage
 {

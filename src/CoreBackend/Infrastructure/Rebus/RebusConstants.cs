@@ -1,13 +1,13 @@
 ﻿using Rebus.Exceptions;
 using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 [TsClass(IncludeNamespace = false)]
 public static class RebusConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const int MaxDeliveryAttempts = 5;
+    public const int MaxDeliveryAttempts = 5; // todo: move this out of CoreBackend into RebusOptions
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string RebusMessageCouldNotBeDispatchedToAnyHandlersException = nameof(MessageCouldNotBeDispatchedToAnyHandlersException);

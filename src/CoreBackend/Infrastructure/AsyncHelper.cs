@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace MrWatchdog.Core.Infrastructure;
+namespace CoreBackend.Infrastructure;
 
 // Async helper allowing to call async method from a sync code.
 // Taken from https://github.com/aspnet/AspNetIdentity/blob/main/src/Microsoft.AspNet.Identity.Core/AsyncHelper.cs

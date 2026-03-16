@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Messages;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public interface ICoreBus
 {

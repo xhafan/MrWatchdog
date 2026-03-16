@@ -10,12 +10,12 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Validations;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Security.Claims;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Validations;
 
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
 

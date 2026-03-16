@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MrWatchdog.Core.Infrastructure.Validations;
+namespace CoreBackend.Infrastructure.Validations;
 
 // taken from https://andrewlock.net/creating-an-empty-guid-validation-attribute/
 public class NotDefaultAttribute() : ValidationAttribute(DefaultErrorMessage)
@@ -9,7 +9,7 @@ public class NotDefaultAttribute() : ValidationAttribute(DefaultErrorMessage)
 
     public override bool IsValid(object? value)
     {
-        //NotDefault doesn't necessarily mean required
+        // NotDefault doesn't necessarily mean required
         if (value is null)
         {
             return true;

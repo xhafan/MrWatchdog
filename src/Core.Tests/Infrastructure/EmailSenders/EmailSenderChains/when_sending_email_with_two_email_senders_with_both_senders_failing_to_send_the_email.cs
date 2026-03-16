@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Infrastructure.EmailSenders;
+﻿using CoreBackend.Infrastructure.EmailSenders;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.EmailSenderChains;
 

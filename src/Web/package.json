@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "esbuild": "node esbuild.config.js --watch",
-    "tsc": "tsc --noEmit --watch"
+    "web-tsc": "tsc --noEmit --watch"
   },
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -21,7 +21,7 @@
   "-vs-binding": {
     "ProjectOpened": [
       "esbuild",
-      "tsc"
+      "web-tsc"
     ]
   }
 }

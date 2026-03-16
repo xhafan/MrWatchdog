@@ -2,7 +2,7 @@
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
 
-namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+namespace CoreBackend.Infrastructure.EmailSenders;
 
 public class SmtpServerEmailSender(
     IOptions<SmtpServerEmailSenderOptions> iEmailSenderOptions,

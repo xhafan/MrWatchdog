@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Rebus;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.ActingUserAccessors.JobContextActingUserAccessors;
 

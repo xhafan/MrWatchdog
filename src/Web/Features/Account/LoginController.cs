@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Infrastructure.Validations;
 using System.ComponentModel.DataAnnotations;
+using CoreBackend.Infrastructure.Validations;
 
 namespace MrWatchdog.Web.Features.Account;
 

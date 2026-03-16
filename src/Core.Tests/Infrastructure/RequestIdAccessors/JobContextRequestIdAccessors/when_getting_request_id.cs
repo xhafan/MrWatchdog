@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.RequestIdAccessors;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.RequestIdAccessors;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.RequestIdAccessors.JobContextRequestIdAccessors;
 

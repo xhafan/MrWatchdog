@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
+using CoreWeb.Infrastructure.Authorizations;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.ClaimsPrincipalExtensions;
 

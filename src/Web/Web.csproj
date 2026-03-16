@@ -16,12 +16,15 @@
     <PackageReference Include="CoreDdd.AspNetCore" Version="3.3.1" />
     <PackageReference Include="CoreDdd.Nhibernate.Register.Castle" Version="3.3.0" />
     <PackageReference Include="CoreDdd.Nhibernate.Register.DependencyInjection" Version="3.3.0" />
-    <PackageReference Include="CoreDdd.Rebus.UnitOfWork" Version="3.3.1" />
+    <PackageReference Include="CoreDdd.Register.Castle" Version="3.3.0" />
     <PackageReference Include="CoreDdd.Register.DependencyInjection" Version="4.0.0" />
+    <PackageReference Include="CoreIoC.Castle" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.2" />
     <PackageReference Include="Rebus" Version="8.9.0" />
+    <PackageReference Include="Rebus.PostgreSql" Version="9.1.1" />
+    <PackageReference Include="Rebus.RabbitMq" Version="10.1.1" />
     <PackageReference Include="Rebus.Castle.Windsor" Version="6.1.0" />
     <PackageReference Include="Rebus.Microsoft.Extensions.Logging" Version="5.2.0" />
     <PackageReference Include="Rebus.ServiceProvider" Version="10.7.2" />
@@ -34,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoreWeb\CoreWeb.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
@@ -53,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<DatabaseScripts Include="../DatabaseScripts/ChangeScripts/**/*.*" />
+    <DatabaseScripts Include="../DatabaseScripts/ChangeScripts/**/*.*" />
   </ItemGroup>
 
   <Target Name="CopyChangeScripts" AfterTargets="Publish">

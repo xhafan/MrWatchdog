@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.MessageRouting;
+using MrWatchdog.Core.Features.Scrapers.Commands;
 using Rebus.Messages;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.MessageRouting;
@@ -13,7 +13,7 @@ public class when_getting_destination_address
     [SetUp]
     public void Context()
     {
-        _messageRouter = new MessageRouter("Test");
+        _messageRouter = new MessageRouter("Test", [typeof(ScrapeScraperCommand).Assembly]);
     }
 
     [Test]

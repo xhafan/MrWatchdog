@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.RebusQueueRedirectors;
 

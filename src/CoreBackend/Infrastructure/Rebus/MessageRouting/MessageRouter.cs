@@ -1,18 +1,18 @@
 ﻿using System.Reflection;
+using CoreBackend.Messages;
 using CoreUtils;
-using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Routing;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
+namespace CoreBackend.Infrastructure.Rebus.MessageRouting;
 
 public class MessageRouter : IRouter
 {
     private readonly Dictionary<Type, string> _environmentQueueNamesByMessageType = [];
 
-    public MessageRouter(string environmentName)
+    public MessageRouter(string environmentName, IEnumerable<Assembly> assembliesWithTypesDerivedFromBaseMessage)
     {
-        var allMessageTypes = _GetAllDerivedTypes<BaseMessage>();
+        var allMessageTypes = _GetAllDerivedTypes(assembliesWithTypesDerivedFromBaseMessage);
 
         foreach (var messageType in allMessageTypes)
         {
@@ -44,15 +44,15 @@ public class MessageRouter : IRouter
         _environmentQueueNamesByMessageType[messageType] = environmentQueueName;
     }
 
-    private static ICollection<Type> _GetAllDerivedTypes<TType>()
+    private static ICollection<Type> _GetAllDerivedTypes(IEnumerable<Assembly> assembliesWithTypesDerivedFromBaseMessage)
     {
-        var allDerivedTypes = typeof(TType).Assembly.GetTypes()
-            .Where(x => typeof(TType).IsAssignableFrom(x)
+        var allDerivedTypes = assembliesWithTypesDerivedFromBaseMessage.SelectMany(x => x.GetTypes())
+            .Where(x => typeof(BaseMessage).IsAssignableFrom(x)
                         && !x.IsAbstract
                         && x.IsPublic)
             .ToList();
 
-        Guard.Hope(allDerivedTypes.Any(), $"There are no derived types for type {typeof(TType).Name}");
+        Guard.Hope(allDerivedTypes.Any(), $"There are no types derived from {nameof(BaseMessage)} in the assembly.");
         return allDerivedTypes;
     }
 

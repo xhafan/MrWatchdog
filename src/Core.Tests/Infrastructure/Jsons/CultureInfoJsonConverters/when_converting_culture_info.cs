@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Infrastructure.Jsons;
+﻿using CoreBackend.Infrastructure.Jsons;
+using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Infrastructure.Localization;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Jsons.CultureInfoJsonConverters;

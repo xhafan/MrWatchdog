@@ -1,15 +1,16 @@
 import type { TurboFrameLoadEvent } from "@hotwired/turbo";
 import { Application } from "@hotwired/stimulus";
+import { CoreWebStimulusControllers } from "../../../CoreWeb/Features/Shared/Generated/CoreWebStimulusControllers";
 import { StimulusControllers } from "./Generated/StimulusControllers";
-import { logError } from "./logging";
+import { logError } from "../../../CoreWeb/Features/Shared/logging";
 
 import "./site.css";
 
 
 import BodyController from "./BodyController";
-import TurboFrameController from "./TagHelpers/TurboFrame/TurboFrameController";
+import TurboFrameController from "../../../CoreWeb/Features/Shared/TagHelpers/TurboFrame/TurboFrameController";
 import OnboardingController from "./TagHelpers/Onboarding/OnboardingController";
-import ViewOrEditFormController from "./TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import ViewOrEditFormController from "../../../CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
 
 import ScrapersCreateController from "../Scrapers/Create/CreateController";
 import ScrapersDetailController from "../Scrapers/Detail/DetailController";
@@ -29,9 +30,9 @@ import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSe
 
 const application = Application.start();
 application.register(StimulusControllers.body, BodyController);
-application.register(StimulusControllers.turboFrame, TurboFrameController);
+application.register(CoreWebStimulusControllers.turboFrame, TurboFrameController);
 application.register(StimulusControllers.onboarding, OnboardingController);
-application.register(StimulusControllers.viewOrEditForm, ViewOrEditFormController);
+application.register(CoreWebStimulusControllers.viewOrEditForm, ViewOrEditFormController);
 
 application.register(StimulusControllers.scrapersCreate, ScrapersCreateController);
 application.register(StimulusControllers.scrapersDetail, ScrapersDetailController);

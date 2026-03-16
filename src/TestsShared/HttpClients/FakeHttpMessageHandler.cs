@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using MrWatchdog.Core.Infrastructure.Extensions;
+using CoreBackend.Infrastructure.Extensions;
 
 namespace MrWatchdog.TestsShared.HttpClients;
 

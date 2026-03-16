@@ -1,28 +1,28 @@
-﻿using Castle.Windsor;
-using CoreDdd.Domain.Events;
+﻿using CoreDdd.Domain.Events;
+using CoreIoC;
 using CoreUtils;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public class DomainEventHandlerFactory : IDomainEventHandlerFactory
 {
     public IEnumerable<IDomainEventHandler<TDomainEvent>> Create<TDomainEvent>() where TDomainEvent : IDomainEvent
     {
-        var windsorContainer = _GetJobContextWindsorContainer();
-        return windsorContainer.ResolveAll<IDomainEventHandler<TDomainEvent>>();
+        var ioCContainer = _GetJobContextIoCContainer();
+        return ioCContainer.ResolveAll<IDomainEventHandler<TDomainEvent>>();
     }
 
     public void Release(object domainEventHandler)
     {
-        var windsorContainer = _GetJobContextWindsorContainer();
-        windsorContainer.Release(domainEventHandler);
+        var ioCContainer = _GetJobContextIoCContainer();
+        ioCContainer.Release(domainEventHandler);
     }
     
-    private IWindsorContainer _GetJobContextWindsorContainer()
+    private IContainer _GetJobContextIoCContainer()
     {
-        var windsorContainer = JobContext.WindsorContainer.Value;
-        Guard.Hope(windsorContainer != null, $"{nameof(JobContext)}.{nameof(windsorContainer)} is null");
-        return windsorContainer;
+        var ioCContainer = JobContext.IoCContainer.Value;
+        Guard.Hope(ioCContainer != null, $"{nameof(JobContext)}.{nameof(ioCContainer)} is null");
+        return ioCContainer;
     }
     
 }

@@ -1,10 +1,10 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.HostedServices;

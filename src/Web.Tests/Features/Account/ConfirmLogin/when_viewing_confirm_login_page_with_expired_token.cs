@@ -1,8 +1,8 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure.Rebus;
+using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
-import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features/Jobs/jobCompletion";
 import Enumerable from "linq";
 import { ScraperUrlConstants } from "../../Shared/Generated/ScraperUrlConstants";
 

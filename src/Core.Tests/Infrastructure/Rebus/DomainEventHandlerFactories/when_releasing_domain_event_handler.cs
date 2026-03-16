@@ -1,8 +1,8 @@
-﻿using Castle.Windsor;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Messages;
 using CoreDdd.Domain.Events;
+using CoreIoC;
 using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Messages;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.DomainEventHandlerFactories;
 
@@ -10,15 +10,15 @@ namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.DomainEventHandlerFactories
 public class when_releasing_domain_event_handler
 {
     private TestDomainEventHandler _testDomainEventHandler = null!;
-    private IWindsorContainer _windsorContainer = null!;
+    private IContainer _ioCContainer = null!;
 
     [SetUp]
     public void Context()
     {
         _testDomainEventHandler = new TestDomainEventHandler();
 
-        _windsorContainer = A.Fake<IWindsorContainer>();
-        JobContext.WindsorContainer.Value = _windsorContainer;
+        _ioCContainer = A.Fake<IContainer>();
+        JobContext.IoCContainer.Value = _ioCContainer;
 
         var factory = new DomainEventHandlerFactory();
         
@@ -26,9 +26,9 @@ public class when_releasing_domain_event_handler
     }
 
     [Test]
-    public void handlers_are_correctly_resolved()
+    public void handlers_are_correctly_released()
     {
-        A.CallTo(() => _windsorContainer.Release(_testDomainEventHandler)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _ioCContainer.Release(_testDomainEventHandler)).MustHaveHappenedOnceExactly();
     }
 
     private record TestDomainEvent : DomainEvent;

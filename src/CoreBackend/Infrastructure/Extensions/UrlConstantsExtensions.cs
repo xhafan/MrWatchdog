@@ -1,6 +1,6 @@
 ﻿using CoreUtils;
 
-namespace MrWatchdog.Core.Features;
+namespace CoreBackend.Infrastructure.Extensions;
 
 public static class UrlConstantsExtensions
 {

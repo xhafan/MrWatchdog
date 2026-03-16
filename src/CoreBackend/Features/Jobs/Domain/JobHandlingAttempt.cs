@@ -1,8 +1,8 @@
-﻿using CoreUtils;
-using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Shared.Domain;
+﻿using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Features.Shared.Domain;
+using CoreUtils;
 
-namespace MrWatchdog.Core.Features.Jobs.Domain;
+namespace CoreBackend.Features.Jobs.Domain;
 
 public class JobHandlingAttempt : VersionedEntity
 {

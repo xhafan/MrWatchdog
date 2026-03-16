@@ -1,10 +1,10 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.Repositories;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

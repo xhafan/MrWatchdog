@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Messages;
+using CoreDdd.Nhibernate.UnitOfWorks;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public abstract class BaseJobCreator : IJobCreator
 {

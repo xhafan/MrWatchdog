@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
+using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Conventions;
+using CoreBackend.Infrastructure.Interceptors;
 using CoreDdd.Nhibernate.Configurations;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 #if DEBUG
 using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
-using MrWatchdog.Core.Infrastructure.Conventions;
-using MrWatchdog.Core.Infrastructure.Interceptors;
 using NHibernate.Cfg;
 
 namespace MrWatchdog.Core.Infrastructure;
@@ -24,6 +25,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
     {
         return
         [
+            typeof(Job).Assembly,
             typeof(Scraper).Assembly
         ];
     }

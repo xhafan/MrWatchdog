@@ -1,9 +1,9 @@
 ﻿using System.Net;
+using CoreBackend.Features.Jobs.Domain;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Scrapers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;

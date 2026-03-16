@@ -1,26 +1,26 @@
-﻿using Castle.Windsor;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Messages;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using CoreIoC;
 using Microsoft.Extensions.Logging;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Pipeline;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public class JobTrackingIncomingStep(
     INhibernateConfigurator nhibernateConfigurator,
     ILogger<JobTrackingIncomingStep> logger,
-    IWindsorContainer windsorContainer,
+    IContainer ioCContainer,
     IJobCreator jobCreator,
     IRebusHandlingQueueGetter rebusHandlingQueueGetter
 ) : IIncomingStep
 {
     public async Task Process(IncomingStepContext context, Func<Task> next)
     {
-        JobContext.WindsorContainer.Value = windsorContainer;
+        JobContext.IoCContainer.Value = ioCContainer;
         JobContext.RaisedDomainEvents.Value = [];
 
         var rebusMessage = context.Load<Message>();

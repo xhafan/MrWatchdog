@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Messages;
+using MrWatchdog.Core.Features.Watchdogs.Domain;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Commands;
 

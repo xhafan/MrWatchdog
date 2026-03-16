@@ -1,14 +1,14 @@
-﻿using Castle.Windsor;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Messages;
 using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using CoreIoC;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
@@ -24,8 +24,8 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private Scraper _scraper = null!;
     private long _scraperWebPageIdOne;
     private long _scraperWebPageIdTwo;
-    private IWindsorContainer _windsorContainer = null!;
-    private IWindsorContainer? _jobContextWindsorContainerInTheNextIncomingStep;
+    private IContainer _ioCContainer = null!;
+    private IContainer? _jobContextIoCContainerInTheNextIncomingStep;
     private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
     private readonly Guid _relatedCommandGuid = Guid.NewGuid();
@@ -37,7 +37,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     {
         _BuildEntitiesInSeparateTransaction();
         
-        _windsorContainer = A.Fake<IWindsorContainer>();
+        _ioCContainer = A.Fake<IContainer>();
         JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
 
         _scraper = new ScraperBuilder(UnitOfWork)
@@ -54,7 +54,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         UnitOfWork.Clear();
 
         var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
-            .WithWindsorContainer(_windsorContainer)
+            .WithIoCContainer(_ioCContainer)
             .Build();
         
         var jobCompletionIncomingStep = new JobCompletionIncomingStepBuilder(UnitOfWork).Build();
@@ -90,7 +90,7 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             
             _scraperWebPageIdTwo = _scraper.WebPages.Single(x => x.Id != _scraperWebPageIdOne).Id;
 
-            _jobContextWindsorContainerInTheNextIncomingStep = JobContext.WindsorContainer.Value;
+            _jobContextIoCContainerInTheNextIncomingStep = JobContext.IoCContainer.Value;
             _jobContextRaisedDomainEventsInTheNextIncomingStep = JobContext.RaisedDomainEvents.Value;
             _jobContextCommandGuidInTheNextIncomingStep = JobContext.CommandGuid.Value;
         }
@@ -132,9 +132,9 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     }
 
     [Test]
-    public void job_context_windsor_container_is_set_in_the_next_incoming_step()
+    public void job_context_ioc_container_is_set_in_the_next_incoming_step()
     {
-        _jobContextWindsorContainerInTheNextIncomingStep.ShouldBe(_windsorContainer);
+        _jobContextIoCContainerInTheNextIncomingStep.ShouldBe(_ioCContainer);
     }
 
     [Test]

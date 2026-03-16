@@ -1,4 +1,5 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;

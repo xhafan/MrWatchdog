@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Jobs;
+﻿using CoreBackend.Features.Jobs;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Messages;
+using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using MrWatchdog.Core.Messages;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;

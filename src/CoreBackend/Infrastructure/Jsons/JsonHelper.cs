@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace MrWatchdog.Core.Infrastructure.Jsons;
+namespace CoreBackend.Infrastructure.Jsons;
 
 public static class JsonHelper
 {

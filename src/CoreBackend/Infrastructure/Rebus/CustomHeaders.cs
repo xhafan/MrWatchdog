@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.Rebus;
+﻿namespace CoreBackend.Infrastructure.Rebus;
 
 public static class CustomHeaders
 {

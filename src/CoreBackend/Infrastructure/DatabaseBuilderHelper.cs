@@ -1,14 +1,14 @@
-﻿using CoreUtils;
+﻿using System.Data;
+using CoreUtils;
 using DatabaseBuilder;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 
-namespace MrWatchdog.Core.Infrastructure;
+namespace CoreBackend.Infrastructure;
 
 public static class DatabaseBuilderHelper
 {
     public static void BuildDatabase(
-        string connectionString, 
+        Func<IDbConnection> createConnectionFunc,
         string databaseScriptsDirectoryPath, 
         ILogger logger,
         string environmentName
@@ -16,18 +16,18 @@ public static class DatabaseBuilderHelper
     {
         logger.LogInformation("DatabaseScripts directory path: {dbScriptsDirectoryPath}", databaseScriptsDirectoryPath);
 
-        var builderOfDatabase = new BuilderOfDatabase(() => new NpgsqlConnection(connectionString), logAction: msg => logger.LogInformation(msg));
+        var builderOfDatabase = new BuilderOfDatabase(createConnectionFunc, logAction: msg => logger.LogInformation(msg));
         builderOfDatabase.BuildDatabase(databaseScriptsDirectoryPath);
 
-        _CheckDatabaseEnvironmentMatchesAppEnvironment(connectionString, environmentName);
+        _CheckDatabaseEnvironmentMatchesAppEnvironment(createConnectionFunc, environmentName);
     }
 
     private static void _CheckDatabaseEnvironmentMatchesAppEnvironment(
-        string connectionString, 
+        Func<IDbConnection> createConnectionFunc, 
         string environmentName
     )
     {
-        using var connection = new NpgsqlConnection(connectionString);
+        using var connection = createConnectionFunc();
         connection.Open();
         using var command = connection.CreateCommand();
         command.CommandText =

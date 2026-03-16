@@ -1,8 +1,8 @@
 using System.Globalization;
+using CoreBackend.Infrastructure.ActingUserAccessors;
 using CoreDdd.Queries;
+using CoreWeb.Features.Shared;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Web.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Scrapers.Manage.UserScrapers;
 

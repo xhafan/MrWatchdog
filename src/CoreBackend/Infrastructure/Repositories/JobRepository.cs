@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
-using MrWatchdog.Core.Features.Jobs.Domain;
 
-namespace MrWatchdog.Core.Infrastructure.Repositories;
+namespace CoreBackend.Infrastructure.Repositories;
 
 public class JobRepository(NhibernateUnitOfWork unitOfWork) : NhibernateRepository<Job>(unitOfWork), IJobRepository
 {

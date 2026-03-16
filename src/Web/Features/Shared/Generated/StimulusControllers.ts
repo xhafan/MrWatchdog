@@ -5,8 +5,6 @@
 export abstract class StimulusControllers
 {
 	public static body: string = `body`;
-	public static turboFrame: string = `turbo-frame`;
-	public static viewOrEditForm: string = `view-or-edit-form`;
 	public static scrapersCreate: string = `scrapers--create`;
 	public static scrapersDetail: string = `scrapers--detail`;
 	public static scrapersDetailActions: string = `scrapers--detail-actions`;

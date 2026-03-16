@@ -1,6 +1,6 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure.EmailSenders;
+using FakeItEasy;
 using Microsoft.Extensions.Hosting;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.SendEmailCommandMessageHandlers;

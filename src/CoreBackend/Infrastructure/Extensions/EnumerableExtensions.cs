@@ -1,6 +1,6 @@
 ﻿using CoreUtils.Extensions;
 
-namespace MrWatchdog.Core.Infrastructure.Extensions;
+namespace CoreBackend.Infrastructure.Extensions;
 
 public static class EnumerableExtensions
 {

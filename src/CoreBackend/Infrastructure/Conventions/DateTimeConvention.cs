@@ -2,7 +2,7 @@
 using FluentNHibernate.Conventions.Instances;
 using NHibernate.Type;
 
-namespace MrWatchdog.Core.Infrastructure.Conventions;
+namespace CoreBackend.Infrastructure.Conventions;
 
 public class DateTimeConvention : IPropertyConvention
 {

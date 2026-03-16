@@ -1,9 +1,9 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure.Rebus;
+using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

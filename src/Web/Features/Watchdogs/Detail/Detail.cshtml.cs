@@ -8,9 +8,9 @@ using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Web.Features.Shared;
 using System.Globalization;
+using CoreBackend.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Detail;
 

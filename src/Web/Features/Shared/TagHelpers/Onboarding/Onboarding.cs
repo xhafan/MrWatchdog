@@ -1,9 +1,10 @@
-﻿using CoreDdd.Queries;
+﻿using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Extensions;
+using CoreDdd.Queries;
+using CoreWeb.Features.Shared.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Core.Infrastructure.Extensions;
 
 namespace MrWatchdog.Web.Features.Shared.TagHelpers.Onboarding;
 

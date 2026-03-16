@@ -1,17 +1,23 @@
-﻿namespace MrWatchdog.Core.Resources;
+﻿using CoreBackend.Resources;
 
-public static class SharedTranslationsGetter
+namespace MrWatchdog.Core.Resources;
+
+public class SharedTranslationsGetter : ISharedTranslationsGetter
 {
-    public static SharedTranslations GetSharedTranslations()
+    private readonly SharedTranslations _sharedTranslations = new()
     {
-        return new SharedTranslations
-        {
-            Ok = Resource.Ok,
-            Cancel = Resource.Cancel,
-            Back = Resource.Back,
-            Next = Resource.Next,
-            Finish = Resource.Finish,
-            Error = Resource.Error
-        };
+        Ok = Resource.Ok,
+        Cancel = Resource.Cancel,
+        Back = Resource.Back,
+        Next = Resource.Next,
+        Finish = Resource.Finish,
+        Error = Resource.Error,
+        Edit = Resource.Edit,
+        Save = Resource.Save
+    };
+
+    public SharedTranslations GetSharedTranslations()
+    {
+        return _sharedTranslations;
     }
 }

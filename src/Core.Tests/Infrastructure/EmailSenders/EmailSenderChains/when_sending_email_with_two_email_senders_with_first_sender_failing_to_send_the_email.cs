@@ -1,5 +1,5 @@
-﻿using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
+﻿using CoreBackend.Infrastructure.EmailSenders;
+using FakeItEasy;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.EmailSenderChains;
 

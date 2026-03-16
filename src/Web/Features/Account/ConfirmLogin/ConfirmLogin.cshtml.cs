@@ -7,11 +7,11 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Web.Features.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreWeb.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Account.ConfirmLogin;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+namespace CoreBackend.Infrastructure.EmailSenders;
 
 public class SendEmailCommandMessageHandler(
     IEmailSenderChain emailSenderChain,

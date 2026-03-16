@@ -1,11 +1,11 @@
-﻿using CoreDdd.Nhibernate.Configurations;
+﻿using System.Diagnostics;
+using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using System.Diagnostics;
 using CoreUtils;
-using MrWatchdog.Core.Infrastructure.Rebus;
 
-namespace MrWatchdog.Core.Features.Jobs.Services;
+namespace CoreBackend.Features.Jobs.Services;
 
 public class JobCompletionAwaiter(INhibernateConfigurator nhibernateConfigurator) : IJobCompletionAwaiter
 {

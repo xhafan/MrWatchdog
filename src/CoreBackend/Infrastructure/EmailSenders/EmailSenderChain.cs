@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+namespace CoreBackend.Infrastructure.EmailSenders;
 
 public class EmailSenderChain(
     IEnumerable<IEmailSender> emailSenders,

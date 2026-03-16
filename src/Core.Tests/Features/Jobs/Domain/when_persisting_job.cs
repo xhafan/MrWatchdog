@@ -1,8 +1,8 @@
-﻿using CoreDdd.Nhibernate.TestHelpers;
-using MrWatchdog.Core.Features.Jobs.Domain;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Jsons;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.TestHelpers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Jsons;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

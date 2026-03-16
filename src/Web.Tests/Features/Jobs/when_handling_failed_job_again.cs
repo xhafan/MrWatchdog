@@ -1,12 +1,12 @@
+using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Messages;
+using CoreWeb.Features.Jobs;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Jobs.Domain;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Messages;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.Web.Features.Jobs;
 using Rebus.Bus;
 using Rebus.Messages;
 

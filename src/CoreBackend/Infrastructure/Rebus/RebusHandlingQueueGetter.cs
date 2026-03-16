@@ -1,10 +1,10 @@
-﻿using CoreUtils;
+﻿using System.Reflection;
+using CoreUtils;
 using Rebus.Bus;
 using Rebus.Pipeline;
 using Rebus.Transport;
-using System.Reflection;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 // Rebus does not expose the handling queue name, so we have to resort to reflection to get it. Refactor if Rebus adds public API for this.
 public class RebusHandlingQueueGetter : IRebusHandlingQueueGetter

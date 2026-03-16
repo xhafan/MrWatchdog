@@ -9,12 +9,6 @@ public static class StimulusControllers
     public const string Body = "body";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string TurboFrame = "turbo-frame";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ViewOrEditForm = "view-or-edit-form";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScrapersCreate = "scrapers--create";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]

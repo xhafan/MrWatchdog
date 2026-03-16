@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Core.Infrastructure;
+namespace CoreBackend.Infrastructure;
 
 [TsClass(IncludeNamespace = false)]
 public static class LogConstants

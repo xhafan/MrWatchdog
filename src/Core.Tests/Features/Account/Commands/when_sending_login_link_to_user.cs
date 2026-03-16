@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Rebus;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.TestsShared;
 

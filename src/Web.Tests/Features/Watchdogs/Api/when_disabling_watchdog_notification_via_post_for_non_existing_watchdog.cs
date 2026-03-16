@@ -1,8 +1,8 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure.Rebus;
+using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Api;
 

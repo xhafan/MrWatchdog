@@ -1,10 +1,10 @@
+using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Shared;
 

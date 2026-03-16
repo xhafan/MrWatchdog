@@ -1,10 +1,10 @@
-﻿using CoreDdd.Domain;
+﻿using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Features.Shared.Domain;
+using CoreBackend.Infrastructure.Jsons;
+using CoreDdd.Domain;
 using CoreUtils;
-using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Shared.Domain;
-using MrWatchdog.Core.Infrastructure.Jsons;
 
-namespace MrWatchdog.Core.Features.Jobs.Domain;
+namespace CoreBackend.Features.Jobs.Domain;
 
 public class Job : VersionedEntity, IAggregateRoot
 {

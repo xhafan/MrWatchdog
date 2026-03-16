@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using MrWatchdog.Core.Messages;
+using CoreBackend.Messages;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 

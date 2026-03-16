@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Domain;
 
-namespace MrWatchdog.Core.Features.Shared.Domain;
+namespace CoreBackend.Features.Shared.Domain;
 
 /// <summary>
 /// The purpose of this class is to enable NHibernate versioned concurrency model for entities derived from this class.

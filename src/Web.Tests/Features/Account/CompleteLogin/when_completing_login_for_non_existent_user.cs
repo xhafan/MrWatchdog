@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 using System.Security.Claims;
+using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Nhibernate.TestHelpers;
 
 namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;

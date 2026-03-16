@@ -1,7 +1,8 @@
 ﻿using Rebus.Config;
 using Rebus.Routing;
+using System.Reflection;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
+namespace CoreBackend.Infrastructure.Rebus.MessageRouting;
 
 public static class MessageRoutingConfigurator
 {
@@ -9,10 +10,11 @@ public static class MessageRoutingConfigurator
 
     public static void ConfigureMessageRouting(
         StandardConfigurer<IRouter> routerConfigurer,
-        string environmentName
+        string environmentName,
+        IEnumerable<Assembly> assembliesWithTypesDerivedFromBaseMessage
     )
     {
-        _messageRouter ??= new MessageRouter(environmentName);
+        _messageRouter ??= new MessageRouter(environmentName, assembliesWithTypesDerivedFromBaseMessage);
 
         routerConfigurer.Register(_ => _messageRouter);
     }

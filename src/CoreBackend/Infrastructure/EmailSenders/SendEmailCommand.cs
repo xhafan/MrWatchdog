@@ -1,8 +1,8 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.MessageRouting;
+using CoreBackend.Messages;
 
-namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+namespace CoreBackend.Infrastructure.EmailSenders;
 
 [RebusRouting(RebusQueues.Email)]
 public record SendEmailCommand(

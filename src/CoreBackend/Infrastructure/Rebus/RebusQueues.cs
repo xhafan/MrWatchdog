@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
-public static class RebusQueues
+public static class RebusQueues // todo: move this out of CoreBackend
 {
     public const string Main = nameof(Main);
     public const string AdminBulk = nameof(AdminBulk);

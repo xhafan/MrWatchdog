@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using CoreBackend.Features.Jobs;
+using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Features.Jobs.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Jobs;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Jobs.Queries;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

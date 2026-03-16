@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.Configurations;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Messages;
+using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Messages;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 public class NewTransactionJobCreator(INhibernateConfigurator nhibernateConfigurator) : BaseJobCreator
 {

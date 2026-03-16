@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Rebus.MessageRouting;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.MessageRouting;
+using CoreBackend.Messages;
 
 namespace MrWatchdog.Core.Features.Scrapers.Commands;
 

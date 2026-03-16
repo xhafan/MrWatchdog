@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CoreWeb.Infrastructure.Authorizations;
+using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;

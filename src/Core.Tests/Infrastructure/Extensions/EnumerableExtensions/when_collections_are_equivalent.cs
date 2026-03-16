@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Infrastructure.Extensions;
+﻿using CoreBackend.Infrastructure.Extensions;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Extensions.EnumerableExtensions;
 

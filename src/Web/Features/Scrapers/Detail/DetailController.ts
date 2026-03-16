@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
-import BaseStimulusModelController from "../../Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
 import { ScraperDetailStimulusModel } from "../../Shared/Generated/ScraperDetailStimulusModel";
-import { formSubmitWithWaitForJobCompletion } from "../../Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features/Jobs/jobCompletion";
 import Enumerable from "linq";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import { scraperWebPageRemovedEvent } from "./WebPage/WebPageController";

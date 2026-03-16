@@ -1,18 +1,18 @@
-﻿using CoreDdd.Domain;
+﻿using CoreBackend.Features.Shared.Domain;
+using CoreBackend.Infrastructure;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Extensions;
+using CoreBackend.Infrastructure.Jsons;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
-using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using MrWatchdog.Core.Infrastructure.Extensions;
-using MrWatchdog.Core.Infrastructure.Jsons;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using Serilog;
 

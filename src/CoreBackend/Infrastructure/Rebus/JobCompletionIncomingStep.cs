@@ -1,10 +1,10 @@
-﻿using CoreUtils;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Messages;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Messages;
+using CoreUtils;
 using Rebus.Messages;
 using Rebus.Pipeline;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 /// <summary>
 /// Completes the job in the main unit of work transaction.

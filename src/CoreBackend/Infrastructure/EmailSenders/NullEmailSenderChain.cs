@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.EmailSenders;
+﻿namespace CoreBackend.Infrastructure.EmailSenders;
 
 // For testing purposes
 public class NullEmailSenderChain : IEmailSenderChain

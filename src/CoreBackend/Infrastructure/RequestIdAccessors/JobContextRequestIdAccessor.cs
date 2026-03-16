@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.Rebus;
 
-namespace MrWatchdog.Core.Infrastructure.RequestIdAccessors;
+namespace CoreBackend.Infrastructure.RequestIdAccessors;
 
 public class JobContextRequestIdAccessor : IRequestIdAccessor
 {

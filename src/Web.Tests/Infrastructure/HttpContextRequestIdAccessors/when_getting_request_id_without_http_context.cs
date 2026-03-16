@@ -1,6 +1,6 @@
-﻿using FakeItEasy;
+﻿using CoreWeb.Infrastructure.RequestIdAccessors;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
-using MrWatchdog.Web.Infrastructure.RequestIdAccessors;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.HttpContextRequestIdAccessors;
 

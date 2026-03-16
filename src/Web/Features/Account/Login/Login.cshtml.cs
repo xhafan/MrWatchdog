@@ -9,13 +9,13 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Features.Jobs.Queries;
-using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Validations;
-using MrWatchdog.Web.Features.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Validations;
+using CoreWeb.Features.Shared;
 using MrWatchdog.Core.Resources;
 
 namespace MrWatchdog.Web.Features.Account.Login;

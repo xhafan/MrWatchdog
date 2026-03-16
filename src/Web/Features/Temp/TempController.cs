@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Diagnostics;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Rebus;
+using CoreWeb.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Features.Temp;
 
 // Temporary controller for any purpose.
 [ApiController]
-[Authorize(Policies.SuperAdmin)]
+[Authorize(CoreWebPolicies.SuperAdmin)]
 [Route("api/[controller]/[action]")]
 public class TempController(
     ICoreBus bus, 

@@ -1,7 +1,7 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Jobs.Domain;
-using MrWatchdog.Core.Features.Jobs.Services;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 

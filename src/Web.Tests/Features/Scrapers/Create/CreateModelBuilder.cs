@@ -1,6 +1,6 @@
-﻿using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.ActingUserAccessors;
-using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Rebus;
+using FakeItEasy;
 using MrWatchdog.Web.Features.Scrapers.Create;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Create;

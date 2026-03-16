@@ -7,13 +7,13 @@ using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.Core.Features.Shared.Domain;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.EmailSenders;
-using MrWatchdog.Core.Infrastructure.Extensions;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
 using System.Globalization;
+using CoreBackend.Features.Shared.Domain;
+using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Extensions;
+using CoreBackend.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Localization;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;

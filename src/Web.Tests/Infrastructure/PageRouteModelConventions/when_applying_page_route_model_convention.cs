@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using MrWatchdog.Web.Infrastructure;
+﻿using CoreWeb.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.PageRouteModelConventions;
 

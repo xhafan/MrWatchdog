@@ -1,10 +1,12 @@
-﻿using CoreDdd.Domain.Events;
+﻿using CoreBackend.Infrastructure;
+using CoreDdd.Domain.Events;
 using CoreDdd.TestHelpers.DomainEvents;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.TestsShared.Loggers;
+using Npgsql;
 
 namespace MrWatchdog.TestsShared;
 
@@ -40,7 +42,7 @@ public class BaseRunOncePerTestRun
         var databaseScriptsDirectoryPath = ConsoleAppSettings.Configuration["DatabaseScriptsDirectoryPath"];
         Guard.Hope(databaseScriptsDirectoryPath != null, nameof(databaseScriptsDirectoryPath) + " is null");
         DatabaseBuilderHelper.BuildDatabase(
-            connectionString,
+            () => new NpgsqlConnection(connectionString),
             databaseScriptsDirectoryPath,
             new ConsoleTestLogger(),
             EnvironmentName

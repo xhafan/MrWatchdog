@@ -1,11 +1,11 @@
-﻿using CoreDdd.Domain.Events;
+﻿using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
+using CoreBackend.Messages;
+using CoreDdd.Domain.Events;
 using CoreUtils;
-using MrWatchdog.Core.Infrastructure.Rebus.RebusQueueRedirectors;
-using MrWatchdog.Core.Messages;
 using Rebus.Bus.Advanced;
 using Rebus.Messages;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus;
 
 /// <summary>
 /// Handles all domain events by sending them over a message bus.

@@ -1,8 +1,8 @@
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../Shared/BodyController";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
 import { scraperScrapedResultsWebPagesInitializedEventName } from "../../ScrapedResults/ScrapedResultsController";
 import Enumerable from "linq";
 import { StimulusControllers } from "../../../Shared/Generated/StimulusControllers";
-import BaseStimulusModelController from "../../../Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
 import { ScrapedResultsWebPagesStimulusModel } from "../../../Shared/Generated/ScrapedResultsWebPagesStimulusModel";
 
 export const searchTermModifiedEventName = "searchTermModified";

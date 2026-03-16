@@ -1,7 +1,7 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
-using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 

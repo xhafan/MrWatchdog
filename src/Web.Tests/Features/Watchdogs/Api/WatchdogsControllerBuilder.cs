@@ -1,11 +1,11 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Api;
 

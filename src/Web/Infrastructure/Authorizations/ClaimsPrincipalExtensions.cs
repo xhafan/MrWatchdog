@@ -1,39 +1,22 @@
-﻿using CoreUtils;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using MrWatchdog.Core.Infrastructure.Repositories;
 using System.Security.Claims;
+using CoreWeb.Infrastructure.Authorizations;
 
 namespace MrWatchdog.Web.Infrastructure.Authorizations;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static async Task<bool> IsSuperAdmin(this ClaimsPrincipal claimsPrincipal, IUserRepository userRepository)
+    extension(ClaimsPrincipal claimsPrincipal)
     {
-        if (!claimsPrincipal.IsAuthenticated())
+        public async Task<bool> IsSuperAdmin(IUserRepository userRepository)
         {
-            return false;
-        }
+            if (!claimsPrincipal.IsAuthenticated())
+            {
+                return false;
+            }
 
-        var user = await userRepository.LoadByIdAsync(claimsPrincipal.GetUserId());
-        return user.SuperAdmin;
+            var user = await userRepository.LoadByIdAsync(claimsPrincipal.GetUserId());
+            return user.SuperAdmin;
+        }
     }
-    
-    public static bool IsAuthenticated(this ClaimsPrincipal claimsPrincipal)
-    {
-        return claimsPrincipal.Identity?.IsAuthenticated == true
-            && claimsPrincipal.Identity?.AuthenticationType == CookieAuthenticationDefaults.AuthenticationScheme;
-    }  
-    
-    public static long GetUserId(this ClaimsPrincipal claimsPrincipal)
-    {
-        if (!claimsPrincipal.IsAuthenticated())
-        {
-            return 0;
-        }
-
-        var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-        Guard.Hope(userId != null, "Cannot retrieve userId");
-
-        return long.Parse(userId);
-    }       
 }

@@ -4,7 +4,7 @@ using FluentNHibernate.Conventions.AcceptanceCriteria;
 using FluentNHibernate.Conventions.Inspections;
 using FluentNHibernate.Conventions.Instances;
 
-namespace MrWatchdog.Core.Infrastructure.Conventions;
+namespace CoreBackend.Infrastructure.Conventions;
 
 // https://stackoverflow.com/a/27945320/379279
 public class CultureInfoConvention : IUserTypeConvention

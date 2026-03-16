@@ -1,4 +1,4 @@
-using MrWatchdog.Web.Features.Shared;
+using CoreWeb.Features.Shared;
 
 namespace MrWatchdog.Web.Features.Scrapers.Manage;
 

@@ -1,4 +1,4 @@
-﻿using MrWatchdog.Core.Infrastructure.Validations;
+﻿using CoreBackend.Infrastructure.Validations;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 

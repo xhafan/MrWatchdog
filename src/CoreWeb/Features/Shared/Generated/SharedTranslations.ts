@@ -10,4 +10,6 @@ export interface SharedTranslations
 	next: string;
 	finish: string;
 	error: string;
+	edit: string;
+	save: string;
 }

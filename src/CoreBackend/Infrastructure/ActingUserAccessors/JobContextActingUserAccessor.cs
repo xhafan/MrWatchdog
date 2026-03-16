@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.Rebus;
 
-namespace MrWatchdog.Core.Infrastructure.ActingUserAccessors;
+namespace CoreBackend.Infrastructure.ActingUserAccessors;
 
 public class JobContextActingUserAccessor : IActingUserAccessor
 {

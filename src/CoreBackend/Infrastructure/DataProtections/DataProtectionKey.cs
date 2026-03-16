@@ -1,6 +1,6 @@
 ﻿using CoreDdd.Domain;
 
-namespace MrWatchdog.Core.Infrastructure.DataProtections;
+namespace CoreBackend.Infrastructure.DataProtections;
 
 public class DataProtectionKey : Entity<string>, IAggregateRoot
 {

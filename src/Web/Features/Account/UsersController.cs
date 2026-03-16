@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreBackend.Infrastructure.Rebus;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Account;
 

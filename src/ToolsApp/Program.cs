@@ -2,8 +2,8 @@
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using System.Text.RegularExpressions;
+using MrWatchdog.Core.Infrastructure.Configurations;
 
 namespace MrWatchdog.ToolsApp;
 

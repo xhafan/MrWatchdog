@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Features.Jobs.Domain;
+﻿namespace CoreBackend.Features.Jobs.Domain;
 
 public enum JobKind
 {

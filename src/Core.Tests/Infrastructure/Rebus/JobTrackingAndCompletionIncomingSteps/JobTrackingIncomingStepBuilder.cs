@@ -1,19 +1,19 @@
-﻿using Castle.Windsor;
+﻿using CoreBackend.Infrastructure.Rebus;
+using CoreIoC;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 
 public class JobTrackingIncomingStepBuilder
 {
-    private IWindsorContainer? _windsorContainer;
+    private IContainer? _ioCContainer;
     private IRebusHandlingQueueGetter? _rebusHandlingQueueGetter;
 
-    public JobTrackingIncomingStepBuilder WithWindsorContainer(IWindsorContainer windsorContainer)
+    public JobTrackingIncomingStepBuilder WithIoCContainer(IContainer ioCContainer)
     {
-        _windsorContainer = windsorContainer;
+        _ioCContainer = ioCContainer;
         return this;
     }
 
@@ -34,7 +34,7 @@ public class JobTrackingIncomingStepBuilder
         return new JobTrackingIncomingStep(
             TestFixtureContext.NhibernateConfigurator,
             A.Fake<ILogger<JobTrackingIncomingStep>>(),
-            _windsorContainer ?? A.Fake<IWindsorContainer>(),
+            _ioCContainer ?? A.Fake<IContainer>(),
             new NewTransactionJobCreator(TestFixtureContext.NhibernateConfigurator),
             _rebusHandlingQueueGetter
         );

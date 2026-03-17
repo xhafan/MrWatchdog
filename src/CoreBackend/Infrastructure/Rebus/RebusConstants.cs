@@ -7,9 +7,6 @@ namespace CoreBackend.Infrastructure.Rebus;
 public static class RebusConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const int MaxDeliveryAttempts = 5; // todo: move this out of CoreBackend into RebusOptions
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string RebusMessageCouldNotBeDispatchedToAnyHandlersException = nameof(MessageCouldNotBeDispatchedToAnyHandlersException);
 
     public const string RebusSendQueueSuffix = "Send";

@@ -185,8 +185,10 @@ public class Program
         builder.Services.AddSingleton<ICoreBus, CoreBus>();
         
 
+        var rebusOptions = OptionsRetriever.Retrieve<RebusOptions>(builder.Configuration, builder.Services);
+
         InMemNetwork? rebusInMemoryNetwork = null;
-        if (builder.Configuration["Rebus:Transport"] == "InMemory")
+        if (rebusOptions.Transport == "InMemory")
         {
             rebusInMemoryNetwork = new InMemNetwork();
             builder.Services.AddSingleton(rebusInMemoryNetwork);
@@ -217,6 +219,7 @@ public class Program
                     hostedServiceInputQueueName,
                     environmentName,
                     connectionString,
+                    rebusOptions,
                     RebusAssembliesHelper.GetAssembliesWithTypesDerivedFromBaseMessage,
                     resolutionContext => new ReportFailedMessageErrorHandler(
                         resolutionContext.Get<IErrorHandler>(),
@@ -582,13 +585,13 @@ public class Program
                 var rebusConfigurer = configure
                     .Logging(x => x.MicrosoftExtensionsLogging(serviceProvider.GetRequiredService<ILoggerFactory>()));
 
-                switch (builder.Configuration["Rebus:Transport"])
+                switch (rebusOptions.Transport)
                 {
                     case "RabbitMQ":
                         var rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMQ");
                         rebusConfigurer.Transport(x => x.UseRabbitMq(rabbitMqConnectionString, webEnvironmentInputQueueName));
                         break;
-                
+
                     case "PostgreSql":
                         rebusConfigurer
                             .Transport(x => x.UsePostgreSql(
@@ -597,11 +600,11 @@ public class Program
                                 webEnvironmentInputQueueName
                             ));
                         break;
-                
+
                     case "InMemory":
                         rebusConfigurer.Transport(x => x.UseInMemoryTransport(rebusInMemoryNetwork, webEnvironmentInputQueueName, registerSubscriptionStorage: false));
                         break;
-                
+
                     default:
                         throw new InvalidOperationException("Rebus transport is not configured. Set Rebus:Transport to RabbitMq, PostgreSql, or InMemory in appsettings.json.");
                 }

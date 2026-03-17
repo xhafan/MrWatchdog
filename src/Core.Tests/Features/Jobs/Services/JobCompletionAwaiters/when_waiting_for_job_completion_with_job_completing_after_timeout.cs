@@ -1,4 +1,5 @@
 ﻿using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -32,7 +33,8 @@ public class when_waiting_for_job_completion_with_job_completing_after_timeout :
             );
         });
         
-        _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
+        var rebusOptions = OptionsTestRetriever.Retrieve<RebusOptions>();
+        _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator, rebusOptions);
     }
 
     [Test]

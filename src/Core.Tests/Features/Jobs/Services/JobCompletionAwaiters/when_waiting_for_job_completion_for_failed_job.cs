@@ -2,6 +2,7 @@
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using Microsoft.Extensions.Options;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
 
@@ -14,11 +15,13 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
     private Guid _jobGuid;
     private Task _createJobTask = null!;
     private JobCompletionAwaiter _jobCompletionAwaiter = null!;
+    private IOptions<RebusOptions> _rebusOptions = null!;
 
     [SetUp]
     public void Context()
     {
         _jobGuid = Guid.NewGuid();
+        _rebusOptions = OptionsTestRetriever.Retrieve<RebusOptions>();
 
         _createJobTask = Task.Run(async () =>
         {
@@ -31,7 +34,7 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
                         .WithGuid(_jobGuid)
                         .Build();
 
-                    for (var i = 1; i <= RebusConstants.MaxDeliveryAttempts; i++)
+                    for (var i = 1; i <= _rebusOptions.Value.MaxDeliveryAttempts; i++)
                     {
                         _job.HandlingStarted(RebusQueues.Main);
                         _job.Fail(new Exception($"Error {i}"));
@@ -41,8 +44,8 @@ public class when_waiting_for_job_completion_for_failed_job : BaseDatabaseTest
                 }
             );
         });
-        
-        _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
+
+        _jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator, _rebusOptions);
     }
 
     [Test]

@@ -4,10 +4,14 @@ using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
+using Microsoft.Extensions.Options;
 
 namespace CoreBackend.Features.Jobs.Services;
 
-public class JobCompletionAwaiter(INhibernateConfigurator nhibernateConfigurator) : IJobCompletionAwaiter
+public class JobCompletionAwaiter(
+    INhibernateConfigurator nhibernateConfigurator,
+    IOptions<RebusOptions> iRebusOptions
+) : IJobCompletionAwaiter
 {
     public const int DefaultTimeoutInMilliseconds = 60000;
     
@@ -29,7 +33,7 @@ public class JobCompletionAwaiter(INhibernateConfigurator nhibernateConfigurator
                     {
                         await Task.Delay(100);
                     }
-                    else if (job.NumberOfHandlingAttempts >= RebusConstants.MaxDeliveryAttempts 
+                    else if (job.NumberOfHandlingAttempts >= iRebusOptions.Value.MaxDeliveryAttempts
                              && !string.IsNullOrWhiteSpace(job.GetLastException()))
                     {
                         throw new Exception($"Job {jobGuid} failed: {job.GetLastException()}");

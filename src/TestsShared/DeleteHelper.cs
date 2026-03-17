@@ -1,5 +1,6 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Repositories;
 using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
@@ -29,7 +30,8 @@ public static class DeleteHelper
 
         if (waitForJobCompletion)
         {
-            var jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
+            var rebusOptions = OptionsTestRetriever.Retrieve<RebusOptions>();
+            var jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator, rebusOptions);
             await jobCompletionAwaiter.WaitForJobCompletion(job.Guid);
         
             await unitOfWork.Session!.EvictAsync(job);

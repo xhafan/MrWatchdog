@@ -50,7 +50,8 @@ public class when_waiting_for_job_completion : BaseDatabaseTest
             );
         });
         
-        var jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator);
+        var rebusOptions = OptionsTestRetriever.Retrieve<RebusOptions>();
+        var jobCompletionAwaiter = new JobCompletionAwaiter(TestFixtureContext.NhibernateConfigurator, rebusOptions);
         
         await jobCompletionAwaiter.WaitForJobCompletion(_jobGuid);
     }

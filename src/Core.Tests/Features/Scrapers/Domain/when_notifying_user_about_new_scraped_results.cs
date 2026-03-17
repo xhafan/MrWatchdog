@@ -30,7 +30,6 @@ public class when_notifying_user_about_new_scraped_results : BaseTest
     [Test]
     public void watchdog_scraping_result_history_is_populated()
     {
-        _watchdog.ScrapedResultsHistory.Count().ShouldBe(1);
         var scrapedResultHistory = _watchdog.ScrapedResultsHistory.SingleOrDefault(x => x.ScrapedResult.Value == "Doom 2");
         scrapedResultHistory.ShouldNotBeNull();
         scrapedResultHistory.NotifiedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));

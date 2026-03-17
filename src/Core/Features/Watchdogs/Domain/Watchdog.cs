@@ -40,6 +40,17 @@ public class Watchdog : VersionedEntity, IAggregateRoot
         var scrapedResults = _GetScraperScrapedResults();
         
         _currentScrapedResults.AddRange(scrapedResults.Select(x => new ScrapedResult(x)));
+
+        _addInitialScrapedResultsToHistoryToPreventNotifyingAboutThemInTheFuture();
+        return;
+
+        void _addInitialScrapedResultsToHistoryToPreventNotifyingAboutThemInTheFuture()
+        {
+            foreach (var scrapedResult in _currentScrapedResults)
+            {
+                _scrapedResultsHistory.Add(new WatchdogScrapedResultHistory(scrapedResult, Clock.UtcNow));
+            }
+        }
     }
 
     public virtual Scraper Scraper { get; } = null!;

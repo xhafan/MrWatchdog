@@ -55,7 +55,7 @@ public class when_persisting_watchdog : BaseDatabaseTest
         _persistedWatchdog.SearchTerm.ShouldBe("text");
         _persistedWatchdog.CurrentScrapedResults.Select(x => x.Value).ShouldBe(["<div>text</div>"]);
         _persistedWatchdog.ScrapedResultsToNotifyAbout.ShouldBeEmpty();
-        _persistedWatchdog.ScrapedResultsHistory.ShouldBeEmpty();
+        _persistedWatchdog.ScrapedResultsHistory.Select(x => x.ScrapedResult.Value).ShouldBe(["<div>text</div>"]);
         _persistedWatchdog.IsArchived.ShouldBe(false);
     }
 }

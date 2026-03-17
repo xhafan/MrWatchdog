@@ -29,7 +29,7 @@ public class when_refreshing_watchdog_scraped_results_hashes : BaseDatabaseTest
     {
         _watchdog.CurrentScrapedResults.Single().Hash.Length.ShouldBe(32);
         _watchdog.ScrapedResultsToNotifyAbout.Single().Hash.Length.ShouldBe(32);
-        _watchdog.ScrapedResultsHistory.Single().ScrapedResult.Hash.Length.ShouldBe(32);
+        _watchdog.ScrapedResultsHistory.First().ScrapedResult.Hash.Length.ShouldBe(32);
     }
 
     private async Task _BuildEntities()
@@ -93,7 +93,7 @@ public class when_refreshing_watchdog_scraped_results_hashes : BaseDatabaseTest
         {
             _watchdog.CurrentScrapedResults.Single().SetPrivateProperty(x => x.Hash, Array.Empty<byte>());
             _watchdog.ScrapedResultsToNotifyAbout.Single().SetPrivateProperty(x => x.Hash, Array.Empty<byte>());
-            _watchdog.ScrapedResultsHistory.Single().ScrapedResult.SetPrivateProperty(x => x.Hash, Array.Empty<byte>());
+            _watchdog.ScrapedResultsHistory.First().ScrapedResult.SetPrivateProperty(x => x.Hash, Array.Empty<byte>());
         }
     }
 }

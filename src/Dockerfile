@@ -6,7 +6,9 @@ WORKDIR /app
 RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
+COPY CoreBackend/*.csproj ./CoreBackend/
 COPY Core/*.csproj ./Core/
+COPY CoreWeb/*.csproj ./CoreWeb/
 COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
@@ -18,7 +20,9 @@ RUN npm ci
 
 # Copy the remaining source code
 WORKDIR /app
+COPY CoreBackend/. ./CoreBackend/
 COPY Core/. ./Core/
+COPY CoreWeb/. ./CoreWeb/
 COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
@@ -28,7 +32,7 @@ WORKDIR /app/Web
 RUN npx tsc --noEmit && node esbuild.config.js
 WORKDIR /app
 
-# Make sure the above is the same as for ./docker-ci/Dockerfile.tests to be able to benefit from cached layers
+# ******************************* Make sure the above is the same as for Dockerfile.tests to be able to benefit from cached layers *******************************
 
 # Back to app root to publish .NET
 RUN dotnet publish Web/Web.csproj -c Release -o Web/publish

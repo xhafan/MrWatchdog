@@ -408,10 +408,12 @@ namespace MrWatchdog.Core.Resources {
         ///   If you just requested to log in to &lt;a href=&quot;{0}&quot;&gt;{1}&lt;/a&gt;, click the link below:
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///   &lt;a href=&quot;{2}&quot;&gt;{3}&lt;/a&gt;
+        ///   &lt;a href=&quot;{2}&quot; style=&quot;display:inline-block;padding:0.375rem 0.75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#fff;text-align:center;text-decoration:none;background-color:#0d6efd;border:1px solid #0d6efd;border-radius:0.375rem;&quot;&gt;
+        ///        Log in now
+        ///    &lt;/a&gt;
         ///&lt;/p&gt;
         ///&lt;p&gt;
-        ///   This link expires in {4} minutes.
+        ///   This link expires in {3} minutes.
         ///&lt;/p&gt;
         ///&lt;/body&gt;
         ///&lt;/html&gt;.

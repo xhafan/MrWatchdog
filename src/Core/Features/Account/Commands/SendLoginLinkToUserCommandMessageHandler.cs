@@ -48,7 +48,6 @@ public class SendLoginLinkToUserCommandMessageHandler(
                 runtimeOptions.Url,
                 mrWatchdogResource,
                 accountConfirmLoginUrl,
-                accountConfirmLoginUrl,
                 jwtOptions.ExpireMinutes
             )
         ));

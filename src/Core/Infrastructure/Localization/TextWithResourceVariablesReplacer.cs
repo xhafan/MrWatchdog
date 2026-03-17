@@ -17,11 +17,20 @@ public static class TextWithResourceVariablesReplacer
             return text;
         }
 
-        return _resourceVariablePattern.Replace(text, match =>
+        while (true)
         {
-            var key = match.Groups["key"].Value;
-            var localizedValue = Resource.ResourceManager.GetString(key, culture);
-            return localizedValue ?? match.Value;
-        });
+            var textWithReplacedResourceVariables = _resourceVariablePattern.Replace(text, match =>
+            {
+                var key = match.Groups["key"].Value;
+                var localizedValue = Resource.ResourceManager.GetString(key, culture);
+                return localizedValue ?? match.Value;
+            });
+
+            if (textWithReplacedResourceVariables == text) break;
+
+            text = textWithReplacedResourceVariables;
+        }
+
+        return text;
     }    
 }

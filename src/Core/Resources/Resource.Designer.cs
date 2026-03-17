@@ -726,6 +726,15 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No HTML node(s) selected. Please review the CSS selector, or check &quot;${Resource_ScrapeHtmlAsRenderedByBrowser}&quot;..
+        /// </summary>
+        public static string NoHtmlNodesSelected {
+            get {
+                return ResourceManager.GetString("NoHtmlNodesSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No scraped results are currently available..
         /// </summary>
         public static string NoScrapedResultsAvailable {
@@ -798,7 +807,13 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optional localization JSON format: { &quot;en&quot;: &quot;English text&quot;, &quot;cs&quot;: &quot;Český text&quot; }.
+        ///   Looks up a localized string similar to Optional localization JSON format:
+        ///&lt;pre class=&quot;mb-0&quot;&gt;
+        ///{
+        ///  &quot;en&quot;: &quot;English text&quot;,
+        ///  &quot;cs&quot;: &quot;Český text&quot;
+        ///}
+        ///&lt;/pre&gt;.
         /// </summary>
         public static string OptionalLocalizationJsonFormat {
             get {
@@ -987,11 +1002,20 @@ namespace MrWatchdog.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scrape HTML as rendered by a browser.
+        ///   Looks up a localized string similar to Scrape HTML by a browser.
         /// </summary>
         public static string ScrapeHtmlAsRenderedByBrowser {
             get {
                 return ResourceManager.GetString("ScrapeHtmlAsRenderedByBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check it to enable scraping by a browser instead of scraping by .NET HttpClient which might be blocked by a scraper protection..
+        /// </summary>
+        public static string ScrapeHtmlAsRenderedByBrowserHint {
+            get {
+                return ResourceManager.GetString("ScrapeHtmlAsRenderedByBrowserHint", resourceCulture);
             }
         }
         

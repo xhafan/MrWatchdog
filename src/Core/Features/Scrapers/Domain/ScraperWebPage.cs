@@ -12,6 +12,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFail
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.Localization;
+using MrWatchdog.Core.Resources;
 using Serilog;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
@@ -300,7 +301,7 @@ public class ScraperWebPage : VersionedEntity
         
         if (selectedHtmlNodes.IsEmpty())
         {
-            SetScrapingErrorMessage("No HTML node(s) selected. Please review the Selector.", canRaiseScrapingFailedDomainEvent);
+            SetScrapingErrorMessage($"${{{nameof(Resource)}_{nameof(Resource.NoHtmlNodesSelected)}}}", canRaiseScrapingFailedDomainEvent);
             return;
         }
 

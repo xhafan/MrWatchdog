@@ -1,5 +1,7 @@
 ﻿@page
+@using System.Globalization
 @using CoreWeb.Features.Shared
+@using MrWatchdog.Core.Infrastructure.Localization
 @using MrWatchdog.Core.Resources
 @using MrWatchdog.Web.Features.Shared
 @model WebPageScrapedResultsModel
@@ -48,7 +50,8 @@
                 <span class="text-danger">
                     @if (Model.ScraperWebPageScrapedResults.ScrapingErrorMessage != null)
                     {
-                        @Resource.Error@:: @Model.ScraperWebPageScrapedResults.ScrapingErrorMessage
+                        @Resource.Error@:: 
+                        @TextWithResourceVariablesReplacer.ReplaceResourceVariables(Model.ScraperWebPageScrapedResults.ScrapingErrorMessage, CultureInfo.CurrentUICulture)
                     }
                     else
                     {

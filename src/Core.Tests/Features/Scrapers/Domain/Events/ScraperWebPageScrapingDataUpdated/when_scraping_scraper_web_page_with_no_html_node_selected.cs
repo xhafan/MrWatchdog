@@ -55,7 +55,7 @@ public class when_scraping_scraper_web_page_with_no_html_node_selected : BaseDat
         var webPage = _scraper.WebPages.Single();
         webPage.ScrapedResults.ShouldBeEmpty();
         webPage.ScrapedOn.ShouldBe(null);
-        webPage.ScrapingErrorMessage.ShouldBe("No HTML node(s) selected. Please review the Selector.");
+        webPage.ScrapingErrorMessage.ShouldBe("${Resource_NoHtmlNodesSelected}");
     }
     
     private void _BuildEntities()

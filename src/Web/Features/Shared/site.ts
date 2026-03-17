@@ -11,6 +11,7 @@ import BodyController from "./BodyController";
 import TurboFrameController from "../../../CoreWeb/Features/Shared/TagHelpers/TurboFrame/TurboFrameController";
 import OnboardingController from "./TagHelpers/Onboarding/OnboardingController";
 import ViewOrEditFormController from "../../../CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import HintController from "../../../CoreWeb/Features/Shared/TagHelpers/Hint/HintController";
 
 import ScrapersCreateController from "../Scrapers/Create/CreateController";
 import ScrapersDetailController from "../Scrapers/Detail/DetailController";
@@ -33,6 +34,7 @@ application.register(StimulusControllers.body, BodyController);
 application.register(CoreWebStimulusControllers.turboFrame, TurboFrameController);
 application.register(StimulusControllers.onboarding, OnboardingController);
 application.register(CoreWebStimulusControllers.viewOrEditForm, ViewOrEditFormController);
+application.register(CoreWebStimulusControllers.hint, HintController);
 
 application.register(StimulusControllers.scrapersCreate, ScrapersCreateController);
 application.register(StimulusControllers.scrapersDetail, ScrapersDetailController);

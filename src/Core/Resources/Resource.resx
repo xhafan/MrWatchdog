@@ -529,7 +529,7 @@ This watchdog emails you notification about new results of the related scraper.<
 	  <value>To add a new watchdog, go to the list of {0}, select one, and choose &lt;i&gt;{1}&lt;/i&gt;.</value>
   </data>
   <data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
-	  <value>Scrape HTML as rendered by a browser</value>
+	  <value>Scrape HTML by a browser</value>
   </data>
   <data name="ScrapingByBrowserWaitFor" xml:space="preserve">
 	  <value>Wait for</value>
@@ -550,7 +550,13 @@ This watchdog emails you notification about new results of the related scraper.<
 	  <value>You can create a new scraper {0} and later make it public.</value>
   </data>
   <data name="OptionalLocalizationJsonFormat" xml:space="preserve">
-	  <value>Optional localization JSON format: { "en": "English text", "cs": "Český text" }</value>
+	  <value>Optional localization JSON format:
+&lt;pre class="mb-0"&gt;
+{
+  "en": "English text",
+  "cs": "Český text"
+}
+&lt;/pre&gt;</value>
   </data>
   <data name="ScrapedResultsFilteringNotSupported" xml:space="preserve">
 	  <value>Scraped results filtering not supported</value>
@@ -653,5 +659,11 @@ This watchdog emails you notification about new results of the related scraper.<
 	  <value>&lt;p&gt;
     If your original session is in this browser, you can continue &lt;a href="{0}"&gt;here&lt;/a&gt;.
 &lt;/p&gt;</value>
+  </data>
+  <data name="ScrapeHtmlAsRenderedByBrowserHint" xml:space="preserve">
+	  <value>Check it to enable scraping by a browser instead of scraping by .NET HttpClient which might be blocked by a scraper protection.</value>
+  </data>
+  <data name="NoHtmlNodesSelected" xml:space="preserve">
+	  <value>No HTML node(s) selected. Please review the CSS selector, or check "${Resource_ScrapeHtmlAsRenderedByBrowser}".</value>
   </data>
 </root>

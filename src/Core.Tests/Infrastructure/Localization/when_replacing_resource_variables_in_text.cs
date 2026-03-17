@@ -24,6 +24,11 @@ public class when_replacing_resource_variables_in_text
         "Choose '${Resource_CreateWatchdog}' to receive email notification.",
         "az",
         "Choose 'Create watchdog' to receive email notification.", TestName = "6 text with resource variable without the resource translation")]
+    [TestCase(
+        "${Resource_NoHtmlNodesSelected}",
+        "en",
+        "No HTML node(s) selected. Please review the CSS selector, or check \"Scrape HTML by a browser\".", 
+        TestName = "7 text with a resource which references another resource")]
     public void localized_text_is_resolved_correctly(
         string? textWithResourceVariables, 
         string cultureName, 

@@ -411,7 +411,7 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 		<value>Chcete-li přidat nového hlídacího psa, přejděte do seznamu {0}, vyberte nějaký a zvolte &lt;i&gt;{1}&lt;/i&gt;.</value>
 	</data>
 	<data name="ScrapeHtmlAsRenderedByBrowser" xml:space="preserve">
-		<value>Scrapovat HTML tak jak je renderováno prohlížečem</value>
+		<value>Scrapovat HTML pomocí prohlížeče</value>
 	</data>
 	<data name="ScrapingByBrowserWaitFor" xml:space="preserve">
 		<value>Počkat na</value>
@@ -432,7 +432,13 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 		<value>Nový scraper můžete vytvořit {0} a později jej zveřejnit.</value>
 	</data>
 	<data name="OptionalLocalizationJsonFormat" xml:space="preserve">
-		<value>Volitelný lokalizační JSON formát: { "en": "English text", "cs": "Český text" }</value>
+		<value>Volitelný lokalizační JSON formát:
+&lt;pre class="mb-0"&gt;
+{
+  "en": "English text",
+  "cs": "Český text"
+}
+&lt;/pre&gt;</value>
 	</data>
 	<data name="ScrapedResultsFilteringNotSupported" xml:space="preserve">
 		<value>Filtrování scrapovaných výsledků nepodporováno</value>
@@ -535,5 +541,11 @@ Tento hlídací pes Vám zasílá emailem upozornění na nové výsledky danéh
 		<value>&lt;p&gt;
     Pokud je vaše původní relace v tomto prohlížeči, můžete pokračovat &lt;a href="{0}"&gt;zde&lt;/a&gt;.
 &lt;/p&gt;</value>
+	</data>
+	<data name="ScrapeHtmlAsRenderedByBrowserHint" xml:space="preserve">
+		<value>Zaškrtněte chcete-li povolit scrapování pomocí prohlížeče namísto scrapování pomocí .NET HttpClient, které může být blokováno ochranou proti scraperům.</value>
+	</data>
+	<data name="NoHtmlNodesSelected" xml:space="preserve">
+		<value>Nebyly vybrány žádné HTML elementy. Zkontrolujte prosím CSS selektor, nebo zaškrtněte "${Resource_ScrapeHtmlAsRenderedByBrowser}".</value>
 	</data>
 </root>

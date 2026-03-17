@@ -14,6 +14,10 @@ COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
 
 # Install Node packages
+WORKDIR /app/CoreWeb
+COPY CoreWeb/package*.json ./
+RUN npm ci
+
 WORKDIR /app/Web
 COPY Web/package*.json ./
 RUN npm ci

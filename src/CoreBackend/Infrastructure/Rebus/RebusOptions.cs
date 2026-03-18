@@ -1,5 +1,8 @@
+using Reinforced.Typings.Attributes;
+
 namespace CoreBackend.Infrastructure.Rebus;
 
+[TsInterface(IncludeNamespace = false, AutoI = false)]
 public class RebusOptions
 {
     public string Transport { get; set; } = null!;

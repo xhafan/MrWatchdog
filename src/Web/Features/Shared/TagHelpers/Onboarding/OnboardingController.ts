@@ -5,7 +5,7 @@ import {TourGuideClient} from "@sjmc11/tourguidejs";
 import { UserUrlConstants } from "../../Generated/UserUrlConstants";
 import { FrameElement } from "@hotwired/turbo";
 import Enumerable from "linq";
-import { sharedTranslations } from "../../../../../CoreWeb/Features/Shared/sharedTranslations";
+import { frontendSettings } from "../../../../../CoreWeb/Features/Shared/frontendSettingsHelper";
 
 const onboardingLocalStorageKeyPrefix = "onboardingComplete_";
 
@@ -49,9 +49,9 @@ export default class OnboardingController extends BaseStimulusModelController<On
         });
 
         this.tourGuide.setOptions({
-          prevLabel: sharedTranslations.back,
-          nextLabel: sharedTranslations.next,
-          finishLabel: sharedTranslations.finish
+          prevLabel: frontendSettings.sharedTranslations.back,
+          nextLabel: frontendSettings.sharedTranslations.next,
+          finishLabel: frontendSettings.sharedTranslations.finish
         });
 
         this.tourGuide.onAfterExit(async () => {

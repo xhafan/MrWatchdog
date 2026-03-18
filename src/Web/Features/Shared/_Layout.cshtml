@@ -9,10 +9,13 @@
 @using MrWatchdog.Core.Infrastructure.Configurations
 @using MrWatchdog.Core.Infrastructure.Repositories
 @using MrWatchdog.Core.Resources
+@using CoreBackend.Infrastructure.Rebus
+@using CoreWeb.Infrastructure.FrontendSettings
 @using MrWatchdog.Web.Infrastructure.Authorizations
 @inject IUserRepository UserRepository
 @inject IOptions<LoggingOptions> LoggingOptions
 @inject IOptions<RuntimeOptions> RuntimeOptions
+@inject IOptions<RebusOptions> RebusOptions
 @inject ISharedTranslationsGetter SharedTranslationsGetter
 <!DOCTYPE html>
 <html lang="en">
@@ -37,8 +40,13 @@
 
     <script type="module" src="~/assets/bundle.js" data-turbo-track="reload"></script>
     
-    <script>
-        window.sharedTranslations = @Html.Raw(JsonHelper.Serialize(SharedTranslationsGetter.GetSharedTranslations()));
+    <script type="application/json" id="@FrontendSettingsConstants.FrontendSettingsScriptId">
+        @Html.Raw(JsonHelper.Serialize(
+            new FrontendSettings
+            {
+                SharedTranslations = SharedTranslationsGetter.GetSharedTranslations(),
+                RebusOptions = RebusOptions.Value
+            }))
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

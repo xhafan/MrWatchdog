@@ -49,9 +49,9 @@ export default class OnboardingController extends BaseStimulusModelController<On
         });
 
         this.tourGuide.setOptions({
-          prevLabel: frontendSettings.sharedTranslations.back,
-          nextLabel: frontendSettings.sharedTranslations.next,
-          finishLabel: frontendSettings.sharedTranslations.finish
+          prevLabel: frontendSettings.sharedTranslations.translationByResource["Back"],
+          nextLabel: frontendSettings.sharedTranslations.translationByResource["Next"],
+          finishLabel: frontendSettings.sharedTranslations.translationByResource["Finish"]
         });
 
         this.tourGuide.onAfterExit(async () => {

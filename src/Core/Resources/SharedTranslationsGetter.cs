@@ -1,4 +1,4 @@
-﻿using CoreBackend.Resources;
+using CoreBackend.Resources;
 
 namespace MrWatchdog.Core.Resources;
 
@@ -8,12 +8,16 @@ public class SharedTranslationsGetter : ISharedTranslationsGetter
     {
         Ok = Resource.Ok,
         Cancel = Resource.Cancel,
-        Back = Resource.Back,
-        Next = Resource.Next,
-        Finish = Resource.Finish,
         Error = Resource.Error,
         Edit = Resource.Edit,
-        Save = Resource.Save
+        Save = Resource.Save,
+
+        TranslationByResource = new Dictionary<string, string>
+        {
+            [nameof(Resource.Back)] = Resource.Back,
+            [nameof(Resource.Next)] = Resource.Next,
+            [nameof(Resource.Finish)] = Resource.Finish
+        }
     };
 
     public SharedTranslations GetSharedTranslations()

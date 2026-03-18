@@ -6,6 +6,7 @@ import { UserUrlConstants } from "../../Generated/UserUrlConstants";
 import { FrameElement } from "@hotwired/turbo";
 import Enumerable from "linq";
 import { frontendSettings } from "../../../../../CoreWeb/Features/Shared/frontendSettingsHelper";
+import { Resource } from "../../Generated/Resource";
 
 const onboardingLocalStorageKeyPrefix = "onboardingComplete_";
 
@@ -49,9 +50,9 @@ export default class OnboardingController extends BaseStimulusModelController<On
         });
 
         this.tourGuide.setOptions({
-          prevLabel: frontendSettings.sharedTranslations.translationByResource["Back"],
-          nextLabel: frontendSettings.sharedTranslations.translationByResource["Next"],
-          finishLabel: frontendSettings.sharedTranslations.translationByResource["Finish"]
+          prevLabel: frontendSettings.sharedTranslations.translationByResource[Resource.back],
+          nextLabel: frontendSettings.sharedTranslations.translationByResource[Resource.next],
+          finishLabel: frontendSettings.sharedTranslations.translationByResource[Resource.finish]
         });
 
         this.tourGuide.onAfterExit(async () => {

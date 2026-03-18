@@ -1,9 +1,10 @@
 ﻿using MrWatchdog.Core.Features;
+using MrWatchdog.Core.Resources;
 using Reinforced.Typings.Attributes;
 using Reinforced.Typings.Fluent;
 using ConfigurationBuilder = Reinforced.Typings.Fluent.ConfigurationBuilder;
 
-namespace MrWatchdog.Web.Infrastructure;
+namespace MrWatchdog.Web.Infrastructure.ReinforcedTypings;
 
 public static class ReinforcedTypingsConfiguration
 {
@@ -35,6 +36,11 @@ public static class ReinforcedTypingsConfiguration
 
         builder.ExportAsEnums(enumTypes, config => config
             .DontIncludeToNamespace()
-        );        
+        );
+
+        builder.ExportAsClasses([typeof(Resource)], config => config
+            .WithCodeGenerator<PropertiesAsConstantsCodeGenerator>()
+            .DontIncludeToNamespace()
+        );
     }
 }

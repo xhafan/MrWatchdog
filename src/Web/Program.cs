@@ -196,6 +196,8 @@ public class Program
         
         _addRebusForSendingOnly();
 
+        RebusQueues.RegisterQueueSource(typeof(CustomRebusQueues));
+
         foreach (var queue in RebusQueues.AllQueues.Value)
         {
             var inputQueueName = $"{queue}";

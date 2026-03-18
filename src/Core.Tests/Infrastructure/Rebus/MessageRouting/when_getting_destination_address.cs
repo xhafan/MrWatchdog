@@ -1,6 +1,7 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.MessageRouting;
 using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Messages;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.MessageRouting;
@@ -26,7 +27,7 @@ public class when_getting_destination_address
             )
         );
 
-        destinationAddress.ShouldBe($"Test{RebusQueues.Scraping}");
+        destinationAddress.ShouldBe($"Test{CustomRebusQueues.Scraping}");
     }
 
     [Test]

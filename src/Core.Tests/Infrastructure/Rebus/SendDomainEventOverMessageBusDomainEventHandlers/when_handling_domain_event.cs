@@ -2,6 +2,7 @@
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 using CoreBackend.Messages;
+using MrWatchdog.Core.Infrastructure.Rebus;
 using FakeItEasy;
 using MrWatchdog.TestsShared;
 using MrWatchdog.TestsShared.Builders;
@@ -29,7 +30,7 @@ public class when_handling_domain_event : BaseDatabaseTest
         JobContext.CommandGuid.Value = _commandGuid;
         JobContext.ActingUserId.Value = 23;
         JobContext.RequestId.Value = "0HNFBP8T98MQS:00000045";
-        JobContext.RebusHandlingQueue.Value = $"Test{RebusQueues.Scraping}";
+        JobContext.RebusHandlingQueue.Value = $"Test{CustomRebusQueues.Scraping}";
 
         _testDomainEvent = new TestDomainEvent {RelatedCommandGuid = _commandGuid};
 
@@ -71,7 +72,7 @@ public class when_handling_domain_event : BaseDatabaseTest
         domainEventMessageHeaders[Headers.MessageId].ShouldMatch("[0-9A-Fa-f\\-]{36}");
 
         domainEventMessageHeaders.ShouldContainKey(CustomHeaders.QueueForRedirection);
-        domainEventMessageHeaders[CustomHeaders.QueueForRedirection].ShouldBe($"Test{RebusQueues.Scraping}{RebusConstants.RebusSendQueueSuffix}");
+        domainEventMessageHeaders[CustomHeaders.QueueForRedirection].ShouldBe($"Test{CustomRebusQueues.Scraping}{RebusConstants.RebusSendQueueSuffix}");
 
         return true;
     }    

@@ -2,7 +2,6 @@ using CoreBackend.Register.ServiceProvider;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Queries;
-using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Commands;

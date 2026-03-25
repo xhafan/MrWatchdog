@@ -1,6 +1,7 @@
 using AspNetCore.ReCaptcha;
 using Castle.Windsor;
-using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Register.Castle;
+using CoreBackend.Register.ServiceProvider;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure;
 using CoreBackend.Infrastructure.ActingUserAccessors;
@@ -9,7 +10,6 @@ using CoreBackend.Infrastructure.Jsons;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.MessageRouting;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
-using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.Infrastructure.RequestIdAccessors;
 using CoreBackend.Resources;
 using CoreDdd.AspNetCore.Middlewares;
@@ -18,9 +18,7 @@ using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
 using CoreDdd.Queries;
 using CoreDdd.Register.DependencyInjection;
-using CoreIoC.Castle;
 using CoreUtils;
-using CoreWeb.Features.Jobs;
 using CoreWeb.Features.Logs;
 using CoreWeb.HostedServices;
 using CoreWeb.Infrastructure;
@@ -77,6 +75,9 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Messages;
 
 namespace MrWatchdog.Web;
 
@@ -112,6 +113,7 @@ public class Program
         // Add services to the container.
 
         // register repositories from CoreBackend
+        // todo: remove duplication registration of repositories in CoreBackendServiceCollectionExtensions and here
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<JobRepository>()
             .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
@@ -212,12 +214,31 @@ public class Program
                 string hostedServiceInputQueueName
             )
             {
-                var hostedServiceWindsorContainer = new WindsorContainer(); // Rebus hosted service instance needs its own Windsor container instance
-                RebusHostedServiceWindsorContainerRegistrator.RegisterServices(hostedServiceWindsorContainer, serviceProvider);
+                IRebusHostedServiceContainerSetup containerSetup;
+
+                switch (rebusOptions.IoCContainer)
+                {
+                    case "CastleWindsor":
+                    {
+                        var hostedServiceWindsorContainer = new WindsorContainer();
+                        RebusHostedServiceWindsorContainerRegistrator.RegisterServices(hostedServiceWindsorContainer, serviceProvider);
+                        containerSetup = new CastleWindsorContainerSetup(hostedServiceWindsorContainer);
+                        break;
+                    }
+                    case "ServiceProvider":
+                    {
+                        var hostedServiceServiceProvider = RebusHostedServiceServiceProviderRegistrator.RegisterServices(serviceProvider);
+                        containerSetup = new ServiceProviderContainerSetup(hostedServiceServiceProvider);
+                        break;
+                    }
+                    default:
+                        throw new NotSupportedException($"IoC container '{rebusOptions.IoCContainer}' is not supported. Set Rebus:IoCContainer to CastleWindsor or ServiceProvider in appsettings.json.");
+                }
+
+                var ioCContainer = containerSetup.GetContainer();
 
                 return new RebusHostedService(
-                    () => Configure.With(new CastleWindsorContainerAdapter(hostedServiceWindsorContainer)),
-                    new CastleContainer(hostedServiceWindsorContainer),
+                    containerSetup,
                     hostedServiceInputQueueName,
                     environmentName,
                     connectionString,
@@ -226,15 +247,10 @@ public class Program
                     resolutionContext => new ReportFailedMessageErrorHandler(
                         resolutionContext.Get<IErrorHandler>(),
                         resolutionContext.Get<ISerializer>(),
-                        hostedServiceWindsorContainer.Resolve<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
-                        hostedServiceWindsorContainer.Resolve<IOptions<RuntimeOptions>>(),
-                        hostedServiceWindsorContainer.Resolve<IOptions<EmailAddressesOptions>>()
-                    ),
-                    onServiceStopped: () =>
-                    {
-                        hostedServiceWindsorContainer.Dispose();
-                        return Task.CompletedTask;
-                    }
+                        ioCContainer.Resolve<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
+                        ioCContainer.Resolve<IOptions<RuntimeOptions>>(),
+                        ioCContainer.Resolve<IOptions<EmailAddressesOptions>>()
+                    )
                 );
             }
         }

@@ -5,7 +5,6 @@ using CoreBackend.Messages;
 using CoreDdd.Domain.Events;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreIoC;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
@@ -26,8 +25,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     private Scraper _scraper = null!;
     private long _scraperWebPageIdOne;
     private long _scraperWebPageIdTwo;
-    private IContainer _ioCContainer = null!;
-    private IContainer? _jobContextIoCContainerInTheNextIncomingStep;
     private HashSet<IDomainEvent>? _jobContextRaisedDomainEventsInTheNextIncomingStep;
     private Guid _jobContextCommandGuidInTheNextIncomingStep;
     private long _jobContentActingUserId;
@@ -37,7 +34,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
     [SetUp]
     public async Task Context()
     {
-        _ioCContainer = A.Fake<IContainer>();
         JobContext.RaisedDomainEvents.Value = [new TestDomainEvent()];
 
         _scraper = new ScraperBuilder(UnitOfWork)
@@ -57,7 +53,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         A.CallTo(() => rebusHandlingQueueGetter.GetHandlingQueue()).Returns($"Test{RebusQueues.AdminBulk}");
 
         var jobTrackingIncomingStep = new JobTrackingIncomingStepBuilder()
-            .WithIoCContainer(_ioCContainer)
             .WithRebusHandlingQueueGetter(rebusHandlingQueueGetter)
             .Build();
 
@@ -106,7 +101,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
             
             _scraperWebPageIdTwo = _scraper.WebPages.Single(x => x.Id != _scraperWebPageIdOne).Id;
 
-            _jobContextIoCContainerInTheNextIncomingStep = JobContext.IoCContainer.Value;
             _jobContextRaisedDomainEventsInTheNextIncomingStep = JobContext.RaisedDomainEvents.Value;
             _jobContextCommandGuidInTheNextIncomingStep = JobContext.CommandGuid.Value;
         }
@@ -143,12 +137,6 @@ public class when_executing_job_tracking_incoming_step_and_job_completion_incomi
         jobHandlingAttempt.StartedOn.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         jobHandlingAttempt.EndedOn.ShouldNotBeNull();
         jobHandlingAttempt.EndedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
-    }
-
-    [Test]
-    public void job_context_ioc_container_is_set_in_the_next_incoming_step()
-    {
-        _jobContextIoCContainerInTheNextIncomingStep.ShouldBe(_ioCContainer);
     }
 
     [Test]

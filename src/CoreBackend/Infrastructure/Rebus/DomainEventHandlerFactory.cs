@@ -20,8 +20,8 @@ public class DomainEventHandlerFactory : IDomainEventHandlerFactory
     
     private IContainer _GetJobContextIoCContainer()
     {
-        var ioCContainer = JobContext.IoCContainer.Value;
-        Guard.Hope(ioCContainer != null, $"{nameof(JobContext)}.{nameof(ioCContainer)} is null");
+        var ioCContainer = JobContext.IoCContainer.Value.Value;
+        Guard.Hope(ioCContainer != null, $"{nameof(JobContext)}.{nameof(JobContext.IoCContainer)} is null");
         return ioCContainer;
     }
     

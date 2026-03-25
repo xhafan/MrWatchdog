@@ -62,6 +62,9 @@ public static class ScraperUrlConstants
     public const string ScraperDetailActionsMakePublicUrlTemplate = $"/Scrapers/Detail/Actions/{ScraperIdVariable}?handler=MakePublic";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
+    public const string ScraperDetailActionsRequestToMakePublicUrlTemplate = $"/Scrapers/Detail/Actions/{ScraperIdVariable}?handler=RequestToMakePublic";
+
+    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string ScrapersManageUrl = "/Scrapers/Manage";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
@@ -77,7 +80,7 @@ public static class ScraperUrlConstants
             return urlTemplate.WithVariable(ScraperIdVariable, scraperId.ToString());
         }
 
-        public string WithScraperWebPageIdVariable(long scraperWebPageId)
+        public string WithScraperWebPageId(long scraperWebPageId)
         {
             return urlTemplate.WithVariable(ScraperWebPageIdVariable, scraperWebPageId.ToString());
         }

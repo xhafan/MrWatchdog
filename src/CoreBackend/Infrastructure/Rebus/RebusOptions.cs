@@ -7,6 +7,7 @@ public class RebusOptions
 {
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     public string Transport { get; set; } = null!;
+    public string IoCContainer { get; set; } = null!;
     public int MaxDeliveryAttempts { get; set; }
     public int DefaultNumberOfWorkers { get; set; }
 

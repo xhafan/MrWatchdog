@@ -18,7 +18,7 @@ public class when_releasing_domain_event_handler
         _testDomainEventHandler = new TestDomainEventHandler();
 
         _ioCContainer = A.Fake<IContainer>();
-        JobContext.IoCContainer.Value = _ioCContainer;
+        JobContext.IoCContainer.Value = new FlowContext<IContainer?> {Value = _ioCContainer};
 
         var factory = new DomainEventHandlerFactory();
         

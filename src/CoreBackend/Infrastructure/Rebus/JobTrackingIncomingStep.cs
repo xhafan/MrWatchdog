@@ -13,14 +13,13 @@ namespace CoreBackend.Infrastructure.Rebus;
 public class JobTrackingIncomingStep(
     INhibernateConfigurator nhibernateConfigurator,
     ILogger<JobTrackingIncomingStep> logger,
-    IContainer ioCContainer,
     IJobCreator jobCreator,
     IRebusHandlingQueueGetter rebusHandlingQueueGetter
 ) : IIncomingStep
 {
     public async Task Process(IncomingStepContext context, Func<Task> next)
     {
-        JobContext.IoCContainer.Value = ioCContainer;
+        JobContext.IoCContainer.Value = new FlowContext<IContainer?>();
         JobContext.RaisedDomainEvents.Value = [];
 
         var rebusMessage = context.Load<Message>();

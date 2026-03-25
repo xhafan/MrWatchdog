@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="CoreDdd" Version="4.0.0" />
     <PackageReference Include="CoreDdd.Nhibernate" Version="4.0.0" />
-    <PackageReference Include="CoreIoC" Version="3.4.0" />
+    <PackageReference Include="CoreIoC" Version="4.0.1" />
     <PackageReference Include="DatabaseBuilder" Version="1.2.5" />
     <PackageReference Include="DnsClient" Version="1.8.0" />
     <PackageReference Include="MailKit" Version="4.15.1" />

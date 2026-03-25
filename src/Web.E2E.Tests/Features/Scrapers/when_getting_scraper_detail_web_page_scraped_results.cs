@@ -25,7 +25,7 @@ public class when_getting_scraper_detail_web_page_scraped_results : BaseDatabase
 
         var url = ScraperUrlConstants.ScraperDetailWebPageScrapedResultsUrlTemplate
             .WithScraperId(_scraper.Id)
-            .WithScraperWebPageIdVariable(scraperWebPageId);
+            .WithScraperWebPageId(scraperWebPageId);
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.GetAsync(url);
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location.ShouldNotBeNull();

@@ -1,4 +1,4 @@
-﻿namespace CoreWeb.Features.Jobs;
+﻿namespace CoreBackend.Messages;
 
 public interface IMessageTypeGetter
 {

@@ -21,6 +21,7 @@ export abstract class ScraperUrlConstants
 	public static scraperDetailBadgesUrlTemplate: string = `/Scrapers/Detail/Badges/$scraperId`;
 	public static scraperDetailActionsUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId`;
 	public static scraperDetailActionsMakePublicUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId?handler=MakePublic`;
+	public static scraperDetailActionsRequestToMakePublicUrlTemplate: string = `/Scrapers/Detail/Actions/$scraperId?handler=RequestToMakePublic`;
 	public static scrapersManageUrl: string = `/Scrapers/Manage`;
 	public static scrapersManageUserScrapersUrl: string = `/Scrapers/Manage/UserScrapers`;
 	public static scrapersManageOtherUsersScrapersUrl: string = `/Scrapers/Manage/OtherUsersScrapers`;

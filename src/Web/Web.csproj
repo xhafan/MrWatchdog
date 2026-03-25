@@ -15,10 +15,10 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
     <PackageReference Include="CoreDdd.AspNetCore" Version="3.3.1" />
     <PackageReference Include="CoreDdd.Nhibernate.Register.Castle" Version="3.3.0" />
-    <PackageReference Include="CoreDdd.Nhibernate.Register.DependencyInjection" Version="3.3.0" />
+    <PackageReference Include="CoreDdd.Nhibernate.Register.ServiceProvider" Version="4.0.1" />
     <PackageReference Include="CoreDdd.Register.Castle" Version="3.3.0" />
-    <PackageReference Include="CoreDdd.Register.DependencyInjection" Version="4.0.0" />
-    <PackageReference Include="CoreIoC.Castle" Version="3.4.0" />
+    <PackageReference Include="CoreDdd.Register.ServiceProvider" Version="4.0.1" />
+    <PackageReference Include="CoreIoC.Castle" Version="4.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.2" />
@@ -39,6 +39,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CoreWeb\CoreWeb.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj" />
+    <ProjectReference Include="..\CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj" />
   </ItemGroup>
 
   <ItemGroup>

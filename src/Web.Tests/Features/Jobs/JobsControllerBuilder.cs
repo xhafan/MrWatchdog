@@ -1,5 +1,6 @@
 ﻿using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.Messages;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using CoreWeb.Features.Jobs;

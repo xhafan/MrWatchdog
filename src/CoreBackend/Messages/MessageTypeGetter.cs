@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using CoreBackend.Messages;
 using CoreUtils;
 
-namespace CoreWeb.Features.Jobs;
+namespace CoreBackend.Messages;
 
 public class MessageTypeGetter : IMessageTypeGetter
 {

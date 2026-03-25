@@ -19,7 +19,7 @@ public class when_creating_domain_event_handlers
 
         var ioCContainer = A.Fake<IContainer>();
         A.CallTo(() => ioCContainer.ResolveAll<IDomainEventHandler<TestDomainEvent>>()).Returns([_testDomainEventHandler]);
-        JobContext.IoCContainer.Value = ioCContainer;
+        JobContext.IoCContainer.Value = new FlowContext<IContainer?> {Value = ioCContainer};
 
         var factory = new DomainEventHandlerFactory();
         

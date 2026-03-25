@@ -34,7 +34,7 @@ namespace CoreBackend.Register.Castle;
 /// <summary>
 /// Extension methods on <see cref="IWindsorContainer"/> for registering CoreBackend services.
 /// </summary>
-public static class CoreBackendWindsorExtensions
+public static class CoreBackendServicesCastleWindsorRegistrationExtensions
 {
     extension(IWindsorContainer hostedServiceWindsorContainer)
     {

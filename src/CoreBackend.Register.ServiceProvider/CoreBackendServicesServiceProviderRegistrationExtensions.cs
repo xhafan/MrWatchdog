@@ -29,7 +29,7 @@ namespace CoreBackend.Register.ServiceProvider;
 /// <summary>
 /// Extension methods on <see cref="IServiceCollection"/> for registering CoreBackend services.
 /// </summary>
-public static class CoreBackendServiceCollectionExtensions
+public static class CoreBackendServicesServiceProviderRegistrationExtensions
 {
     extension(IServiceCollection hostedServiceServices)
     {

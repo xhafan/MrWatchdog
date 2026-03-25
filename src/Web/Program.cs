@@ -113,7 +113,7 @@ public class Program
         // Add services to the container.
 
         // register repositories from CoreBackend
-        // todo: remove duplication registration of repositories in CoreBackendServiceCollectionExtensions and here
+        // todo: remove duplication registration of repositories in CoreBackendServicesServiceProviderRegistrationExtensions and here
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<JobRepository>()
             .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))

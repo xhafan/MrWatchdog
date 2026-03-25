@@ -27,7 +27,6 @@ public static class RebusHostedServiceServiceProviderRegistrator
         hostedServiceServices.AddCoreDddAndCoreBackendServices(configuration, fireAndForgetWebBus, hibernateConfigurator);
 
         hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<IPlaywright>());
-        hostedServiceServices.AddSingleton(typeof(IOptions<>), typeof(MainServiceProviderOptions<>));
 
         // register repositories from Core
         hostedServiceServices.Scan(scan => scan

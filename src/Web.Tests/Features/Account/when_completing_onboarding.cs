@@ -1,9 +1,9 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account;

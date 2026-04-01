@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using MrWatchdog.TestsShared;
+using CoreBackend.TestsShared;
 
 namespace MrWatchdog.Web.E2E.Tests.Features;
 

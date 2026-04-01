@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.HttpClients;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.HttpClients;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
 

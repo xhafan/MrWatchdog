@@ -1,10 +1,10 @@
 ﻿using System.Net;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.HttpClients;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.HttpClients;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Scraping;
 

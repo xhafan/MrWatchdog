@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.TestsShared;
+﻿using CoreBackend.TestsShared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MrWatchdog.Web.Tests.Features.Jobs;
 

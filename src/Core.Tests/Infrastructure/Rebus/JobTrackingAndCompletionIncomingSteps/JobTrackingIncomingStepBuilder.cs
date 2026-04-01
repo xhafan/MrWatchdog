@@ -1,7 +1,7 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.JobTrackingAndCompletionIncomingSteps;
 

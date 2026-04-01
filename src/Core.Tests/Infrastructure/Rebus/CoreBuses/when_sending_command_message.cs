@@ -3,9 +3,9 @@ using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.Infrastructure.RequestIdAccessors;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.TestsShared;
 using Rebus.Bus;
 using Rebus.Messages;
 

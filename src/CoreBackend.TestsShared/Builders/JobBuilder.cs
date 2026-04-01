@@ -1,14 +1,14 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.EmailSenders;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 
-namespace MrWatchdog.TestsShared.Builders;
+namespace CoreBackend.TestsShared.Builders;
 
 public class JobBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {
-    public const string Type = nameof(CreateScraperCommand);
-    public static readonly object InputData = new CreateScraperCommand(23, "scraper name");
+    public const string Type = nameof(SendEmailCommand);
+    public static readonly object InputData = new SendEmailCommand("recipient@testemail.com", "subject", "html message");
     public const JobKind Kind = JobKind.Command;
     public const string RequestId = "0HNFBP8T98MQS:00000045";
 

@@ -1,9 +1,10 @@
-﻿using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
+﻿using CoreBackend.Infrastructure.Configurations;
+using CoreDdd.Nhibernate.DatabaseSchemaGenerators;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure;
 using System.Text.RegularExpressions;
-using MrWatchdog.Core.Infrastructure.Configurations;
 
 namespace MrWatchdog.ToolsApp;
 
@@ -36,6 +37,8 @@ public class Program
             selectedOption = args[0];
         }
 
+        ConsoleAppSettings.Initialize(assemblyWithUserSecrets: typeof(Scraper).Assembly);
+        
         if (selectedOption == "1" || selectedOption == "generateDatabaseSchema") _generateDatabaseSchemaSqlFile();
         if (selectedOption == "2" || selectedOption == "convertPrivateKeyToOneLineForJson") _convertPrivateKeyToOneLine();
         if (selectedOption == "3" || selectedOption == "generateGitMoveScript") _generateGitMoveScript();

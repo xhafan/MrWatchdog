@@ -1,10 +1,10 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Jsons;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
-using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Jobs.Domain;
 
@@ -48,7 +48,7 @@ public class when_persisting_job : BaseDatabaseTest
         _persistedJob.CompletedOn.Value.ShouldBeGreaterThanOrEqualTo(_persistedJob.CreatedOn);
         _persistedJob.CompletedOn.Value.ShouldBe(DateTime.UtcNow, tolerance: TimeSpan.FromSeconds(5));
         _persistedJob.Type.ShouldBe(JobBuilder.Type);
-        JsonHelper.Deserialize<CreateScraperCommand>(_persistedJob.InputData).ShouldBe(JobBuilder.InputData);
+        JsonHelper.Deserialize<SendEmailCommand>(_persistedJob.InputData).ShouldBe(JobBuilder.InputData);
         _persistedJob.Kind.ShouldBe(JobBuilder.Kind);
         _persistedJob.NumberOfHandlingAttempts.ShouldBe(1);
         _persistedJob.AffectedEntities.ShouldBeEmpty();

@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 using System.Security.Claims;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
 

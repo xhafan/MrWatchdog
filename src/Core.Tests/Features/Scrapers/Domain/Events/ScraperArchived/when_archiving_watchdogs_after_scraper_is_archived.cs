@@ -1,4 +1,5 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Domain;
@@ -6,8 +7,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperArchived;
 

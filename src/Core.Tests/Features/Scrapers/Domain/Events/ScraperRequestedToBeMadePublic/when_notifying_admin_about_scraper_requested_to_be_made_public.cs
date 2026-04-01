@@ -1,13 +1,13 @@
 ﻿using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 

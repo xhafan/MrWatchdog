@@ -2,7 +2,7 @@
 using System.Reflection;
 using CoreUtils;
 
-namespace MrWatchdog.TestsShared.Builders;
+namespace CoreBackend.TestsShared.Builders;
 
 // This class is here mainly to set entity Ids when used in a unit test where NHibernate would not magically set the entity Id.
 // Don't abuse setting private properties unnecessarily. Use a proper way to construct an object and use its public

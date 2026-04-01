@@ -2,9 +2,9 @@
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 using CoreBackend.Infrastructure.RequestIdAccessors;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.TestsShared;
 using Rebus.Bus;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.CoreBuses;

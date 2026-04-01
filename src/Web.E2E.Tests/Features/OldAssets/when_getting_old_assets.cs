@@ -1,5 +1,5 @@
-﻿using MrWatchdog.TestsShared;
-using System.Net;
+﻿using System.Net;
+using CoreBackend.TestsShared;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.OldAssets;
 

@@ -1,6 +1,6 @@
 ﻿using System.Net;
+using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
 

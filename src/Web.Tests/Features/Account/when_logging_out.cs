@@ -1,10 +1,10 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.TestsShared;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account;

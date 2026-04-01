@@ -1,9 +1,9 @@
-﻿using FakeItEasy;
+﻿using CoreBackend.Infrastructure.Configurations;
+using FakeItEasy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure.Configurations;
 
-namespace MrWatchdog.TestsShared;
+namespace CoreBackend.TestsShared;
 
 public static class OptionsTestRetriever
 {

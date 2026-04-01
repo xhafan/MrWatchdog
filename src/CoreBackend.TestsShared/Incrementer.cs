@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.TestsShared;
+﻿namespace CoreBackend.TestsShared;
 
 public static class Incrementer
 {

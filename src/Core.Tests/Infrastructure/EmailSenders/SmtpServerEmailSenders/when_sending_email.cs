@@ -1,5 +1,5 @@
 ﻿using CoreBackend.Infrastructure.EmailSenders;
-using MrWatchdog.TestsShared;
+using CoreBackend.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.EmailSenders.SmtpServerEmailSenders;
 

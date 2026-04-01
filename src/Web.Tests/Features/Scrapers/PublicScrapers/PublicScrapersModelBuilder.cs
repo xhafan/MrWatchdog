@@ -1,7 +1,7 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using CoreBackend.TestsShared;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Scrapers.PublicScrapers;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.PublicScrapers;

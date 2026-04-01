@@ -1,10 +1,10 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Globalization;
+using CoreDdd.Nhibernate.TestHelpers;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using System.Globalization;
-using CoreDdd.Nhibernate.TestHelpers;
 
-namespace MrWatchdog.TestsShared.Builders;
+namespace MrWatchdog.Core.TestsShared.Builders;
 
 public class UserBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {

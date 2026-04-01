@@ -1,6 +1,6 @@
 ﻿using CoreUtils.Extensions;
 
-namespace MrWatchdog.TestsShared.HttpClients;
+namespace CoreBackend.TestsShared.HttpClients;
 
 public class HttpClientFactoryBuilder
 {

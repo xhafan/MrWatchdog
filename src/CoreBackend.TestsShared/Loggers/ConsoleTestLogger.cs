@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace MrWatchdog.TestsShared.Loggers;
+namespace CoreBackend.TestsShared.Loggers;
 
 public class ConsoleTestLogger : ILogger, IDisposable
 {

@@ -1,8 +1,8 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Jobs.Domain;
 

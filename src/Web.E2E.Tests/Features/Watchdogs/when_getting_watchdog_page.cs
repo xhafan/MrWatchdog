@@ -1,9 +1,10 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Watchdogs;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using System.Net;
+using CoreBackend.TestsShared;
+using MrWatchdog.Core.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Watchdogs;
 

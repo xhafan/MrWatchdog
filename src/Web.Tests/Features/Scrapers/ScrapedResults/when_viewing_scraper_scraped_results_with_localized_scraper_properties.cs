@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
+using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;

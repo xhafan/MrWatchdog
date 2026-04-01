@@ -3,12 +3,14 @@ using System.Net.Http.Json;
 using CoreBackend.Features.Jobs;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Jobs;
 

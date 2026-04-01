@@ -1,12 +1,12 @@
 using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Messages;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreWeb.Features.Jobs;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using Rebus.Bus;
 using Rebus.Messages;
 
@@ -104,10 +104,9 @@ public class when_handling_failed_job_again : BaseDatabaseTest
 
     private bool _MatchesCommand(Command command)
     {
-        command.ShouldBeOfType<CreateScraperCommand>();
-        var createScraperCommand = (CreateScraperCommand)command;
-        createScraperCommand.UserId.ShouldBe(23);
-        createScraperCommand.Name.ShouldBe("scraper name");
+        command.ShouldBeOfType<SendEmailCommand>();
+        var sendEmailCommand = (SendEmailCommand)command;
+        sendEmailCommand.ShouldBe(JobBuilder.InputData);
         return true;
     }
 

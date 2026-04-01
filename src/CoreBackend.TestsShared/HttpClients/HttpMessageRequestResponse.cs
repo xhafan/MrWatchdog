@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.TestsShared.HttpClients;
+﻿namespace CoreBackend.TestsShared.HttpClients;
 
 public record HttpMessageRequestResponse(
     string RequestUrlOrRegexUrlPattern,

@@ -1,9 +1,9 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 using CoreBackend.Messages;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using FakeItEasy;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using Rebus.Bus.Advanced;
 
 namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.SendDomainEventOverMessageBusDomainEventHandlers;

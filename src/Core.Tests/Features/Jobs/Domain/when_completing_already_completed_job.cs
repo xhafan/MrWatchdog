@@ -1,6 +1,6 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
-using MrWatchdog.TestsShared.Builders;
+using CoreBackend.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Jobs.Domain;
 

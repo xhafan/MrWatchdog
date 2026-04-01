@@ -1,5 +1,5 @@
-﻿using FakeItEasy;
-using MrWatchdog.TestsShared;
+﻿using CoreBackend.TestsShared;
+using FakeItEasy;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;

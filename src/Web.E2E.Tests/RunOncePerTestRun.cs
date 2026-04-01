@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MrWatchdog.TestsShared;
+using MrWatchdog.Core.TestsShared;
 
 namespace MrWatchdog.Web.E2E.Tests;
 

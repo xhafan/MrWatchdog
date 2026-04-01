@@ -1,4 +1,4 @@
-﻿using MrWatchdog.TestsShared;
+﻿using MrWatchdog.Core.TestsShared;
 
 namespace MrWatchdog.Web.Tests;
 

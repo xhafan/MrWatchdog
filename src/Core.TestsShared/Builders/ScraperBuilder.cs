@@ -1,9 +1,11 @@
-﻿using CoreDdd.Nhibernate.TestHelpers;
+﻿using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
+using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 
-namespace MrWatchdog.TestsShared.Builders;
+namespace MrWatchdog.Core.TestsShared.Builders;
 
 public class ScraperBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {

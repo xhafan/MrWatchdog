@@ -1,5 +1,5 @@
 ﻿using Microsoft.Playwright;
-using MrWatchdog.TestsShared;
+using MrWatchdog.Core.TestsShared;
 
 namespace MrWatchdog.Core.Tests;
 
@@ -7,7 +7,7 @@ namespace MrWatchdog.Core.Tests;
 public class RunOncePerTestRun : BaseRunOncePerTestRun
 {
     public static Lazy<Task<IPlaywright>> PlaywrightTask = null!;
-    
+
     [OneTimeSetUp]
     public void SetUp()
     {

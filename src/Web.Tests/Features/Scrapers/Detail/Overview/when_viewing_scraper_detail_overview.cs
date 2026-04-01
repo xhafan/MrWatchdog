@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreBackend.TestsShared;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Scrapers.Detail.Overview;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.Detail.Overview;

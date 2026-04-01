@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Scrapers.Detail.Badges;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 

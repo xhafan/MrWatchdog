@@ -1,11 +1,11 @@
 ﻿using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.TestsShared;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;

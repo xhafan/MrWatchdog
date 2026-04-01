@@ -1,12 +1,10 @@
 ﻿using CoreDdd.Domain.Events;
-using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
 
-namespace MrWatchdog.TestsShared;
+namespace CoreBackend.TestsShared;
 
-public abstract class BaseDatabaseTest
+public abstract class BaseTest
 {
-    protected NhibernateUnitOfWork UnitOfWork = null!;
     protected static ICollection<IDomainEvent> RaisedDomainEvents
     {
         get
@@ -20,24 +18,11 @@ public abstract class BaseDatabaseTest
     public void BaseSetUp()
     {
         TestFixtureContext.RaisedDomainEvents.Value = new List<IDomainEvent>();
-        UnitOfWork = new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator);
-        UnitOfWork.BeginTransaction();
     }
 
     [TearDown]
     public void BaseTearDown()
     {
-        try
-        {
-            UnitOfWork.Flush();
-        }
-        finally
-        {
-            UnitOfWork.Rollback();
-        }
-        
         TestFixtureContext.RaisedDomainEvents.Value = null;
-        
-        NotDeletedRecordsChecker.CheckNotDeletedRecords(UnitOfWork);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
@@ -9,8 +10,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 

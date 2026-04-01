@@ -1,11 +1,11 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using Rebus.Messages;
 using Rebus.Pipeline;
 using Rebus.Transport;

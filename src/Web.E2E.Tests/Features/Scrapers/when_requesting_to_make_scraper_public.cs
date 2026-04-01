@@ -9,9 +9,10 @@ using MrWatchdog.Core.Features.Scrapers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using System.Net;
+using CoreBackend.TestsShared;
+using MrWatchdog.Core.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 

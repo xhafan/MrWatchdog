@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using CoreBackend.Infrastructure.Extensions;
 
-namespace MrWatchdog.TestsShared.HttpClients;
+namespace CoreBackend.TestsShared.HttpClients;
 
 public class FakeHttpMessageHandler(List<HttpMessageRequestResponse> requestResponses) : HttpMessageHandler
 {

@@ -1,13 +1,14 @@
 ﻿using System.Net;
 using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 

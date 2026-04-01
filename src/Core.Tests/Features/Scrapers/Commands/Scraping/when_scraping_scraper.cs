@@ -1,12 +1,12 @@
 ﻿using System.Net;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.HttpClients;
 using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.TestHelpers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
-using MrWatchdog.TestsShared.HttpClients;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands.Scraping;
 

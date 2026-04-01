@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.TestsShared.HttpClients;
+﻿namespace CoreBackend.TestsShared.HttpClients;
 
 public class HttpClientFactory(HttpClient? httpClient = null) : IHttpClientFactory
 {

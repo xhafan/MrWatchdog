@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Tests", "Web.Tests\Web.Tests.csproj", "{166ED8DF-C115-4197-8682-3FAA06A816FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsShared", "TestsShared\TestsShared.csproj", "{C6019163-BB64-47B0-BC2B-4A03B908090D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.TestsShared", "Core.TestsShared\Core.TestsShared.csproj", "{C6019163-BB64-47B0-BC2B-4A03B908090D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsApp", "ToolsApp\ToolsApp.csproj", "{B53B27BF-4CB8-497E-8E9A-48AEDFA1792B}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.Castle", "CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj", "{B7DD8646-051B-4F11-B88D-0DAF64D6BAEF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.ServiceProvider", "CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj", "{5DD54F47-19B3-452F-8F43-422B4982874D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.TestsShared", "CoreBackend.TestsShared\CoreBackend.TestsShared.csproj", "{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,6 +176,18 @@ Global
 		{5DD54F47-19B3-452F-8F43-422B4982874D}.Release|x64.Build.0 = Release|Any CPU
 		{5DD54F47-19B3-452F-8F43-422B4982874D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5DD54F47-19B3-452F-8F43-422B4982874D}.Release|x86.Build.0 = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|x64.Build.0 = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x64.Build.0 = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +197,7 @@ Global
 		{C6019163-BB64-47B0-BC2B-4A03B908090D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8248B593-EA02-4E37-BC92-8392F686959D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D94E4182-4B3F-1532-BE0D-D7B36F87B7F6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6806D3F-3FDE-401C-9CC9-665A82982FFE}

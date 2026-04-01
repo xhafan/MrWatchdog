@@ -2,10 +2,10 @@
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
 using CoreBackend.Messages;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using FakeItEasy;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using Rebus.Bus.Advanced;
 using Rebus.Messages;
 

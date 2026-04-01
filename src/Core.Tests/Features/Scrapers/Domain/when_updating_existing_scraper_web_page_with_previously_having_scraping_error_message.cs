@@ -1,6 +1,6 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+﻿using CoreBackend.TestsShared;
+using MrWatchdog.Core.Features.Scrapers.Domain;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain;
 

@@ -6,13 +6,15 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.Login;
 using System.Globalization;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
+using MrWatchdog.Core.TestsShared;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 

@@ -1,5 +1,5 @@
 ﻿using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.MakingScraperPublic;
 

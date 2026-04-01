@@ -1,10 +1,10 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.TestsShared;
+using CoreDdd.Nhibernate.Repositories;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Commands;
 

@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.TestHelpers;
+﻿using CoreBackend.TestsShared;
+using CoreDdd.Nhibernate.TestHelpers;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain;
 

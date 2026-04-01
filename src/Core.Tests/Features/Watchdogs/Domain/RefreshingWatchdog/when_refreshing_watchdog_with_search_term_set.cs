@@ -1,8 +1,8 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using CoreBackend.TestsShared;
+using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.RefreshingWatchdog;
 

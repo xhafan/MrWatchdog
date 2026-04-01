@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
+using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Core.Tests.Features.Account.Commands;
 

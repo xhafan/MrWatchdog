@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 using MrWatchdog.Web.Infrastructure.Authorizations;
 using System.Security.Claims;
+using CoreBackend.TestsShared;
 using CoreWeb.Infrastructure.Authorizations;
+using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Web.Tests.Infrastructure.Authorizations.SuperAdminAuthorizationHandlers;
 

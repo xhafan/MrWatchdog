@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreBackend.TestsShared;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;

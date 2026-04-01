@@ -1,10 +1,10 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Scrapers.Domain;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Web.Tests.Features.Jobs;
 

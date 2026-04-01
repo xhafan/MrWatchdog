@@ -1,10 +1,10 @@
 ﻿using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.Messages;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using CoreWeb.Features.Jobs;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Tests.Features.Jobs;

@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using CoreBackend.Features.Jobs;
 using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Jobs;
 

@@ -1,5 +1,5 @@
-﻿using MrWatchdog.Core.Features.Scrapers.Services;
-using MrWatchdog.TestsShared;
+﻿using CoreBackend.TestsShared;
+using MrWatchdog.Core.Features.Scrapers.Services;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Services.WebScraperChains;
 

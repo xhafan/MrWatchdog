@@ -1,11 +1,11 @@
 ﻿using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
 using Microsoft.Extensions.Configuration;
-using MrWatchdog.TestsShared;
 using System.Net;
 using System.Text;
 using CoreBackend.Infrastructure;
 using CoreBackend.Infrastructure.Jsons;
+using CoreBackend.TestsShared;
 using CoreWeb.Features.Logs;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Logs;

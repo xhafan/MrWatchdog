@@ -1,6 +1,6 @@
 ﻿using System.Net;
+using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.TestsShared;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Account;
 

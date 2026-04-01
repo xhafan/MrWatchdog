@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using CoreDdd.Queries;
 
-namespace MrWatchdog.TestsShared;
+namespace CoreBackend.TestsShared;
 
 public class FakeQueryHandlerFactory : IQueryHandlerFactory
 {

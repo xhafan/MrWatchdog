@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 
-namespace MrWatchdog.TestsShared.Builders;
+namespace MrWatchdog.Core.TestsShared.Builders;
 
 public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
 {

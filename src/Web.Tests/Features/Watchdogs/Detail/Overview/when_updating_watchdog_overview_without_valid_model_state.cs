@@ -1,11 +1,11 @@
 ﻿using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Detail.Overview;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail.Overview;

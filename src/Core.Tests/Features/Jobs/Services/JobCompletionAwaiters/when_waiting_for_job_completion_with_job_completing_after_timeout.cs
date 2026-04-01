@@ -1,8 +1,8 @@
 ﻿using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.TestsShared;
-using MrWatchdog.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Jobs.Services.JobCompletionAwaiters;
 

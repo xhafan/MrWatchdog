@@ -9,8 +9,8 @@
   <Import Project="..\SharedAssemblyInfo.props" />
 
   <ItemGroup>
-    <Compile Include="..\TestsShared\GlobalUsings.cs" Link="GlobalUsings.cs" />
-    <Compile Include="..\TestsShared\TestConfig.cs" Link="TestConfig.cs" />
+    <Compile Include="..\CoreBackend.TestsShared\GlobalUsings.cs" Link="GlobalUsings.cs" />
+    <Compile Include="..\Core.TestsShared\TestConfig.cs" Link="TestConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestsShared\TestsShared.csproj" />
+    <ProjectReference Include="..\Core.TestsShared\Core.TestsShared.csproj" />
   </ItemGroup>
 
 </Project>

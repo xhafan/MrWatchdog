@@ -2,10 +2,10 @@
 using System.Text.RegularExpressions;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.TestsShared;
 using NHibernate;
 using NHibernate.Criterion;
 

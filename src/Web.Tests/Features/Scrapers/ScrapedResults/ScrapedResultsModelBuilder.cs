@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Scrapers.ScrapedResults;
 
 namespace MrWatchdog.Web.Tests.Features.Scrapers.ScrapedResults;

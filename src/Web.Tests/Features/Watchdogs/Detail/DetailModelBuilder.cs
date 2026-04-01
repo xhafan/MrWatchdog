@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
@@ -9,7 +10,6 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Queries;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
-using MrWatchdog.TestsShared;
 using MrWatchdog.Web.Features.Watchdogs.Detail;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Detail;

@@ -1,10 +1,6 @@
-﻿using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.TestsShared;
 using FakeItEasy;
-using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Messages;
 using Rebus.Retry;
@@ -20,26 +16,21 @@ public class when_handling_failed_message
     private ITransactionContext _transactionContext = null!;
     private TransportMessage _transportMessage = null!;
     private ExceptionInfo _exceptionInfo = null!;
-    private ICoreBus _bus = null!;
-    private IOptions<EmailAddressesOptions> _iEmailAddressesOptions = null!;
+    private IFailedMessageReporter _failedMessageReporter = null!;
     private Guid _jobGuid;
 
     [SetUp]
     public async Task Context()
     {
         _originalErrorHandler = A.Fake<IErrorHandler>();
-        
-        var serializer = A.Fake<ISerializer>();
-        _bus = A.Fake<ICoreBus>();
 
-        _iEmailAddressesOptions = OptionsTestRetriever.Retrieve<EmailAddressesOptions>();
+        var serializer = A.Fake<ISerializer>();
+        _failedMessageReporter = A.Fake<IFailedMessageReporter>();
 
         var errorHandlerDecorator = new ReportFailedMessageErrorHandler(
             _originalErrorHandler,
             serializer,
-            _bus,
-            OptionsTestRetriever.Retrieve<RuntimeOptions>(),
-            _iEmailAddressesOptions
+            _failedMessageReporter
         );
 
         _jobGuid = Guid.NewGuid();
@@ -77,24 +68,8 @@ public class when_handling_failed_message
     }
 
     [Test]
-    public void send_email_command_is_sent()
+    public void failed_message_is_reported()
     {
-        A.CallTo(() => _bus.Send(A<SendEmailCommand>.That.Matches(p => _MatchingCommand(p)))).MustHaveHappenedOnceExactly();
-    }
-
-    private bool _MatchingCommand(SendEmailCommand command)
-    {
-        command.RecipientEmail.ShouldBe(_iEmailAddressesOptions.Value.BackendErrors);
-        
-        command.Subject.ShouldBe("Job ArchiveScraperCommand failed");
-        
-        command.HtmlMessage.ShouldContain("Job");
-        command.HtmlMessage.ShouldContain(
-            $"""
-             <a href="https://mrwatchdog_test/api/Jobs/{_jobGuid}">ArchiveScraperCommand</a>
-             """
-        );
-        command.HtmlMessage.ShouldContain("failed");
-        return true;
+        A.CallTo(() => _failedMessageReporter.Report(_jobGuid, typeof(ArchiveScraperCommand))).MustHaveHappenedOnceExactly();
     }
 }

@@ -1,9 +1,5 @@
-﻿using CoreBackend.Features.Jobs;
-using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Messages;
-using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;
@@ -14,14 +10,12 @@ namespace MrWatchdog.Core.Infrastructure.Rebus;
 public class ReportFailedMessageErrorHandler(
     IErrorHandler errorHandler,
     ISerializer serializer,
-    ICoreBus bus,
-    IOptions<RuntimeOptions> iRuntimeOptions,
-    IOptions<EmailAddressesOptions> iEmailAddressesOptions
+    IFailedMessageReporter failedMessageReporter
 )
 : IErrorHandler
 {
     public async Task HandlePoisonMessage(
-        TransportMessage transportMessage, 
+        TransportMessage transportMessage,
         ITransactionContext transactionContext,
         ExceptionInfo exceptionInfo
     )
@@ -33,14 +27,7 @@ public class ReportFailedMessageErrorHandler(
         if (rebusMessage.Body is not BaseMessage message) return;
 
         var jobGuid = Guid.Parse(rebusMessage.Headers[Headers.MessageId]);
-        var failedMessageTypeName = message.GetType().Name;
 
-        await bus.Send(new SendEmailCommand(
-            iEmailAddressesOptions.Value.BackendErrors,
-            Subject: $"Job {failedMessageTypeName} failed",
-            HtmlMessage: $"""
-                          Job <a href="{iRuntimeOptions.Value.Url}{JobUrlConstants.GetJobUrlTemplate.WithJobGuid(jobGuid)}">{failedMessageTypeName}</a> failed.
-                          """
-        ));
+        await failedMessageReporter.Report(jobGuid, message.GetType());
     }
 }

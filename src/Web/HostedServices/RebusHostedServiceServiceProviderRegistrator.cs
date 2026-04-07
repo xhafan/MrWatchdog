@@ -27,20 +27,7 @@ public static class RebusHostedServiceServiceProviderRegistrator
 
         hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<IPlaywright>());
 
-        // register repositories from Core
-        hostedServiceServices.Scan(scan => scan
-            .FromAssemblyOf<UserRepository>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
-        // register query handlers from Core
-        hostedServiceServices.Scan(scan => scan
-            .FromAssemblyOf<GetUserByEmailQueryHandler>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
+        hostedServiceServices.AddCoreRepositoriesAndQueryHandlers();
 
         // register web scrapers
         hostedServiceServices.Scan(scan => scan
@@ -60,5 +47,21 @@ public static class RebusHostedServiceServiceProviderRegistrator
         );
 
         return hostedServiceServices.BuildServiceProvider();
+    }
+
+    public static void AddCoreRepositoriesAndQueryHandlers(this IServiceCollection services)
+    {
+        services.Scan(scan => scan
+            .FromAssemblyOf<UserRepository>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
+        );
+        services.Scan(scan => scan
+            .FromAssemblyOf<GetUserByEmailQueryHandler>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime()
+        );
     }
 }

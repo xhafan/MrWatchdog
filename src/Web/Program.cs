@@ -14,9 +14,7 @@ using CoreBackend.Infrastructure.RequestIdAccessors;
 using CoreBackend.Resources;
 using CoreDdd.AspNetCore.Middlewares;
 using CoreDdd.Domain.Events;
-using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Register.DependencyInjection;
-using CoreDdd.Queries;
 using CoreDdd.Register.DependencyInjection;
 using CoreUtils;
 using CoreWeb.Features.Logs;
@@ -45,13 +43,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.HttpClients;
 using MrWatchdog.Core.Infrastructure.Rebus;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using MrWatchdog.Web.Features.Account.Login;
 using MrWatchdog.Web.HostedServices;
@@ -74,10 +70,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
-using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.Messages;
 
 namespace MrWatchdog.Web;
@@ -113,36 +107,8 @@ public class Program
 
         // Add services to the container.
 
-        // register repositories from CoreBackend
-        // todo: remove duplication registration of repositories in CoreBackendServicesServiceProviderRegistrationExtensions and here
-        builder.Services.Scan(scan => scan
-            .FromAssemblyOf<JobRepository>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
-        // register repositories from Core
-        builder.Services.Scan(scan => scan
-            .FromAssemblyOf<UserRepository>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
-
-        // register query handlers from CoreBackend
-        builder.Services.Scan(scan => scan
-            .FromAssemblyOf<GetJobQueryHandler>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
-        // register query handlers from Core
-        builder.Services.Scan(scan => scan
-            .FromAssemblyOf<GetUserByEmailQueryHandler>()
-            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithTransientLifetime()
-        );
+        builder.Services.AddCoreBackendRepositoriesAndQueryHandlers();
+        builder.Services.AddCoreRepositoriesAndQueryHandlers();
         
         var mvcBuilder = builder.Services
             .AddRazorPages()

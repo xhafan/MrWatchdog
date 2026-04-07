@@ -70,18 +70,7 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
             hostedServiceServices.AddCoreDdd();
             hostedServiceServices.AddCoreDddNhibernate<TNhibernateConfigurator>(_ => nhibernateConfigurator);
 
-            hostedServiceServices.Scan(scan => scan
-                .FromAssemblyOf<JobRepository>()
-                .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-            );
-            hostedServiceServices.Scan(scan => scan
-                .FromAssemblyOf<GetJobQueryHandler>()
-                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-            );
+            hostedServiceServices.AddCoreBackendRepositoriesAndQueryHandlers();
 
             hostedServiceServices.AddSingleton<IJobRepositoryFactory, JobRepositoryFactory>();
 
@@ -148,6 +137,22 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
             hostedServiceServices.Scan(scan => scan
                 .FromAssemblyOf<SendEmailCommandMessageHandler>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IHandleMessages<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
+        }
+
+        public void AddCoreBackendRepositoriesAndQueryHandlers()
+        {
+            hostedServiceServices.Scan(scan => scan
+                .FromAssemblyOf<JobRepository>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IRepository<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
+            hostedServiceServices.Scan(scan => scan
+                .FromAssemblyOf<GetJobQueryHandler>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
             );

@@ -7,6 +7,9 @@ RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
 COPY CoreBackend/*.csproj ./CoreBackend/
+COPY CoreBackend.Postgres/*.csproj ./CoreBackend.Postgres/
+COPY CoreBackend.Register.Castle/*.csproj ./CoreBackend.Register.Castle/
+COPY CoreBackend.Register.ServiceProvider/*.csproj ./CoreBackend.Register.ServiceProvider/
 COPY Core/*.csproj ./Core/
 COPY CoreWeb/*.csproj ./CoreWeb/
 COPY Web/*.csproj ./Web/
@@ -25,6 +28,9 @@ RUN npm ci
 # Copy the remaining source code
 WORKDIR /app
 COPY CoreBackend/. ./CoreBackend/
+COPY CoreBackend.Postgres/. ./CoreBackend.Postgres/
+COPY CoreBackend.Register.Castle/. ./CoreBackend.Register.Castle/
+COPY CoreBackend.Register.ServiceProvider/. ./CoreBackend.Register.ServiceProvider/
 COPY Core/. ./Core/
 COPY CoreWeb/. ./CoreWeb/
 COPY Web/. ./Web/
@@ -40,21 +46,23 @@ WORKDIR /app
 
 # Copy only csproj files first
 COPY MrWatchdog.sln .
+COPY CoreBackend.TestsShared/*.csproj CoreBackend.TestsShared/
+COPY Core.TestsShared/*.csproj Core.TestsShared/
 COPY Core.Tests/*.csproj Core.Tests/
-COPY TestsShared/*.csproj TestsShared/
-COPY ToolsApp/*.csproj ToolsApp/
 COPY Web.E2E.Tests/*.csproj Web.E2E.Tests/
 COPY Web.Tests/*.csproj Web.Tests/
+COPY ToolsApp/*.csproj ToolsApp/
 
 # Restore all projects (creates a cached layer)
 RUN dotnet restore
 
 # Copy test projects files
+COPY CoreBackend.TestsShared/. ./CoreBackend.TestsShared/
+COPY Core.TestsShared/. ./Core.TestsShared/
 COPY Core.Tests/. ./Core.Tests/
-COPY TestsShared/. ./TestsShared/
-COPY ToolsApp/. ./ToolsApp/
 COPY Web.E2E.Tests/. ./Web.E2E.Tests/
 COPY Web.Tests/. ./Web.Tests/
+COPY ToolsApp/. ./ToolsApp/
 
 RUN dotnet build
 

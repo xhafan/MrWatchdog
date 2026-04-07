@@ -7,6 +7,9 @@ RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
 COPY CoreBackend/*.csproj ./CoreBackend/
+COPY CoreBackend.Postgres/*.csproj ./CoreBackend.Postgres/
+COPY CoreBackend.Register.Castle/*.csproj ./CoreBackend.Register.Castle/
+COPY CoreBackend.Register.ServiceProvider/*.csproj ./CoreBackend.Register.ServiceProvider/
 COPY Core/*.csproj ./Core/
 COPY CoreWeb/*.csproj ./CoreWeb/
 COPY Web/*.csproj ./Web/
@@ -25,6 +28,9 @@ RUN npm ci
 # Copy the remaining source code
 WORKDIR /app
 COPY CoreBackend/. ./CoreBackend/
+COPY CoreBackend.Postgres/. ./CoreBackend.Postgres/
+COPY CoreBackend.Register.Castle/. ./CoreBackend.Register.Castle/
+COPY CoreBackend.Register.ServiceProvider/. ./CoreBackend.Register.ServiceProvider/
 COPY Core/. ./Core/
 COPY CoreWeb/. ./CoreWeb/
 COPY Web/. ./Web/
@@ -46,7 +52,7 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:258b939d6d684ff05ad7ea16782b4bee55260de4acc6f99bec897fd11de7640c
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
-RUN apk add --no-cache icu-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl
+RUN apk add --no-cache icu-libs krb5-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl
 
 WORKDIR /app
 

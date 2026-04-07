@@ -4,6 +4,8 @@ using CoreBackend.Infrastructure.Conventions;
 using CoreBackend.Infrastructure.Interceptors;
 using CoreDdd.Nhibernate.Configurations;
 using MrWatchdog.Core.Features.Scrapers.Domain;
+using CoreBackend.Postgres.Features.Jobs.Domain;
+
 #if DEBUG
 using HibernatingRhinos.Profiler.Appender.NHibernate;
 #endif
@@ -26,6 +28,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
         return
         [
             typeof(Job).Assembly,
+            typeof(JobMappingOverrides).Assembly,
             typeof(Scraper).Assembly
         ];
     }

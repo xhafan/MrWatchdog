@@ -30,7 +30,6 @@
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Playwright" Version="1.58.0" />
     <PackageReference Include="NHibernate" Version="5.6.0" />
-    <PackageReference Include="Npgsql" Version="10.0.1" />
     <PackageReference Include="Rebus" Version="8.9.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>
@@ -40,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoreBackend.Postgres\CoreBackend.Postgres.csproj" />
     <ProjectReference Include="..\CoreBackend\CoreBackend.csproj" />
   </ItemGroup>
 

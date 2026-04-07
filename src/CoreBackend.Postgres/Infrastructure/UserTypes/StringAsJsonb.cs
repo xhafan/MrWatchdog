@@ -1,12 +1,12 @@
-﻿using NHibernate.Engine;
+﻿using System.Data;
+using System.Data.Common;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Npgsql;
 using NpgsqlTypes;
-using System.Data.Common;
-using System.Data;
 
-namespace MrWatchdog.Core.Infrastructure.UserTypes;
+namespace CoreBackend.Postgres.Infrastructure.UserTypes;
 
 // inspired by
 // https://gist.github.com/bariloce/e65fe5db6c6ddf46e6f8

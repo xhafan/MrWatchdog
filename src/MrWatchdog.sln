@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.TestsShared", "CoreBackend.TestsShared\CoreBackend.TestsShared.csproj", "{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Postgres", "CoreBackend.Postgres\CoreBackend.Postgres.csproj", "{D35FF348-1A36-9A29-B167-6EF16C19C6BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -188,6 +190,18 @@ Global
 		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x64.Build.0 = Release|Any CPU
 		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}.Release|x86.Build.0 = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|x64.Build.0 = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Debug|x86.Build.0 = Debug|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|x64.Build.0 = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{D35FF348-1A36-9A29-B167-6EF16C19C6BE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

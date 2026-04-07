@@ -1,8 +1,8 @@
 ﻿using CoreBackend.Features.Jobs.Domain;
+using CoreBackend.Postgres.Infrastructure.UserTypes;
 using FluentNHibernate.Automapping;
-using MrWatchdog.Core.Infrastructure.UserTypes;
 
-namespace MrWatchdog.Core.Features.Jobs.Domain;
+namespace CoreBackend.Postgres.Features.Jobs.Domain;
 
 public class JobMappingOverrides : BaseJobMappingOverrides
 {

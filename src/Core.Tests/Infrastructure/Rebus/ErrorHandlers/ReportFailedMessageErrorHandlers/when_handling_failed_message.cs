@@ -1,13 +1,12 @@
-using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Rebus;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.ReportFailedMessageErrorHandlers;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.ErrorHandlers.ReportFailedMessageErrorHandlers;
 
 [TestFixture]
 public class when_handling_failed_message

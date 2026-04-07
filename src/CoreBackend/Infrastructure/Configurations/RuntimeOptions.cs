@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Infrastructure.Configurations;
+﻿namespace CoreBackend.Infrastructure.Configurations;
 
 public class RuntimeOptions
 {

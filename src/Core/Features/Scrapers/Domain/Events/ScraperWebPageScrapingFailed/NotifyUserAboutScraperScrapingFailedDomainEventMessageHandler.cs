@@ -1,9 +1,9 @@
-﻿using CoreBackend.Infrastructure.EmailSenders;
+﻿using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Domain.Repositories;
 using CoreUtils.Extensions;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;
 

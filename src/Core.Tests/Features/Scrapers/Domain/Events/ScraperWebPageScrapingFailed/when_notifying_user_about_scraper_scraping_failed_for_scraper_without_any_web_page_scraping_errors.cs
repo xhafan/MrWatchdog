@@ -1,4 +1,5 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Messages;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
@@ -6,7 +7,6 @@ using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Scrapers.Domain.Events.ScraperWebPageScrapingFailed;

@@ -1,4 +1,4 @@
-namespace CoreBackend.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 
 public interface IFailedMessageReporter
 {

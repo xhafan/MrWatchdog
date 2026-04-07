@@ -1,13 +1,13 @@
+using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Scrapers.Commands;
-using MrWatchdog.Core.Infrastructure.Configurations;
-using MrWatchdog.Core.Infrastructure.Rebus;
 
-namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.FailedMessageEmailReporters;
+namespace MrWatchdog.Core.Tests.Infrastructure.Rebus.ErrorHandlers.FailedMessageEmailReporters;
 
 [TestFixture]
 public class when_reporting_failed_message

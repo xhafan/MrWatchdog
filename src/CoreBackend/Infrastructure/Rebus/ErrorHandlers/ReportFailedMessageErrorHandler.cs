@@ -1,11 +1,10 @@
-using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Messages;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;
 using Rebus.Transport;
 
-namespace MrWatchdog.Core.Infrastructure.Rebus;
+namespace CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 
 public class ReportFailedMessageErrorHandler(
     IErrorHandler errorHandler,

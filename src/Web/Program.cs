@@ -49,7 +49,6 @@ using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.HttpClients;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Repositories;
@@ -76,6 +75,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
 using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.Messages;
 

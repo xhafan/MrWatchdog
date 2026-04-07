@@ -1,8 +1,8 @@
-﻿using CoreBackend.Infrastructure.EmailSenders;
+﻿using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
 using Rebus.Handlers;

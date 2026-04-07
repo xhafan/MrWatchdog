@@ -1,4 +1,5 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Messages;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.Repositories;
@@ -8,7 +9,6 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
-using MrWatchdog.Core.Infrastructure.Configurations;
 using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;

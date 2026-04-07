@@ -8,6 +8,7 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -166,7 +167,11 @@ public static class CoreBackendServicesCastleWindsorRegistrationExtensions
                     .FromAssemblyContaining(typeof(SendDomainEventOverMessageBusDomainEventHandler<>))
                     .BasedOn(typeof(IDomainEventHandler<>))
                     .WithService.FirstInterface()
-                    .Configure(x => x.LifestyleTransient())
+                    .Configure(x => x.LifestyleTransient()),
+
+                // Failed message reporter
+                Component.For<IFailedMessageReporter>().ImplementedBy<FailedMessageEmailReporter>().LifeStyle.Singleton
+                    .DependsOn(Dependency.OnComponent(typeof(ICoreBus), RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus))
             );
 
             hostedServiceWindsorContainer.Kernel.Resolver.AddSubResolver(new CollectionResolver(hostedServiceWindsorContainer.Kernel));

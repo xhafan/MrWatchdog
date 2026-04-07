@@ -3,6 +3,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.RebusQueueRedirectors;
@@ -131,6 +133,15 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
                 .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
+            );
+
+            // Failed message reporter
+            hostedServiceServices.AddSingleton<IFailedMessageReporter>(sp =>
+                new FailedMessageEmailReporter(
+                    sp.GetRequiredKeyedService<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
+                    sp.GetRequiredService<IOptions<RuntimeOptions>>(),
+                    sp.GetRequiredService<IOptions<EmailAddressesOptions>>()
+                )
             );
 
             // Rebus message handlers from CoreBackend

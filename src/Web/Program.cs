@@ -214,11 +214,7 @@ public class Program
                     resolutionContext => new ReportFailedMessageErrorHandler(
                         resolutionContext.Get<IErrorHandler>(),
                         resolutionContext.Get<ISerializer>(),
-                        new FailedMessageEmailReporter(
-                            ioCContainer.Resolve<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
-                            ioCContainer.Resolve<IOptions<RuntimeOptions>>(),
-                            ioCContainer.Resolve<IOptions<EmailAddressesOptions>>()
-                        )
+                        ioCContainer.Resolve<IFailedMessageReporter>()
                     )
                 );
             }

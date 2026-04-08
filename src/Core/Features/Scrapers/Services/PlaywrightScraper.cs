@@ -84,11 +84,15 @@ public class PlaywrightScraper(
             {
                 page.Response += async (_, pageResponse) =>
                 {
+                    if (pageResponse.Request.ResourceType != "document") return;
+
                     if (!playwrightScraperOptions.Value.DisableWebPageSizeCheck
                         && pageResponse.Headers.TryGetValue("content-length", out var lengthStr)
-                        && long.TryParse(lengthStr, out var length) 
+                        && long.TryParse(lengthStr, out var length)
                         && length > ScrapingConstants.WebPageSizeLimitInMegaBytes * 1024 * 1024)
                     {
+                        logger?.LogInformation("content-length: {length}", length);
+
                         isPageTooLarge = true;
                         await page.CloseAsync();
                     }
@@ -147,6 +151,8 @@ public class PlaywrightScraper(
                             if (!playwrightScraperOptions.Value.DisableWebPageSizeCheck
                                 && currentTotal > ScrapingConstants.WebPageSizeLimitInMegaBytes * 1024 * 1024)
                             {
+                                logger?.LogInformation("chunked currentTotal: {currentTotal}", currentTotal);
+
                                 // Set ID to null to stop further processing of this request
                                 mainDocumentRequestId = null;
 

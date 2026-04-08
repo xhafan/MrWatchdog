@@ -19,9 +19,9 @@ public class LoginToken : VersionedEntity, IAggregateRoot
         Token = token;
     }
 
-    public virtual Guid Guid { get; protected set; }
-    public virtual string Email { get; protected set; } = null!;
-    public virtual string Token { get; protected set; } = null!;
+    public virtual Guid Guid { get; }
+    public virtual string Email { get; } = null!;
+    public virtual string Token { get; } = null!;
     public virtual bool Confirmed { get; protected set; }
     public virtual bool Used { get; protected set; }
     

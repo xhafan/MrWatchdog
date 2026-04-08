@@ -37,7 +37,7 @@ public class Job : VersionedEntity, IAggregateRoot
     public virtual JobKind Kind { get; }
     public virtual int NumberOfHandlingAttempts { get; protected set; }
     public virtual Job? RelatedCommandJob { get; protected set; }
-    public virtual string? RequestId { get; protected set; }
+    public virtual string? RequestId { get; }
     public virtual string? Queue { get; protected set; }
     public virtual IEnumerable<JobAffectedEntity> AffectedEntities => _affectedEntities;
     public virtual IEnumerable<JobHandlingAttempt> HandlingAttempts => _handlingAttempts;

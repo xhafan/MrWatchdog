@@ -67,6 +67,14 @@ public class PlaywrightScraper(
 
             var html = await page.ContentAsync();
 
+            if (playwrightScraperOptions.Value.SaveWebPageToTempDirectory)
+            {
+                await File.WriteAllTextAsync(
+                    Path.Combine(Path.GetTempPath(), $"webpage_{Guid.NewGuid()}.html"), 
+                    html
+                );
+            }
+
             return ScrapeResult.Succeeded(
                 html,
                 httpStatusCode: response.Status
@@ -76,12 +84,11 @@ public class PlaywrightScraper(
             {
                 page.Response += async (_, pageResponse) =>
                 {
-                    if (pageResponse.Headers.TryGetValue("content-length", out var lengthStr)
+                    if (!playwrightScraperOptions.Value.DisableWebPageSizeCheck
+                        && pageResponse.Headers.TryGetValue("content-length", out var lengthStr)
                         && long.TryParse(lengthStr, out var length) 
                         && length > ScrapingConstants.WebPageSizeLimitInMegaBytes * 1024 * 1024)
                     {
-                        logger?.LogInformation("content-length: {length}", length);
-
                         isPageTooLarge = true;
                         await page.CloseAsync();
                     }
@@ -137,10 +144,9 @@ public class PlaywrightScraper(
                         {
                             var currentTotal = Interlocked.Add(ref totalBytes, lengthProp.GetInt64());
 
-                            if (currentTotal > ScrapingConstants.WebPageSizeLimitInMegaBytes * 1024 * 1024)
+                            if (!playwrightScraperOptions.Value.DisableWebPageSizeCheck
+                                && currentTotal > ScrapingConstants.WebPageSizeLimitInMegaBytes * 1024 * 1024)
                             {
-                                logger?.LogInformation("chunked currentTotal: {currentTotal}", currentTotal);
-
                                 // Set ID to null to stop further processing of this request
                                 mainDocumentRequestId = null;
 

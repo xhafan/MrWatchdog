@@ -71,7 +71,7 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
                 CultureConstants.En.Name,
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
-                validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)
+                validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 60)
             ))
             .Build();
         _loginToken.Confirm();

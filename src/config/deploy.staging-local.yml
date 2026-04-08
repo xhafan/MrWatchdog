@@ -9,6 +9,8 @@ proxy:
 env:
   clear:
     ASPNETCORE_ENVIRONMENT: "Staging"
+    PlaywrightScraper__DisableWebPageSizeCheck: true
+    PlaywrightScraper__SaveWebPageToTempDirectory: true
 
 accessories:
   db:

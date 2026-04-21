@@ -5,7 +5,7 @@ using CoreDdd.Queries;
 using CoreWeb.Account.Features.LoginLink.ConfirmLogin;
 using Microsoft.Extensions.Options;
 
-namespace MrWatchdog.Web.Features.Account.LoginLink.ConfirmLogin;
+namespace MrWatchdog.Web.Features.Account.ConfirmLogin;
 
 public class ConfirmLoginModel(
     ICoreBus bus,

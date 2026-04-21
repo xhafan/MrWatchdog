@@ -15,7 +15,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account.LoginLink.CompleteLogin;
+using MrWatchdog.Web.Features.Account.CompleteLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 

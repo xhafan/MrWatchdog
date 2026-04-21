@@ -1,12 +1,12 @@
 ﻿using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Localization;
 using System.Globalization;
 using System.Security.Claims;
 using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Account.Features.LoginLink.Domain;
-using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Core.TestsShared.Builders;
 

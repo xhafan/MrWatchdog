@@ -3,7 +3,7 @@ using CoreWeb.Account.Features.LoginLink;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using MrWatchdog.Web.Features.Account.LoginLink.Login;
+using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 

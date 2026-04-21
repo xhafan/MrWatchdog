@@ -2,11 +2,11 @@
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Web.Features.Watchdogs.Api;
 using System.Security.Claims;
 using CoreBackend.Account.Features.LoginLink;
-using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 

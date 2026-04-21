@@ -3,7 +3,7 @@ using CoreBackend.TestsShared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account.LoginLink.LoginLinkSent;
+using MrWatchdog.Web.Features.Account.LoginLinkSent;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 

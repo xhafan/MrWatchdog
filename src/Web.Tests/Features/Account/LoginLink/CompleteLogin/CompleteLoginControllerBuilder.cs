@@ -10,7 +10,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Web.Features.Account.LoginLink.CompleteLogin;
+using MrWatchdog.Web.Features.Account.CompleteLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 

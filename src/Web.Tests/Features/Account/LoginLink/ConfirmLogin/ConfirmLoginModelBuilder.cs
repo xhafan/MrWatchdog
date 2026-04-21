@@ -7,7 +7,7 @@ using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
-using MrWatchdog.Web.Features.Account.LoginLink.ConfirmLogin;
+using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.ConfirmLogin;
 

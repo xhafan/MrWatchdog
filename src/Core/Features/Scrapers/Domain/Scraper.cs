@@ -2,6 +2,7 @@
 using CoreDdd.Domain.Events;
 using CoreUtils;
 using CoreUtils.Extensions;
+using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperArchived;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperRequestedToBeMadePublic;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperScrapingCompleted;
@@ -14,7 +15,6 @@ using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Extensions;
 using CoreBackend.Infrastructure.Rebus;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Core.Features.Scrapers.Domain;
 

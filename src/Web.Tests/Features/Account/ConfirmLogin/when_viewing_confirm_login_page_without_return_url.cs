@@ -1,8 +1,8 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
@@ -25,7 +25,7 @@ public class when_viewing_confirm_login_page_without_return_url : BaseDatabaseTe
         
         _model = new ConfirmLoginModelBuilder(UnitOfWork)
             .WithBus(_bus)
-            .WithToken(Uri.EscapeDataString(_loginToken.Token))
+            .WithLoginToken(Uri.EscapeDataString(_loginToken.Token))
             .Build();
         
         _actionResult = await _model.OnGet();

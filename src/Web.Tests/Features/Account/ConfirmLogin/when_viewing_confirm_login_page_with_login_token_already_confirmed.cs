@@ -1,9 +1,9 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using CoreBackend.Features.Account.Commands;
+using CoreBackend.Features.Account.Domain;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
@@ -25,7 +25,7 @@ public class when_viewing_confirm_login_page_with_login_token_already_confirmed 
         
         _model = new ConfirmLoginModelBuilder(UnitOfWork)
             .WithBus(_bus)
-            .WithToken(Uri.EscapeDataString(_loginToken.Token))
+            .WithLoginToken(Uri.EscapeDataString(_loginToken.Token))
             .Build();
     }
     

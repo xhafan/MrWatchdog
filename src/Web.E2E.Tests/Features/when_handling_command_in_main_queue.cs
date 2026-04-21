@@ -1,12 +1,13 @@
 ﻿using System.Net;
+using CoreBackend.Features.Account.Commands;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
-using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 

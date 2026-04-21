@@ -1,57 +1,16 @@
-using CoreDdd.Queries;
-using CoreUtils;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Account.Queries;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+using CoreBackend.Features.Account;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
-using CoreWeb.Features.Shared;
+using CoreDdd.Queries;
+using CoreWeb.Features.Account.ConfirmLogin;
+using Microsoft.Extensions.Options;
 
 namespace MrWatchdog.Web.Features.Account.ConfirmLogin;
 
-[AllowAnonymous]
 public class ConfirmLoginModel(
     ICoreBus bus,
     IOptions<JwtOptions> iJwtOptions,
     IQueryExecutor queryExecutor,
     IJobCompletionAwaiter jobCompletionAwaiter
-) : BasePageModel
-{
-    [BindProperty(SupportsGet = true)]
-    [Required]
-    [StringLength(800)]
-    public string Token { get; set; } = null!;
-
-    public string ReturnUrl { get; private set; } = null!;
-    
-    public async Task<IActionResult> OnGet()
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        
-        var tokenClaimsPrincipal = TokenValidator.ValidateToken(Uri.UnescapeDataString(Token), iJwtOptions.Value);
-
-        var loginTokenGuidString = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.Guid);
-        Guard.Hope(!string.IsNullOrWhiteSpace(loginTokenGuidString), "Cannot get guid from token.");
-        var loginTokenGuid = Guid.Parse(loginTokenGuidString);
-        
-        var loginTokenDto = await queryExecutor.ExecuteSingleAsync<GetLoginTokenByGuidQuery, LoginTokenDto>(new GetLoginTokenByGuidQuery(loginTokenGuid));
-        Guard.Hope(!loginTokenDto.Confirmed, "Login token has already been confirmed.");
-        
-        var command = new ConfirmLoginTokenCommand(loginTokenGuid);
-        await bus.Send(command);
-        await jobCompletionAwaiter.WaitForJobCompletion(command.Guid);
-
-        ReturnUrl = tokenClaimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl) ?? "/";
-
-        return Page();
-    }
-}
+) 
+    : BaseConfirmLoginModel(bus, iJwtOptions, queryExecutor, jobCompletionAwaiter);

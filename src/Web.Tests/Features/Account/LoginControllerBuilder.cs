@@ -1,9 +1,9 @@
-﻿using CoreBackend.TestsShared;
+﻿using CoreBackend.Features.Account.Queries;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Infrastructure.Repositories;
-using MrWatchdog.Web.Features.Account;
+using CoreWeb.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account;
 

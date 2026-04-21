@@ -1,4 +1,4 @@
-﻿namespace MrWatchdog.Core.Features.Account;
+﻿namespace CoreBackend.Features.Account;
 
 public class JwtOptions
 {

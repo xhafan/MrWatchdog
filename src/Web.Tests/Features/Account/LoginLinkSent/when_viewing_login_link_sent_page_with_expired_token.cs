@@ -1,9 +1,11 @@
 ﻿using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
 
@@ -41,7 +43,7 @@ public class when_viewing_login_link_sent_page_with_expired_token : BaseDatabase
             .WithToken(TokenGenerator.GenerateLoginToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com",
-                CultureConstants.En.Name,
+                [new Claim(CustomClaimTypes.CultureName, CultureConstants.En.Name)],
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)

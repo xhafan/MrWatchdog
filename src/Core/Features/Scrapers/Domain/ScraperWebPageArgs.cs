@@ -13,7 +13,7 @@ public record ScraperWebPageArgs
 
     [Url]
     [Required]
-    [StringLength(ValidationConstants.UrlMaxLength)]
+    [StringLength(CoreBackendValidationConstants.UrlMaxLength)]
     [Display(Name = nameof(Resource.Url), ResourceType = typeof(Resource))]
     public string? Url { get; set; }
 

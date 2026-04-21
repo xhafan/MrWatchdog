@@ -1,15 +1,16 @@
 ﻿using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Core.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Tests.Features.Account.Commands;
 
@@ -55,8 +56,8 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
         var claimsPrincipal = TokenValidator.ValidateToken(_loginToken.Token, _iJwtOptions.Value);
 
         claimsPrincipal.FindFirstValue(ClaimTypes.Email).ShouldBe(_email);
-        claimsPrincipal.FindFirstValue(CustomClaimTypes.Guid).ShouldBe(_loginToken.Guid.ToString());
-        claimsPrincipal.FindFirstValue(CustomClaimTypes.ReturnUrl).ShouldBe("/Watchdogs");
+        claimsPrincipal.FindFirstValue(CoreBackendClaimTypes.Guid).ShouldBe(_loginToken.Guid.ToString());
+        claimsPrincipal.FindFirstValue(CoreBackendClaimTypes.ReturnUrl).ShouldBe("/Watchdogs");
         claimsPrincipal.FindFirstValue(CustomClaimTypes.CultureName).ShouldBe("cs");
     }
 
@@ -73,7 +74,7 @@ public class when_sending_login_link_to_user : BaseDatabaseTest
         command.RecipientEmail.ShouldBe(_email);
         command.Subject.ShouldContain("odkaz pro přihlášení");
         command.HtmlMessage.ShouldContain("přihlášení");
-        command.HtmlMessage.ShouldContain($"https://mrwatchdog_test/Account/ConfirmLogin?token={_loginToken.Token}");
+        command.HtmlMessage.ShouldContain($"https://mrwatchdog_test/Account/ConfirmLogin?loginToken={_loginToken.Token}");
         return true;
     }
 }

@@ -1,8 +1,8 @@
-﻿using CoreBackend.TestsShared;
+﻿using CoreBackend.Features.Account.Commands;
+using CoreBackend.Features.Account.Domain;
+using CoreBackend.Infrastructure.Repositories;
+using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.TestsShared.Builders;
 
 namespace MrWatchdog.Core.Tests.Features.Account.Commands;

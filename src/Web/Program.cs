@@ -42,14 +42,12 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using Microsoft.Playwright;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
 using MrWatchdog.Core.Infrastructure.HttpClients;
 using MrWatchdog.Core.Infrastructure.Rebus;
 using MrWatchdog.Core.Resources;
-using MrWatchdog.Web.Features.Account.Login;
 using MrWatchdog.Web.HostedServices;
 using MrWatchdog.Web.Infrastructure.RateLimiting;
 using MrWatchdog.Web.Infrastructure.Rebus;
@@ -70,9 +68,13 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
+using CoreBackend.Features.Account;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Messages;
+using CoreWeb.Features.Account;
+using CoreWeb.Features.Account.Login;
+using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web;
 
@@ -333,10 +335,10 @@ public class Program
 
                 googleOptions.Events.OnRemoteFailure = context =>
                 {
-                    var redirectUrl = context.Properties?.Items.TryGetValue(AccountUrlConstants.ReturnUrl, out var returnUrl) == true
+                    var redirectUrl = context.Properties?.Items.TryGetValue(CoreWebAccountUrlConstants.ReturnUrl, out var returnUrl) == true
                         ? QueryHelpers.AddQueryString(
                             AccountUrlConstants.AccountLoginUrl,
-                            new Dictionary<string, string?> {{AccountUrlConstants.ReturnUrl, returnUrl}}
+                            new Dictionary<string, string?> {{CoreWebAccountUrlConstants.ReturnUrl, returnUrl}}
                         )
                         : AccountUrlConstants.AccountLoginUrl;
                     context.Response.Redirect(redirectUrl);

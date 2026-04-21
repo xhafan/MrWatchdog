@@ -1,16 +1,16 @@
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
-namespace MrWatchdog.Core.Features.Account;
+namespace CoreBackend.Features.Account;
 
 public static class TokenGenerator
 {
     public static string GenerateLoginToken(
         Guid tokenGuid, 
         string email,
-        string cultureName,
+        IEnumerable<Claim> customClaims,
         string? returnUrl,
         JwtOptions jwtOptions,
         DateTime? validFrom = null
@@ -19,16 +19,15 @@ public static class TokenGenerator
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new List<Claim>
+        var claims = new List<Claim>(customClaims)
         {
             new(ClaimTypes.Email, email),
-            new(CustomClaimTypes.Guid, tokenGuid.ToString()),
-            new(CustomClaimTypes.CultureName, cultureName)
+            new(CoreBackendClaimTypes.Guid, tokenGuid.ToString())
         };
         
         if (!string.IsNullOrWhiteSpace(returnUrl))
         {
-            claims.Add(new Claim(CustomClaimTypes.ReturnUrl, returnUrl));
+            claims.Add(new Claim(CoreBackendClaimTypes.ReturnUrl, returnUrl));
         }        
 
         validFrom ??= DateTime.UtcNow;
@@ -44,18 +43,13 @@ public static class TokenGenerator
     }
 
     public static string GenerateUnsubscribeToken(
-        long watchdogId,
+        IEnumerable<Claim> claims,
         JwtOptions jwtOptions
     )
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new List<Claim>
-        {
-            new(CustomClaimTypes.WatchdogId, watchdogId.ToString())
-        };
-        
         var token = new JwtSecurityToken(
             claims: claims,
             signingCredentials: signingCredentials

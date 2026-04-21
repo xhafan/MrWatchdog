@@ -8,5 +8,4 @@ export abstract class DomainConstants
 	public static scraperWebPageEntityName: string = `ScraperWebPage`;
 	public static scraperWebPageScrapingDataUpdatedDomainEventName: string = `ScraperWebPageScrapingDataUpdatedDomainEvent`;
 	public static watchdogEntityName: string = `Watchdog`;
-	public static accountLoginTokenEntityName: string = `LoginToken`;
 }

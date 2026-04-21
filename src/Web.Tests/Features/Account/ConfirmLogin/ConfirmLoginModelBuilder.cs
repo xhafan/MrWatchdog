@@ -1,12 +1,12 @@
-﻿using CoreBackend.Features.Jobs.Services;
+﻿using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Queries;
+using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
@@ -15,7 +15,7 @@ public class ConfirmLoginModelBuilder(NhibernateUnitOfWork unitOfWork)
 {
     private ICoreBus? _bus;
     private IJobCompletionAwaiter? _jobCompletionAwaiter;
-    private string? _token;
+    private string? _loginToken;
 
     public ConfirmLoginModelBuilder WithBus(ICoreBus bus)
     {
@@ -29,9 +29,9 @@ public class ConfirmLoginModelBuilder(NhibernateUnitOfWork unitOfWork)
         return this;
     }
     
-    public ConfirmLoginModelBuilder WithToken(string? token)
+    public ConfirmLoginModelBuilder WithLoginToken(string? loginToken)
     {
-        _token = token;
+        _loginToken = loginToken;
         return this;
     }
     
@@ -54,7 +54,7 @@ public class ConfirmLoginModelBuilder(NhibernateUnitOfWork unitOfWork)
             _jobCompletionAwaiter
         )
         {
-            Token = _token!
+            LoginToken = _loginToken!
         };
         ModelValidator.ValidateModel(model);
         return model;

@@ -2,9 +2,11 @@
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
@@ -25,7 +27,7 @@ public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTe
         
         _model = new ConfirmLoginModelBuilder(UnitOfWork)
             .WithBus(_bus)
-            .WithToken(Uri.EscapeDataString(_loginToken.Token))
+            .WithLoginToken(Uri.EscapeDataString(_loginToken.Token))
             .Build();
     }
     
@@ -47,7 +49,7 @@ public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTe
             .WithToken(TokenGenerator.GenerateLoginToken(
                 loginTokenGuid, 
                 $"user+{Guid.NewGuid()}@email.com", 
-                CultureConstants.En.Name,
+                [new Claim(CustomClaimTypes.CultureName, CultureConstants.En.Name)],
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)

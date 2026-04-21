@@ -9,6 +9,7 @@ using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 using System.Security.Claims;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;

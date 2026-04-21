@@ -1,6 +1,6 @@
-﻿using CoreDdd.Queries;
-using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreDdd.Queries;
 
-namespace MrWatchdog.Core.Features.Account.Queries;
+namespace CoreBackend.Features.Account.Queries;
 
 public record GetLoginTokenByIdQuery(long LoginTokenId) : IQuery<LoginTokenDto>;

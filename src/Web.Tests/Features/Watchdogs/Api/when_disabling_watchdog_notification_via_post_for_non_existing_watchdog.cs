@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Web.Features.Watchdogs.Api;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 
@@ -24,7 +26,10 @@ public class when_disabling_watchdog_notification_via_post_for_non_existing_watc
             .WithBus(_bus)
             .Build();
 
-        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(123, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
+        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(
+            [new Claim(CustomClaimTypes.WatchdogId, "123")], 
+            OptionsTestRetriever.Retrieve<JwtOptions>().Value
+        );
         
         _actionResult = await _controller.DisableNotificationPost(unsubscribeToken);
     }

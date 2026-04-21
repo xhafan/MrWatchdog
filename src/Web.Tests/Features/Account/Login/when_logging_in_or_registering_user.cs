@@ -1,20 +1,21 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using FakeItEasy;
-using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Web.Features.Account.Login;
-using System.Globalization;
+﻿using CoreBackend.Features;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
+using CoreDdd.Nhibernate.UnitOfWorks;
+using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account.Commands;
+using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
+using MrWatchdog.Web.Features.Account.Login;
+using System.Globalization;
+using CoreBackend.Features.Account;
+using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
 
@@ -107,7 +108,7 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
                             .WithType(nameof(SendLoginLinkToUserCommand))
                             .WithKind(JobKind.Command)
                             .Build();
-                        _job.AddAffectedEntity(DomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
+                        _job.AddAffectedEntity(CoreBackendDomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
                         newUnitOfWork.Save(_job);
                     }
                 );

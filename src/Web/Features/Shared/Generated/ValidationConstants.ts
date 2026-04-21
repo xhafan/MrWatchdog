@@ -8,5 +8,4 @@ export abstract class ValidationConstants
 	public static scraperDescriptionMaxLength: number = 1000;
 	public static scraperWebPageNameMaxLength: number = 200;
 	public static searchTermMaxLength: number = 400;
-	public static urlMaxLength: number = 3000;
 }

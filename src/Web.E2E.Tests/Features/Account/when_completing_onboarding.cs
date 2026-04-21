@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;

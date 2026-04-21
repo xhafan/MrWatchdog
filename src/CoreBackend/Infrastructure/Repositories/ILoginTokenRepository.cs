@@ -1,7 +1,7 @@
-﻿using CoreDdd.Domain.Repositories;
-using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreDdd.Domain.Repositories;
 
-namespace MrWatchdog.Core.Infrastructure.Repositories;
+namespace CoreBackend.Infrastructure.Repositories;
 
 public interface ILoginTokenRepository : IRepository<LoginToken>
 {

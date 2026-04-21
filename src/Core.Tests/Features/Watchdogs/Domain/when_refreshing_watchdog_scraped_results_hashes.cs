@@ -1,10 +1,10 @@
-﻿using CoreBackend.Infrastructure.Configurations;
+﻿using CoreBackend.Features.Account;
+using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreBackend.TestsShared.Builders;
 using CoreDdd.Nhibernate.TestHelpers;
 using FakeItEasy;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.TestsShared.Builders;

@@ -1,7 +1,7 @@
-﻿using CoreBackend.TestsShared;
-using MrWatchdog.Core.Features.Account.Domain;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreBackend.TestsShared;
+using CoreWeb.Features.Account;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account;
 

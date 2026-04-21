@@ -1,5 +1,5 @@
 ﻿using CoreBackend.Messages;
 
-namespace MrWatchdog.Core.Features.Account.Commands;
+namespace CoreBackend.Features.Account.Commands;
 
 public record ConfirmLoginTokenCommand(Guid LoginTokenGuid) : Command;

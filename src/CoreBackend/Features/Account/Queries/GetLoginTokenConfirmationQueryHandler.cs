@@ -1,8 +1,8 @@
-﻿using CoreDdd.Nhibernate.Queries;
+﻿using CoreBackend.Infrastructure.Repositories;
+using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Features.Account.Queries;
+namespace CoreBackend.Features.Account.Queries;
 
 public class GetLoginTokenConfirmationQueryHandler(
     NhibernateUnitOfWork unitOfWork, 

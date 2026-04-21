@@ -1,8 +1,8 @@
-﻿using CoreBackend.Infrastructure.Configurations;
+﻿using CoreBackend.Features.Account;
+using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Domain.Repositories;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Account;
 using Rebus.Handlers;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;

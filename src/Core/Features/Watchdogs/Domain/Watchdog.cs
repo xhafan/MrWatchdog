@@ -15,6 +15,8 @@ using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
 using MrWatchdog.Core.Resources;
 using Serilog;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 
@@ -180,7 +182,10 @@ public class Watchdog : VersionedEntity, IAggregateRoot
             
             var localizedScraperName = Scraper.GetLocalizedName(userCulture);
 
-            var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(Id, jwtOptions);
+            var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(
+                [new Claim(CustomClaimTypes.WatchdogId, Id.ToString())],
+                jwtOptions
+            );
 
             await bus.Send(new SendEmailCommand(
                 User.Email,

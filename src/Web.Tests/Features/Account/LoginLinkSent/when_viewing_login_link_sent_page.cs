@@ -1,7 +1,7 @@
-﻿using CoreBackend.TestsShared;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreBackend.TestsShared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
 

@@ -1,8 +1,8 @@
 @page
+@using CoreWeb.Features.Account.Login
 @using CoreWeb.Features.Shared
 @using Microsoft.Extensions.Options
 @using MrWatchdog.Core.Resources
-@using MrWatchdog.Web.Features.Shared
 @model LoginModel
 @inject IOptions<ReCaptchaOptions> ReCaptchaOptions
 @{
@@ -17,7 +17,7 @@
 
 <h1 class="display-4">@title</h1>
 
-<div @Stimulus.Controller(StimulusControllers.AccountLogin, new LoginStimulusModel(ReCaptchaOptions.Value.SiteKey))>
+<div @Stimulus.Controller(CoreWebStimulusControllers.AccountLogin, new LoginStimulusModel(ReCaptchaOptions.Value.SiteKey))>
     <form method="post" 
           style="max-width: 600px;"
           data-account--login-target="form"

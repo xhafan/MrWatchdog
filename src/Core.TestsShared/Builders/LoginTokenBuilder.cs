@@ -1,10 +1,12 @@
-﻿using System.Globalization;
-using CoreBackend.TestsShared;
+﻿using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
+using System.Globalization;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 
 namespace MrWatchdog.Core.TestsShared.Builders;
 
@@ -61,7 +63,7 @@ public class LoginTokenBuilder(NhibernateUnitOfWork? unitOfWork = null)
             _token = TokenGenerator.GenerateLoginToken(
                 _guid, 
                 _email, 
-                _culture.Name,
+                [new Claim(CustomClaimTypes.CultureName, _culture.Name)],
                 _tokenReturnUrl, 
                 OptionsTestRetriever.Retrieve<JwtOptions>().Value
             );

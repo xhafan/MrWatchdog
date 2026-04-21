@@ -1,4 +1,4 @@
-﻿using CoreBackend.Infrastructure.Extensions;
+﻿using CoreBackend.Features.Account;
 using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Core.Features.Account;
@@ -7,40 +7,13 @@ namespace MrWatchdog.Core.Features.Account;
 public static class AccountUrlConstants
 {
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string TokenVariable = "$token";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string LoginTokenGuidVariable = "$loginTokenGuid";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ReturnUrl = "returnUrl";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string AccountLoginUrl = "/Account/Login";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountConfirmLoginUrlTemplate = $"/Account/ConfirmLogin?token={TokenVariable}";
+    public const string AccountConfirmLoginUrlTemplate = $"/Account/ConfirmLogin?loginToken={CoreBackendAccountUrlConstants.LoginTokenVariable}";
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountLoginLinkSentUrlTemplate = $"/Account/LoginLinkSent?loginTokenGuid={LoginTokenGuidVariable}";
+    public const string AccountLoginLinkSentUrlTemplate = $"/Account/LoginLinkSent?loginTokenGuid={CoreBackendAccountUrlConstants.LoginTokenGuidVariable}";
     
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ApiGetLoginTokenConfirmationUrlTemplate = $"/api/Login/GetLoginTokenConfirmation?loginTokenGuid={LoginTokenGuidVariable}";
 
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string ApiCompleteLoginUrlTemplate = $"/api/CompleteLogin/CompleteLogin?loginTokenGuid={LoginTokenGuidVariable}";
-
-
-    extension(string urlTemplate)
-    {
-        public string WithToken(string token)
-        {
-            return urlTemplate.WithVariable(TokenVariable, token);
-        }
-
-        public string WithLoginTokenGuid(Guid loginTokenGuid)
-        {
-            return urlTemplate.WithVariable(LoginTokenGuidVariable, loginTokenGuid.ToString());
-        }
-    }
 }   

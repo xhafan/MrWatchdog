@@ -1,6 +1,6 @@
 ﻿using CoreBackend.TestsShared;
+using CoreWeb.Features.Account;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
@@ -26,6 +26,6 @@ public class when_logging_in_via_external_authentication_provider_without_return
         _actionResult.ShouldBeOfType<ChallengeResult>();
         var challengeResult = (ChallengeResult) _actionResult;
         challengeResult.Properties.ShouldNotBeNull();
-        challengeResult.Properties.Items.ShouldNotContainKey(AccountUrlConstants.ReturnUrl);
+        challengeResult.Properties.Items.ShouldNotContainKey(CoreWebAccountUrlConstants.ReturnUrl);
     }
 }

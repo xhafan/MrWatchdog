@@ -1,4 +1,5 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;

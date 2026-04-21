@@ -3,6 +3,7 @@ import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
+import { CoreWebAccountUrlConstants } from "../../../../CoreWeb/Features/Shared/Generated/CoreWebAccountUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
 import { searchTermModifiedEventName } from "../Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
@@ -57,7 +58,7 @@ export default class ScrapedResultsController extends Controller {
         const currentRelativeUrl = currentUrl.replace(window.location.origin, "");
 
         let accountLoginUrl = new URL(AccountUrlConstants.accountLoginUrl, window.location.origin);
-        accountLoginUrl.searchParams.set(AccountUrlConstants.returnUrl, currentRelativeUrl);
+        accountLoginUrl.searchParams.set(CoreWebAccountUrlConstants.returnUrl, currentRelativeUrl);
 
         Turbo.visit(accountLoginUrl.toString());
     }

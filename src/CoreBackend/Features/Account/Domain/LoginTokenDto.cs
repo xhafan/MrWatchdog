@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace MrWatchdog.Core.Features.Account.Domain;
+namespace CoreBackend.Features.Account.Domain;
 
 [TsInterface]
 public record LoginTokenDto(

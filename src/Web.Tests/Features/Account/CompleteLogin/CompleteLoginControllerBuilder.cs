@@ -1,11 +1,13 @@
-﻿using CoreBackend.Features.Jobs.Services;
+﻿using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Queries;
+using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Web.Features.Account.CompleteLogin;

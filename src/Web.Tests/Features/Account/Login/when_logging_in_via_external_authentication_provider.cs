@@ -1,8 +1,8 @@
 ﻿using CoreBackend.TestsShared;
+using CoreWeb.Features.Account;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
@@ -39,6 +39,6 @@ public class when_logging_in_via_external_authentication_provider : BaseDatabase
         challengeResult.AuthenticationSchemes.ShouldBe(["Google"]);
         challengeResult.Properties.ShouldNotBeNull();
         challengeResult.Properties.RedirectUri.ShouldBe(_callbackUrl);
-        challengeResult.Properties.Items.ShouldContainKeyAndValue(AccountUrlConstants.ReturnUrl, "/Watchdogs");
+        challengeResult.Properties.Items.ShouldContainKeyAndValue(CoreWebAccountUrlConstants.ReturnUrl, "/Watchdogs");
     }
 }

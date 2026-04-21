@@ -2,7 +2,7 @@
 using CoreDdd.Domain;
 using CoreUtils;
 
-namespace MrWatchdog.Core.Features.Account.Domain;
+namespace CoreBackend.Features.Account.Domain;
 
 public class LoginToken : VersionedEntity, IAggregateRoot
 {

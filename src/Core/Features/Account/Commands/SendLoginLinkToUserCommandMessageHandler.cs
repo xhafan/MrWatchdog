@@ -1,11 +1,12 @@
-﻿using CoreBackend.Infrastructure.Configurations;
+﻿using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Commands;
+using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Repositories;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Core.Resources;
-using Rebus.Handlers;
+using System.Security.Claims;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 
@@ -15,29 +16,27 @@ public class SendLoginLinkToUserCommandMessageHandler(
     IOptions<JwtOptions> iJwtOptions,
     IOptions<RuntimeOptions> iRuntimeOptions
 ) 
-    : IHandleMessages<SendLoginLinkToUserCommand>
+    : BaseSendLoginLinkToUserCommandMessageHandler<SendLoginLinkToUserCommand>(
+        loginTokenRepository,
+        iJwtOptions,
+        iRuntimeOptions
+    )
 {
-    public async Task Handle(SendLoginLinkToUserCommand command)
+    private readonly JwtOptions _jwtOptions = iJwtOptions.Value;
+    private readonly RuntimeOptions _runtimeOptions = iRuntimeOptions.Value;
+
+    protected override IEnumerable<Claim> GetCustomClaimForLoginTokenGeneration(SendLoginLinkToUserCommand command)
     {
-        var jwtOptions = iJwtOptions.Value;
-        var runtimeOptions = iRuntimeOptions.Value;
+        return [new Claim(CustomClaimTypes.CultureName, command.Culture.Name)];
+    }
 
-        var loginTokenGuid = Guid.NewGuid();
+    protected override string GetAccountConfirmLoginUrl(string loginToken)
+    {
+        return AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithLoginToken(loginToken);
+    }
 
-        var loginTokenString = TokenGenerator.GenerateLoginToken(
-            loginTokenGuid,
-            command.Email,
-            command.Culture.Name,
-            command.ReturnUrl,
-            jwtOptions
-        );
-
-        var loginToken = new LoginToken(loginTokenGuid, command.Email, loginTokenString);
-        await loginTokenRepository.SaveAsync(loginToken);
-        
-        var tokenParam = Uri.EscapeDataString(loginTokenString);
-        var accountConfirmLoginUrl = $"{runtimeOptions.Url}{AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(tokenParam)}";
-
+    protected override async Task SendLoginLinkToUser(SendLoginLinkToUserCommand command, string accountConfirmLoginUrl)
+    {
         var mrWatchdogResource = ResourceHelper.GetString(nameof(Resource.MrWatchdog), command.Culture);
 
         await bus.Send(new SendEmailCommand(
@@ -45,10 +44,10 @@ public class SendLoginLinkToUserCommandMessageHandler(
             string.Format(ResourceHelper.GetString(nameof(Resource.LoginLinkEmailSubject), command.Culture), mrWatchdogResource),
             string.Format(
                 ResourceHelper.GetString(nameof(Resource.LoginLinkEmailBody), command.Culture),
-                runtimeOptions.Url,
+                _runtimeOptions.Url,
                 mrWatchdogResource,
                 accountConfirmLoginUrl,
-                jwtOptions.ExpireMinutes
+                _jwtOptions.ExpireMinutes
             )
         ));
     }

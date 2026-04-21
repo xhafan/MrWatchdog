@@ -1,4 +1,6 @@
-﻿using CoreBackend.Infrastructure.Configurations;
+﻿using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
@@ -38,7 +40,10 @@ public class when_notifying_user_about_new_watchdog_scraped_results : BaseDataba
             OptionsTestRetriever.Retrieve<JwtOptions>()
         );
 
-        _unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(_watchdog.Id, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
+        _unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(
+            [new Claim(CustomClaimTypes.WatchdogId, _watchdog.Id.ToString())],
+            OptionsTestRetriever.Retrieve<JwtOptions>().Value
+        );
 
         await handler.Handle(new WatchdogScrapedResultsUpdatedDomainEvent(_watchdog.Id));
     }

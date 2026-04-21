@@ -1,5 +1,4 @@
-﻿using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Scrapers.Domain;
+﻿using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain.Events.ScraperWebPageScrapingDataUpdated;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using Reinforced.Typings.Attributes;
@@ -20,9 +19,4 @@ public static class DomainConstants
     
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string WatchdogEntityName = nameof(Watchdog);
-    
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountLoginTokenEntityName = nameof(LoginToken);
-    
 }

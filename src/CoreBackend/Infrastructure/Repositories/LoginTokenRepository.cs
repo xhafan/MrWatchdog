@@ -1,9 +1,9 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreUtils;
-using MrWatchdog.Core.Features.Account.Domain;
 
-namespace MrWatchdog.Core.Infrastructure.Repositories;
+namespace CoreBackend.Infrastructure.Repositories;
 
 public class LoginTokenRepository(NhibernateUnitOfWork unitOfWork) : NhibernateRepository<LoginToken>(unitOfWork), ILoginTokenRepository
 {

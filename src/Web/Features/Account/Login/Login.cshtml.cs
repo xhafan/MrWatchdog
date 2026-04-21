@@ -1,32 +1,25 @@
-using AspNetCore.ReCaptcha;
-using CoreDdd.Queries;
-using CoreUtils;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Core.Features.Account.Queries;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using CoreBackend.Features.Jobs.Queries;
+using CoreBackend.Features.Account.Commands;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Validations;
-using CoreWeb.Features.Shared;
+using CoreDdd.Queries;
+using CoreWeb.Features.Account.Login;
+using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Resources;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using CoreBackend.Features.Account;
+using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Features.Account.Login;
 
-[ValidateReCaptcha]
-[AllowAnonymous]
 public class LoginModel(
     ICoreBus bus,
     IJobCompletionAwaiter jobCompletionAwaiter,
     IQueryExecutor queryExecutor
-) : BasePageModel
+) 
+    : BaseLoginModel(bus, jobCompletionAwaiter, queryExecutor)
 {
     [BindProperty]
     [Required]
@@ -34,56 +27,18 @@ public class LoginModel(
     [StringLength(254)]
     [Display(Name = nameof(Resource.Email), ResourceType = typeof(Resource))]
     public string Email { get; set; } = null!;
-    
-    [BindProperty(SupportsGet = true)]
-    [StringLength(ValidationConstants.UrlMaxLength)]
-    public string? ReturnUrl { get; set; }
-    
-    // this field is here just to see ReCaptcha validation error
-    public string Recaptcha { get; set; } = null!;
 
-    public async Task<IActionResult> OnPost()
+    protected override BaseSendLoginLinkToUserCommand GetSendLoginLinkToUserCommand()
     {
-        if (!ModelState.IsValid)
-        {
-            return PageWithUnprocessableEntityStatus422();
-        }
-
-        Email = Email.Trim();
-
-        var command = new SendLoginLinkToUserCommand(
-            Email,
+        return new SendLoginLinkToUserCommand(
+            Email.Trim(),
             CultureInfo.CurrentUICulture,
             Url.IsLocalUrl(ReturnUrl) ? ReturnUrl : null
         );
-        await bus.Send(command);
-        await jobCompletionAwaiter.WaitForJobCompletion(command.Guid);
-
-        var jobDto = (
-            await queryExecutor.ExecuteAsync<GetJobQuery, JobDto>(new GetJobQuery(command.Guid))
-        ).Single();
-        var loginTokenId = jobDto.AffectedEntities.Single(x => x.EntityName == DomainConstants.AccountLoginTokenEntityName).EntityId;
-        var loginTokenDto = await queryExecutor.ExecuteSingleAsync<GetLoginTokenByIdQuery, LoginTokenDto>(new GetLoginTokenByIdQuery(loginTokenId));
-        
-        return Redirect(AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(loginTokenDto.Guid));
     }
 
-    public IActionResult OnGetExternalLogin(string provider)
+    protected override string GetAccountLoginLinkSentUrl(Guid loginTokenGuid)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var redirectUrl = Url.Action("CompleteExternalLoginCallback", "CompleteLogin", values: new {ReturnUrl});
-        Guard.Hope(redirectUrl != null, nameof(redirectUrl) + " is null");
-
-        var properties = new AuthenticationProperties {RedirectUri = redirectUrl};
-        if (!string.IsNullOrWhiteSpace(ReturnUrl))
-        {
-            properties.Items.Add(AccountUrlConstants.ReturnUrl, ReturnUrl);
-        }
-
-        return new ChallengeResult(provider, properties);
+        return AccountUrlConstants.AccountLoginLinkSentUrlTemplate.WithLoginTokenGuid(loginTokenGuid);
     }
 }

@@ -7,6 +7,8 @@ using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Api;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 
@@ -29,7 +31,10 @@ public class when_disabling_watchdog_notification_via_post_for_existing_watchdog
             .WithBus(_bus)
             .Build();
         
-        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(_watchdog.Id, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
+        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(
+            [new Claim(CustomClaimTypes.WatchdogId, _watchdog.Id.ToString())],
+            OptionsTestRetriever.Retrieve<JwtOptions>().Value
+        );
 
         _actionResult = await _controller.DisableNotificationPost(unsubscribeToken);
     }

@@ -1,8 +1,9 @@
 ﻿using System.Net;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 

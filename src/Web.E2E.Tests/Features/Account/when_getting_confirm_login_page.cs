@@ -1,10 +1,11 @@
 ﻿using System.Net;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Commands;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using NHibernate;
@@ -27,7 +28,7 @@ public class when_getting_confirm_login_page : BaseDatabaseTest
     public async Task confirm_login_page_can_be_fetched()
     {
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value
-            .GetAsync(AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithToken(_loginToken.Token));
+            .GetAsync(AccountUrlConstants.AccountConfirmLoginUrlTemplate.WithLoginToken(_loginToken.Token));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
     

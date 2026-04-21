@@ -1,4 +1,6 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +31,10 @@ public class when_disabling_watchdog_notification_via_get_for_existing_watchdog 
             .WithBus(_bus)
             .Build();
         
-        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(_watchdog.Id, OptionsTestRetriever.Retrieve<JwtOptions>().Value);
+        var unsubscribeToken = TokenGenerator.GenerateUnsubscribeToken(
+            [new Claim(CustomClaimTypes.WatchdogId, _watchdog.Id.ToString())], 
+            OptionsTestRetriever.Retrieve<JwtOptions>().Value
+        );
 
         _actionResult = await _controller.DisableNotificationGet(unsubscribeToken);
     }

@@ -11,6 +11,8 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 using System.Security.Claims;
+using CoreBackend.Features.Account.Commands;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;

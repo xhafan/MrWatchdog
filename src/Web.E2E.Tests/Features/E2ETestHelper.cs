@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Commands;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Commands;
+using CoreWeb.Features.Account;
 using NHibernate;
 using NHibernate.Criterion;
 
@@ -37,7 +38,7 @@ public static partial class E2ETestHelper
     {
         var request = new HttpRequestMessage(
             HttpMethod.Post,
-            AccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(loginTokenGuid)
+            CoreWebAccountUrlConstants.ApiCompleteLoginUrlTemplate.WithLoginTokenGuid(loginTokenGuid)
         );
 
         if (httpHeaders != null)

@@ -25,8 +25,8 @@ import ScrapersScrapedResultsWebPagesController from "../Scrapers/Shared/Scraped
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
-import AccountLoginController from "../Account/Login/LoginController";
-import AccountLoginLinkSentController from "../Account/LoginLinkSent/LoginLinkSentController";
+import AccountLoginController from "../../../CoreWeb/Features/Account/Login/LoginController";
+import AccountLoginLinkSentController from "../../../CoreWeb/Features/Account/LoginLinkSent/LoginLinkSentController";
 
 
 const application = Application.start();
@@ -48,8 +48,8 @@ application.register(StimulusControllers.scrapersScrapedResultsWebPages, Scraper
 application.register(StimulusControllers.watchdogDetail, WatchdogsDetailController);
 application.register(StimulusControllers.watchdogDetailOverview, WatchdogsDetailOverviewController);
 
-application.register(StimulusControllers.accountLogin, AccountLoginController);
-application.register(StimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
+application.register(CoreWebStimulusControllers.accountLogin, AccountLoginController);
+application.register(CoreWebStimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
 
 
 attachValidationOnTurboLoad();

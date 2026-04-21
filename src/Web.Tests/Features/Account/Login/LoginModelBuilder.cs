@@ -1,4 +1,5 @@
-﻿using CoreBackend.Features.Jobs.Queries;
+﻿using CoreBackend.Features.Account.Queries;
+using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Repositories;
@@ -9,8 +10,6 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
-using MrWatchdog.Core.Features.Account.Queries;
-using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Web.Features.Account.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;

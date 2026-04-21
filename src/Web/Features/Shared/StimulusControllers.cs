@@ -42,11 +42,5 @@ public static class StimulusControllers
     public const string WatchdogDetailOverview = "watchdogs--detail-overview";
 
     [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountLogin = "account--login";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
-    public const string AccountLoginLinkSent = "account--login-link-sent";
-
-    [TsProperty(Constant = true, ShouldBeCamelCased = true)]
     public const string Onboarding = "onboarding";
 }

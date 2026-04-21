@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using CoreBackend.Features.Account.Domain;
 using CoreBackend.Features.Jobs;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Features.Jobs.Queries;

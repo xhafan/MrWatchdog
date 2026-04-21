@@ -11,6 +11,9 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
+using System.Security.Claims;
+using CoreBackend.Features.Account;
+using CoreBackend.Features.Account.Domain;
 
 namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
 
@@ -68,7 +71,7 @@ public class when_completing_login_for_existing_user_with_expired_token : BaseDa
             .WithToken(TokenGenerator.GenerateLoginToken(
                 loginTokenGuid, 
                 _user.Email,
-                CultureConstants.En.Name,
+                [new Claim(CustomClaimTypes.CultureName, CultureConstants.En.Name)],
                 returnUrl: "/Watchdogs", 
                 jwtOptions,
                 validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 60)

@@ -1,4 +1,6 @@
-﻿using CoreDdd.Nhibernate.Repositories;
+﻿using CoreBackend.Features.Account.Domain;
+using CoreBackend.Infrastructure.Repositories;
+using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;

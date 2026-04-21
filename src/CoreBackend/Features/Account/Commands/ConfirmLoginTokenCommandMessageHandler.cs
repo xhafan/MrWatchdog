@@ -1,7 +1,7 @@
-﻿using MrWatchdog.Core.Infrastructure.Repositories;
+﻿using CoreBackend.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace MrWatchdog.Core.Features.Account.Commands;
+namespace CoreBackend.Features.Account.Commands;
 
 public class ConfirmLoginTokenCommandMessageHandler(
     ILoginTokenRepository loginTokenRepository

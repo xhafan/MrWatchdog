@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:9b4b31da5246f575086b1901e9871b189ae2a80eb42fe9234e9d000b51febd4b AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:732cd42c6f659814c9804ad7b05c7f761e83ef8379c5b2fdc3af673353caff73 AS build
 WORKDIR /app
 
 # Install Node.js and npm
@@ -7,11 +7,15 @@ RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
 COPY CoreBackend/*.csproj ./CoreBackend/
-COPY CoreBackend.Postgres/*.csproj ./CoreBackend.Postgres/
 COPY CoreBackend.Register.Castle/*.csproj ./CoreBackend.Register.Castle/
 COPY CoreBackend.Register.ServiceProvider/*.csproj ./CoreBackend.Register.ServiceProvider/
+COPY CoreBackend.Account/*.csproj ./CoreBackend.Account/
+COPY CoreBackend.Account.Register.Castle/*.csproj ./CoreBackend.Account.Register.Castle/
+COPY CoreBackend.Account.Register.ServiceProvider/*.csproj ./CoreBackend.Account.Register.ServiceProvider/
+COPY CoreBackend.Postgres/*.csproj ./CoreBackend.Postgres/
 COPY Core/*.csproj ./Core/
 COPY CoreWeb/*.csproj ./CoreWeb/
+COPY CoreWeb.Account/*.csproj ./CoreWeb.Account/
 COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
@@ -28,11 +32,15 @@ RUN npm ci
 # Copy the remaining source code
 WORKDIR /app
 COPY CoreBackend/. ./CoreBackend/
-COPY CoreBackend.Postgres/. ./CoreBackend.Postgres/
 COPY CoreBackend.Register.Castle/. ./CoreBackend.Register.Castle/
 COPY CoreBackend.Register.ServiceProvider/. ./CoreBackend.Register.ServiceProvider/
+COPY CoreBackend.Account/. ./CoreBackend.Account/
+COPY CoreBackend.Account.Register.Castle/. ./CoreBackend.Account.Register.Castle/
+COPY CoreBackend.Account.Register.ServiceProvider/. ./CoreBackend.Account.Register.ServiceProvider/
+COPY CoreBackend.Postgres/. ./CoreBackend.Postgres/
 COPY Core/. ./Core/
 COPY CoreWeb/. ./CoreWeb/
+COPY CoreWeb.Account/. ./CoreWeb.Account/
 COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/

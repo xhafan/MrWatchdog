@@ -57,7 +57,7 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:258b939d6d684ff05ad7ea16782b4bee55260de4acc6f99bec897fd11de7640c
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:5cceea0ea5da4f96f9607e0640b3e74f5bba90a630ec107666771f001240672f
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache icu-libs krb5-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl

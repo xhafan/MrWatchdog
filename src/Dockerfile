@@ -20,15 +20,6 @@ COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
 
-# Install Node packages
-WORKDIR /app/CoreWeb
-COPY CoreWeb/package*.json ./
-RUN npm ci
-
-WORKDIR /app/Web
-COPY Web/package*.json ./
-RUN npm ci
-
 # Copy the remaining source code
 WORKDIR /app
 COPY CoreBackend/. ./CoreBackend/
@@ -45,19 +36,32 @@ COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
 
+# ******************************* Make sure the above is the same as for Dockerfile.tests to be able to benefit from cached layers *******************************
+
+# Install Node packages
+WORKDIR /app/CoreWeb
+COPY CoreWeb/package*.json ./
+RUN npm ci
+
+WORKDIR /app/CoreWeb.Account
+COPY CoreWeb.Account/package*.json ./
+RUN npm ci
+
+WORKDIR /app/Web
+COPY Web/package*.json ./
+RUN npm ci
+
 # Build front-end assets
 WORKDIR /app/Web
 RUN npx tsc --noEmit && node esbuild.config.js
 WORKDIR /app
-
-# ******************************* Make sure the above is the same as for Dockerfile.tests to be able to benefit from cached layers *******************************
 
 # Back to app root to publish .NET
 RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:5cceea0ea5da4f96f9607e0640b3e74f5bba90a630ec107666771f001240672f
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:1201dde897ab436b7c6b386f6dbd4f9a3ca0245f9c5a8aac8f8bcdccb4c7d484
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
 RUN apk add --no-cache icu-libs krb5-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl

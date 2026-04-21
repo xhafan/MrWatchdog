@@ -20,15 +20,6 @@ COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
 
-# Install Node packages
-WORKDIR /app/CoreWeb
-COPY CoreWeb/package*.json ./
-RUN npm ci
-
-WORKDIR /app/Web
-COPY Web/package*.json ./
-RUN npm ci
-
 # Copy the remaining source code
 WORKDIR /app
 COPY CoreBackend/. ./CoreBackend/
@@ -44,11 +35,6 @@ COPY CoreWeb.Account/. ./CoreWeb.Account/
 COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
-
-# Build front-end assets
-WORKDIR /app/Web
-RUN npx tsc --noEmit && node esbuild.config.js
-WORKDIR /app
 
 # ******************************* Make sure the above is the same as for Dockerfile to be able to benefit from cached layers *******************************
 
@@ -75,7 +61,7 @@ COPY ToolsApp/. ./ToolsApp/
 RUN dotnet build
 
 # ---- Runtime container: runs the tests ----
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:9b4b31da5246f575086b1901e9871b189ae2a80eb42fe9234e9d000b51febd4b
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:732cd42c6f659814c9804ad7b05c7f761e83ef8379c5b2fdc3af673353caff73
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl)
 RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl

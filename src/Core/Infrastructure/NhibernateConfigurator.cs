@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Conventions;
 using CoreBackend.Infrastructure.Interceptors;

@@ -2,7 +2,7 @@
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Account;
+namespace MrWatchdog.Web.E2E.Tests.Features.Account.LoginLink;
 
 [TestFixture]
 public class when_getting_login_page : BaseDatabaseTest

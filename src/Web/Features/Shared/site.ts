@@ -1,6 +1,7 @@
 import type { TurboFrameLoadEvent } from "@hotwired/turbo";
 import { Application } from "@hotwired/stimulus";
 import { CoreWebStimulusControllers } from "../../../CoreWeb/Features/Shared/Generated/CoreWebStimulusControllers";
+import { CoreWebAccountStimulusControllers } from "../../../CoreWeb.Account/Features/Shared/Generated/CoreWebAccountStimulusControllers";
 import { StimulusControllers } from "./Generated/StimulusControllers";
 import { logError } from "../../../CoreWeb/Features/Shared/logging";
 
@@ -25,8 +26,8 @@ import ScrapersScrapedResultsWebPagesController from "../Scrapers/Shared/Scraped
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
-import AccountLoginController from "../../../CoreWeb.Account/Features/Account/Login/LoginController";
-import AccountLoginLinkSentController from "../../../CoreWeb.Account/Features/Account/LoginLinkSent/LoginLinkSentController";
+import AccountLoginLinkLoginController from "../../../CoreWeb.Account/Features/LoginLink/Login/LoginController";
+import AccountLoginLinkLoginLinkSentController from "../../../CoreWeb.Account/Features/LoginLink/LoginLinkSent/LoginLinkSentController";
 
 
 const application = Application.start();
@@ -48,8 +49,8 @@ application.register(StimulusControllers.scrapersScrapedResultsWebPages, Scraper
 application.register(StimulusControllers.watchdogDetail, WatchdogsDetailController);
 application.register(StimulusControllers.watchdogDetailOverview, WatchdogsDetailOverviewController);
 
-application.register(CoreWebStimulusControllers.accountLogin, AccountLoginController);
-application.register(CoreWebStimulusControllers.accountLoginLinkSent, AccountLoginLinkSentController);
+application.register(CoreWebAccountStimulusControllers.accountLoginLinkLogin, AccountLoginLinkLoginController);
+application.register(CoreWebAccountStimulusControllers.accountLoginLinkLoginLinkSent, AccountLoginLinkLoginLinkSentController);
 
 
 attachValidationOnTurboLoad();

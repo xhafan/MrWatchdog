@@ -6,7 +6,7 @@ using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Web.Features.Account;
 
-namespace MrWatchdog.Web.Tests.Features.Account;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink;
 
 [TestFixture]
 public class when_completing_onboarding : BaseDatabaseTest

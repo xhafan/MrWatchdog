@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using CoreBackend.Account.Features.Account.Commands;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;

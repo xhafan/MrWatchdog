@@ -1,9 +1,9 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 [TestFixture]
 public class when_completing_login_for_existing_user_with_used_login_token : BaseDatabaseTest

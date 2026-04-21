@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;

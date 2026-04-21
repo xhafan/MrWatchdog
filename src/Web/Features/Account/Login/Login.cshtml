@@ -1,5 +1,6 @@
 @page
-@using CoreWeb.Account.Features.Account.Login
+@using CoreWeb.Account.Features.LoginLink.Login
+@using CoreWeb.Account.Features.Shared
 @using CoreWeb.Features.Shared
 @using Microsoft.Extensions.Options
 @using MrWatchdog.Core.Resources
@@ -17,10 +18,10 @@
 
 <h1 class="display-4">@title</h1>
 
-<div @Stimulus.Controller(CoreWebStimulusControllers.AccountLogin, new LoginStimulusModel(ReCaptchaOptions.Value.SiteKey))>
+<div @Stimulus.Controller(CoreWebAccountStimulusControllers.AccountLoginLinkLogin, new LoginStimulusModel(ReCaptchaOptions.Value.SiteKey))>
     <form method="post" 
           style="max-width: 600px;"
-          data-account--login-target="form"
+          data-account-login-link--login-target="form"
           >
         <div class="mb-3">
             <label type="email" asp-for="Email" class="form-label fw-bold" placeholder="Email"></label>

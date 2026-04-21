@@ -2,7 +2,7 @@
 using CoreDdd.Nhibernate.Queries;
 using CoreDdd.Nhibernate.UnitOfWorks;
 
-namespace CoreBackend.Account.Features.Account.Queries;
+namespace CoreBackend.Account.Features.LoginLink.Queries;
 
 public class GetLoginTokenConfirmationQueryHandler(
     NhibernateUnitOfWork unitOfWork, 

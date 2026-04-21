@@ -8,7 +8,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Watchdogs.Api;
 using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.LoginLink;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 

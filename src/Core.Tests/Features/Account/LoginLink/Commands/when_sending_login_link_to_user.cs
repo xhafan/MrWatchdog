@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
@@ -12,7 +12,7 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Infrastructure.Localization;
 
-namespace MrWatchdog.Core.Tests.Features.Account.Commands;
+namespace MrWatchdog.Core.Tests.Features.Account.LoginLink.Commands;
 
 [TestFixture]
 public class when_sending_login_link_to_user : BaseDatabaseTest

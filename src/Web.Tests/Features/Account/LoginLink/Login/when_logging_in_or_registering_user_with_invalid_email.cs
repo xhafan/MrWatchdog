@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Web.Features.Account.Login;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 [TestFixture]
 public class when_logging_in_or_registering_user_with_invalid_email : BaseDatabaseTest

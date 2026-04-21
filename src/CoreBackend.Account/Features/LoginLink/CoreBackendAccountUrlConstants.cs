@@ -1,7 +1,7 @@
 ﻿using CoreBackend.Infrastructure.Extensions;
 using Reinforced.Typings.Attributes;
 
-namespace CoreBackend.Account.Features.Account;
+namespace CoreBackend.Account.Features.LoginLink;
 
 [TsClass(IncludeNamespace = false, AutoExportMethods = false)]
 public static class CoreBackendAccountUrlConstants

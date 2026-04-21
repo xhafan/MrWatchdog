@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;

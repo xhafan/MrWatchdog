@@ -1,12 +1,12 @@
-﻿using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Queries;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
 
-namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 
 public class LoginLinkSentModelBuilder(NhibernateUnitOfWork unitOfWork)
 {

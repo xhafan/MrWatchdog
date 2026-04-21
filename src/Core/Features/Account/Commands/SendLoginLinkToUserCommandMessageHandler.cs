@@ -4,8 +4,8 @@ using CoreBackend.Infrastructure.Rebus;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Resources;
 using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Commands;
 using CoreBackend.Account.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Features.Account.Commands;

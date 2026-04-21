@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
 
-namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 
 [TestFixture]
 public class when_viewing_login_link_sent_page_with_empty_login_token_guid : BaseDatabaseTest

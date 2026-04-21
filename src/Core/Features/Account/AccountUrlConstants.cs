@@ -1,4 +1,4 @@
-﻿using CoreBackend.Account.Features.Account;
+﻿using CoreBackend.Account.Features.LoginLink;
 using Reinforced.Typings.Attributes;
 
 namespace MrWatchdog.Core.Features.Account;

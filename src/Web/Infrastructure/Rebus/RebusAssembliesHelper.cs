@@ -1,7 +1,7 @@
-﻿using CoreBackend.Account.Features.Account.Commands;
-using CoreBackend.Messages;
+﻿using CoreBackend.Messages;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using System.Reflection;
+using CoreBackend.Account.Features.LoginLink.Commands;
 
 namespace MrWatchdog.Web.Infrastructure.Rebus;
 

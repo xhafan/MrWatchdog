@@ -1,6 +1,6 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreDdd.Queries;
 
-namespace CoreBackend.Account.Features.Account.Queries;
+namespace CoreBackend.Account.Features.LoginLink.Queries;
 
 public record GetLoginTokenByIdQuery(long LoginTokenId) : IQuery<LoginTokenDto>;

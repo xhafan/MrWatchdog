@@ -1,4 +1,4 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using Reinforced.Typings.Attributes;
 
 namespace CoreBackend.Account.Features;

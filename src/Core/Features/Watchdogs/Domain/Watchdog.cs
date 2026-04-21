@@ -16,7 +16,7 @@ using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpd
 using MrWatchdog.Core.Resources;
 using Serilog;
 using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.LoginLink;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 

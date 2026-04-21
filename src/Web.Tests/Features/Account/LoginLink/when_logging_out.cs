@@ -1,5 +1,5 @@
 ﻿using CoreBackend.TestsShared;
-using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.LoginLink;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 
-namespace MrWatchdog.Web.Tests.Features.Account;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink;
 
 [TestFixture]
 public class when_logging_out : BaseDatabaseTest

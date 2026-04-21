@@ -1,5 +1,5 @@
 ﻿using CoreBackend.Account.Features;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
@@ -12,7 +12,7 @@ using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.Login;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 [TestFixture]
 public class when_logging_in_or_registering_user_with_not_local_return_url : BaseDatabaseTest

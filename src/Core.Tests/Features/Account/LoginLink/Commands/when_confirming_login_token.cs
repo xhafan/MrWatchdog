@@ -1,11 +1,11 @@
-﻿using CoreBackend.Account.Features.Account.Commands;
-using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using MrWatchdog.Core.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Account.Commands;
+namespace MrWatchdog.Core.Tests.Features.Account.LoginLink.Commands;
 
 [TestFixture]
 public class when_confirming_login_token : BaseDatabaseTest

@@ -1,4 +1,7 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
@@ -11,11 +14,8 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
-using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Domain;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 [TestFixture]
 public class when_completing_login_for_existing_user_with_expired_token : BaseDatabaseTest

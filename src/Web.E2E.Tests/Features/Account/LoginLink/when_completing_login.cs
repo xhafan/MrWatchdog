@@ -1,18 +1,18 @@
 ﻿using System.Net;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Commands;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.LoginLink;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Account;
+namespace MrWatchdog.Web.E2E.Tests.Features.Account.LoginLink;
 
 [TestFixture]
 public class when_completing_login : BaseDatabaseTest

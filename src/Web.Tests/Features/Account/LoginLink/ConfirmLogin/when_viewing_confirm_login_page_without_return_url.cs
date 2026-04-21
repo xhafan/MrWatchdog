@@ -1,4 +1,4 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.ConfirmLogin;
 
 [TestFixture]
 public class when_viewing_confirm_login_page_without_return_url : BaseDatabaseTest

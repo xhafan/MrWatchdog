@@ -1,5 +1,5 @@
-﻿using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Queries;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
@@ -12,7 +12,7 @@ using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Infrastructure.Repositories;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 public class CompleteLoginControllerBuilder(NhibernateUnitOfWork unitOfWork)
 {

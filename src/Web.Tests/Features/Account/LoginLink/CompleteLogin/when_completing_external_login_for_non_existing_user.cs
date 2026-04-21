@@ -1,4 +1,8 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
+﻿using System.Globalization;
+using System.Security.Claims;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,15 +13,11 @@ using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
-using MrWatchdog.Web.Features.Account.CompleteLogin;
-using System.Globalization;
-using System.Security.Claims;
-using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
+using MrWatchdog.Web.Features.Account.CompleteLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 [TestFixture]
 public class when_completing_external_login_for_non_existing_user : BaseDatabaseTest

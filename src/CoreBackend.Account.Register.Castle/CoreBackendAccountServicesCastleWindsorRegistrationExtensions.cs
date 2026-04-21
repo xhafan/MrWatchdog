@@ -1,7 +1,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using CoreBackend.Account.Features.Account.Commands;
-using CoreBackend.Account.Features.Account.Queries;
+using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreBackend.Account.Features.LoginLink.Queries;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Queries;

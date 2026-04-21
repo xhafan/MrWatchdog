@@ -1,13 +1,13 @@
-﻿using CoreBackend.TestsShared;
+﻿using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.TestsShared;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
-using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Domain;
 
-namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 
 [TestFixture]
 public class when_viewing_login_link_sent_page_with_expired_token : BaseDatabaseTest

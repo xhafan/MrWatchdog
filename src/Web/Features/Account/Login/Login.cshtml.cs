@@ -7,9 +7,9 @@ using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Commands;
-using CoreWeb.Account.Features.Account.Login;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreWeb.Account.Features.LoginLink.Login;
 using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Features.Account.Login;

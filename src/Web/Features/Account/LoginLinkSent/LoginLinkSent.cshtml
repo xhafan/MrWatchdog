@@ -1,5 +1,6 @@
 @page
-@using CoreWeb.Account.Features.Account.LoginLinkSent
+@using CoreWeb.Account.Features.LoginLink.LoginLinkSent
+@using CoreWeb.Account.Features.Shared
 @using CoreWeb.Features.Shared
 @using Microsoft.Extensions.Localization
 @using MrWatchdog.Core.Resources
@@ -12,6 +13,6 @@
 }
 <h1 class="display-4">@title</h1>
 
-<div @Stimulus.Controller(CoreWebStimulusControllers.AccountLoginLinkSent, new LoginLinkSentStimulusModel(Model.LoginTokenGuid))>
+<div @Stimulus.Controller(CoreWebAccountStimulusControllers.AccountLoginLinkLoginLinkSent, new LoginLinkSentStimulusModel(Model.LoginTokenGuid))>
     @Html.Raw(Localizer[Resource.LoginLinkSentDescription, Model.Email, Resource.MrWatchdog])
 </div>

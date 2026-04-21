@@ -1,4 +1,4 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreDdd.Domain.Repositories;
 
 namespace CoreBackend.Account.Infrastructure.Repositories;

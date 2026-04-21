@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Commands;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.LoginLink;
 using NHibernate;
 using NHibernate.Criterion;
 

@@ -1,4 +1,8 @@
-﻿using CoreBackend.Features.Jobs.Domain;
+﻿using System.Globalization;
+using CoreBackend.Account.Features;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreBackend.TestsShared.Builders;
@@ -6,18 +10,14 @@ using CoreDdd.Nhibernate.TestHelpers;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.Login;
-using System.Globalization;
-using CoreBackend.Account.Features;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Domain;
-using MrWatchdog.Core.Features.Account;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 [TestFixture]
 public class when_logging_in_or_registering_user : BaseDatabaseTest

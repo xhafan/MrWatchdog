@@ -9,8 +9,8 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
 using System.Globalization;
 using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreWeb.Account.Features.Account.CompleteLogin;
+using CoreBackend.Account.Features.LoginLink;
+using CoreWeb.Account.Features.LoginLink.CompleteLogin;
 
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
 

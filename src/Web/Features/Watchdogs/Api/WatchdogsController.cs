@@ -7,7 +7,7 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Infrastructure.Rebus;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Api;

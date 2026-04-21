@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
@@ -9,7 +9,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 
-namespace MrWatchdog.Web.E2E.Tests.Features.Account;
+namespace MrWatchdog.Web.E2E.Tests.Features.Account.LoginLink;
 
 [TestFixture]
 public class when_completing_onboarding : BaseDatabaseTest

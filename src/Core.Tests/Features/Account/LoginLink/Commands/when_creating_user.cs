@@ -5,7 +5,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.Infrastructure.Repositories;
 
-namespace MrWatchdog.Core.Tests.Features.Account.Commands;
+namespace MrWatchdog.Core.Tests.Features.Account.LoginLink.Commands;
 
 [TestFixture]
 public class when_creating_user : BaseDatabaseTest

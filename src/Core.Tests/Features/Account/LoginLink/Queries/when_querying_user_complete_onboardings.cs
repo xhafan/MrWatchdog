@@ -3,7 +3,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Account.Queries;
+namespace MrWatchdog.Core.Tests.Features.Account.LoginLink.Queries;
 
 [TestFixture]
 public class when_querying_user_complete_onboardings : BaseDatabaseTest

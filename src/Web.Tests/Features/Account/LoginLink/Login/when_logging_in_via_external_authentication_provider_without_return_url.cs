@@ -1,9 +1,9 @@
 ﻿using CoreBackend.TestsShared;
-using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.LoginLink;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Web.Features.Account.Login;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 [TestFixture]
 public class when_logging_in_via_external_authentication_provider_without_return_url : BaseDatabaseTest

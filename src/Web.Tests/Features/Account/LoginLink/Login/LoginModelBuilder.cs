@@ -1,4 +1,4 @@
-﻿using CoreBackend.Account.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.LoginLink.Queries;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Features.Jobs.Services;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Web.Features.Account.Login;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 public class LoginModelBuilder(NhibernateUnitOfWork unitOfWork)
 {

@@ -1,4 +1,4 @@
-﻿namespace CoreBackend.Account.Features.Account;
+﻿namespace CoreBackend.Account.Features.LoginLink;
 
 public class JwtOptions
 {

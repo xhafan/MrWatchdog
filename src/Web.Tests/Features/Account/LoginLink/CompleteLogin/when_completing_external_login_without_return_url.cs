@@ -11,7 +11,7 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 [TestFixture]
 public class when_completing_external_login_without_return_url : BaseDatabaseTest

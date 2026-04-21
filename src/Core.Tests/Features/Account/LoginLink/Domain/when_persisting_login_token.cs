@@ -1,9 +1,9 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.TestHelpers;
 using MrWatchdog.Core.TestsShared.Builders;
 
-namespace MrWatchdog.Core.Tests.Features.Account.Domain;
+namespace MrWatchdog.Core.Tests.Features.Account.LoginLink.Domain;
 
 [TestFixture]
 public class when_persisting_login_token : BaseDatabaseTest

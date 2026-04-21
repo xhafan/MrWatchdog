@@ -1,11 +1,11 @@
 ﻿using CoreBackend.TestsShared;
-using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.LoginLink;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using MrWatchdog.Web.Features.Account.Login;
 
-namespace MrWatchdog.Web.Tests.Features.Account.Login;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 
 [TestFixture]
 public class when_logging_in_via_external_authentication_provider : BaseDatabaseTest

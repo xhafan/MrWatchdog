@@ -1,4 +1,8 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -7,14 +11,10 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Routing;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
-using MrWatchdog.Web.Features.Account.CompleteLogin;
-using System.Security.Claims;
-using CoreBackend.Account.Features.Account.Domain;
-using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
+using MrWatchdog.Web.Features.Account.CompleteLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 
 [TestFixture]
 public class when_completing_login_for_existing_user : BaseDatabaseTest

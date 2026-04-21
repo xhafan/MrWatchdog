@@ -1,5 +1,5 @@
-﻿using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Queries;
 using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
@@ -9,7 +9,7 @@ using CoreDdd.Queries;
 using FakeItEasy;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.ConfirmLogin;
 
 public class ConfirmLoginModelBuilder(NhibernateUnitOfWork unitOfWork)
 {

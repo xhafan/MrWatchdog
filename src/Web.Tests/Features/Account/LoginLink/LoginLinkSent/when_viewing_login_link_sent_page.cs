@@ -1,11 +1,11 @@
-﻿using CoreBackend.Account.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
 
-namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 
 [TestFixture]
 public class when_viewing_login_link_sent_page : BaseDatabaseTest

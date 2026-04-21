@@ -1,15 +1,15 @@
-﻿using CoreBackend.Infrastructure.Rebus;
+﻿using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
-using System.Security.Claims;
-using CoreBackend.Account.Features.Account;
-using CoreBackend.Account.Features.Account.Domain;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
-namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
+namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.ConfirmLogin;
 
 [TestFixture]
 public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTest

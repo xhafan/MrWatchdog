@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.LoginLink.Commands;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 

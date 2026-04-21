@@ -3,7 +3,7 @@ using CoreDdd.Queries;
 using CoreWeb.Account.Features.LoginLink.LoginLinkSent;
 using Microsoft.Extensions.Options;
 
-namespace MrWatchdog.Web.Features.Account.LoginLinkSent;
+namespace MrWatchdog.Web.Features.Account.LoginLink.LoginLinkSent;
 
 public class LoginLinkSentModel(
     IQueryExecutor queryExecutor,

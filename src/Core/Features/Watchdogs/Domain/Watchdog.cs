@@ -8,8 +8,6 @@ using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Domain;
 using CoreDdd.Domain.Events;
 using CoreUtils.Extensions;
-using MrWatchdog.Core.Features.Account;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers.Domain;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogArchived;
 using MrWatchdog.Core.Features.Watchdogs.Domain.Events.WatchdogScrapedResultsUpdated;
@@ -17,6 +15,8 @@ using MrWatchdog.Core.Resources;
 using Serilog;
 using System.Security.Claims;
 using CoreBackend.Account.Features.LoginLink;
+using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Core.Features.Watchdogs.Domain;
 

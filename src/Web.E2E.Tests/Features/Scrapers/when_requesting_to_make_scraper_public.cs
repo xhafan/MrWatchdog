@@ -4,7 +4,6 @@ using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
-using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Scrapers;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Domain;
@@ -14,6 +13,7 @@ using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
+using MrWatchdog.Core.Features.Account.Domain;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Scrapers;
 

@@ -6,7 +6,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account.ConfirmLogin;
+using MrWatchdog.Web.Features.Account.LoginLink.ConfirmLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.ConfirmLogin;
 

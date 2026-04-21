@@ -1,18 +1,18 @@
-using CoreBackend.Features.Jobs.Services;
-using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.Infrastructure.Validations;
-using CoreDdd.Queries;
-using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Core.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Account.Features.LoginLink.Commands;
+using CoreBackend.Features.Jobs.Services;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.Infrastructure.Validations;
+using CoreDdd.Queries;
 using CoreWeb.Account.Features.LoginLink.Login;
+using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Features.Account.Commands;
+using MrWatchdog.Core.Resources;
 
-namespace MrWatchdog.Web.Features.Account.Login;
+namespace MrWatchdog.Web.Features.Account.LoginLink.Login;
 
 public class LoginModel(
     ICoreBus bus,

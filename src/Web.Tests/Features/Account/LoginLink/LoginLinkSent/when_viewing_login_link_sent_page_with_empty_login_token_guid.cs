@@ -1,6 +1,6 @@
 ﻿using CoreBackend.TestsShared;
 using Microsoft.AspNetCore.Mvc;
-using MrWatchdog.Web.Features.Account.LoginLinkSent;
+using MrWatchdog.Web.Features.Account.LoginLink.LoginLinkSent;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.LoginLinkSent;
 

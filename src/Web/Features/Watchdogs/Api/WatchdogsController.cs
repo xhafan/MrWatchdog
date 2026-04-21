@@ -3,12 +3,12 @@ using CoreUtils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Core.Features.Watchdogs.Queries;
 using System.Security.Claims;
 using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Infrastructure.Rebus;
+using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Features.Watchdogs.Api;
 

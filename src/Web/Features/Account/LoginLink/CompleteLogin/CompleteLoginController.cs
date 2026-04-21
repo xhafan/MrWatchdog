@@ -1,18 +1,18 @@
-﻿using CoreBackend.Features.Jobs.Services;
+﻿using System.Globalization;
+using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Queries;
 using CoreUtils.Extensions;
+using CoreWeb.Account.Features.LoginLink.CompleteLogin;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
-using System.Globalization;
-using System.Security.Claims;
-using CoreBackend.Account.Features.LoginLink;
-using CoreWeb.Account.Features.LoginLink.CompleteLogin;
 
-namespace MrWatchdog.Web.Features.Account.CompleteLogin;
+namespace MrWatchdog.Web.Features.Account.LoginLink.CompleteLogin;
 
 public class CompleteLoginController(
     ICoreBus bus,

@@ -10,7 +10,7 @@ using FakeItEasy;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account.Login;
+using MrWatchdog.Web.Features.Account.LoginLink.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 

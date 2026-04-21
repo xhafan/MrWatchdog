@@ -1,7 +1,7 @@
 ﻿using CoreBackend.Account.Features.LoginLink.Domain;
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
-using MrWatchdog.Web.Features.Account.CompleteLogin;
+using MrWatchdog.Web.Features.Account.LoginLink.CompleteLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.CompleteLogin;
 

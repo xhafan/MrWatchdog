@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MrWatchdog.Core.Features.Account.Commands;
-using MrWatchdog.Web.Features.Account.Login;
+using MrWatchdog.Web.Features.Account.LoginLink.Login;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLink.Login;
 

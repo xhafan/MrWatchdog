@@ -1,0 +1,59 @@
+﻿using System.Security.Claims;
+using CoreBackend.Account.Features.LoginLink;
+using CoreBackend.Account.Features.LoginLink.Domain;
+using CoreBackend.Infrastructure.Rebus;
+using CoreBackend.TestsShared;
+using FakeItEasy;
+using MrWatchdog.Core.Features.Account;
+using MrWatchdog.Core.Infrastructure.Localization;
+using MrWatchdog.Core.TestsShared.Builders;
+using MrWatchdog.Web.Features.Account.ConfirmLogin;
+
+namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;
+
+[TestFixture]
+public class when_viewing_confirm_login_page_with_expired_token : BaseDatabaseTest
+{
+    private ConfirmLoginModel _model = null!;
+    private ICoreBus _bus = null!;
+    private LoginToken _loginToken = null!;
+    
+    [SetUp]
+    public void Context()
+    {
+        _BuildEntities();
+        
+        _bus = A.Fake<ICoreBus>();
+        
+        _model = new ConfirmLoginModelBuilder(UnitOfWork)
+            .WithBus(_bus)
+            .WithLoginToken(Uri.EscapeDataString(_loginToken.Token))
+            .Build();
+    }
+    
+    [Test]
+    public void exception_is_thrown()
+    {
+        var ex = Should.Throw<Exception>(async () => await _model.OnGet());
+        
+        ex.Message.ShouldContain("The token is expired");
+    }
+    
+    private void _BuildEntities()
+    {
+        var jwtOptions = OptionsTestRetriever.Retrieve<JwtOptions>().Value;
+        
+        var loginTokenGuid = Guid.NewGuid();
+        _loginToken = new LoginTokenBuilder(UnitOfWork)
+            .WithGuid(loginTokenGuid)
+            .WithToken(TokenGenerator.GenerateLoginToken(
+                loginTokenGuid, 
+                $"user+{Guid.NewGuid()}@email.com", 
+                [new Claim(CustomClaimTypes.CultureName, CultureConstants.En.Name)],
+                returnUrl: "/Watchdogs", 
+                jwtOptions,
+                validFrom: DateTime.UtcNow.AddMinutes(-jwtOptions.ExpireMinutes - 1)
+            ))
+            .Build();
+    }
+}

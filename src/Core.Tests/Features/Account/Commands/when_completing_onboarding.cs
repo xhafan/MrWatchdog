@@ -1,0 +1,29 @@
+﻿using CoreBackend.TestsShared;
+using MrWatchdog.Core.Features.Account.Commands;
+using MrWatchdog.Core.Features.Account.Domain;
+using MrWatchdog.Core.Infrastructure.Repositories;
+using MrWatchdog.Core.TestsShared.Builders;
+
+namespace MrWatchdog.Core.Tests.Features.Account.Commands;
+
+[TestFixture]
+public class when_completing_onboarding : BaseDatabaseTest
+{
+    private User _user = null!;
+
+    [SetUp]
+    public async Task Context()
+    {
+        _user = new UserBuilder(UnitOfWork).Build();
+
+        var handler = new CompleteOnboardingCommandMessageHandler(new UserRepository(UnitOfWork));
+
+        await handler.Handle(new CompleteOnboardingCommand(OnboardingIdentifiers.ScraperScrapedResults) {ActingUserId = _user.Id});
+    }
+
+    [Test]
+    public void user_onboarding_is_complete()
+    {
+        _user.CompleteOnboardings.ShouldBe([OnboardingIdentifiers.ScraperScrapedResults]);
+    }
+}

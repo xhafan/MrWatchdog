@@ -1,12 +1,12 @@
-﻿using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Commands;
-using CoreBackend.Infrastructure.Configurations;
+﻿using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.Infrastructure.Repositories;
 using Microsoft.Extensions.Options;
 using MrWatchdog.Core.Resources;
 using System.Security.Claims;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Infrastructure.Repositories;
 
 namespace MrWatchdog.Core.Features.Account.Commands;
 

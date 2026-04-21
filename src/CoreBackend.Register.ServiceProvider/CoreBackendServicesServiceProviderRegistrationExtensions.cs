@@ -61,7 +61,7 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
         }
 
         /// <summary>
-        /// Registers all CoreBackend services into Castle Windsor.
+        /// Registers all CoreBackend services into ServiceProvider.
         /// </summary>
         public void AddCoreDddAndCoreBackendServices<TNhibernateConfigurator>(
             IConfiguration configuration,

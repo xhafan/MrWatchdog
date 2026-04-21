@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Infrastructure.Configurations;
-using CoreBackend.Infrastructure.Repositories;
 using Microsoft.Extensions.Options;
 using Rebus.Handlers;
 
-namespace CoreBackend.Features.Account.Commands;
+namespace CoreBackend.Account.Features.Account.Commands;
 
 public abstract class BaseSendLoginLinkToUserCommandMessageHandler<TSendLoginLinkToUserCommand>(
     ILoginTokenRepository loginTokenRepository,

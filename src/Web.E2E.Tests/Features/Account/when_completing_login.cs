@@ -1,11 +1,11 @@
 ﻿using System.Net;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Commands;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreWeb.Features.Account;
+using CoreWeb.Account.Features.Account;
 using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;

@@ -6,7 +6,7 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Features.Watchdogs.Commands;
 using MrWatchdog.Web.Features.Watchdogs.Api;
 using System.Security.Claims;
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Watchdogs.Api;
 

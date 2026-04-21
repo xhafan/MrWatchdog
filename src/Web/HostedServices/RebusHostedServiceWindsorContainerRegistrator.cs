@@ -1,5 +1,6 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using CoreBackend.Account.Register.Castle;
 using CoreBackend.Register.Castle;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Queries;
@@ -24,6 +25,7 @@ public static class RebusHostedServiceWindsorContainerRegistrator
 
         var fireAndForgetWebBus = mainServiceProvider.GetRequiredService<IBus>();
         hostedServiceWindsorContainer.AddCoreDddAndCoreBackendServices(fireAndForgetWebBus);
+        hostedServiceWindsorContainer.AddCoreBackendAccountServices();
 
         hostedServiceWindsorContainer.Register(
             Component.For<IPlaywright>()

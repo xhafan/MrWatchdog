@@ -1,6 +1,6 @@
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features.Account;
 using CoreDdd.Queries;
-using CoreWeb.Features.Account.LoginLinkSent;
+using CoreWeb.Account.Features.Account.LoginLinkSent;
 using Microsoft.Extensions.Options;
 
 namespace MrWatchdog.Web.Features.Account.LoginLinkSent;

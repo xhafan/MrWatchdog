@@ -1,8 +1,8 @@
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features.Account;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Queries;
-using CoreWeb.Features.Account.ConfirmLogin;
+using CoreWeb.Account.Features.Account.ConfirmLogin;
 using Microsoft.Extensions.Options;
 
 namespace MrWatchdog.Web.Features.Account.ConfirmLogin;

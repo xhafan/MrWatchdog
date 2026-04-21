@@ -1,5 +1,5 @@
 ﻿using CoreBackend.Messages;
 
-namespace CoreBackend.Features.Account.Commands;
+namespace CoreBackend.Account.Features.Account.Commands;
 
 public record MarkLoginTokenAsUsedCommand(Guid LoginTokenGuid) : Command;

@@ -3,7 +3,7 @@ import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
-import { CoreWebAccountUrlConstants } from "../../../../CoreWeb/Features/Shared/Generated/CoreWebAccountUrlConstants";
+import { CoreWebAccountUrlConstants } from "../../../../CoreWeb.Account/Features/Shared/Generated/CoreWebAccountUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
 import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
 import { searchTermModifiedEventName } from "../Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";

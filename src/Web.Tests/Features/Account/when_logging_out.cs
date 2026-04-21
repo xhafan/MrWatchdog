@@ -1,5 +1,5 @@
 ﻿using CoreBackend.TestsShared;
-using CoreWeb.Features.Account;
+using CoreWeb.Account.Features.Account;
 using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;

@@ -1,5 +1,5 @@
-﻿using CoreBackend.Features.Account.Commands;
-using CoreBackend.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using FakeItEasy;

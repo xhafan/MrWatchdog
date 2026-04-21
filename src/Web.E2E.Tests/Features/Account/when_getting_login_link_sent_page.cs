@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account;

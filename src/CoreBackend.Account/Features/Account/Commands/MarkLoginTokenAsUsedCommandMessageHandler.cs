@@ -1,7 +1,7 @@
-﻿using CoreBackend.Infrastructure.Repositories;
+﻿using CoreBackend.Account.Infrastructure.Repositories;
 using Rebus.Handlers;
 
-namespace CoreBackend.Features.Account.Commands;
+namespace CoreBackend.Account.Features.Account.Commands;
 
 public class MarkLoginTokenAsUsedCommandMessageHandler(
     ILoginTokenRepository loginTokenRepository

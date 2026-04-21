@@ -1,5 +1,4 @@
-﻿using CoreBackend.Features.Account;
-using CoreBackend.Features.Jobs.Services;
+﻿using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreDdd.Queries;
 using CoreUtils.Extensions;
@@ -10,7 +9,8 @@ using MrWatchdog.Core.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account.Queries;
 using System.Globalization;
 using System.Security.Claims;
-using CoreWeb.Features.Account.CompleteLogin;
+using CoreBackend.Account.Features.Account;
+using CoreWeb.Account.Features.Account.CompleteLogin;
 
 namespace MrWatchdog.Web.Features.Account.CompleteLogin;
 

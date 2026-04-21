@@ -25,8 +25,8 @@ import ScrapersScrapedResultsWebPagesController from "../Scrapers/Shared/Scraped
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
-import AccountLoginController from "../../../CoreWeb/Features/Account/Login/LoginController";
-import AccountLoginLinkSentController from "../../../CoreWeb/Features/Account/LoginLinkSent/LoginLinkSentController";
+import AccountLoginController from "../../../CoreWeb.Account/Features/Account/Login/LoginController";
+import AccountLoginLinkSentController from "../../../CoreWeb.Account/Features/Account/LoginLinkSent/LoginLinkSentController";
 
 
 const application = Application.start();

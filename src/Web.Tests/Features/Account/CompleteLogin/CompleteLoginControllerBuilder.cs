@@ -1,8 +1,8 @@
-﻿using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Queries;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreDdd.Queries;

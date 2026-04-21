@@ -1,5 +1,5 @@
-﻿using CoreBackend.Features;
-using CoreBackend.Features.Account.Domain;
+﻿using CoreBackend.Account.Features;
+using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
@@ -85,7 +85,7 @@ public class when_logging_in_or_registering_user_with_not_local_return_url : Bas
                             .WithType(nameof(SendLoginLinkToUserCommand))
                             .WithKind(JobKind.Command)
                             .Build();
-                        _job.AddAffectedEntity(CoreBackendDomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
+                        _job.AddAffectedEntity(CoreBackendAccountDomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
                         newUnitOfWork.Save(_job);
                     }
                 );

@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using CoreBackend.Features.Account.Commands;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account.Commands;
+using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;

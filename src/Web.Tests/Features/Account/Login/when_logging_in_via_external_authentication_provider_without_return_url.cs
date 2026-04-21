@@ -1,5 +1,5 @@
 ﻿using CoreBackend.TestsShared;
-using CoreWeb.Features.Account;
+using CoreWeb.Account.Features.Account;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Web.Features.Account.Login;
 

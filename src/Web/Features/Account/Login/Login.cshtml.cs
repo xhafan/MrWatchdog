@@ -1,15 +1,15 @@
-using CoreBackend.Features.Account.Commands;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Validations;
 using CoreDdd.Queries;
-using CoreWeb.Features.Account.Login;
 using Microsoft.AspNetCore.Mvc;
 using MrWatchdog.Core.Features.Account.Commands;
 using MrWatchdog.Core.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Commands;
+using CoreWeb.Account.Features.Account.Login;
 using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Features.Account.Login;

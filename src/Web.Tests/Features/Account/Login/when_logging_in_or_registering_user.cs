@@ -1,6 +1,4 @@
-﻿using CoreBackend.Features;
-using CoreBackend.Features.Account.Domain;
-using CoreBackend.Features.Jobs.Domain;
+﻿using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.TestsShared;
 using CoreBackend.TestsShared.Builders;
@@ -14,7 +12,9 @@ using MrWatchdog.Core.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.Login;
 using System.Globalization;
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
 using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web.Tests.Features.Account.Login;
@@ -108,7 +108,7 @@ public class when_logging_in_or_registering_user : BaseDatabaseTest
                             .WithType(nameof(SendLoginLinkToUserCommand))
                             .WithKind(JobKind.Command)
                             .Build();
-                        _job.AddAffectedEntity(CoreBackendDomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
+                        _job.AddAffectedEntity(CoreBackendAccountDomainConstants.AccountLoginTokenEntityName, _loginToken.Id, isCreated: true);
                         newUnitOfWork.Save(_job);
                     }
                 );

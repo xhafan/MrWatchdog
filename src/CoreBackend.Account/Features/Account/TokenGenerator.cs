@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CoreBackend.Features.Account;
+namespace CoreBackend.Account.Features.Account;
 
 public static class TokenGenerator
 {

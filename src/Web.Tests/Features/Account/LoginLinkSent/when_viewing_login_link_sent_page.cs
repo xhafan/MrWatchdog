@@ -1,4 +1,4 @@
-﻿using CoreBackend.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.TestsShared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

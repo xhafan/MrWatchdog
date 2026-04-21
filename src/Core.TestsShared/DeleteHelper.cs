@@ -1,5 +1,5 @@
-﻿using CoreBackend.Features.Account.Domain;
-using CoreBackend.Infrastructure.Repositories;
+﻿using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreDdd.Nhibernate.Repositories;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using MrWatchdog.Core.Features.Account.Domain;

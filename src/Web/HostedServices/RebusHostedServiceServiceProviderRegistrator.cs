@@ -1,3 +1,4 @@
+using CoreBackend.Account.Register.ServiceProvider;
 using CoreBackend.Register.ServiceProvider;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Configurations;
@@ -24,6 +25,7 @@ public static class RebusHostedServiceServiceProviderRegistrator
         var fireAndForgetWebBus = mainServiceProvider.GetRequiredService<IBus>();
         var hibernateConfigurator = mainServiceProvider.GetRequiredService<INhibernateConfigurator>();
         hostedServiceServices.AddCoreDddAndCoreBackendServices(configuration, fireAndForgetWebBus, hibernateConfigurator);
+        hostedServiceServices.AddCoreBackendAccountServices();
 
         hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<IPlaywright>());
 

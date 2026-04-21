@@ -1,6 +1,6 @@
 ﻿using CoreBackend.Messages;
 
-namespace CoreBackend.Features.Account.Commands;
+namespace CoreBackend.Account.Features.Account.Commands;
 
 public abstract record BaseSendLoginLinkToUserCommand(
     string Email,

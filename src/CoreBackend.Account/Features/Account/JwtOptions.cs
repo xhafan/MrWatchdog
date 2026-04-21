@@ -1,4 +1,4 @@
-﻿namespace CoreBackend.Features.Account;
+﻿namespace CoreBackend.Account.Features.Account;
 
 public class JwtOptions
 {

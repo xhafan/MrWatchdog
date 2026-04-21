@@ -4,8 +4,8 @@ using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.LoginLinkSent;
 using System.Security.Claims;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
 
 namespace MrWatchdog.Web.Tests.Features.Account.LoginLinkSent;
 

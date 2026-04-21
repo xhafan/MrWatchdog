@@ -1,6 +1,6 @@
 ﻿using Reinforced.Typings.Attributes;
 
-namespace CoreBackend.Features.Account.Domain;
+namespace CoreBackend.Account.Features.Account.Domain;
 
 [TsInterface]
 public record LoginTokenDto(

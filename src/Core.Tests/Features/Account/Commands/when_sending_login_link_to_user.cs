@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
-using CoreBackend.Infrastructure.Repositories;
 using CoreBackend.TestsShared;
 using FakeItEasy;
 using Microsoft.Extensions.Options;

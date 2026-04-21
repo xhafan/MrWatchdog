@@ -1,7 +1,7 @@
-﻿using CoreBackend.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.Account.Domain;
 using CoreDdd.Domain.Repositories;
 
-namespace CoreBackend.Infrastructure.Repositories;
+namespace CoreBackend.Account.Infrastructure.Repositories;
 
 public interface ILoginTokenRepository : IRepository<LoginToken>
 {

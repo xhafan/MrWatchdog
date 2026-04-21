@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.Conventions;
 using CoreBackend.Infrastructure.Interceptors;
@@ -29,6 +30,7 @@ public class NhibernateConfigurator : BaseNhibernateConfigurator
         [
             typeof(Job).Assembly,
             typeof(JobMappingOverrides).Assembly,
+            typeof(LoginToken).Assembly,
             typeof(Scraper).Assembly
         ];
     }

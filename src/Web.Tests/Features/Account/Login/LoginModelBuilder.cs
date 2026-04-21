@@ -1,4 +1,5 @@
-﻿using CoreBackend.Features.Account.Queries;
+﻿using CoreBackend.Account.Features.Account.Queries;
+using CoreBackend.Account.Infrastructure.Repositories;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure.Rebus;

@@ -1,4 +1,4 @@
-﻿using CoreBackend.Features.Account.Domain;
+﻿using CoreBackend.Account.Features.Account.Domain;
 using CoreBackend.TestsShared;
 using MrWatchdog.Core.TestsShared.Builders;
 using MrWatchdog.Web.Features.Account.CompleteLogin;

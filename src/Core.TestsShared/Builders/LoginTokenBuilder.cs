@@ -5,8 +5,8 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Localization;
 using System.Globalization;
 using System.Security.Claims;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
 
 namespace MrWatchdog.Core.TestsShared.Builders;
 

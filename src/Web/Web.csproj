@@ -36,6 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoreBackend.Account.Register.Castle\CoreBackend.Account.Register.Castle.csproj" />
+    <ProjectReference Include="..\CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj" />
+    <ProjectReference Include="..\CoreBackend.Account\CoreBackend.Account.csproj" />
+    <ProjectReference Include="..\CoreWeb.Account\CoreWeb.Account.csproj" />
     <ProjectReference Include="..\CoreWeb\CoreWeb.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj" />

@@ -68,12 +68,13 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.RateLimiting;
-using CoreBackend.Features.Account;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Register.ServiceProvider;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Messages;
-using CoreWeb.Features.Account;
-using CoreWeb.Features.Account.Login;
+using CoreWeb.Account.Features.Account;
+using CoreWeb.Account.Features.Account.Login;
 using MrWatchdog.Core.Features.Account;
 
 namespace MrWatchdog.Web;
@@ -110,6 +111,7 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddCoreBackendRepositoriesAndQueryHandlers();
+        builder.Services.AddCoreBackendAccountRepositoriesAndQueryHandlers();
         builder.Services.AddCoreRepositoriesAndQueryHandlers();
         
         var mvcBuilder = builder.Services

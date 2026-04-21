@@ -2,7 +2,7 @@
 using CoreDdd.Domain;
 using CoreUtils;
 
-namespace CoreBackend.Features.Account.Domain;
+namespace CoreBackend.Account.Features.Account.Domain;
 
 public class LoginToken : VersionedEntity, IAggregateRoot
 {

@@ -1,4 +1,4 @@
-﻿using CoreBackend.Features.Account;
+﻿using CoreBackend.Account.Features.Account;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;

@@ -5,8 +5,8 @@ using MrWatchdog.Core.Features.Account;
 using MrWatchdog.Core.Infrastructure.Localization;
 using MrWatchdog.Core.TestsShared.Builders;
 using System.Security.Claims;
-using CoreBackend.Features.Account;
-using CoreBackend.Features.Account.Domain;
+using CoreBackend.Account.Features.Account;
+using CoreBackend.Account.Features.Account.Domain;
 using MrWatchdog.Web.Features.Account.ConfirmLogin;
 
 namespace MrWatchdog.Web.Tests.Features.Account.ConfirmLogin;

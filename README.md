@@ -21,4 +21,4 @@ git subtree pull --prefix=src/Libraries/CoreBackend https://github.com/xhafan/Co
 git subtree push --prefix=src/Libraries/CoreBackend https://github.com/xhafan/CoreBackend main
 ```
 
-This repo does not build standalone — cross-project references resolve only inside a consumer workspace. Develop inside the consumer, push changes back with `git subtree push`.
+This repo does not build standalone — cross-project references resolve only inside a consumer workspace. Develop inside a consumer, push changes back with `git subtree push`.

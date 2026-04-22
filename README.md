@@ -21,4 +21,6 @@ git subtree pull --prefix=src/Libraries/CoreBackend https://github.com/xhafan/Co
 git subtree push --prefix=src/Libraries/CoreBackend https://github.com/xhafan/CoreBackend main
 ```
 
+Consumers typically wrap these in a helper script — see [MrWatchdog's `src/subtree.sh`](https://github.com/xhafan/MrWatchdog/blob/main/src/subtree.sh) for a reference implementation.
+
 This repo does not build standalone — cross-project references resolve only inside a consumer workspace. Develop inside a consumer, push changes back with `git subtree push`.

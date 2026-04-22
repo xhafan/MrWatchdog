@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Sync the CoreBackend / CoreWeb subtrees with their upstream repos.
-# Usage: ./src/subtree.sh <pull|push> <corebackend|coreweb>
+
 set -eu
 
 usage() {
@@ -13,11 +13,11 @@ usage() {
 case "$2" in
     corebackend)
         PREFIX=src/Libraries/CoreBackend
-        URL=https://github.com/xhafan/CoreBackend.git
+        URL=git@github.com:xhafan/CoreBackend.git
         ;;
     coreweb)
         PREFIX=src/Libraries/CoreWeb
-        URL=https://github.com/xhafan/CoreWeb.git
+        URL=git@github.com:xhafan/CoreWeb.git
         ;;
     *) usage ;;
 esac

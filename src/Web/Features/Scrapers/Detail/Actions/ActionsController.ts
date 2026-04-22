@@ -1,6 +1,6 @@
-import { formSubmitWithWaitForJobCompletion } from "../../../../../CoreWeb/Features/Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
 import { DomEvents } from "../../../Shared/Generated/DomEvents";
-import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { ActionsStimulusModel } from "../../../Shared/Generated/ActionsStimulusModel";
 
 export default class ActionsControllers extends BaseStimulusModelController<ActionsStimulusModel> {

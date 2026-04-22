@@ -24,25 +24,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.E2E.Tests", "Web.E2E.Tests\Web.E2E.Tests.csproj", "{D94E4182-4B3F-1532-BE0D-D7B36F87B7F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend", "CoreBackend\CoreBackend.csproj", "{3FDCF9C1-A8E0-4549-9CAF-87A66C6B60E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend", "Libraries\CoreBackend\CoreBackend\CoreBackend.csproj", "{3FDCF9C1-A8E0-4549-9CAF-87A66C6B60E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWeb", "CoreWeb\CoreWeb.csproj", "{11021559-FA52-6BA7-0CED-18006C4CA741}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWeb", "Libraries\CoreWeb\CoreWeb\CoreWeb.csproj", "{11021559-FA52-6BA7-0CED-18006C4CA741}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.Castle", "CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj", "{B7DD8646-051B-4F11-B88D-0DAF64D6BAEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.Castle", "Libraries\CoreBackend\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj", "{B7DD8646-051B-4F11-B88D-0DAF64D6BAEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.ServiceProvider", "CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj", "{5DD54F47-19B3-452F-8F43-422B4982874D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Register.ServiceProvider", "Libraries\CoreBackend\CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj", "{5DD54F47-19B3-452F-8F43-422B4982874D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.TestsShared", "CoreBackend.TestsShared\CoreBackend.TestsShared.csproj", "{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.TestsShared", "Libraries\CoreBackend\CoreBackend.TestsShared\CoreBackend.TestsShared.csproj", "{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Postgres", "CoreBackend.Postgres\CoreBackend.Postgres.csproj", "{D35FF348-1A36-9A29-B167-6EF16C19C6BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Postgres", "Libraries\CoreBackend\CoreBackend.Postgres\CoreBackend.Postgres.csproj", "{D35FF348-1A36-9A29-B167-6EF16C19C6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account", "CoreBackend.Account\CoreBackend.Account.csproj", "{19E691F0-52D8-0958-500C-181A5DA409B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account", "Libraries\CoreBackend\CoreBackend.Account\CoreBackend.Account.csproj", "{19E691F0-52D8-0958-500C-181A5DA409B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWeb.Account", "CoreWeb.Account\CoreWeb.Account.csproj", "{9EEF8370-9A55-4228-753B-C233D8A1D230}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWeb.Account", "Libraries\CoreWeb\CoreWeb.Account\CoreWeb.Account.csproj", "{9EEF8370-9A55-4228-753B-C233D8A1D230}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Register.Castle", "CoreBackend.Account.Register.Castle\CoreBackend.Account.Register.Castle.csproj", "{45610F6D-496B-1EF6-22E5-07FA619B0A89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Register.Castle", "Libraries\CoreBackend\CoreBackend.Account.Register.Castle\CoreBackend.Account.Register.Castle.csproj", "{45610F6D-496B-1EF6-22E5-07FA619B0A89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Register.ServiceProvider", "CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj", "{554E46F5-A216-A9FD-2F9C-B181B517CC80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Register.ServiceProvider", "Libraries\CoreBackend\CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj", "{554E46F5-A216-A9FD-2F9C-B181B517CC80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

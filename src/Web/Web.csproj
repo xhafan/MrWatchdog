@@ -36,14 +36,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoreBackend.Account.Register.Castle\CoreBackend.Account.Register.Castle.csproj" />
-    <ProjectReference Include="..\CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj" />
-    <ProjectReference Include="..\CoreBackend.Account\CoreBackend.Account.csproj" />
-    <ProjectReference Include="..\CoreWeb.Account\CoreWeb.Account.csproj" />
-    <ProjectReference Include="..\CoreWeb\CoreWeb.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Account.Register.Castle\CoreBackend.Account.Register.Castle.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Account\CoreBackend.Account.csproj" />
+    <ProjectReference Include="..\Libraries\CoreWeb\CoreWeb.Account\CoreWeb.Account.csproj" />
+    <ProjectReference Include="..\Libraries\CoreWeb\CoreWeb\CoreWeb.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj" />
-    <ProjectReference Include="..\CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj" />
   </ItemGroup>
 
   <ItemGroup>

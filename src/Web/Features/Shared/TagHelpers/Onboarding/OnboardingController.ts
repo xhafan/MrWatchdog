@@ -1,11 +1,11 @@
-import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { OnboardingStimulusModel } from "../../Generated/OnboardingStimulusModel";
 import "@sjmc11/tourguidejs/dist/css/tour.min.css";
 import {TourGuideClient} from "@sjmc11/tourguidejs";
 import { UserUrlConstants } from "../../Generated/UserUrlConstants";
 import { FrameElement } from "@hotwired/turbo";
 import Enumerable from "linq";
-import { frontendSettings } from "../../../../../CoreWeb/Features/Shared/frontendSettingsHelper";
+import { frontendSettings } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/frontendSettingsHelper";
 import { Resource } from "../../Generated/Resource";
 
 const onboardingLocalStorageKeyPrefix = "onboardingComplete_";

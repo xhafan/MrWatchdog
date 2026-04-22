@@ -1,12 +1,12 @@
 import { FrameElement } from "@hotwired/turbo";
-import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitForJobCompletion } from "../../../../../CoreWeb/Features/Jobs/jobCompletion";
-import { formSubmitJobCompletedEventName } from "../../../../../CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import { formSubmitWithWaitForJobCompletion, getRelatedDomainEventJobGuid, waitForJobCompletion } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
+import { formSubmitJobCompletedEventName } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
-import { JobDto } from "../../../../../CoreWeb/Features/Shared/Generated/JobDto";
+import { JobDto } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/Generated/JobDto";
 import { scraperWebPageNameModifiedEventName } from "./WebPageOverviewController";
-import { logError } from "../../../../../CoreWeb/Features/Shared/logging";
+import { logError } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/logging";
 import { scraperWebPageScrapedEvent } from "./WebPageScrapedResultsController";
-import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { WebPageStimulusModel } from "../../../Shared/Generated/WebPageStimulusModel";
 
 export const scraperWebPageRemovedEvent = "scraperWebPageRemoved";

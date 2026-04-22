@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 import { FrameElement } from "@hotwired/turbo";
-import { formSubmitWithWaitForJobCompletion, waitForJobCompletion } from "../../../../../CoreWeb/Features/Jobs/jobCompletion";
-import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import { formSubmitWithWaitForJobCompletion, waitForJobCompletion } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
+import BaseStimulusModelController from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { WebPageOverviewStimulusModel } from "../../../Shared/Generated/WebPageOverviewStimulusModel";
-import { formSubmitJobCompletedEventName } from "../../../../../CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
-import { JobDto } from "../../../../../CoreWeb/Features/Shared/Generated/JobDto";
-import { JobUrlConstants } from "../../../../../CoreWeb/Features/Shared/Generated/JobUrlConstants";
+import { formSubmitJobCompletedEventName } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import { JobDto } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/Generated/JobDto";
+import { JobUrlConstants } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/Generated/JobUrlConstants";
 import { DomainConstants } from "../../../Shared/Generated/DomainConstants";
 import { ValidationConstants } from "../../../Shared/Generated/ValidationConstants";
 

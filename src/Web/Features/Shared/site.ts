@@ -1,18 +1,18 @@
 import type { TurboFrameLoadEvent } from "@hotwired/turbo";
 import { Application } from "@hotwired/stimulus";
-import { CoreWebStimulusControllers } from "../../../CoreWeb/Features/Shared/Generated/CoreWebStimulusControllers";
-import { CoreWebAccountStimulusControllers } from "../../../CoreWeb.Account/Features/Shared/Generated/CoreWebAccountStimulusControllers";
+import { CoreWebStimulusControllers } from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/Generated/CoreWebStimulusControllers";
+import { CoreWebAccountStimulusControllers } from "../../../Libraries/CoreWeb/CoreWeb.Account/Features/Shared/Generated/CoreWebAccountStimulusControllers";
 import { StimulusControllers } from "./Generated/StimulusControllers";
-import { logError } from "../../../CoreWeb/Features/Shared/logging";
+import { logError } from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/logging";
 
 import "./site.css";
 
 
 import BodyController from "./BodyController";
-import TurboFrameController from "../../../CoreWeb/Features/Shared/TagHelpers/TurboFrame/TurboFrameController";
+import TurboFrameController from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/TagHelpers/TurboFrame/TurboFrameController";
 import OnboardingController from "./TagHelpers/Onboarding/OnboardingController";
-import ViewOrEditFormController from "../../../CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
-import HintController from "../../../CoreWeb/Features/Shared/TagHelpers/Hint/HintController";
+import ViewOrEditFormController from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/TagHelpers/ViewOrEditForm/ViewOrEditFormController";
+import HintController from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/TagHelpers/Hint/HintController";
 
 import ScrapersCreateController from "../Scrapers/Create/CreateController";
 import ScrapersDetailController from "../Scrapers/Detail/DetailController";
@@ -26,8 +26,8 @@ import ScrapersScrapedResultsWebPagesController from "../Scrapers/Shared/Scraped
 import WatchdogsDetailController from "../Watchdogs/Detail/DetailController";
 import WatchdogsDetailOverviewController from "../Watchdogs/Detail/Overview/OverviewController";
 
-import AccountLoginLinkLoginController from "../../../CoreWeb.Account/Features/LoginLink/Login/LoginController";
-import AccountLoginLinkLoginLinkSentController from "../../../CoreWeb.Account/Features/LoginLink/LoginLinkSent/LoginLinkSentController";
+import AccountLoginLinkLoginController from "../../../Libraries/CoreWeb/CoreWeb.Account/Features/LoginLink/Login/LoginController";
+import AccountLoginLinkLoginLinkSentController from "../../../Libraries/CoreWeb/CoreWeb.Account/Features/LoginLink/LoginLinkSent/LoginLinkSentController";
 
 
 const application = Application.start();

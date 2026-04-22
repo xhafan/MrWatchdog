@@ -1,6 +1,6 @@
-﻿import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus";
 import { removeOnboardingKeysFromLocalStorage } from "./TagHelpers/Onboarding/OnboardingController";
-import { registerGlobalEventHandlerEventName, EventHandlerRegistration } from "../../../CoreWeb/Features/Shared/EventHandlerRegistration";
+import { registerGlobalEventHandlerEventName, EventHandlerRegistration } from "../../../Libraries/CoreWeb/CoreWeb/Features/Shared/EventHandlerRegistration";
 
 export default class BodyController extends Controller {
     connect() {

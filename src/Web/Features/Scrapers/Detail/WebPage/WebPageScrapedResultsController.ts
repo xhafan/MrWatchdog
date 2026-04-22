@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
-import { formSubmitWithWaitForJobCompletion } from "../../../../../CoreWeb/Features/Jobs/jobCompletion";
-import BaseStimulusModelController from "../../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import { formSubmitWithWaitForJobCompletion } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
+import BaseStimulusModelController from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { WebPageScrapedResultsStimulusModel } from "../../../Shared/Generated/WebPageScrapedResultsStimulusModel";
 
 export const scraperWebPageScrapedEvent = "scraperWebPageScraped";

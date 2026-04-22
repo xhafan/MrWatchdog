@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { formSubmitWithWaitForJobCompletion } from "../../../../../CoreWeb/Features/Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
 
 export default class WebPageDisabledWarningController extends Controller {
     static targets = [

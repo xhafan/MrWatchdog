@@ -6,32 +6,32 @@ WORKDIR /app
 RUN apk add --no-cache nodejs npm
 
 # Copy only project files first for better layer caching
-COPY CoreBackend/*.csproj ./CoreBackend/
-COPY CoreBackend.Register.Castle/*.csproj ./CoreBackend.Register.Castle/
-COPY CoreBackend.Register.ServiceProvider/*.csproj ./CoreBackend.Register.ServiceProvider/
-COPY CoreBackend.Account/*.csproj ./CoreBackend.Account/
-COPY CoreBackend.Account.Register.Castle/*.csproj ./CoreBackend.Account.Register.Castle/
-COPY CoreBackend.Account.Register.ServiceProvider/*.csproj ./CoreBackend.Account.Register.ServiceProvider/
-COPY CoreBackend.Postgres/*.csproj ./CoreBackend.Postgres/
+COPY Libraries/CoreBackend/CoreBackend/*.csproj ./Libraries/CoreBackend/CoreBackend/
+COPY Libraries/CoreBackend/CoreBackend.Register.Castle/*.csproj ./Libraries/CoreBackend/CoreBackend.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/*.csproj ./Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Account/*.csproj ./Libraries/CoreBackend/CoreBackend.Account/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.Castle/*.csproj ./Libraries/CoreBackend/CoreBackend.Account.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/*.csproj ./Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Postgres/*.csproj ./Libraries/CoreBackend/CoreBackend.Postgres/
 COPY Core/*.csproj ./Core/
-COPY CoreWeb/*.csproj ./CoreWeb/
-COPY CoreWeb.Account/*.csproj ./CoreWeb.Account/
+COPY Libraries/CoreWeb/CoreWeb/*.csproj ./Libraries/CoreWeb/CoreWeb/
+COPY Libraries/CoreWeb/CoreWeb.Account/*.csproj ./Libraries/CoreWeb/CoreWeb.Account/
 COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
 RUN dotnet restore Web/Web.csproj
 
 # Copy the remaining source code
 WORKDIR /app
-COPY CoreBackend/. ./CoreBackend/
-COPY CoreBackend.Register.Castle/. ./CoreBackend.Register.Castle/
-COPY CoreBackend.Register.ServiceProvider/. ./CoreBackend.Register.ServiceProvider/
-COPY CoreBackend.Account/. ./CoreBackend.Account/
-COPY CoreBackend.Account.Register.Castle/. ./CoreBackend.Account.Register.Castle/
-COPY CoreBackend.Account.Register.ServiceProvider/. ./CoreBackend.Account.Register.ServiceProvider/
-COPY CoreBackend.Postgres/. ./CoreBackend.Postgres/
+COPY Libraries/CoreBackend/CoreBackend/. ./Libraries/CoreBackend/CoreBackend/
+COPY Libraries/CoreBackend/CoreBackend.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Account/. ./Libraries/CoreBackend/CoreBackend.Account/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Account.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Postgres/. ./Libraries/CoreBackend/CoreBackend.Postgres/
 COPY Core/. ./Core/
-COPY CoreWeb/. ./CoreWeb/
-COPY CoreWeb.Account/. ./CoreWeb.Account/
+COPY Libraries/CoreWeb/CoreWeb/. ./Libraries/CoreWeb/CoreWeb/
+COPY Libraries/CoreWeb/CoreWeb.Account/. ./Libraries/CoreWeb/CoreWeb.Account/
 COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
@@ -39,12 +39,12 @@ COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
 # ******************************* Make sure the above is the same as for Dockerfile.tests to be able to benefit from cached layers *******************************
 
 # Install Node packages
-WORKDIR /app/CoreWeb
-COPY CoreWeb/package*.json ./
+WORKDIR /app/Libraries/CoreWeb/CoreWeb
+COPY Libraries/CoreWeb/CoreWeb/package*.json ./
 RUN npm ci
 
-WORKDIR /app/CoreWeb.Account
-COPY CoreWeb.Account/package*.json ./
+WORKDIR /app/Libraries/CoreWeb/CoreWeb.Account
+COPY Libraries/CoreWeb/CoreWeb.Account/package*.json ./
 RUN npm ci
 
 WORKDIR /app/Web

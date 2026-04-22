@@ -1,9 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 import { searchTermModifiedEventName } from "../../Scrapers/Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
-import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features/Jobs/jobCompletion";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/EventHandlerRegistration";
+import { formSubmitWithWaitForJobCompletion } from "../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
-import BaseStimulusModelController from "../../../../CoreWeb/Features/Shared/BaseStimulusModelController";
+import BaseStimulusModelController from "../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/BaseStimulusModelController";
 import { WatchdogDetailStimulusModel } from "../../Shared/Generated/WatchdogDetailStimulusModel";
 
 export default class DetailController extends BaseStimulusModelController<WatchdogDetailStimulusModel> {

@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
-import { formSubmitWithWaitForJobCompletion } from "../../../../CoreWeb/Features/Jobs/jobCompletion";
+import { formSubmitWithWaitForJobCompletion } from "../../../../Libraries/CoreWeb/CoreWeb/Features/Jobs/jobCompletion";
 import { DomainConstants } from "../../Shared/Generated/DomainConstants";
 import Enumerable from "linq";
 import { WatchdogUrlConstants } from "../../Shared/Generated/WatchdogUrlConstants";
-import { CoreWebAccountUrlConstants } from "../../../../CoreWeb.Account/Features/Shared/Generated/CoreWebAccountUrlConstants";
+import { CoreWebAccountUrlConstants } from "../../../../Libraries/CoreWeb/CoreWeb.Account/Features/Shared/Generated/CoreWebAccountUrlConstants";
 import { AccountUrlConstants } from "../../Shared/Generated/AccountUrlConstants";
-import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../CoreWeb/Features/Shared/EventHandlerRegistration";
+import { EventHandlerRegistration, registerGlobalEventHandlerEventName } from "../../../../Libraries/CoreWeb/CoreWeb/Features/Shared/EventHandlerRegistration";
 import { searchTermModifiedEventName } from "../Shared/ScrapedResultsWebPages/ScrapedResultsWebPagesController";
 
 export const scraperScrapedResultsWebPagesInitializedEventName = "scraperScrapedResultsWebPagesInitialized";

@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoreBackend.Account\CoreBackend.Account.csproj" />
-    <ProjectReference Include="..\CoreBackend.Postgres\CoreBackend.Postgres.csproj" />
-    <ProjectReference Include="..\CoreBackend\CoreBackend.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Account\CoreBackend.Account.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend.Postgres\CoreBackend.Postgres.csproj" />
+    <ProjectReference Include="..\Libraries\CoreBackend\CoreBackend\CoreBackend.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,6 +22,10 @@ case "$2" in
     *) usage ;;
 esac
 
+# Refresh the index to avoid spurious "working tree has modifications" from
+# stat-dirty files (common on WSL reading /mnt/c). Harmless when clean.
+git update-index --refresh >/dev/null || true
+
 case "$1" in
     pull) git subtree pull --prefix="$PREFIX" "$URL" main --squash ;;
     push) git subtree push --prefix="$PREFIX" "$URL" main ;;

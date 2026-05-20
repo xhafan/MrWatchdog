@@ -48,6 +48,7 @@
 		* `apk add docker`
 		* `rc-update add docker boot`
 		* `service docker start`
+		* If you manage docker via `alpine` user; `addgroup alpine docker`
 	* Deploy the app via Kamal - see [Deployment](Deployment.md)
 	* Install Caddy reverse proxy on the host:
 		* `apk update`

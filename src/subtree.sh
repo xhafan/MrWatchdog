@@ -14,10 +14,12 @@ case "$2" in
     corebackend)
         PREFIX=src/Libraries/CoreBackend
         URL=git@github.com:xhafan/CoreBackend.git
+        MESSAGE="Update CoreBackend subtree from upstream main"
         ;;
     coreweb)
         PREFIX=src/Libraries/CoreWeb
         URL=git@github.com:xhafan/CoreWeb.git
+        MESSAGE="Update CoreWeb subtree from upstream main"
         ;;
     *) usage ;;
 esac
@@ -27,7 +29,7 @@ esac
 git update-index --refresh >/dev/null || true
 
 case "$1" in
-    pull) git subtree pull --prefix="$PREFIX" "$URL" main --squash ;;
+    pull) git subtree pull --prefix="$PREFIX" "$URL" main --squash -m "$MESSAGE" ;;
     push) git subtree push --prefix="$PREFIX" "$URL" main ;;
     *) usage ;;
 esac

@@ -45,10 +45,15 @@ COPY Core.TestsShared/*.csproj Core.TestsShared/
 COPY Core.Tests/*.csproj Core.Tests/
 COPY Web.E2E.Tests/*.csproj Web.E2E.Tests/
 COPY Web.Tests/*.csproj Web.Tests/
+COPY Web.ScriptTests/*.esproj Web.ScriptTests/
+COPY Web.ScriptTests/package*.json Web.ScriptTests/
 COPY ToolsApp/*.csproj ToolsApp/
 
 # Restore all projects (creates a cached layer)
 RUN dotnet restore
+
+# Install TypeScript test dependencies from the lockfile while package manifests are still cacheable
+RUN npm --prefix Web.ScriptTests ci --include=dev
 
 # Copy test projects files
 COPY Libraries/CoreBackend/CoreBackend.TestsShared/. ./Libraries/CoreBackend/CoreBackend.TestsShared/
@@ -56,6 +61,7 @@ COPY Core.TestsShared/. ./Core.TestsShared/
 COPY Core.Tests/. ./Core.Tests/
 COPY Web.E2E.Tests/. ./Web.E2E.Tests/
 COPY Web.Tests/. ./Web.Tests/
+COPY Web.ScriptTests/. ./Web.ScriptTests/
 COPY ToolsApp/. ./ToolsApp/
 
 RUN dotnet build
@@ -63,8 +69,8 @@ RUN dotnet build
 # ---- Runtime container: runs the tests ----
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:732cd42c6f659814c9804ad7b05c7f761e83ef8379c5b2fdc3af673353caff73
 
-# Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl)
-RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl
+# Install Alpine-native Chromium, Node.js, and npm (these are compiled for Alpine's musl)
+RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs npm xvfb dbus mesa-gl
 
 WORKDIR /app
 
@@ -79,4 +85,4 @@ COPY --from=build /app .
 COPY --from=build /root/.nuget/packages /root/.nuget/packages
 
 # Start Xvfb in the background to support headed Chrome browser and then run tests
-ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet test --no-restore --no-build"]
+ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet test --no-restore --no-build && npm --prefix Web.ScriptTests run verify"]

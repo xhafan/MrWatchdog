@@ -2,6 +2,7 @@
 **/obj
 **/*.bak
 Web/node_modules/
+Web.ScriptTests/node_modules/
 Web/wwwroot/assets
 Install/
 **/*.sh

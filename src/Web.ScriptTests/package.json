@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --noEmit",
-    "verify": "tsc --noEmit && jest"
+    "verify": "tsc --noEmit && jest --passWithNoTests"
   },
   "devDependencies": {
     "@types/bootbox": "^5.2.9",

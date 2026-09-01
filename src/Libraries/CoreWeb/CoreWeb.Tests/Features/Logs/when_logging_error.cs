@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace MrWatchdog.Web.Tests.Features.Logs;
+namespace CoreWeb.Tests.Features.Logs;
 
 [TestFixture]
 public class when_logging_error
@@ -43,7 +43,7 @@ public class when_logging_error
                 new ControllerActionDescriptor())
             )
         };
-        _logsController.ControllerContext.HttpContext.Request.Headers[LogConstants.LogErrorApiSecretHeaderName] 
+        _logsController.ControllerContext.HttpContext.Request.Headers[LogConstants.LogErrorApiSecretHeaderName]
             = iLoggingOptions.Value.LogErrorApiSecret;
 
         await _logsController.LogError(

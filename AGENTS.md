@@ -68,6 +68,7 @@
 ## Coding Style
 
 - Match existing C# style: file-scoped namespaces, records for commands/queries, primary constructors where already used, async all the way.
+- Preserve each existing file's encoding, byte-order mark, and newline style when editing or moving it. Do not add or remove a BOM or convert between CRLF and LF unless the user explicitly requests it.
 - Prefer existing CoreBackend/CoreWeb helpers before adding new infrastructure.
 - Keep changes narrow and feature-local. Avoid unrelated refactors and broad formatting churn.
 - Keep comments rare; code structure and tests should carry the explanation.

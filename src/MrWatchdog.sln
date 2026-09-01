@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Registe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreBackend.Account.Register.ServiceProvider", "Libraries\CoreBackend\CoreBackend.Account.Register.ServiceProvider\CoreBackend.Account.Register.ServiceProvider.csproj", "{554E46F5-A216-A9FD-2F9C-B181B517CC80}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Web.ScriptTests", "Web.ScriptTests\Web.ScriptTests.esproj", "{554D3678-5715-45CB-80D0-0A517EE10DDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -258,6 +260,12 @@ Global
 		{554E46F5-A216-A9FD-2F9C-B181B517CC80}.Release|x64.Build.0 = Release|Any CPU
 		{554E46F5-A216-A9FD-2F9C-B181B517CC80}.Release|x86.ActiveCfg = Release|Any CPU
 		{554E46F5-A216-A9FD-2F9C-B181B517CC80}.Release|x86.Build.0 = Release|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Release|x64.ActiveCfg = Release|Any CPU
+		{554D3678-5715-45CB-80D0-0A517EE10DDB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -268,6 +276,7 @@ Global
 		{8248B593-EA02-4E37-BC92-8392F686959D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D94E4182-4B3F-1532-BE0D-D7B36F87B7F6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{CA66DC1D-EB4B-C836-0C0B-DA3DDB2C5F1B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{554D3678-5715-45CB-80D0-0A517EE10DDB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6806D3F-3FDE-401C-9CC9-665A82982FFE}

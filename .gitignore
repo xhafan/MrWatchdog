@@ -7,6 +7,7 @@ obj
 /src/Libraries/CoreWeb/CoreWeb/node_modules
 /src/Libraries/CoreWeb/CoreWeb.Account/node_modules
 /src/Web/node_modules
+/src/Web.ScriptTests/node_modules
 /src/Web/wwwroot/assets/bundle.js
 /src/Web/wwwroot/assets/bundle.js.map
 /src/Web/wwwroot/assets/bundle.css

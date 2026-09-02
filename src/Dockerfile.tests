@@ -87,4 +87,4 @@ COPY --from=build /app .
 COPY --from=build /root/.nuget/packages /root/.nuget/packages
 
 # Start Xvfb in the background to support headed Chrome browser and then run tests
-ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet test --no-restore --no-build && npm --prefix Web.ScriptTests run verify"]
+ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet test --no-restore --no-build --maxcpucount && npm --prefix Web.ScriptTests run verify"]

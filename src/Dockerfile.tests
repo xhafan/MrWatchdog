@@ -40,6 +40,7 @@ COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
 
 # Copy only csproj files first
 COPY MrWatchdog.sln .
+COPY Libraries/CoreBackend/CoreBackend.Tests/*.csproj Libraries/CoreBackend/CoreBackend.Tests/
 COPY Libraries/CoreBackend/CoreBackend.TestsShared/*.csproj Libraries/CoreBackend/CoreBackend.TestsShared/
 COPY Libraries/CoreWeb/CoreWeb.Tests/*.csproj Libraries/CoreWeb/CoreWeb.Tests/
 COPY Core.TestsShared/*.csproj Core.TestsShared/
@@ -57,6 +58,7 @@ RUN dotnet restore
 RUN npm --prefix Web.ScriptTests ci --include=dev
 
 # Copy test projects files
+COPY Libraries/CoreBackend/CoreBackend.Tests/. ./Libraries/CoreBackend/CoreBackend.Tests/
 COPY Libraries/CoreBackend/CoreBackend.TestsShared/. ./Libraries/CoreBackend/CoreBackend.TestsShared/
 COPY Libraries/CoreWeb/CoreWeb.Tests/. ./Libraries/CoreWeb/CoreWeb.Tests/
 COPY Core.TestsShared/. ./Core.TestsShared/

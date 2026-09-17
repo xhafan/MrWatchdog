@@ -9,6 +9,13 @@
 	* `Reboot`
 	* Login as root with a password
 	* Install nano editor: `apk add nano`
+	* Create a 2 GiB swap file if `free -h` reports zero swap and `cat /proc/swaps` prints only its header:
+		* Create the file: `dd if=/dev/zero of=/swapfile bs=1M count=2048`
+		* Allow only root to access it: `chmod 600 /swapfile`
+		* Format and enable it: `mkswap /swapfile && swapon /swapfile`
+		* Run `grep -qxF '/swapfile none swap defaults 0 0' /etc/fstab || printf '%s\n' '/swapfile none swap defaults 0 0' >> /etc/fstab`
+		* Enable swap during boot: `rc-update add swap boot`
+		* Verify the result: `free -h` and `cat /proc/swaps`
 	* Temporarily allow root password login if disabled: `nano /etc/ssh/sshd_config` and set:
 		* `PasswordAuthentication` to `yes`
 		* `PermitRootLogin` to `yes`

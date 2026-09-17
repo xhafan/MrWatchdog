@@ -46,7 +46,7 @@
 	* Install docker: 
 		* `nano /etc/apk/repositories` - uncomment line http://dl-cdn.alpinelinux.org/alpine/v3.22/community
 		* `apk add docker`
-		* `rc-update add docker boot`
+		* `rc-update add docker default` - use the `default` runlevel rather than `boot`. The Docker OpenRC service depends on networking, which starts in the `default` runlevel. Registering Docker in `boot` can race network initialization and leave Docker stopped after a reboot.
 		* `service docker start`
 		* If you manage docker via `alpine` user: `addgroup alpine docker`
 	* Deploy the app via Kamal - see [Deployment](Deployment.md)

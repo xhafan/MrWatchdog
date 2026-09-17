@@ -16,6 +16,14 @@
 		* Run `grep -qxF '/swapfile none swap defaults 0 0' /etc/fstab || printf '%s\n' '/swapfile none swap defaults 0 0' >> /etc/fstab`
 		* Enable swap during boot: `rc-update add swap boot`
 		* Verify the result: `free -h` and `cat /proc/swaps`
+	* Collect historical memory and swap statistics with `sysstat` and retain them for 31 days:
+		* Install `sysstat`: `apk add sysstat`
+		* Set the retention period: `sed -i 's/^HISTORY=.*/HISTORY=31/' /etc/sysconfig/sysstat`
+		* Enable and start `crond`; `sysstat` uses cron rather than a persistent service: `rc-update add crond default && rc-service crond start`
+		* Collect statistics every 10 minutes: `grep -qxF '*/10 * * * * /usr/lib/sa/sa1 1 1' /etc/crontabs/root || echo '*/10 * * * * /usr/lib/sa/sa1 1 1' >> /etc/crontabs/root`
+		* Generate the daily report and remove expired data shortly after midnight: `grep -qxF '5 0 * * * /usr/lib/sa/sa2 -A' /etc/crontabs/root || echo '5 0 * * * /usr/lib/sa/sa2 -A' >> /etc/crontabs/root`
+		* Apply the new schedule and create the first sample: `rc-service crond restart && /usr/lib/sa/sa1 1 1`
+		* Verify collection: `rc-service crond status`, `sar -S`, `sar -W`, and `du -sh /var/log/sa`
 	* Temporarily allow root password login if disabled: `nano /etc/ssh/sshd_config` and set:
 		* `PasswordAuthentication` to `yes`
 		* `PermitRootLogin` to `yes`

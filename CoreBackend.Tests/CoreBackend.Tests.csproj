@@ -22,6 +22,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CoreBackend\CoreBackend.csproj" />
     <ProjectReference Include="..\CoreBackend.TestsShared\CoreBackend.TestsShared.csproj" />
+    <ProjectReference Include="..\CoreBackend.Register.ServiceProvider\CoreBackend.Register.ServiceProvider.csproj" />
+    <ProjectReference Include="..\CoreBackend.Register.Castle\CoreBackend.Register.Castle.csproj" />
   </ItemGroup>
 
 </Project>

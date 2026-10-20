@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.ActingUserAccessors;
-using CoreBackend.Infrastructure.Configurations;
+using CoreBackend.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
@@ -52,6 +52,7 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
             hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<HybridCache>());
             hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<IMessageTypeGetter>());
             hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<ISharedTranslationsGetter>());
+            hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<ErrorReportQueue>());
 
             var rebusInMemoryNetwork = mainServiceProvider.GetService<InMemNetwork>();
             if (rebusInMemoryNetwork != null)
@@ -136,13 +137,7 @@ public static class CoreBackendServicesServiceProviderRegistrationExtensions
             );
 
             // Failed message reporter
-            hostedServiceServices.AddSingleton<IFailedMessageReporter>(sp =>
-                new FailedMessageEmailReporter(
-                    sp.GetRequiredKeyedService<ICoreBus>(RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus),
-                    sp.GetRequiredService<IOptions<RuntimeOptions>>(),
-                    sp.GetRequiredService<IOptions<EmailAddressesOptions>>()
-                )
-            );
+            hostedServiceServices.AddSingleton<IFailedMessageReporter, QueuedFailedMessageReporter>();
 
             // Rebus message handlers from CoreBackend
             hostedServiceServices.Scan(scan => scan

@@ -9,5 +9,6 @@ public record SendEmailCommand(
     string RecipientEmail, 
     string Subject, 
     string HtmlMessage,
-    string? UnsubscribeUrl = null
+    string? UnsubscribeUrl = null,
+    bool IsErrorNotification = false
 ) : Command;

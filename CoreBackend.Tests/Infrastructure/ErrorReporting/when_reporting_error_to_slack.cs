@@ -34,7 +34,7 @@ public class when_reporting_error_to_slack
         handler.MediaType.ShouldBe("application/json");
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
         payload.RootElement.GetProperty("channel").GetString().ShouldBe("#web-app-staging-errors");
-        payload.RootElement.GetProperty("username").GetString().ShouldBe("SmartGuide web app errors");
+        payload.RootElement.GetProperty("username").GetString().ShouldBe("Application errors");
         payload.RootElement.GetProperty("icon_emoji").GetString().ShouldBe(":warning:");
         var text = payload.RootElement.GetProperty("text").GetString().ShouldNotBeNull();
         text.ShouldContain("RequestId: request-123");
@@ -50,6 +50,25 @@ public class when_reporting_error_to_slack
         var reporter = _createReporter(handler, "#web-app-staging-errors");
 
         await Should.ThrowAsync<HttpRequestException>(() => reporter.Report(_report()));
+        handler.RequestCount.ShouldBe(1);
+    }
+
+    [Test]
+    public async Task it_uses_the_configured_application_identity()
+    {
+        var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
+        var reporter = new SlackErrorReporter(new HttpClientFactory(new HttpClient(handler)),
+            Options.Create(new SlackErrorReportingOptions
+            {
+                WebHookUrl = "https://hooks.slack.test/services/another-app",
+                Channel = "#backend-errors",
+                ApplicationName = "Another backend"
+            }));
+
+        await reporter.Report(_report());
+
+        using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
+        payload.RootElement.GetProperty("username").GetString().ShouldBe("Another backend errors");
     }
 
     private static SlackErrorReporter _createReporter(
@@ -69,7 +88,8 @@ public class when_reporting_error_to_slack
     private static ErrorReport _report() => new(
         "Failure <script>&</script><!channel>",
         "request-123",
-        new DateTime(2026, 9, 1, 10, 11, 12, 345, DateTimeKind.Utc)
+        new DateTime(2026, 9, 1, 10, 11, 12, 345, DateTimeKind.Utc),
+        Origin: ErrorReportOrigin.Server
     );
 
     private sealed class RecordingHttpMessageHandler(HttpStatusCode statusCode) : HttpMessageHandler

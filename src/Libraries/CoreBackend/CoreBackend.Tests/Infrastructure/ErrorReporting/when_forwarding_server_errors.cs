@@ -154,7 +154,7 @@ public class when_forwarding_server_errors
             var diagnostic = logs.Events.ShouldHaveSingleItem();
             diagnostic.RenderMessage().ShouldContain("queue is full or closed");
             diagnostic.RenderMessage().ShouldNotContain("private report content");
-            ErrorReportingLogPolicy.ShouldReport(diagnostic).ShouldBeFalse();
+            ErrorReportingLogPolicy.ShouldReport(diagnostic, new ErrorReportingOptions()).ShouldBeFalse();
         }
         finally
         {

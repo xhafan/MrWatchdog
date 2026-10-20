@@ -10,7 +10,7 @@ public sealed class ErrorReportingSink(ErrorReportQueue queue) : ILogEventSink
 {
     public void Emit(LogEvent logEvent)
     {
-        if (!ErrorReportingLogPolicy.ShouldReport(logEvent)) return;
+        if (!ErrorReportingLogPolicy.ShouldReport(logEvent, queue.Options)) return;
 
         var message = new StringBuilder(logEvent.RenderMessage(CultureInfo.InvariantCulture));
         foreach (var name in new[] { "SourceContext", LogConstants.MessageId, LogConstants.MessageType })

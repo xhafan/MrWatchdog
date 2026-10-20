@@ -8,4 +8,6 @@ public sealed class ErrorReportingOptions
     public int QueueCapacity { get; set; } = 256;
     public TimeSpan DeliveryTimeout { get; set; } = TimeSpan.FromSeconds(10);
     public TimeSpan ShutdownTimeout { get; set; } = TimeSpan.FromSeconds(5);
+
+    public List<Func<Exception, bool>> IgnoredExceptions { get; } = [];
 }

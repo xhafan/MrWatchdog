@@ -6,4 +6,5 @@ public sealed class SlackErrorReportingOptions
 
     public string WebHookUrl { get; set; } = "";
     public string Channel { get; set; } = "";
+    public string ApplicationName { get; set; } = "Application";
 }

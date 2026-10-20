@@ -21,7 +21,7 @@ public sealed class SlackErrorReporter(
         var payload = new Dictionary<string, string>
         {
             ["channel"] = options.Channel,
-            ["username"] = "SmartGuide web app errors",
+            ["username"] = $"{options.ApplicationName} errors",
             ["icon_emoji"] = ":warning:",
             ["text"] = $"""
                        RequestId: {_escapeSlackText(report.RequestId)}

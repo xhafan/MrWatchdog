@@ -1,4 +1,6 @@
 using CoreBackend.Messages;
+using CoreBackend.Infrastructure.ErrorReporting;
+using CoreBackend.Infrastructure.EmailSenders;
 using Rebus.Messages;
 using Rebus.Retry;
 using Rebus.Serialization;
@@ -19,14 +21,33 @@ public class ReportFailedMessageErrorHandler(
         ExceptionInfo exceptionInfo
     )
     {
+        using var suppression = ErrorReportingLogPolicy.Suppress();
         await errorHandler.HandlePoisonMessage(transportMessage, transactionContext, exceptionInfo);
 
-        var rebusMessage = await serializer.Deserialize(transportMessage);
+        transactionContext.OnAck(_ => ReportFailure(transportMessage, exceptionInfo));
+    }
 
-        if (rebusMessage.Body is not BaseMessage message) return;
+    private async Task ReportFailure(TransportMessage transportMessage, ExceptionInfo exceptionInfo)
+    {
+        using var suppression = ErrorReportingLogPolicy.Suppress();
+        try
+        {
+            var rebusMessage = await serializer.Deserialize(transportMessage);
 
-        var jobGuid = Guid.Parse(rebusMessage.Headers[Headers.MessageId]);
+            if (rebusMessage.Body is not BaseMessage message) return;
+            if (message is SendEmailCommand { IsErrorNotification: true }) return;
 
-        await failedMessageReporter.Report(jobGuid, message.GetType());
+            await failedMessageReporter.Report(new FailedMessageReport(
+                Guid.Parse(rebusMessage.Headers[Headers.MessageId]),
+                message.GetType(),
+                message.RequestId,
+                exceptionInfo.GetFullErrorDescription(),
+                DateTime.UtcNow
+            ));
+        }
+        catch (Exception exception)
+        {
+            ErrorReportingDiagnostics.DeliveryFailed(exception);
+        }
     }
 }

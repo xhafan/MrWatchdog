@@ -8,6 +8,7 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using CoreBackend.Features.Jobs.Queries;
 using CoreBackend.Infrastructure.ActingUserAccessors;
+using CoreBackend.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
@@ -78,7 +79,10 @@ public static class CoreBackendServicesCastleWindsorRegistrationExtensions
                     .Instance(mainServiceProvider.GetRequiredService<IMessageTypeGetter>()),
 
                 Component.For<ISharedTranslationsGetter>()
-                    .Instance(mainServiceProvider.GetRequiredService<ISharedTranslationsGetter>())
+                    .Instance(mainServiceProvider.GetRequiredService<ISharedTranslationsGetter>()),
+
+                Component.For<ErrorReportQueue>()
+                    .Instance(mainServiceProvider.GetRequiredService<ErrorReportQueue>())
             );
 
             var rebusInMemoryNetwork = mainServiceProvider.GetService<InMemNetwork>();
@@ -170,8 +174,9 @@ public static class CoreBackendServicesCastleWindsorRegistrationExtensions
                     .Configure(x => x.LifestyleTransient()),
 
                 // Failed message reporter
-                Component.For<IFailedMessageReporter>().ImplementedBy<FailedMessageEmailReporter>().LifeStyle.Singleton
-                    .DependsOn(Dependency.OnComponent(typeof(ICoreBus), RebusConstants.CoreBusWithNewTransactionJobCreatorAndFireAndForgetWebBus))
+                Component.For<IFailedMessageReporter>()
+                    .ImplementedBy<QueuedFailedMessageReporter>()
+                    .LifestyleSingleton()
             );
 
             hostedServiceWindsorContainer.Kernel.Resolver.AddSubResolver(new CollectionResolver(hostedServiceWindsorContainer.Kernel));

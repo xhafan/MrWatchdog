@@ -16,6 +16,7 @@ public class when_handling_failed_message
     private TransportMessage _transportMessage = null!;
     private ExceptionInfo _exceptionInfo = null!;
     private IFailedMessageReporter _failedMessageReporter = null!;
+    private Func<ITransactionContext, Task> _onAck = null!;
     private Guid _jobGuid;
 
     [SetUp]
@@ -38,11 +39,13 @@ public class when_handling_failed_message
         A.CallTo(() => serializer.Deserialize(_transportMessage)).Returns(
             new Message(
                 new Dictionary<string, string> {{Headers.MessageId, _jobGuid.ToString()}},
-                new ArchiveScraperCommand(ScraperId: 23)
+                new ArchiveScraperCommand(ScraperId: 23) { RequestId = "request-123" }
             )
         );
 
         _transactionContext = A.Fake<ITransactionContext>();
+        A.CallTo(() => _transactionContext.OnAck(A<Func<ITransactionContext, Task>>._))
+            .Invokes((Func<ITransactionContext, Task> callback) => _onAck = callback);
         _exceptionInfo = new ExceptionInfo(
             "Exception",
             "Test exception",
@@ -67,8 +70,21 @@ public class when_handling_failed_message
     }
 
     [Test]
-    public void failed_message_is_reported()
+    public void failed_message_is_not_reported_before_acknowledgement()
     {
-        A.CallTo(() => _failedMessageReporter.Report(_jobGuid, typeof(ArchiveScraperCommand))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _failedMessageReporter.Report(A<FailedMessageReport>._)).MustNotHaveHappened();
+    }
+
+    [Test]
+    public async Task failed_message_is_reported_after_acknowledgement()
+    {
+        await _onAck.ShouldNotBeNull()(_transactionContext);
+
+        A.CallTo(() => _failedMessageReporter.Report(A<FailedMessageReport>.That.Matches(report =>
+                report.JobGuid == _jobGuid
+                && report.FailedMessageType == typeof(ArchiveScraperCommand)
+                && report.RequestId == "request-123"
+                && report.ErrorDetails.Contains("Exception details", StringComparison.Ordinal))))
+            .MustHaveHappenedOnceExactly();
     }
 }

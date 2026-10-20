@@ -6,6 +6,7 @@ using CoreBackend.Features.Jobs.Services;
 using CoreBackend.Infrastructure;
 using CoreBackend.Infrastructure.ActingUserAccessors;
 using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.Jsons;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.MessageRouting;
@@ -100,9 +101,9 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString(connectionStringName);
         Guard.Hope(connectionString != null, nameof(connectionString) + " is null");
 
-        _configureLogging();
+        await using var startupLogger = _configureLogging();
 
-        Log.Information("Starting {MrWatchdog}, environment {ENVIRONMENT}, PID {PID}", 
+        startupLogger.Information("Starting {MrWatchdog}, environment {ENVIRONMENT}, PID {PID}",
             Resource.MrWatchdog,
             environmentName,
             Environment.ProcessId
@@ -156,6 +157,7 @@ public class Program
         builder.Services.AddCoreDddNhibernate<NhibernateConfigurator>(_ => nhibernateConfigurator);
         builder.Services.AddSingleton<IJobCreator, NewTransactionJobCreator>();
         builder.Services.AddSingleton<ICoreBus, CoreBus>();
+        builder.Services.AddSingleton<IErrorReporter, EmailErrorReporter>();
         
 
         var rebusOptions = OptionsRetriever.Retrieve<RebusOptions>(builder.Configuration, builder.Services);
@@ -168,6 +170,7 @@ public class Program
         }
         
         _addRebusForSendingOnly();
+        builder.Services.AddErrorReporting(builder.Configuration);
 
         RebusQueues.RegisterQueueSource(typeof(CustomRebusQueues));
 
@@ -455,6 +458,7 @@ public class Program
         builder.Services.AddSingleton<ISharedTranslationsGetter>(new SharedTranslationsGetter());
 
         var app = builder.Build();
+        Log.Logger = app.Services.GetRequiredService<Serilog.ILogger>();
 
         _buildDatabase();
 
@@ -558,8 +562,6 @@ public class Program
         finally
         {
             playwright.Dispose();
-
-            await Log.CloseAndFlushAsync();
         }
         return;
 
@@ -623,10 +625,21 @@ public class Program
             DatabaseBuilderHelper.BuildDatabase(() => new NpgsqlConnection(connectionStringWithTimeout), databaseScriptsDirectoryPath, logger, environmentName);
         }
 
-        void _configureLogging()
+        Serilog.Core.Logger _configureLogging()
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
+            var logger = _configureLogger(new LoggerConfiguration(), builder.Configuration).CreateLogger();
+            Log.Logger = logger;
+
+            builder.Host.UseSerilog((context, serviceProvider, loggerConfiguration) =>
+                _configureLogger(loggerConfiguration, context.Configuration)
+                    .WriteTo.Sink(serviceProvider.GetRequiredService<ErrorReportingSink>()), preserveStaticLogger: true);
+            return logger;
+        }
+
+        LoggerConfiguration _configureLogger(LoggerConfiguration loggerConfiguration, IConfiguration configuration)
+        {
+            return loggerConfiguration
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.PostgreSQL(
@@ -657,10 +670,7 @@ public class Program
                          """, new PropertiesColumnWriter()}
                     },
                     formatProvider: null
-                )
-                .CreateLogger();
-
-            builder.Host.UseSerilog();
+                );
         }
 
         async Task _refreshScrapedResultsHashes()

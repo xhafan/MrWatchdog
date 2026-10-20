@@ -1,10 +1,11 @@
-﻿using CoreDdd.Nhibernate.UnitOfWorks;
-using CoreUtils;
+﻿using CoreUtils;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Text;
 using CoreBackend.Infrastructure;
 using CoreBackend.Infrastructure.Jsons;
+using CoreBackend.Infrastructure.ErrorReporting;
+using Microsoft.Extensions.DependencyInjection;
 using CoreBackend.TestsShared;
 using CoreWeb.Features.Logs;
 
@@ -14,6 +15,14 @@ namespace MrWatchdog.Web.E2E.Tests.Features.Logs;
 public class when_logging_error : BaseDatabaseTest
 {
     private readonly string _jsErrorMessage = $"JS error message {Guid.NewGuid()}";
+
+    [Test]
+    public void error_notifications_are_disabled_for_the_shared_test_host()
+    {
+        var queue = RunOncePerTestRun.WebApplicationFactory.Value.Services.GetRequiredService<ErrorReportQueue>();
+
+        queue.TryEnqueue(new ErrorReport("Test error", "test-request", DateTime.UtcNow, Origin: ErrorReportOrigin.Server)).ShouldBeFalse();
+    }
 
     [Test]
     public async Task error_message_can_be_logged_unauthenticated_with_a_secret_in_header()
@@ -50,17 +59,5 @@ public class when_logging_error : BaseDatabaseTest
         var response = await RunOncePerTestRun.SharedWebApplicationClient.Value.SendAsync(request);
         
         response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
-    }
-
-    [TearDown]
-    public async Task TearDown()
-    {
-        await NhibernateUnitOfWorkRunner.RunAsync(
-            () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
-            async newUnitOfWork =>
-            {
-                await E2ETestHelper.DeleteSendEmailCommandJob(_jsErrorMessage, newUnitOfWork);
-            }
-        );
     }
 }

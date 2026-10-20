@@ -33,6 +33,10 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
                         config.AddJsonFile(appSettingsTestPath);
                         config.AddUserSecrets<Program>();
                         config.AddEnvironmentVariables();
+                        config.AddInMemoryCollection(new Dictionary<string, string?>
+                        {
+                            ["ErrorReporting:Enabled"] = "false"
+                        });
                     });
                 });
         });

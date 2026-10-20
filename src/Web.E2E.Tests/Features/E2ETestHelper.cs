@@ -4,6 +4,7 @@ using CoreBackend.Account.Features.LoginLink;
 using CoreBackend.Account.Features.LoginLink.Commands;
 using CoreBackend.Features.Jobs.Domain;
 using CoreBackend.Infrastructure.EmailSenders;
+using CoreBackend.Infrastructure.Jsons;
 using CoreBackend.TestsShared;
 using CoreDdd.Nhibernate.UnitOfWorks;
 using CoreWeb.Account.Features.LoginLink;
@@ -90,6 +91,31 @@ public static partial class E2ETestHelper
                         && x.Guid == commandGuid)
             .SingleOrDefaultAsync();
         await unitOfWork.DeleteJobCascade(commandJob, waitForJobCompletion: true);
+    }
+
+    public static async Task<SendEmailCommand[]> WaitForSendEmailCommandJobs(string substringOfHtmlEmail, int expectedCount = 1)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(10);
+        while (DateTime.UtcNow < deadline)
+        {
+            var commands = await NhibernateUnitOfWorkRunner.RunAsync(
+                () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
+                async unitOfWork =>
+                {
+                    var jobs = await unitOfWork.Session!.QueryOver<Job>()
+                        .Where(job => job.Type == nameof(SendEmailCommand))
+                        .And(Expression.Sql(
+                            """
+                            ({alias}."InputData" ->> 'htmlMessage') like ?
+                            """,
+                            $"%{substringOfHtmlEmail}%", NHibernateUtil.String))
+                        .ListAsync();
+                    return jobs.Select(job => JsonHelper.Deserialize<SendEmailCommand>(job.InputData).ShouldNotBeNull()).ToArray();
+                });
+            if (commands.Length >= expectedCount) return commands;
+            await Task.Delay(50);
+        }
+        throw new TimeoutException("Expected error-notification email commands were not created.");
     }
 
     public static async Task DeleteSendEmailCommandJob(string substringOfHtmlEmail, NhibernateUnitOfWork unitOfWork)

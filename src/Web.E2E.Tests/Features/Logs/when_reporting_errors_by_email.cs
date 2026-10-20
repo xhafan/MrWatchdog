@@ -31,7 +31,7 @@ public class when_reporting_errors_by_email : BaseDatabaseTest
         var serverMessage = $"Server error {probe}";
         var jobMessage = $"Failed job {probe}";
         var jobGuid = Guid.NewGuid();
-        var factory = _createReportingFactory(useCastle);
+        await using var factory = _createReportingFactory(useCastle);
         try
         {
             using var client = factory.CreateClient();
@@ -73,7 +73,6 @@ public class when_reporting_errors_by_email : BaseDatabaseTest
         }
         finally
         {
-            await factory.DisposeAsync();
             await NhibernateUnitOfWorkRunner.RunAsync(
                 () => new NhibernateUnitOfWork(TestFixtureContext.NhibernateConfigurator),
                 async unitOfWork =>

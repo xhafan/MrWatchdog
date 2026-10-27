@@ -18,25 +18,23 @@ COPY Libraries/CoreWeb/CoreWeb/*.csproj ./Libraries/CoreWeb/CoreWeb/
 COPY Libraries/CoreWeb/CoreWeb.Account/*.csproj ./Libraries/CoreWeb/CoreWeb.Account/
 COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
-RUN dotnet restore Web/Web.csproj
+RUN --mount=type=cache,id=mrwatchdog-nuget-http,target=/root/.local/share/NuGet/http-cache,sharing=locked dotnet restore Web/Web.csproj
 
-# Copy the remaining source code
+# Install Node packages required by Web asset builds
+WORKDIR /app/Libraries/CoreWeb/CoreWeb
+COPY Libraries/CoreWeb/CoreWeb/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+WORKDIR /app/Libraries/CoreWeb/CoreWeb.Account
+COPY Libraries/CoreWeb/CoreWeb.Account/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+WORKDIR /app/Web
+COPY Web/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+# Keep the dependency steps above aligned with Dockerfile.
 WORKDIR /app
-COPY Libraries/CoreBackend/CoreBackend/. ./Libraries/CoreBackend/CoreBackend/
-COPY Libraries/CoreBackend/CoreBackend.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Register.Castle/
-COPY Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/
-COPY Libraries/CoreBackend/CoreBackend.Account/. ./Libraries/CoreBackend/CoreBackend.Account/
-COPY Libraries/CoreBackend/CoreBackend.Account.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Account.Register.Castle/
-COPY Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/
-COPY Libraries/CoreBackend/CoreBackend.Postgres/. ./Libraries/CoreBackend/CoreBackend.Postgres/
-COPY Core/. ./Core/
-COPY Libraries/CoreWeb/CoreWeb/. ./Libraries/CoreWeb/CoreWeb/
-COPY Libraries/CoreWeb/CoreWeb.Account/. ./Libraries/CoreWeb/CoreWeb.Account/
-COPY Web/. ./Web/
-RUN mkdir -p ./DatabaseScripts/ChangeScripts
-COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
-
-# ******************************* Make sure the above is the same as for Dockerfile to be able to benefit from cached layers *******************************
 
 # Copy only csproj files first
 COPY MrWatchdog.sln .
@@ -52,12 +50,25 @@ COPY Web.ScriptTests/package*.json Web.ScriptTests/
 COPY ToolsApp/*.csproj ToolsApp/
 
 # Restore all projects (creates a cached layer)
-RUN dotnet restore
+RUN --mount=type=cache,id=mrwatchdog-nuget-http,target=/root/.local/share/NuGet/http-cache,sharing=locked dotnet restore MrWatchdog.sln
 
 # Install TypeScript test dependencies from the lockfile while package manifests are still cacheable
-RUN npm --prefix Web.ScriptTests ci --include=dev
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm --prefix Web.ScriptTests ci --include=dev --no-audit --no-fund
 
-# Copy test projects files
+# Copy source only after restoring all dependencies.
+COPY Libraries/CoreBackend/CoreBackend/. ./Libraries/CoreBackend/CoreBackend/
+COPY Libraries/CoreBackend/CoreBackend.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Account/. ./Libraries/CoreBackend/CoreBackend.Account/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Account.Register.Castle/
+COPY Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/. ./Libraries/CoreBackend/CoreBackend.Account.Register.ServiceProvider/
+COPY Libraries/CoreBackend/CoreBackend.Postgres/. ./Libraries/CoreBackend/CoreBackend.Postgres/
+COPY Core/. ./Core/
+COPY Libraries/CoreWeb/CoreWeb/. ./Libraries/CoreWeb/CoreWeb/
+COPY Libraries/CoreWeb/CoreWeb.Account/. ./Libraries/CoreWeb/CoreWeb.Account/
+COPY Web/. ./Web/
+RUN mkdir -p ./DatabaseScripts/ChangeScripts
+COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
 COPY Libraries/CoreBackend/CoreBackend.Tests/. ./Libraries/CoreBackend/CoreBackend.Tests/
 COPY Libraries/CoreBackend/CoreBackend.TestsShared/. ./Libraries/CoreBackend/CoreBackend.TestsShared/
 COPY Libraries/CoreWeb/CoreWeb.Tests/. ./Libraries/CoreWeb/CoreWeb.Tests/
@@ -68,7 +79,7 @@ COPY Web.Tests/. ./Web.Tests/
 COPY Web.ScriptTests/. ./Web.ScriptTests/
 COPY ToolsApp/. ./ToolsApp/
 
-RUN dotnet build
+RUN dotnet build MrWatchdog.sln --no-restore
 
 # ---- Runtime container: runs the tests ----
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine

@@ -18,9 +18,22 @@ COPY Libraries/CoreWeb/CoreWeb/*.csproj ./Libraries/CoreWeb/CoreWeb/
 COPY Libraries/CoreWeb/CoreWeb.Account/*.csproj ./Libraries/CoreWeb/CoreWeb.Account/
 COPY Web/*.csproj ./Web/
 COPY SharedAssemblyInfo.props .
-RUN dotnet restore Web/Web.csproj
+RUN --mount=type=cache,id=mrwatchdog-nuget-http,target=/root/.local/share/NuGet/http-cache,sharing=locked dotnet restore Web/Web.csproj
 
-# Copy the remaining source code
+# Install Node packages required by Web asset builds
+WORKDIR /app/Libraries/CoreWeb/CoreWeb
+COPY Libraries/CoreWeb/CoreWeb/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+WORKDIR /app/Libraries/CoreWeb/CoreWeb.Account
+COPY Libraries/CoreWeb/CoreWeb.Account/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+WORKDIR /app/Web
+COPY Web/package*.json ./
+RUN --mount=type=cache,id=mrwatchdog-npm,target=/root/.npm,sharing=locked npm ci --no-audit --no-fund
+
+# Keep the dependency steps above aligned with Dockerfile.tests.
 WORKDIR /app
 COPY Libraries/CoreBackend/CoreBackend/. ./Libraries/CoreBackend/CoreBackend/
 COPY Libraries/CoreBackend/CoreBackend.Register.Castle/. ./Libraries/CoreBackend/CoreBackend.Register.Castle/
@@ -35,21 +48,6 @@ COPY Libraries/CoreWeb/CoreWeb.Account/. ./Libraries/CoreWeb/CoreWeb.Account/
 COPY Web/. ./Web/
 RUN mkdir -p ./DatabaseScripts/ChangeScripts
 COPY DatabaseScripts/ChangeScripts/. ./DatabaseScripts/ChangeScripts/
-
-# ******************************* Make sure the above is the same as for Dockerfile.tests to be able to benefit from cached layers *******************************
-
-# Install Node packages
-WORKDIR /app/Libraries/CoreWeb/CoreWeb
-COPY Libraries/CoreWeb/CoreWeb/package*.json ./
-RUN npm ci
-
-WORKDIR /app/Libraries/CoreWeb/CoreWeb.Account
-COPY Libraries/CoreWeb/CoreWeb.Account/package*.json ./
-RUN npm ci
-
-WORKDIR /app/Web
-COPY Web/package*.json ./
-RUN npm ci
 
 # Build front-end assets
 WORKDIR /app/Web

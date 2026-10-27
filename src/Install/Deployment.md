@@ -25,3 +25,20 @@
 	* `kamal proxy boot_config set --no-publish --docker-options="publish 127.0.0.1:8080:80" -d <destination>`
 	* `kamal proxy reboot -d <destination>`
 
+**Docker dependency caching**
+
+The production and test Dockerfiles restore NuGet packages and install Node packages
+from their manifests before copying application source. Keep their shared dependency
+steps aligned so both images reuse the same build layers. BuildKit also caches NuGet
+HTTP downloads and npm downloads between builds. All `node_modules` directories are
+excluded from the build context so local packages cannot overwrite container installs.
+
+Image builds run `npm ci --no-audit --no-fund` so advisory-service delays do not block
+tests or deployment. Run dependency audits separately from `src`:
+
+```sh
+npm --prefix Libraries/CoreWeb/CoreWeb audit
+npm --prefix Libraries/CoreWeb/CoreWeb.Account audit
+npm --prefix Web audit
+npm --prefix Web.ScriptTests audit
+```

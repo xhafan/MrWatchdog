@@ -171,6 +171,7 @@ public class Program
         
         _addRebusForSendingOnly();
         builder.Services.AddErrorReporting(builder.Configuration);
+        builder.Services.AddInMemoryErrorReportGate($"MrWatchdog:{environmentName}");
         builder.Services.Configure<ErrorReportingOptions>(options =>
             options.IgnoredExceptions.Add(
                 static exception => exception is HttpRequestException { StatusCode: HttpStatusCode.TooManyRequests }));

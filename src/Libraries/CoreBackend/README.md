@@ -33,6 +33,45 @@ to the host's Serilog configuration and enable `.Enrich.FromLogContext()` so sup
 and correlation properties reach the sink. Resolve the sink from the host service provider
 in the Serilog configuration callback; do not build a second service provider.
 
+Select an `IErrorReportGate` implementation for the host. CoreBackend supplies a thread-safe,
+in-memory implementation, selected by MrWatchdog:
+
+```csharp
+services.AddInMemoryErrorReportGate($"MyApplication:{environmentName}");
+```
+
+It atomically reserves each hashed error identity within the current application instance,
+removes expired reservations, and resets when the app restarts. Hosts needing shared state
+implement the same interface outside CoreBackend. SmartGuide's `Core.Infrastructure.ErrorReporting`
+contains its `HybridCacheErrorReportGate` and `AddHybridCacheErrorReportGate` registration.
+It uses the host's existing HybridCache and PostgreSQL L2 configuration, with L1 disabled.
+Those implementations and their PostgreSQL integration tests
+and dependencies belong to the consuming application, not CoreBackend or its test projects.
+
+`ErrorReporting:SuppressionWindow` uses native .NET `TimeSpan` binding and defaults to
+`1.00:00:00` (one day / 24 hours). The first occurrence reserves a marker before notification delivery;
+repeats do not refresh its absolute expiry. The next occurrence after expiry may notify
+again. Both implementations share `ErrorReportSuppressionKey` so fingerprinting rules remain
+consistent. HybridCache markers use a `hybrid:` prefix to avoid reading legacy raw-cache payloads;
+the first occurrence after migrating to this format can notify again.
+
+HybridCache manages the distributed marker expiration. The gate serializes reservations within
+its singleton instance, awaits the marker write and confirms the marker is readable before
+allowing delivery. Duplicate reads do not refresh expiry. Separate app instances can both notify
+on simultaneous cache misses; this implementation does not use a distributed lock.
+
+All occurrences remain in ordinary application logs. Unconfirmed cache markers skip notification
+delivery and produce a suppressed diagnostic. Failed notification attempts and crashes after
+reservation consume the window, preventing ambiguous transport timeouts from flooding alerts.
+Deduplication state uses hashed identities, never exception text or credentials.
+
+Exception fingerprints use types, messages, HTTP status codes, original throw sites and
+inner exceptions, excluding request IDs, timestamps, source-file paths and line numbers.
+Events without exceptions use their source and rendered message. Failed-job reports preserve
+the original Rebus details for display while fingerprinting details without the Rebus timestamp
+and job/request metadata. Custom producers can supply `ErrorReport.Fingerprint` explicitly;
+otherwise the gate derives one from the report message or failed-job details.
+
 `ErrorReporting` options default to a capacity of 256 reports, a 10-second delivery
 timeout, and a 5-second shutdown drain. Set `Enabled` to false to disable queued
 delivery. Logging never waits for queue space or remote delivery. Overflow, timeouts,

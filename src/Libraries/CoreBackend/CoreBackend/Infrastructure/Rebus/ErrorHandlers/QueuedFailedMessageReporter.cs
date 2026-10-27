@@ -16,7 +16,8 @@ public sealed class QueuedFailedMessageReporter(ErrorReportQueue queue) : IFaile
             report.RequestId ?? string.Empty,
             report.OccurredAtUtc,
             Origin: ErrorReportOrigin.FailedJob,
-            FailedMessage: report
+            FailedMessage: report,
+            Fingerprint: report.Fingerprint ?? ErrorReportFingerprint.ForFailedMessage(report.FailedMessageType, report.ErrorDetails)
         ));
         return Task.CompletedTask;
     }

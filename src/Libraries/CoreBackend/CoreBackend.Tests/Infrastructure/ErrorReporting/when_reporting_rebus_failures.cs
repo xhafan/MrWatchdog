@@ -1,4 +1,5 @@
 using CoreBackend.Infrastructure.ErrorReporting;
+using CoreBackend.TestsShared.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
@@ -69,7 +70,7 @@ public class when_reporting_rebus_failures
         await completed.Task.WaitAsync(TimeSpan.FromSeconds(10));
         bus.Dispose();
         var reporter = new RecordingErrorReporter();
-        using var delivery = new ErrorReportDeliveryBackgroundService(queue, reporter);
+        using var delivery = new ErrorReportDeliveryBackgroundService(queue, reporter, ErrorReportTestServices.CreateGate());
         await delivery.StartAsync(CancellationToken.None);
         await delivery.StopAsync(CancellationToken.None);
 

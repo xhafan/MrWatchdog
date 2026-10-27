@@ -7,5 +7,6 @@ public sealed record ErrorReport(
     string RequestId,
     DateTime OccurredAtUtc,
     ErrorReportOrigin Origin,
-    FailedMessageReport? FailedMessage = null
+    FailedMessageReport? FailedMessage = null,
+    string? Fingerprint = null
 );

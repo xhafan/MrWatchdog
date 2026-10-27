@@ -1,6 +1,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CoreBackend.Infrastructure.ErrorReporting;
+using CoreBackend.TestsShared.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.Configurations;
 using CoreBackend.Infrastructure.EmailSenders;
 using CoreBackend.Infrastructure.Rebus;
@@ -135,7 +136,7 @@ public class when_bridging_failed_message_reporting
             CastleRegistration.AddCoreDddAndCoreBackendServices(second, A.Fake<IBus>());
             var reporter = second.Resolve<IFailedMessageReporter>();
             reporter.ShouldNotBeSameAs(first);
-            await reporter.Report(_failure());
+            await reporter.Report(_failure() with { ErrorDetails = "Another handler failure" });
         }
         else
         {
@@ -151,7 +152,7 @@ public class when_bridging_failed_message_reporting
             using var second = services.BuildServiceProvider();
             var reporter = second.GetRequiredService<IFailedMessageReporter>();
             reporter.ShouldNotBeSameAs(first);
-            await reporter.Report(_failure());
+            await reporter.Report(_failure() with { ErrorDetails = "Another handler failure" });
         }
 
         await _drain(main);
@@ -215,6 +216,7 @@ public class when_bridging_failed_message_reporting
         services.AddOptions();
         services.AddSingleton<IErrorReporter>(reporter ?? new RecordingReporter());
         services.AddErrorReporting(configuration);
+        services.AddSingleton<IErrorReportGate>(_ => ErrorReportTestServices.CreateGate());
         return services;
     }
 

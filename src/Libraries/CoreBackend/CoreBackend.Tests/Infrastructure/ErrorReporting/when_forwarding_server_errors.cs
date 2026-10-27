@@ -1,4 +1,6 @@
 using CoreBackend.Infrastructure.ErrorReporting;
+using CoreBackend.TestsShared.Infrastructure.ErrorReporting;
+using FakeItEasy;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Core;
@@ -9,6 +11,41 @@ namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
 [TestFixture, NonParallelizable]
 public class when_forwarding_server_errors
 {
+    [Test]
+    public async Task it_reserves_the_window_even_when_delivery_fails_and_keeps_all_ordinary_logs()
+    {
+        var queue = _queue();
+        var reports = new RecordingReporter { OnReport = _ => Task.FromException(new HttpRequestException("Slack unavailable")) };
+        var logs = new RecordingSink();
+        using var logger = _logger(queue, logs);
+        logger.ForContext("RequestId", "first").Error(new InvalidOperationException("Same failure"), "Request failed");
+        logger.ForContext("RequestId", "second").Error(new InvalidOperationException("Same failure"), "Request failed");
+
+        await _drain(queue, reports);
+
+        reports.Reports.ShouldHaveSingleItem();
+        logs.Events.Count.ShouldBe(2);
+    }
+
+    [Test]
+    public async Task it_skips_delivery_when_the_gate_fails_and_continues_with_other_reports()
+    {
+        var queue = _queue();
+        var reporter = new RecordingReporter();
+        var gate = A.Fake<IErrorReportGate>();
+        A.CallTo(() => gate.TryReserveAsync(A<ErrorReport>._, A<CancellationToken>._)).Returns(true);
+        A.CallTo(() => gate.TryReserveAsync(A<ErrorReport>.That.Matches(report => report.Message == "first"), A<CancellationToken>._))
+            .ThrowsAsync(new InvalidOperationException("private-cache-connection-string"));
+        queue.TryEnqueue(_report("first"));
+        queue.TryEnqueue(_report("second"));
+        using var service = new ErrorReportDeliveryBackgroundService(queue, reporter, gate);
+
+        await service.StartAsync(CancellationToken.None);
+        await service.StopAsync(CancellationToken.None);
+
+        reporter.Reports.ShouldHaveSingleItem().Message.ShouldBe("second");
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task it_classifies_browser_errors_by_event_id_and_defaults_other_errors_to_server(bool browserError)
@@ -122,7 +159,7 @@ public class when_forwarding_server_errors
             }
         };
         using var logger = _logger(queue);
-        using var delivery = new ErrorReportDeliveryBackgroundService(queue, reporter);
+        using var delivery = new ErrorReportDeliveryBackgroundService(queue, reporter, ErrorReportTestServices.CreateGate());
         await delivery.StartAsync(CancellationToken.None);
         logger.Error("first");
         await entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -211,7 +248,7 @@ public class when_forwarding_server_errors
                 return blocked.Task;
             }
         };
-        using var service = new ErrorReportDeliveryBackgroundService(queue, reporter);
+        using var service = new ErrorReportDeliveryBackgroundService(queue, reporter, ErrorReportTestServices.CreateGate());
         queue.TryEnqueue(_report("pending"));
         await service.StartAsync(CancellationToken.None);
         await entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -271,7 +308,7 @@ public class when_forwarding_server_errors
 
     private static async Task _drain(ErrorReportQueue queue, IErrorReporter reporter)
     {
-        using var service = new ErrorReportDeliveryBackgroundService(queue, reporter);
+        using var service = new ErrorReportDeliveryBackgroundService(queue, reporter, ErrorReportTestServices.CreateGate());
         await service.StartAsync(CancellationToken.None);
         await service.StopAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5));
     }

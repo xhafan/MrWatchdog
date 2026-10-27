@@ -2,7 +2,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace CoreBackend.Infrastructure.ErrorReporting;
 
-public sealed class ErrorReportDeliveryBackgroundService(ErrorReportQueue queue, IErrorReporter reporter) : BackgroundService
+public sealed class ErrorReportDeliveryBackgroundService(ErrorReportQueue queue, IErrorReporter reporter, IErrorReportGate gate) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -15,6 +15,7 @@ public sealed class ErrorReportDeliveryBackgroundService(ErrorReportQueue queue,
                 timeout.CancelAfter(queue.Options.DeliveryTimeout);
                 try
                 {
+                    if (!await gate.TryReserveAsync(report, timeout.Token).WaitAsync(timeout.Token)) continue;
                     await reporter.Report(report, timeout.Token).WaitAsync(timeout.Token);
                 }
                 catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)

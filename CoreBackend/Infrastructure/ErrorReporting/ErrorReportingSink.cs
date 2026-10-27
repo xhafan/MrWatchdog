@@ -26,7 +26,10 @@ public sealed class ErrorReportingSink(ErrorReportQueue queue) : ILogEventSink
             logEvent.Timestamp.UtcDateTime,
             Origin: _isBrowserError(logEvent)
                 ? ErrorReportOrigin.Browser
-                : ErrorReportOrigin.Server
+                : ErrorReportOrigin.Server,
+            Fingerprint: logEvent.Exception == null
+                ? ErrorReportFingerprint.ForMessage(_property(logEvent, "SourceContext"), logEvent.RenderMessage(CultureInfo.InvariantCulture))
+                : ErrorReportFingerprint.ForException(logEvent.Exception)
         ));
     }
 

@@ -42,7 +42,8 @@ public class ReportFailedMessageErrorHandler(
                 message.GetType(),
                 message.RequestId,
                 exceptionInfo.GetFullErrorDescription(),
-                DateTime.UtcNow
+                DateTime.UtcNow,
+                Fingerprint: ErrorReportFingerprint.ForFailedMessage(message.GetType(), exceptionInfo.Details)
             ));
         }
         catch (Exception exception)

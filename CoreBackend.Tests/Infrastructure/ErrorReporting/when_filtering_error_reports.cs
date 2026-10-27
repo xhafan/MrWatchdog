@@ -1,8 +1,10 @@
 using System.Net;
 using CoreBackend.Infrastructure.ErrorReporting;
+using CoreBackend.TestsShared.Infrastructure.ErrorReporting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -12,6 +14,21 @@ namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
 [TestFixture]
 public class when_filtering_error_reports
 {
+    [TestCase("00:00:00")]
+    [TestCase("-01:00:00")]
+    public void it_rejects_a_non_positive_suppression_window(string window)
+    {
+        var services = new ServiceCollection();
+        services.AddErrorReporting(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["ErrorReporting:SuppressionWindow"] = window
+        }).Build());
+        using var provider = services.BuildServiceProvider();
+
+        Should.Throw<OptionsValidationException>(() => provider.GetRequiredService<IOptions<ErrorReportingOptions>>().Value)
+            .Message.ShouldContain("SuppressionWindow must be positive");
+    }
+
     [TestCase(LogEventLevel.Error)]
     [TestCase(LogEventLevel.Fatal)]
     public async Task rate_limited_http_failures_stay_in_logs_without_being_reported(LogEventLevel level)
@@ -132,6 +149,7 @@ public class when_filtering_error_reports
         var services = new ServiceCollection();
         services.AddSingleton<IErrorReporter>(reporter);
         services.AddErrorReporting(new ConfigurationBuilder().Build());
+        services.AddSingleton<IErrorReportGate>(_ => ErrorReportTestServices.CreateGate());
         if (configure != null) services.Configure(configure);
         using var provider = services.BuildServiceProvider();
         var logs = new RecordingSink();

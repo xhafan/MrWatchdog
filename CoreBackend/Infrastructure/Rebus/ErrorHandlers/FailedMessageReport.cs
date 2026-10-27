@@ -5,5 +5,6 @@ public sealed record FailedMessageReport(
     Type FailedMessageType,
     string? RequestId,
     string ErrorDetails,
-    DateTime OccurredAtUtc
+    DateTime OccurredAtUtc,
+    string? Fingerprint = null
 );

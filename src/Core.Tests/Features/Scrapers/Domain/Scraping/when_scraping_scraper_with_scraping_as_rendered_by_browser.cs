@@ -28,7 +28,7 @@ public class when_scraping_scraper_with_scraping_as_rendered_by_browser : BaseTe
         await _scraper.Scrape(new WebScraperChain([
             new HttpClientScraper(httpClientFactory),
             new PlaywrightScraper(
-                await RunOncePerTestRun.PlaywrightTask.Value,
+                RunOncePerTestRun.Browser,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]));

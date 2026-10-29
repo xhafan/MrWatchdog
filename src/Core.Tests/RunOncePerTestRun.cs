@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using CoreBackend.TestsShared;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.TestsShared;
 
 namespace MrWatchdog.Core.Tests;
@@ -6,20 +7,17 @@ namespace MrWatchdog.Core.Tests;
 [SetUpFixture]
 public class RunOncePerTestRun : BaseRunOncePerTestRun
 {
-    public static Lazy<Task<IPlaywright>> PlaywrightTask = null!;
+    public static PlaywrightBrowser Browser = null!;
 
     [OneTimeSetUp]
     public void SetUp()
     {
-        PlaywrightTask = new Lazy<Task<IPlaywright>>(Playwright.CreateAsync);
+        Browser = new PlaywrightBrowser(OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>());
     }
     
     [OneTimeTearDown]
-    public void TearDown()
+    public async Task TearDown()
     {
-        if (PlaywrightTask.IsValueCreated)
-        {
-            PlaywrightTask.Value.Result.Dispose();
-        }
+        await Browser.DisposeAsync();
     }
 }

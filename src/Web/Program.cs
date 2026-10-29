@@ -42,7 +42,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Core.Features.Watchdogs.Services;
 using MrWatchdog.Core.Infrastructure;
@@ -443,8 +442,7 @@ public class Program
 
         builder.Services.Configure<LoggingOptions>(builder.Configuration.GetSection(LogConstants.LoggingConfigurationSectionName));
 
-        var playwright = await Playwright.CreateAsync();
-        builder.Services.AddSingleton(playwright);
+        builder.Services.AddSingleton<PlaywrightBrowser>();
 
         builder.Services.AddDistributedPostgresCache(options =>
         {
@@ -559,14 +557,7 @@ public class Program
         DomainEvents.Initialize(new DomainEventHandlerFactory());
 
 
-        try
-        {
-            await app.RunAsync();
-        }
-        finally
-        {
-            playwright.Dispose();
-        }
+        await app.RunAsync();
         return;
 
         void _addRebusForSendingOnly()

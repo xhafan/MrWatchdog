@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.TestsShared;
 
 namespace MrWatchdog.Web.E2E.Tests;
@@ -20,12 +19,7 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
             return new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
-                    builder.ConfigureLogging(logging =>
-                    {
-                        logging.ClearProviders();
-                        logging.AddConsole();
-                        logging.SetMinimumLevel(LogLevel.Trace);
-                    });
+                    builder.ConfigureLogging(TestLogging.Configure);
 
                     builder.ConfigureAppConfiguration((_, config) =>
                     {
@@ -37,6 +31,7 @@ public class RunOncePerTestRun : BaseRunOncePerTestRun
                         {
                             ["ErrorReporting:Enabled"] = "false"
                         });
+                        config.AddTestLogging();
                     });
                 });
         });

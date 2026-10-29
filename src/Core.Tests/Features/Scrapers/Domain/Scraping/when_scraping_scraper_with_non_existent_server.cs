@@ -20,7 +20,7 @@ public class when_scraping_scraper_with_non_existent_server : BaseTest
         _webScraperChain = new WebScraperChain([
             new HttpClientScraper(new HttpClientFactory()),
             new PlaywrightScraper(
-                await RunOncePerTestRun.PlaywrightTask.Value,
+                RunOncePerTestRun.Browser,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]);

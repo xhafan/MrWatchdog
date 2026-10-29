@@ -13,13 +13,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MrWatchdog.Core.Features.Scrapers.Commands;
+using MrWatchdog.Core.Features.Scrapers.Services;
 using MrWatchdog.Web.HostedServices;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace MrWatchdog.Web.E2E.Tests.Features.Logs;
 
-[TestFixture, NonParallelizable]
+[TestFixture]
 public class when_reporting_errors_by_email : BaseDatabaseTest
 {
     [TestCase(false)]
@@ -48,17 +49,23 @@ public class when_reporting_errors_by_email : BaseDatabaseTest
             factory.Services.GetRequiredService<ILoggerFactory>().CreateLogger<when_reporting_errors_by_email>()
                 .LogError(serverMessage);
             var failure = new FailedMessageReport(jobGuid, typeof(ArchiveScraperCommand), "job-request", jobMessage, DateTime.UtcNow);
+            var browser = factory.Services.GetRequiredService<PlaywrightBrowser>();
             if (useCastle)
             {
                 using var child = new WindsorContainer();
                 RebusHostedServiceWindsorContainerRegistrator.RegisterServices(child, factory.Services);
+                child.Resolve<PlaywrightBrowser>().ShouldBeSameAs(browser);
                 await child.Resolve<IFailedMessageReporter>().Report(failure);
             }
             else
             {
                 using var child = (ServiceProvider)RebusHostedServiceServiceProviderRegistrator.RegisterServices(factory.Services);
+                child.GetRequiredService<PlaywrightBrowser>().ShouldBeSameAs(browser);
                 await child.GetRequiredService<IFailedMessageReporter>().Report(failure);
             }
+
+            await Should.ThrowAsync<OperationCanceledException>(() =>
+                browser.NewContextAsync(cancellationToken: new CancellationToken(canceled: true)));
 
             var commands = await E2ETestHelper.WaitForSendEmailCommandJobs(probe, expectedCount: 3);
             commands.Length.ShouldBe(3);
@@ -130,6 +137,7 @@ public class when_reporting_errors_by_email : BaseDatabaseTest
         return new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment("Test");
+            builder.ConfigureLogging(TestLogging.Configure);
             builder.ConfigureAppConfiguration((_, configuration) => configuration
                 .AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appsettings.Test.json"))
                 .AddUserSecrets<Program>()
@@ -144,7 +152,8 @@ public class when_reporting_errors_by_email : BaseDatabaseTest
                     ["EmailAddresses:BackendErrors"] = "backend-errors@example.test",
                     ["Runtime:Url"] = "https://mrwatchdog_test",
                     ["Logging:LogErrorApiSecret"] = "browser-error-secret"
-                }));
+                })
+                .AddTestLogging());
         });
     }
 

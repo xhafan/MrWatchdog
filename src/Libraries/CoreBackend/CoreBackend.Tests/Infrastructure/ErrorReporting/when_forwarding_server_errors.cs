@@ -8,7 +8,7 @@ using Serilog.Events;
 
 namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
 
-[TestFixture, NonParallelizable]
+[TestFixture]
 public class when_forwarding_server_errors
 {
     [Test]
@@ -176,65 +176,6 @@ public class when_forwarding_server_errors
     }
 
     [Test]
-    public void it_records_overflow_without_including_report_content_or_forwarding_a_diagnostic()
-    {
-        var queue = _queue(capacity: 1);
-        var logs = new RecordingSink();
-        using var logger = _logger(queue, logs);
-        var previousLogger = Log.Logger;
-        Log.Logger = logger;
-        try
-        {
-            queue.TryEnqueue(_report("first")).ShouldBeTrue();
-            queue.TryEnqueue(_report("private report content")).ShouldBeFalse();
-
-            var diagnostic = logs.Events.ShouldHaveSingleItem();
-            diagnostic.RenderMessage().ShouldContain("queue is full or closed");
-            diagnostic.RenderMessage().ShouldNotContain("private report content");
-            ErrorReportingLogPolicy.ShouldReport(diagnostic, new ErrorReportingOptions()).ShouldBeFalse();
-        }
-        finally
-        {
-            Log.Logger = previousLogger;
-        }
-    }
-
-    [Test]
-    public async Task it_continues_after_delivery_fails_without_retrying_or_reporting_delivery_logs()
-    {
-        var queue = _queue();
-        var logs = new RecordingSink();
-        using var logger = _logger(queue, logs);
-        var previousLogger = Log.Logger;
-        Log.Logger = logger;
-        try
-        {
-            var reporter = new RecordingReporter
-            {
-                OnReport = report =>
-                {
-                    Log.Error("Reporter internal error");
-                    return report.Message == "first"
-                        ? Task.FromException(new HttpRequestException("secret-webhook-url"))
-                        : Task.CompletedTask;
-                }
-            };
-            queue.TryEnqueue(_report("first"));
-            queue.TryEnqueue(_report("second"));
-
-            await _drain(queue, reporter);
-
-            reporter.Reports.Select(report => report.Message).ShouldBe(new[] { "first", "second" });
-            logs.Events.ShouldContain(logEvent => logEvent.RenderMessage().Contains("delivery failed", StringComparison.Ordinal));
-            logs.Events.ShouldNotContain(logEvent => logEvent.RenderMessage().Contains("secret-webhook-url", StringComparison.Ordinal));
-        }
-        finally
-        {
-            Log.Logger = previousLogger;
-        }
-    }
-
-    [Test]
     public async Task it_returns_from_shutdown_even_if_the_reporter_ignores_cancellation()
     {
         var queue = _queue(shutdownTimeout: TimeSpan.FromMilliseconds(50));
@@ -284,7 +225,7 @@ public class when_forwarding_server_errors
         }
     }
 
-    private static ErrorReportQueue _queue(
+    internal static ErrorReportQueue _queue(
         int capacity = 10,
         bool enabled = true,
         TimeSpan? shutdownTimeout = null,
@@ -297,23 +238,23 @@ public class when_forwarding_server_errors
         DeliveryTimeout = deliveryTimeout ?? TimeSpan.FromSeconds(1)
     }));
 
-    private static Logger _logger(ErrorReportQueue queue, RecordingSink? ordinaryLogs = null) => new LoggerConfiguration()
+    internal static Logger _logger(ErrorReportQueue queue, RecordingSink? ordinaryLogs = null) => new LoggerConfiguration()
         .MinimumLevel.Verbose()
         .Enrich.FromLogContext()
         .WriteTo.Sink(new ErrorReportingSink(queue))
         .WriteTo.Sink(ordinaryLogs ?? new RecordingSink())
         .CreateLogger();
 
-    private static ErrorReport _report(string message) => new(message, "request-123", DateTime.UtcNow, Origin: ErrorReportOrigin.Server);
+    internal static ErrorReport _report(string message) => new(message, "request-123", DateTime.UtcNow, Origin: ErrorReportOrigin.Server);
 
-    private static async Task _drain(ErrorReportQueue queue, IErrorReporter reporter)
+    internal static async Task _drain(ErrorReportQueue queue, IErrorReporter reporter)
     {
         using var service = new ErrorReportDeliveryBackgroundService(queue, reporter, ErrorReportTestServices.CreateGate());
         await service.StartAsync(CancellationToken.None);
         await service.StopAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5));
     }
 
-    private sealed class RecordingReporter : IErrorReporter
+    internal sealed class RecordingReporter : IErrorReporter
     {
         public List<ErrorReport> Reports { get; } = [];
         public Func<ErrorReport, Task> OnReport { get; init; } = _ => Task.CompletedTask;
@@ -325,7 +266,7 @@ public class when_forwarding_server_errors
         }
     }
 
-    private sealed class RecordingSink : ILogEventSink
+    internal sealed class RecordingSink : ILogEventSink
     {
         public List<LogEvent> Events { get; } = [];
         public void Emit(LogEvent logEvent) => Events.Add(logEvent);

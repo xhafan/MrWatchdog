@@ -13,7 +13,7 @@ public class when_web_scraping_html_as_rendered_by_browser_and_checking_navigato
     {
         var webScraperChain = new WebScraperChain([
             new PlaywrightScraper(
-                await RunOncePerTestRun.PlaywrightTask.Value,
+                RunOncePerTestRun.Browser,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]);

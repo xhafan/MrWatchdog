@@ -3,7 +3,6 @@ using CoreBackend.Register.ServiceProvider;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Nhibernate.Configurations;
 using CoreDdd.Queries;
-using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Services;
@@ -27,7 +26,7 @@ public static class RebusHostedServiceServiceProviderRegistrator
         hostedServiceServices.AddCoreDddAndCoreBackendServices(configuration, fireAndForgetWebBus, hibernateConfigurator);
         hostedServiceServices.AddCoreBackendAccountServices();
 
-        hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<IPlaywright>());
+        hostedServiceServices.AddSingleton(mainServiceProvider.GetRequiredService<PlaywrightBrowser>());
 
         hostedServiceServices.AddCoreRepositoriesAndQueryHandlers();
 

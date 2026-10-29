@@ -26,7 +26,7 @@ public class when_web_scraping_html_as_rendered_by_browser
         var webScraperChain = new WebScraperChain([
             new HttpClientScraper(httpClientFactory),
             new PlaywrightScraper(
-                await RunOncePerTestRun.PlaywrightTask.Value,
+                RunOncePerTestRun.Browser,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             )
         ]);

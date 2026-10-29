@@ -58,7 +58,7 @@ public class when_web_scraping_with_the_first_web_scraper_succeeding_and_and_get
 
         var webScraperChain = new WebScraperChain([
             new PlaywrightScraper(
-                await RunOncePerTestRun.PlaywrightTask.Value,
+                RunOncePerTestRun.Browser,
                 OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
             ),
             new HttpClientScraper(httpClientFactory),

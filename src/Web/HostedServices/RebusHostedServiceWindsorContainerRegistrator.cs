@@ -4,7 +4,6 @@ using CoreBackend.Account.Register.Castle;
 using CoreBackend.Register.Castle;
 using CoreDdd.Domain.Repositories;
 using CoreDdd.Queries;
-using Microsoft.Playwright;
 using MrWatchdog.Core.Features.Account.Queries;
 using MrWatchdog.Core.Features.Scrapers.Commands;
 using MrWatchdog.Core.Features.Scrapers.Services;
@@ -28,8 +27,8 @@ public static class RebusHostedServiceWindsorContainerRegistrator
         hostedServiceWindsorContainer.AddCoreBackendAccountServices();
 
         hostedServiceWindsorContainer.Register(
-            Component.For<IPlaywright>()
-                .Instance(mainServiceProvider.GetRequiredService<IPlaywright>())
+            Component.For<PlaywrightBrowser>()
+                .Instance(mainServiceProvider.GetRequiredService<PlaywrightBrowser>())
         );
 
         hostedServiceWindsorContainer.Register(

@@ -13,7 +13,7 @@ public class when_web_scraping_html_as_rendered_by_browser_with_two_web_scrapers
     public async Task Context()
     {
         var playwrightScraper = new PlaywrightScraper(
-            await RunOncePerTestRun.PlaywrightTask.Value,
+            RunOncePerTestRun.Browser,
             OptionsTestRetriever.Retrieve<PlaywrightScraperOptions>()
         );
         var webScraperChain = new WebScraperChain([

@@ -21,7 +21,7 @@ using CastleRegistration = CoreBackend.Register.Castle.CoreBackendServicesCastle
 
 namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
 
-[TestFixture, NonParallelizable]
+[TestFixture]
 public class when_bridging_failed_message_reporting
 {
     [TestCase(false)]

@@ -17,7 +17,7 @@ services:
       RABBITMQ_DEFAULT_USER: mr_watchdog_test
       RABBITMQ_DEFAULT_PASS: mr_watchdog_test_password
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      test: ["CMD", "su-exec", "rabbitmq", "rabbitmq-diagnostics", "check_running"]
       interval: 2s
       timeout: 2s
       retries: 25
@@ -27,6 +27,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.tests
     environment:
+      MRWATCHDOG_VERBOSE_TESTS: ${MRWATCHDOG_VERBOSE_TESTS:-0}
       ReCaptcha__SiteKey: ${ReCaptcha__SiteKey}
       ReCaptcha__SecretKey: ${ReCaptcha__SecretKey}
       Logging__LogErrorApiSecret: 92a763ee-bc0c-49f9-bef4-f3bd7f03affb

@@ -7,7 +7,7 @@ using MrWatchdog.Core.Features.Scrapers.Domain;
 namespace MrWatchdog.Core.Features.Scrapers.Services;
 
 public class PlaywrightScraper(
-    IPlaywright playwright,
+    PlaywrightBrowser browser,
     IOptions<PlaywrightScraperOptions> playwrightScraperOptions,
     ILogger<PlaywrightScraper>? logger = null
 ) : IWebScraper
@@ -25,19 +25,11 @@ public class PlaywrightScraper(
 
         try
         {
-            var launchOptions = new BrowserTypeLaunchOptions 
-            {
-                ExecutablePath = playwrightScraperOptions.Value.BrowserExecutablePath,
-                Headless = false,
-                Args = ["--window-position=-2000,0"] // Open the browser window "Off-Screen"
-            };
-            
-            await using var browser = await playwright.Chromium.LaunchAsync(launchOptions);
-
-            var browserContext = await browser.NewContextAsync(new BrowserNewContextOptions
+            await using var lease = await browser.NewContextAsync(new BrowserNewContextOptions
             {
                 ExtraHTTPHeaders = httpHeaders?.ToDictionary(x => x.Name, x => x.Value)
             });
+            var browserContext = lease.Context;
 
             await browserContext.AddInitScriptAsync(
                 """

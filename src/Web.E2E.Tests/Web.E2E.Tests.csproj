@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <Compile Include="..\Libraries\CoreBackend\CoreBackend.TestsShared\GlobalUsings.cs" Link="GlobalUsings.cs" />
-    <Compile Include="..\Core.TestsShared\TestConfig.cs" Link="TestConfig.cs" />
+    <Compile Include="..\Libraries\CoreBackend\CoreBackend.TestsShared\TestConfig.cs" Link="TestConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>

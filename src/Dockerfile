@@ -62,7 +62,8 @@ RUN dotnet publish Web/Web.csproj -c Release -o Web/publish
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 
 # Install Alpine-native Chromium and Node.js (these are compiled for Apline's musl); .NET localization requires icu-libs
-RUN apk add --no-cache icu-libs krb5-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb dbus mesa-gl
+RUN apk add --no-cache icu-libs krb5-libs chromium nss freetype harfbuzz ca-certificates ttf-freefont nodejs xvfb-run dbus mesa-gl
+RUN apk add --no-cache tini
 
 WORKDIR /app
 
@@ -79,5 +80,5 @@ ARG GIT_SHA
 ENV Runtime__AppGitShaVersion=$GIT_SHA
 
 EXPOSE 80
-# Start Xvfb in the background to support headed Chrome browser and then run the application
-ENTRYPOINT ["/bin/sh", "-c", "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99 && dotnet MrWatchdog.Web.dll"]
+# Xvfb signals readiness to its parent; keep xvfb-run below PID 1 and forward shutdown signals
+ENTRYPOINT ["/sbin/tini", "-g", "--", "xvfb-run", "--auto-servernum", "--error-file=/dev/stderr", "--server-args=-screen 0 1920x1080x24", "dotnet", "MrWatchdog.Web.dll"]

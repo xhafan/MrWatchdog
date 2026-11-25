@@ -43,7 +43,15 @@ public class LogsController(
             ? message.Substring(0, LogConstants.MaxLogMessageLength) + "…[truncated]"
             : message;
 
-        logger.LogError(ErrorReportingEventIds.BrowserError, safeMessage);
+        var suppressionReason = ErrorReportMessageFilter.GetSuppressionReason(safeMessage, iLoggingOptions.Value.ErrorReportMessageFilters);
+        using (suppressionReason == null ? null : ErrorReportingLogPolicy.Suppress())
+        using (suppressionReason == null ? null : logger.BeginScope(new Dictionary<string, object>
+               {
+                   [ErrorReportMessageFilter.SuppressionReasonPropertyName] = suppressionReason
+               }))
+        {
+            logger.LogError(ErrorReportingEventIds.BrowserError, "{BrowserErrorMessage:l}", safeMessage);
+        }
 
         return Ok();
     }

@@ -1,5 +1,4 @@
 using NUnit.Framework;
 
-[assembly: LevelOfParallelism(6)]
-[assembly: FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
-[assembly: Parallelizable(ParallelScope.All)]
+[assembly: LevelOfParallelism(4)]
+[assembly: Parallelizable(ParallelScope.Fixtures)]

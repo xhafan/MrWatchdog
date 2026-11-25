@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using CoreBackend.Features.Jobs;
 using CoreBackend.Infrastructure.Configurations;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace CoreBackend.Infrastructure.ErrorReporting;
@@ -8,7 +9,8 @@ namespace CoreBackend.Infrastructure.ErrorReporting;
 public sealed class SlackErrorReporter(
     IHttpClientFactory httpClientFactory,
     IOptions<SlackErrorReportingOptions> iSlackErrorReportingOptions,
-    IOptions<RuntimeOptions> iRuntimeOptions
+    IOptions<RuntimeOptions> iRuntimeOptions,
+    IHostEnvironment environment
 ) : IErrorReporter
 {
     public const string HttpClientName = nameof(SlackErrorReporter);
@@ -18,17 +20,20 @@ public sealed class SlackErrorReporter(
     public async Task Report(ErrorReport report, CancellationToken cancellationToken = default)
     {
         var options = iSlackErrorReportingOptions.Value;
-        if (string.IsNullOrWhiteSpace(options.Channel))
+        var isFrontend = report.Origin == ErrorReportOrigin.Browser;
+        var channel = isFrontend ? options.FrontendChannel : options.BackendChannel;
+        if (string.IsNullOrWhiteSpace(options.WebHookUrl) || string.IsNullOrWhiteSpace(channel))
         {
             return;
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
         var payload = new Dictionary<string, string>
         {
-            ["channel"] = options.Channel,
+            ["channel"] = channel,
             ["username"] = $"{options.ApplicationName} errors",
             ["icon_emoji"] = ":warning:",
-            ["text"] = _formatReportText(report)
+            ["text"] = _formatReportText(report, options.ApplicationName, isFrontend ? "Frontend" : "Backend")
         };
 
         var httpClient = httpClientFactory.CreateClient(HttpClientName);
@@ -40,9 +45,12 @@ public sealed class SlackErrorReporter(
         response.EnsureSuccessStatusCode();
     }
 
-    private string _formatReportText(ErrorReport report)
+    private string _formatReportText(ErrorReport report, string applicationName, string component)
     {
-        var metadata = $"RequestId: {_escapeSlackText(report.RequestId)}\n"
+        var metadata = $"Application: {_escapeSlackText(applicationName)}\n"
+                       + $"Environment: {_escapeSlackText(environment.EnvironmentName)}\n"
+                       + $"Component: {component}\n"
+                       + $"RequestId: {_escapeSlackText(report.RequestId)}\n"
                        + $"TimeStamp: {report.OccurredAtUtc:yyyy-MM-dd HH:mm:ss.fff} UTC\n";
         if (report.FailedMessage is { } failure)
         {

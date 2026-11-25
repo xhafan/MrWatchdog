@@ -5,7 +5,10 @@ using CoreBackend.Infrastructure.ErrorReporting;
 using CoreBackend.Infrastructure.Rebus.ErrorHandlers;
 using CoreBackend.Messages;
 using CoreBackend.TestsShared.HttpClients;
+using FakeItEasy;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
@@ -13,8 +16,34 @@ namespace CoreBackend.Tests.Infrastructure.ErrorReporting;
 [TestFixture]
 public class when_reporting_error_to_slack
 {
+    [TestCase(ErrorReportOrigin.Browser, "#frontend-errors")]
+    [TestCase(ErrorReportOrigin.Server, "#backend-errors")]
+    [TestCase(ErrorReportOrigin.FailedJob, "#backend-errors")]
+    public async Task it_uses_one_legacy_webhook_and_selects_the_channel_from_the_error_origin(ErrorReportOrigin origin, string expectedChannel)
+    {
+        var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
+        var options = new SlackErrorReportingOptions();
+        new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["SlackErrorReporting:WebHookUrl"] = "https://hooks.slack.test/services/shared",
+            ["SlackErrorReporting:BackendChannel"] = "#backend-errors",
+            ["SlackErrorReporting:FrontendChannel"] = "#frontend-errors"
+        }).Build().GetSection(SlackErrorReportingOptions.SectionName).Bind(options);
+        var reporter = new SlackErrorReporter(new HttpClientFactory(new HttpClient(handler)),
+            Options.Create(options), Options.Create(new RuntimeOptions { Url = "https://backend.example.test" }), _environment());
+
+        await reporter.Report(_report() with { Origin = origin });
+
+        handler.RequestCount.ShouldBe(1);
+        handler.RequestUri.ShouldBe(new Uri("https://hooks.slack.test/services/shared"));
+        using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
+        payload.RootElement.GetProperty("channel").GetString().ShouldBe(expectedChannel);
+        payload.RootElement.GetProperty("text").GetString().ShouldNotBeNull()
+            .ShouldContain(origin == ErrorReportOrigin.Browser ? "Component: Frontend" : "Component: Backend");
+    }
+
     [Test]
-    public async Task it_does_not_send_when_the_channel_is_empty()
+    public async Task it_does_not_send_when_the_shared_webhook_is_empty()
     {
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
         var reporter = _createReporter(handler, " ");
@@ -28,19 +57,22 @@ public class when_reporting_error_to_slack
     public async Task it_posts_the_error_as_json()
     {
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
-        var reporter = _createReporter(handler, "#web-app-staging-errors");
+        var reporter = _createReporter(handler);
 
         await reporter.Report(_report());
 
         handler.RequestCount.ShouldBe(1);
         handler.Method.ShouldBe(HttpMethod.Post);
-        handler.RequestUri.ShouldBe(new Uri("https://hooks.slack.test/services/error-reporter"));
+        handler.RequestUri.ShouldBe(new Uri("https://hooks.slack.test/services/shared"));
         handler.MediaType.ShouldBe("application/json");
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
-        payload.RootElement.GetProperty("channel").GetString().ShouldBe("#web-app-staging-errors");
+        payload.RootElement.GetProperty("channel").GetString().ShouldBe("#backend-errors");
         payload.RootElement.GetProperty("username").GetString().ShouldBe("Application errors");
         payload.RootElement.GetProperty("icon_emoji").GetString().ShouldBe(":warning:");
         var text = payload.RootElement.GetProperty("text").GetString().ShouldNotBeNull();
+        text.ShouldContain("Application: Application");
+        text.ShouldContain("Environment: Staging");
+        text.ShouldContain("Component: Backend");
         text.ShouldContain("RequestId: request-123");
         text.ShouldContain("TimeStamp: 2026-09-01 10:11:12.345 UTC");
         text.ShouldContain("Message: Failure &lt;script&gt;&amp;&lt;/script&gt;");
@@ -48,32 +80,52 @@ public class when_reporting_error_to_slack
         text.ShouldNotContain("Job: <");
     }
 
-    [Test]
-    public async Task it_throws_for_an_unsuccessful_response()
+    [TestCase(ErrorReportOrigin.Browser, "#frontend-errors")]
+    [TestCase(ErrorReportOrigin.Server, "#backend-errors")]
+    public async Task it_throws_without_rerouting_an_unsuccessful_response(ErrorReportOrigin origin, string expectedChannel)
     {
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.BadGateway);
-        var reporter = _createReporter(handler, "#web-app-staging-errors");
+        var reporter = _createReporter(handler);
 
-        await Should.ThrowAsync<HttpRequestException>(() => reporter.Report(_report()));
+        await Should.ThrowAsync<HttpRequestException>(() => reporter.Report(_report() with { Origin = origin }));
         handler.RequestCount.ShouldBe(1);
+        handler.RequestUri.ShouldBe(new Uri("https://hooks.slack.test/services/shared"));
+        using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
+        payload.RootElement.GetProperty("channel").GetString().ShouldBe(expectedChannel);
+    }
+
+    [TestCase(ErrorReportOrigin.Browser)]
+    [TestCase(ErrorReportOrigin.Server)]
+    public async Task it_honors_cancellation_without_sending_to_either_destination(ErrorReportOrigin origin)
+    {
+        var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
+        using var cancellation = new CancellationTokenSource();
+        await cancellation.CancelAsync();
+
+        await Should.ThrowAsync<OperationCanceledException>(() =>
+            _createReporter(handler).Report(_report() with { Origin = origin }, cancellation.Token));
+
+        handler.RequestCount.ShouldBe(0);
     }
 
     [Test]
-    public async Task it_uses_the_configured_application_identity()
+    public async Task it_escapes_the_application_and_environment_in_the_message()
     {
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
         var reporter = new SlackErrorReporter(new HttpClientFactory(new HttpClient(handler)),
             Options.Create(new SlackErrorReportingOptions
             {
                 WebHookUrl = "https://hooks.slack.test/services/another-app",
-                Channel = "#backend-errors",
-                ApplicationName = "Another backend"
-            }), Options.Create(new RuntimeOptions { Url = "https://backend.example.test" }));
+                BackendChannel = "#backend-errors",
+                ApplicationName = "Another <backend>&"
+            }), Options.Create(new RuntimeOptions { Url = "https://backend.example.test" }), _environment("Staging<&>"));
 
         await reporter.Report(_report());
 
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
-        payload.RootElement.GetProperty("username").GetString().ShouldBe("Another backend errors");
+        var text = payload.RootElement.GetProperty("text").GetString().ShouldNotBeNull();
+        text.ShouldContain("Application: Another &lt;backend&gt;&amp;");
+        text.ShouldContain("Environment: Staging&lt;&amp;&gt;");
     }
 
     [TestCase("x")]
@@ -87,7 +139,7 @@ public class when_reporting_error_to_slack
         var report = _report() with { Message = string.Concat(Enumerable.Repeat(character, 5000)) };
         var originalMessage = report.Message;
 
-        await _createReporter(handler, "#web-app-staging-errors").Report(report);
+        await _createReporter(handler).Report(report);
 
         handler.RequestCount.ShouldBe(1);
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
@@ -106,7 +158,7 @@ public class when_reporting_error_to_slack
     {
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
 
-        await _createReporter(handler, "#web-app-staging-errors").Report(_report() with { Message = new string('<', 1000) });
+        await _createReporter(handler).Report(_report() with { Message = new string('<', 1000) });
 
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
         var text = payload.RootElement.GetProperty("text").GetString().ShouldNotBeNull();
@@ -119,11 +171,11 @@ public class when_reporting_error_to_slack
     [TestCase(4000)]
     public async Task it_preserves_errors_that_fit_the_complete_message_limit(int length)
     {
-        const string prefix = "RequestId: request-123\nTimeStamp: 2026-09-01 10:11:12.345 UTC\nMessage: ";
+        const string prefix = "Application: Application\nEnvironment: Staging\nComponent: Backend\nRequestId: request-123\nTimeStamp: 2026-09-01 10:11:12.345 UTC\nMessage: ";
         var handler = new RecordingHttpMessageHandler(HttpStatusCode.OK);
         var message = new string('x', length - prefix.Length);
 
-        await _createReporter(handler, "#web-app-staging-errors").Report(_report() with { Message = message });
+        await _createReporter(handler).Report(_report() with { Message = message });
 
         using var payload = JsonDocument.Parse(handler.Body.ShouldNotBeNull());
         payload.RootElement.GetProperty("text").GetString().ShouldBe(prefix + message);
@@ -140,10 +192,11 @@ public class when_reporting_error_to_slack
             .AddSingleton<IHttpClientFactory>(new HttpClientFactory(new HttpClient(handler)))
             .AddSingleton(Options.Create(new SlackErrorReportingOptions
             {
-                WebHookUrl = "https://hooks.slack.test/services/error-reporter",
-                Channel = "#web-app-staging-errors"
+                WebHookUrl = "https://hooks.slack.test/services/shared",
+                BackendChannel = "#backend-errors"
             }))
             .AddSingleton(Options.Create(new RuntimeOptions { Url = applicationUrl }))
+            .AddSingleton(_environment())
             .AddSingleton<SlackErrorReporter>()
             .BuildServiceProvider();
         var report = _report();
@@ -178,16 +231,24 @@ public class when_reporting_error_to_slack
 
     private static SlackErrorReporter _createReporter(
         RecordingHttpMessageHandler handler,
-        string channel
+        string webhook = "https://hooks.slack.test/services/shared"
     )
     {
         var factory = new HttpClientFactory(new HttpClient(handler));
         var options = Options.Create(new SlackErrorReportingOptions
         {
-            WebHookUrl = "https://hooks.slack.test/services/error-reporter",
-            Channel = channel
+            WebHookUrl = webhook,
+            BackendChannel = "#backend-errors",
+            FrontendChannel = "#frontend-errors"
         });
-        return new SlackErrorReporter(factory, options, Options.Create(new RuntimeOptions { Url = "https://backend.example.test" }));
+        return new SlackErrorReporter(factory, options, Options.Create(new RuntimeOptions { Url = "https://backend.example.test" }), _environment());
+    }
+
+    private static IHostEnvironment _environment(string name = "Staging")
+    {
+        var environment = A.Fake<IHostEnvironment>();
+        A.CallTo(() => environment.EnvironmentName).Returns(name);
+        return environment;
     }
 
     private static ErrorReport _report() => new(

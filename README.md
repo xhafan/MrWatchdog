@@ -80,7 +80,14 @@ exception messages that could expose webhook credentials. Delivery has no automa
 retries, and the queue is in-process; abrupt termination can lose pending reports.
 
 The host selects its transport and destination. Slack uses `SlackErrorReporting` options
-(`WebHookUrl`, `Channel`, `ApplicationName`); an empty channel disables HTTP delivery.
+with one `WebHookUrl`, `BackendChannel`, `FrontendChannel`, and `ApplicationName`.
+The shared URL must be a legacy Incoming WebHooks integration that accepts channel
+overrides. Browser reports select `FrontendChannel`; server errors and failed jobs select
+`BackendChannel`. An empty URL or selected channel disables HTTP delivery in the reporter;
+hosts should validate the HTTPS URL and distinct nonempty channel names at startup when
+queued reporting is enabled. The payload contains the selected `channel`, application
+`username`, warning icon, and message text. Messages also include the application name,
+`IHostEnvironment.EnvironmentName`, and component in their text.
 Use a dedicated `HttpClient` with a finite timeout, no retry policy, and disabled HTTP
 request logging for webhook URLs. `ApplicationName` defaults to `Application`.
 
